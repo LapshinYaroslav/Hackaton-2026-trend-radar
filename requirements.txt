@@ -12,3 +12,6 @@ matplotlib==3.11.2
 
 psycopg2-binary==2.9.13
 python-dotenv==1.2.3
+
+# --- HTTP ---
+requests==2.32.5
