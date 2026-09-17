@@ -186,6 +186,32 @@ flowchart LR
  "aliases": ["optical AI accelerator", "photonic computing"]}
 ```
 
+**Документы** (Слава → Ярослав; обучение — шаг 3, запрос — поиск №2)
+```json
+{
+  "candidate_id": "c42",
+  "documents": [
+    {
+      "published_at": "2026-03-20",
+      "source": "openalex",
+      "source_type": "paper",
+      "title": "...",
+      "url": "...",
+      "language": "en",
+      "trust_level": "high",
+      "organizations": ["MIT", "Lightmatter"],
+      "text": "..."
+    }
+  ],
+  "source_totals": [
+    {"source": "openalex", "window": "before", "n_total": 1000},
+    {"source": "openalex", "window": "now", "n_total": 1250}
+  ]
+}
+```
+
+Поиск №1 отдаёт только свежие документы и **не** является входом в `compute_features`.
+
 **Результат оценки** (Ярослав → Даня, Егор)
 ```json
 {"candidate_id": "c42", "score": 0.88, "model_version": "v1", "cutoff_date": "2026-09-01",
