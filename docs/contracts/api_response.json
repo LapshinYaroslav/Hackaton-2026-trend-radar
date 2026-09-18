@@ -1,0 +1,136 @@
+{
+  "query": "технологии в медицине",
+  "status": "done",
+  "stats": {
+    "sources_processed": 412,
+    "candidates_found": 57,
+    "signals_above_75": 9
+  },
+  "signals": [
+    {
+      "candidate_id": "c42",
+      "name_ru": "Нейроморфные чипы для периферийного ИИ",
+      "score": 0.88,
+      "model_version": "v1",
+      "features": {
+        "volume": 4.95,
+        "growth": 1.14,
+        "recency": 0.71,
+        "share_research": 0.55,
+        "share_market": 0.20
+      },
+      "top_features": [
+        {
+          "name": "growth",
+          "value": 1.14,
+          "contribution": 1.6,
+          "explanation_ru": "Доля публикаций выросла быстрее отрасли в 3,1 раза"
+        },
+        {
+          "name": "share_research",
+          "value": 0.55,
+          "contribution": 0.5,
+          "explanation_ru": "Высокая доля научных документов (paper/preprint/patent)"
+        }
+      ],
+      "insight": {
+        "description_ru": "Нейроморфные чипы имитируют принципы работы нейронов и синапсов, чтобы выполнять вывод ИИ на устройстве с низким энергопотреблением.",
+        "advantages_ru": [
+          "Низкое энергопотребление на периферии",
+          "Меньше зависимость от облака и задержек сети"
+        ],
+        "cases_ru": [
+          "Пилоты в носимой диагностике и мониторинге пациентов"
+        ],
+        "analyst_notes_ru": "В отраслевых обзорах технология часто относят к ранней стадии: есть лаборатории и стартапы, но нет массового рынка.",
+        "weak_signal_explanation_ru": "Объём публикаций ещё умеренный, но рост относительно фона источников высокий; рыночных документов мало."
+      },
+      "sources": [
+        {
+          "id": "a1b2c3",
+          "title": "Neuromorphic chips for edge AI in healthcare",
+          "url": "https://example.com/neuromorphic",
+          "published_at": "2025-03-14",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high",
+          "summary_ru": "Обзор применения нейроморфных чипов для периферийного ИИ в здравоохранении.",
+          "summary_generated": true
+        },
+        {
+          "id": "d4e5f6",
+          "title": "Стартап показал демо нейроморфного датчика",
+          "url": "https://example.com/blog-demo",
+          "published_at": "2025-11-02",
+          "source_type": "blog",
+          "language": "ru",
+          "trust_level": "low",
+          "summary_ru": "Краткий пост о демо без независимой проверки.",
+          "summary_generated": false
+        }
+      ]
+    },
+    {
+      "candidate_id": "c17",
+      "name_ru": "Фотонные процессоры инференса",
+      "score": 0.81,
+      "model_version": "v1",
+      "features": {
+        "volume": 3.40,
+        "growth": 0.95,
+        "recency": 0.66,
+        "share_research": 0.62,
+        "share_market": 0.15
+      },
+      "top_features": [
+        {
+          "name": "share_research",
+          "value": 0.62,
+          "contribution": 0.7,
+          "explanation_ru": "Преобладают научные и патентные документы, а не продуктовая пресса"
+        },
+        {
+          "name": "recency",
+          "value": 0.66,
+          "contribution": 0.4,
+          "explanation_ru": "Большая доля документов приходится на последние 24 месяца"
+        }
+      ],
+      "insight": {
+        "description_ru": "Фотонные ускорители используют свет для матричных операций инференса, снижая энергозатраты относительно электронных GPU.",
+        "advantages_ru": [
+          "Потенциально выше энергоэффективность на ватт",
+          "Интерес лабораторий и ранних стартапов"
+        ],
+        "cases_ru": [
+          "Прототипы ускорителей для дата-центров и edge-сценариев"
+        ],
+        "analyst_notes_ru": "Аналитики отмечают технологию как перспективную, но до серийных поставок далеко.",
+        "weak_signal_explanation_ru": "Тема свежая и наукоёмкая; стандартов и выраженных лидеров рынка ещё нет."
+      },
+      "sources": [
+        {
+          "id": "g7h8i9",
+          "title": "Photonic inference processors: early results",
+          "url": "https://example.com/photonic",
+          "published_at": "2024-08-01",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium",
+          "summary_ru": "Препринт с ранними результатами по фотонному инференсу.",
+          "summary_generated": true
+        }
+      ]
+    }
+  ],
+  "rejected": [
+    {
+      "name_ru": "Облачные вычисления",
+      "reason_ru": "Зрелая технология: массовое внедрение, сформированный рынок и выраженные лидеры"
+    },
+    {
+      "name_ru": "Электронная медкарта",
+      "reason_ru": "Нерелевантный кандидат: тема уже стандарт отрасли, не зарождающийся сигнал"
+    }
+  ]
+}

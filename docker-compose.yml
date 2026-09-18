@@ -1,0 +1,52 @@
+# Имена сервисов (db, api, ui) — DNS внутри Docker-сети.
+# Из ui к API ходим на http://api:8000, НЕ на localhost.
+# localhost внутри контейнера — это сам контейнер.
+
+services:
+  db:
+    image: postgres:16
+    container_name: trend-radar-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-trend}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-trend}
+      POSTGRES_DB: ${POSTGRES_DB:-trend_radar}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # schema.sql выполняется ТОЛЬКО при первом старте на пустом volume
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-trend} -d ${POSTGRES_DB:-trend_radar}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: trend-radar-api
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://trend:trend@db:5432/trend_radar}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  ui:
+    build:
+      context: .
+      dockerfile: ui/Dockerfile
+    container_name: trend-radar-ui
+    environment:
+      # внутри Compose — имя сервиса api
+      API_URL: ${API_URL:-http://api:8000}
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
