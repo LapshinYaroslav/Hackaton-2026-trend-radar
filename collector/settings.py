@@ -1,0 +1,40 @@
+from __future__ import annotations
+
+import os
+from dataclasses import dataclass
+
+from collector.constants import DEFAULT_MAX_CANDIDATES, DEFAULT_MAX_DOCS_PER_SOURCE, DEFAULT_MAX_WORKERS
+
+
+def _env(name: str) -> str | None:
+    value = os.environ.get(name)
+    if value is None:
+        return None
+    text = value.strip()
+    return text or None
+
+
+@dataclass(frozen=True)
+class Settings:
+    database_url: str | None = None
+    openalex_mailto: str | None = None
+    max_candidates: int = DEFAULT_MAX_CANDIDATES
+    max_workers: int = DEFAULT_MAX_WORKERS
+    max_docs_per_source: int = DEFAULT_MAX_DOCS_PER_SOURCE
+    request_timeout_s: float = 30.0
+    user_agent: str = "weak-signal-collector/0.1 (research; document-collector)"
+
+    @classmethod
+    def from_env(cls) -> Settings:
+        return cls(
+            database_url=_env("COLLECTOR_DATABASE_URL"),
+            openalex_mailto=_env("COLLECTOR_OPENALEX_MAILTO"),
+            max_candidates=int(_env("COLLECTOR_MAX_CANDIDATES") or DEFAULT_MAX_CANDIDATES),
+            max_workers=int(_env("COLLECTOR_MAX_WORKERS") or DEFAULT_MAX_WORKERS),
+            max_docs_per_source=int(
+                _env("COLLECTOR_MAX_DOCS_PER_SOURCE") or DEFAULT_MAX_DOCS_PER_SOURCE
+            ),
+            request_timeout_s=float(_env("COLLECTOR_REQUEST_TIMEOUT_S") or 30.0),
+            user_agent=_env("COLLECTOR_USER_AGENT")
+            or "weak-signal-collector/0.1 (research; document-collector)",
+        )
