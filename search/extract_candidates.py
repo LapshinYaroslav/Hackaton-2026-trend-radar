@@ -126,13 +126,18 @@ def call_llm_batch(
         if cached is not None:
             return list(cached.get("candidates") or []), ["взят ответ из кэша"]
 
-    answer = ask_llm(
-        system_prompt,
-        user_prompt,
-        purpose="extract_candidates",
-        temperature=EXTRACT_TEMPERATURE,
-        max_tokens=MAX_TOKENS,
-    )
+    try:
+        answer = ask_llm(
+            system_prompt,
+            user_prompt,
+            purpose="extract_candidates",
+            temperature=EXTRACT_TEMPERATURE,
+            max_tokens=MAX_TOKENS,
+        )
+    except ValueError as exc:
+        # Частый случай: нет YANDEX_API_KEY / YANDEX_FOLDER_ID в .env
+        warnings.append(f"настройка LLM: {exc}")
+        return [], warnings
     if answer.get("error"):
         warnings.append(f"вызов LLM не удался: {answer['error']}")
         return [], warnings
