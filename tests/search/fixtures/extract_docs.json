@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Photonic inference processors for edge AI",
+    "text": "We present photonic inference processors that accelerate matrix multiplications using silicon photonics. Optical AI accelerators reduce energy per operation compared with GPUs.",
+    "url": "https://example.com/1",
+    "source": "arxiv",
+    "source_type": "preprint",
+    "published_at": "2025-01-10",
+    "language": "en",
+    "trust_level": "high"
+  },
+  {
+    "title": "Optical AI accelerator demo",
+    "text": "A startup demonstrated an optical AI accelerator for inference workloads. Photonic computing remains early-stage without mass-market leaders.",
+    "url": "https://example.com/2",
+    "source": "techcrunch",
+    "source_type": "news",
+    "published_at": "2025-03-02",
+    "language": "en",
+    "trust_level": "medium"
+  },
+  {
+    "title": "Graphene biosensors for home monitoring",
+    "text": "Graphene biosensors enable continuous biomarker tracking at home. Microfluidic chips are combined with flexible electrodes.",
+    "url": "https://example.com/3",
+    "source": "openalex",
+    "source_type": "paper",
+    "published_at": "2024-11-20",
+    "language": "en",
+    "trust_level": "high"
+  },
+  {
+    "title": "Cloud computing in hospitals",
+    "text": "Cloud computing platforms dominate hospital IT. This mature market has clear leaders and standards.",
+    "url": "https://example.com/4",
+    "source": "openalex",
+    "source_type": "report",
+    "published_at": "2023-05-01",
+    "language": "en",
+    "trust_level": "medium"
+  }
+]
