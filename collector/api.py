@@ -8,19 +8,25 @@ Search #2 (collect_history) is the only path that yields CollectionResult for fe
 
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime, timedelta, timezone
 from typing import Callable, Iterable, Sequence
 
 from collector.adapters import ArxivAdapter, OpenAlexAdapter, TechCrunchAdapter
-from collector.adapters.base import SourceAdapter
+from collector.adapters.base import SourceAdapter, totals_signature
 from collector.constants import (
     COLLECTION_START,
+    COUNTER_WINDOWS,
+    YEAR_WINDOWS,
     CUTOFF_DATE,
     DEFAULT_MAX_CANDIDATES,
     DEFAULT_RECENT_DAYS,
     SOLE_SOURCE_WEAK_TYPES,
+    SOURCE_TOTALS_TTL_HOURS,
     WINDOWS,
 )
 from collector.db import DocumentCache, MemoryCache, build_cache
@@ -29,10 +35,14 @@ from collector.http import HttpTransport, HttpxTransport
 from collector.models import (
     Candidate,
     CollectionResult,
+    Counter,
+    CounterResult,
     Document,
     RecentSearchResult,
+    SearchTerms,
     SourceTotal,
     Technology,
+    build_search_terms,
     copy_document,
     require_source_type,
 )
@@ -55,6 +65,34 @@ def search_terms(name_en: str, aliases: list[str] | None = None) -> list[str]:
         seen.add(key)
         terms.append(term)
     return terms
+
+
+def terms_hash(search: SearchTerms) -> str:
+    """Отпечаток поискового запроса: часть ключа кэша счётчиков.
+
+    Отвечает ровно на один вопрос: тот же ли это набор терминов. Уточнили термины —
+    отпечаток другой — старые счётчики из кэша не вернутся. Регистр и порядок
+    терминов не влияют.
+
+    Фильтра типа здесь больше нет. Это константа OpenAlex, и в общем отпечатке она
+    сидела в ключе всех источников сразу: смена фильтра у одного выбрасывала бы кэш
+    GitHub и Википедии, которым до типов записи OpenAlex дела нет. Семантика запроса
+    переехала в query_variant — отдельное поле ключа строки, своё у каждого источника.
+
+    Набора окон здесь нет намеренно. Окно закодировано в ключе строки отдельной
+    колонкой period, и вторая копия внутри хэша делала вредное: добавление одного
+    нового окна меняло отпечаток и выбрасывало все ранее собранные строки по всем
+    окнам. Названия технологии здесь тоже нет — она уже в ключе как tech_key.
+    """
+    payload = json.dumps(
+        {
+            "terms": sorted(item.casefold() for item in search.terms),
+            "context_terms": sorted(item.casefold() for item in search.context_terms),
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:32]
 
 
 def tech_key(name_en: str) -> str:
@@ -98,21 +136,58 @@ class DocumentCollector:
         self.cache = cache or MemoryCache()
         self.settings = settings or Settings()
         self.is_mainstream = is_mainstream
+        self._totals_lock = threading.Lock()
+        # Источник -> окна, уже спрошенные в этом процессе. Именно окна, а не просто
+        # факт пробы: спросили пять окон, потом добавили шестое — шестое надо спросить.
+        self._probed_sources: dict[str, set[str]] = {}
 
-    def probe_source_totals(self, *, force: bool = False) -> list[SourceTotal]:
-        """Ask every source for corpus size on both windows before any tech search."""
-        cached = None if force else self.cache.get_source_totals()
-        if cached is not None:
-            return cached
-        totals: list[SourceTotal] = []
-        for adapter in self.adapters:
-            totals.extend(self._probe_adapter(adapter))
-        self.cache.put_source_totals(totals)
-        return totals
+    def probe_source_totals(
+        self,
+        *,
+        force: bool = False,
+        windows: dict[str, tuple[date, date]] | None = None,
+    ) -> list[SourceTotal]:
+        """Ask every source for corpus size on both windows before any tech search.
 
-    def _probe_adapter(self, adapter: SourceAdapter) -> list[SourceTotal]:
+        Кэш годен сутки. Просроченные строки и источники, чей итог неизвестен,
+        пробуются заново — иначе одна неудачная проба навсегда выключила бы источник
+        из growth. Внутри одного процесса каждый источник пробуется не чаще раза.
+
+        Возвращаются строки только по адаптерам этого коллектора и только по
+        запрошенным окнам. В кэш при этом уходит слияние со всем, что там лежало:
+        прогон по одному источнику не должен стирать итоги остальных, иначе growth
+        перестанет считаться у всех сразу — поправку на фон брать будет неоткуда.
+        """
+        asked = windows or WINDOWS
+        with self._totals_lock:
+            if force:
+                self._probed_sources.clear()
+            stored = self.cache.get_source_totals() or []
+            cached = [] if force else stored
+            expected = {adapter.source: totals_signature(adapter) for adapter in self.adapters}
+            reusable = _reusable_sources(cached, self._probed_sources, expected, set(asked))
+
+            totals: list[SourceTotal] = []
+            changed = False
+            for adapter in self.adapters:
+                if adapter.source in reusable:
+                    totals.extend(row for row in cached if row.source == adapter.source)
+                    continue
+                totals.extend(self._probe_adapter(adapter, asked))
+                self._probed_sources[adapter.source] = set(asked)
+                changed = True
+            if changed:
+                self.cache.put_source_totals(_merge_totals(stored, totals))
+            return totals
+
+    def _probe_adapter(
+        self,
+        adapter: SourceAdapter,
+        windows: dict[str, tuple[date, date]] | None = None,
+    ) -> list[SourceTotal]:
         rows: list[SourceTotal] = []
-        for window, (start, end) in WINDOWS.items():
+        signature = totals_signature(adapter)
+        for window, (start, end) in (windows or WINDOWS).items():
             try:
                 count = adapter.count_total(start, end)
             except AdapterError as exc:
@@ -125,15 +200,24 @@ class DocumentCollector:
                     window=window,
                     n_total=int(count) if available else 0,
                     available=available,
+                    type_filter=adapter.type_filter,
+                    totals_signature=signature,
                 )
             )
         if not all(row.available for row in rows):
             logger.warning(
-                "source %s has no complete totals for both windows; excluded from growth",
+                "source %s has no complete totals for the asked windows; excluded from growth",
                 adapter.source,
             )
             rows = [
-                SourceTotal(source=row.source, window=row.window, n_total=row.n_total, available=False)
+                SourceTotal(
+                    source=row.source,
+                    window=row.window,
+                    n_total=row.n_total,
+                    available=False,
+                    type_filter=row.type_filter,
+                    totals_signature=row.totals_signature,
+                )
                 for row in rows
             ]
         return rows
@@ -183,6 +267,133 @@ class DocumentCollector:
             query_id=candidate.query_id,
         )
         return self._make_result(candidate, documents, totals, cache_hit=False)
+
+    def count_history(self, candidate: Candidate, *, use_cache: bool = True) -> CounterResult:
+        """Поиск №2 версии 0.2: счётчики по технологии, без выгрузки документов.
+
+        Признаки считаются по этим числам. Потолок выдачи на них не влияет: источник
+        отвечает, сколько записей подходит под фильтр, независимо от того, сколько
+        их можно скачать (pipeline.md 0.2, «Почему счётчики, а не документы»).
+        """
+        search = build_search_terms(candidate.terms, candidate.context_terms)
+        if not search.usable:
+            raise ValueError(
+                f"{candidate.candidate_id}: запрос не собрался из терминов, "
+                f"нарушения: {[item['rule'] for item in search.violations]}"
+            )
+        totals = self.probe_source_totals(windows=YEAR_WINDOWS)
+        key = tech_key(candidate.name_en)
+        digest = terms_hash(search)
+        # Кэш спрашивается по каждому источнику отдельно: файл и строка в базе
+        # заведены на пару (технология, источник), чтобы сборщики не мешали друг другу.
+        known: list[Counter] = []
+        hit = False
+        for adapter in self.adapters:
+            rows = self.cache.get_counters(key, digest, adapter.source) if use_cache else None
+            if rows is not None:
+                hit = True
+                known.extend(rows)
+        have = {(row.source, row.window, row.query_variant) for row in known}
+        wanted = {(adapter.source, window, adapter.query_variant)
+                  for adapter in self.adapters for window in COUNTER_WINDOWS}
+        missing = {window for _, window, _ in wanted - have}
+        if hit and not missing:
+            return self._make_counter_result(candidate, key, digest, known, totals, True)
+        # Досчитываются пары (источник, окно), которых нет в кэше: новое окно у всех
+        # источников или один источник, промолчавший по своим окнам. Пары, уже лежащие
+        # в кэше, не перезапрашиваются, поэтому добор arXiv не стоит вызовов OpenAlex.
+        #
+        # Обратная сторона: источник, который молчит всегда, будет опрашиваться каждый
+        # прогон. Для arXiv и TechCrunch это бесплатно, для OpenAlex — вызов за $0.001,
+        # и это осознанный размен: молчание источника и его ноль — разные вещи, и
+        # замораживать молчание в кэше значит считать признаки по неполным данным.
+        counters = known + self._count_windows(
+            key, search, {name: COUNTER_WINDOWS[name] for name in sorted(missing)}, have)
+        by_source: dict[str, list[Counter]] = {}
+        for row in counters:
+            by_source.setdefault(row.source, []).append(row)
+        for source, rows in by_source.items():
+            self.cache.put_counters(
+                key,
+                digest,
+                source,
+                rows,
+                candidate_id=candidate.candidate_id,
+                query_id=candidate.query_id,
+            )
+        return self._make_counter_result(candidate, key, digest, counters, totals, False)
+
+    def count_training(
+        self,
+        technologies: Sequence[Technology],
+        *,
+        use_cache: bool = True,
+    ) -> list[CounterResult]:
+        """Счётчики для размеченного списка. Та же структура, что и в режиме запроса."""
+        self.probe_source_totals(windows=YEAR_WINDOWS)
+        candidates = [tech.as_candidate() for tech in technologies]
+        workers = max(1, min(self.settings.max_workers, len(candidates) or 1))
+        results: dict[str, CounterResult] = {}
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = {pool.submit(self.count_history, item, use_cache=use_cache): item
+                       for item in candidates}
+            for future in as_completed(futures):
+                item = futures[future]
+                results[item.candidate_id] = future.result()
+        return [results[item.candidate_id] for item in candidates]
+
+    def _count_windows(
+        self,
+        key: str,
+        search: SearchTerms,
+        windows: dict[str, tuple[date, date]] | None = None,
+        have: set[tuple[str, str]] | None = None,
+    ) -> list[Counter]:
+        """По одному счётчику на каждую пару (источник, окно). Молчащий источник строки не даёт."""
+        counters: list[Counter] = []
+        for window, (start, end) in (windows or COUNTER_WINDOWS).items():
+            for adapter in self.adapters:
+                if have and (adapter.source, window, adapter.query_variant) in have:
+                    continue
+                try:
+                    number = adapter.count_matching(search, start, end)
+                except AdapterError as exc:
+                    logger.warning("счётчик не получен: %s/%s: %s", adapter.source, window, exc)
+                    number = None
+                if number is None:
+                    continue
+                counters.append(
+                    Counter(
+                        tech_key=key,
+                        source=adapter.source,
+                        window=window,
+                        date_from=start,
+                        date_to=end,
+                        n=number,
+                        type_filter=adapter.type_filter,
+                        query_variant=adapter.query_variant,
+                    )
+                )
+        return counters
+
+    def _make_counter_result(
+        self,
+        candidate: Candidate,
+        key: str,
+        digest: str,
+        counters: list[Counter],
+        totals: list[SourceTotal],
+        cache_hit: bool,
+    ) -> CounterResult:
+        return CounterResult(
+            candidate_id=candidate.candidate_id,
+            tech_key=key,
+            terms_hash=digest,
+            counters=counters,
+            source_totals=totals,
+            query_id=candidate.query_id,
+            cache_hit=cache_hit,
+        )
 
     def collect_histories(
         self,
@@ -390,6 +601,55 @@ def collect_histories(
         items, max_candidates=max_candidates, is_mainstream=is_mainstream
     )
     return [item.to_contract_dict() for item in results if not item.skipped_as_mainstream]
+
+
+def _merge_totals(
+    stored: Sequence[SourceTotal],
+    fresh: Sequence[SourceTotal],
+) -> list[SourceTotal]:
+    """Свежие итоги поверх сохранённых. Ключ — пара (источник, окно).
+
+    Пара, а не источник: прогон может спросить корпуса за два окна роста, а в кэше
+    лежат шесть годовых. Слияние по источнику затёрло бы четыре из них и сделало бы
+    growth несчитаемым, хотя данные были.
+
+    Порядок фиксированный, чтобы файл кэша не переписывался от перестановки строк.
+    """
+    merged = {(row.source, row.window): row for row in stored}
+    merged.update({(row.source, row.window): row for row in fresh})
+    return [merged[key] for key in sorted(merged)]
+
+
+def _reusable_sources(
+    cached: Sequence[SourceTotal],
+    probed: dict[str, set[str]],
+    expected: dict[str, str],
+    asked_windows: set[str],
+) -> set[str]:
+    """Источники, чьи итоги можно взять из кэша.
+
+    Годен итог свежий, доступный, по обоим окнам и посчитанный тем же запросом, что
+    адаптер отправил бы сейчас. Последнее обязательно: смена фильтра, эндпоинта или
+    любого параметра меняет определение знаменателя growth, и старое число молча
+    считалось бы вместе с новым числителем. Подпись выводится из самого запроса,
+    помнить про неё не нужно.
+    """
+    deadline = datetime.now(timezone.utc) - timedelta(hours=SOURCE_TOTALS_TTL_HOURS)
+    by_source: dict[str, list[SourceTotal]] = {}
+    for row in cached:
+        by_source.setdefault(row.source, []).append(row)
+    reusable = set()
+    for source, rows in by_source.items():
+        if asked_windows <= probed.get(source, set()):
+            reusable.add(source)
+            continue
+        windows = {row.window for row in rows}
+        fresh = all(row.collected_at is not None and row.collected_at > deadline for row in rows)
+        same_method = all(row.totals_signature == expected.get(source) for row in rows)
+        complete = asked_windows <= windows
+        if complete and fresh and same_method and all(row.available for row in rows):
+            reusable.add(source)
+    return reusable
 
 
 def _recent_bounds(date_from: date | None, date_to_exclusive: date | None) -> tuple[date, date]:

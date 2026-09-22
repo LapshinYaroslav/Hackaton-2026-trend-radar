@@ -13,27 +13,39 @@ from collector.models import Candidate, Technology
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Weak-signal document collector")
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument(
+        "--refresh-totals",
+        action="store_true",
+        help="Перепробовать корпусные итоги источников, не дожидаясь протухания кэша",
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    train = sub.add_parser("train", help="Training mode: history for a labelled technology list")
+    train = sub.add_parser(
+        "train",
+        parents=[common],
+        help="Training mode: history for a labelled technology list",
+    )
     train.add_argument("--input", required=True, help="JSON list of Technology objects")
     train.add_argument("--output", required=True, help="JSON file for CollectionResult list")
 
-    recent = sub.add_parser("recent", help="Query mode, Search #1: fresh documents by subqueries")
+    recent = sub.add_parser("recent", parents=[common], help="Query mode, Search #1: fresh documents by subqueries")
     recent.add_argument("--subquery", action="append", required=True, dest="subqueries")
     recent.add_argument("--output", required=True)
 
-    history = sub.add_parser("history", help="Query mode, Search #2: 6-year history of a candidate")
+    history = sub.add_parser("history", parents=[common], help="Query mode, Search #2: 6-year history of a candidate")
     history.add_argument("--candidate", required=True, help="JSON Candidate object")
     history.add_argument("--output", required=True)
 
-    many = sub.add_parser("histories", help="Query mode, Search #2 for a candidate list")
+    many = sub.add_parser("histories", parents=[common], help="Query mode, Search #2 for a candidate list")
     many.add_argument("--input", required=True, help="JSON list of Candidate objects")
     many.add_argument("--output", required=True)
     many.add_argument("--max-candidates", type=int, default=None)
 
     args = parser.parse_args(argv)
     collector = build_collector()
+    if args.refresh_totals:
+        collector.probe_source_totals(force=True)
 
     if args.command == "train":
         techs = [Technology.from_dict(item) for item in _load_json(args.input)]

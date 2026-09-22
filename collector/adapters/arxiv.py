@@ -1,8 +1,11 @@
 """arXiv adapter. Preprints via Atom API.
 
-Corpus totals: arXiv search API cannot count the whole corpus. Totals are taken from
-OpenAlex filtered by the arXiv source id (S4306402567). If that call fails, count_total
-returns None and arXiv is excluded from growth (pipeline.md).
+Корпусные итоги берутся у самого arXiv: запрос submittedDate без терминов возвращает
+opensearch:totalResults по всему корпусу за окно. Раньше итоги брались из OpenAlex
+по primary_location.source.id, но с фильтром type:article это сломалось бы — препринты
+arXiv под него не подходят, а фильтр обязан стоять на обеих сторонах формулы growth.
+Замер 20.09.2026: свои итоги 233 029 и 333 181 против 41 653 и 49 963 через OpenAlex —
+OpenAlex индексирует малую часть arXiv.
 """
 
 from __future__ import annotations
@@ -17,30 +20,33 @@ from collector.adapters.base import default_trust
 from collector.constants import inclusive_end
 from collector.exceptions import AdapterError
 from collector.http import HttpTransport, HttpxTransport, RateLimiter
-from collector.models import Document, parse_utc_date, require_source_type
+from collector.models import Document, SearchTerms, parse_utc_date, require_source_type
 from collector.settings import Settings
 
 ARXIV_API = "http://export.arxiv.org/api/query"
-OPENALEX_WORKS = "https://api.openalex.org/works"
-ARXIV_OPENALEX_SOURCE = "S4306402567"
 ATOM = "{http://www.w3.org/2005/Atom}"
+OPENSEARCH_TOTAL = "{http://a9.com/-/spec/opensearch/1.1/}totalResults"
 ARXIV_NS = "{http://arxiv.org/schemas/atom}"
+
+# arXiv просит не чаще одного запроса в три секунды.
+MIN_INTERVAL_S = 3.1
 
 
 class ArxivAdapter:
     source = "arxiv"
     source_type = "preprint"
+    type_filter = None
+    query_variant = "phrase|all"
 
     def __init__(
         self,
         transport: HttpTransport | None = None,
         settings: Settings | None = None,
-        mailto: str | None = None,
+        min_interval_s: float = MIN_INTERVAL_S,
     ) -> None:
         self._settings = settings or Settings()
         self._transport = transport or HttpxTransport(self._settings)
-        self._mailto = mailto or self._settings.openalex_mailto
-        self._limiter = RateLimiter(0.0 if transport is not None else 3.1)
+        self._limiter = RateLimiter(min_interval_s)
 
     def search(
         self,
@@ -72,25 +78,39 @@ class ArxivAdapter:
                 break
         return collected
 
-    def count_total(self, date_from: date, date_to_exclusive: date) -> int | None:
-        """Whole-arXiv count via OpenAlex. None if the helper source is unavailable."""
-        date_to = inclusive_end(date_to_exclusive)
-        params: dict[str, Any] = {
-            "filter": (
-                f"primary_location.source.id:{ARXIV_OPENALEX_SOURCE},"
-                f"from_publication_date:{date_from.isoformat()},"
-                f"to_publication_date:{date_to.isoformat()}"
-            ),
-            "per_page": 1,
-        }
-        if self._mailto:
-            params["mailto"] = self._mailto
-        try:
-            response = self._transport.get(OPENALEX_WORKS, params=params)
-            count = (response.json().get("meta") or {}).get("count")
-            return int(count) if count is not None else None
-        except (httpx.HTTPError, ValueError, TypeError):
+    def count_matching(
+        self,
+        search: SearchTerms,
+        date_from: date,
+        date_to_exclusive: date,
+    ) -> int | None:
+        """totalResults по булеву запросу с фильтром submittedDate.
+
+        Тот же текст запроса, что у OpenAlex: фразу без префикса arXiv трактует как all:.
+        Проверено 20.09.2026 — обе записи дали одинаковые 437 документов.
+        """
+        if not search.usable:
             return None
+        query = f"({search.query}) AND {_submitted_range(date_from, date_to_exclusive)}"
+        try:
+            return _parse_total(self._query_atom_raw(query, start=0, max_results=1))
+        except AdapterError:
+            return None
+
+    def totals_request(self, date_from: date, date_to_exclusive: date) -> tuple[str, dict[str, Any]]:
+        """Весь корпус arXiv за окно: запрос по одной дате подачи, без терминов."""
+        return ARXIV_API, _atom_params(
+            _submitted_range(date_from, date_to_exclusive), start=0, max_results=1
+        )
+
+    def count_total(self, date_from: date, date_to_exclusive: date) -> int | None:
+        try:
+            raw = self._query_atom_raw(
+                _submitted_range(date_from, date_to_exclusive), start=0, max_results=1
+            )
+        except AdapterError:
+            return None
+        return _parse_total(raw)
 
     def _query_atom(
         self,
@@ -101,18 +121,12 @@ class ArxivAdapter:
         start: int,
         max_results: int,
     ) -> str:
-        date_to = inclusive_end(date_to_exclusive)
-        submitted = (
-            f"submittedDate:[{date_from.strftime('%Y%m%d')}0000 TO {date_to.strftime('%Y%m%d')}2359]"
-        )
-        search = f"all:{_quote_term(query)} AND {submitted}"
-        params = {
-            "search_query": search,
-            "start": start,
-            "max_results": max_results,
-            "sortBy": "submittedDate",
-            "sortOrder": "descending",
-        }
+        search = f"all:{_quote_term(query)} AND {_submitted_range(date_from, date_to_exclusive)}"
+        return self._query_atom_raw(search, start=start, max_results=max_results)
+
+    def _query_atom_raw(self, search: str, *, start: int, max_results: int) -> str:
+        """Один запрос к Atom API уже собранной строкой search_query."""
+        params = _atom_params(search, start=start, max_results=max_results)
         self._limiter.wait()
         try:
             response = self._transport.get(ARXIV_API, params=params)
@@ -141,6 +155,32 @@ class ArxivAdapter:
             organizations=orgs,
             text=entry.get("summary", "").strip(),
         )
+
+
+def _atom_params(search: str, *, start: int, max_results: int) -> dict[str, Any]:
+    """Параметры запроса к Atom API. Отдельно от отправки: по ним считается подпись.
+
+    Без sortBy: порядок по релевантности. Сортировка по дате вместе с потолком
+    в 200 документов оставляла только свежие препринты и опустошала окно before.
+    """
+    return {"search_query": search, "start": start, "max_results": max_results}
+
+
+def _submitted_range(date_from: date, date_to_exclusive: date) -> str:
+    """Фильтр arXiv по дате подачи. Границы включающие, поэтому конец сдвигается на день назад."""
+    date_to = inclusive_end(date_to_exclusive)
+    return (
+        f"submittedDate:[{date_from.strftime('%Y%m%d')}0000 TO {date_to.strftime('%Y%m%d')}2359]"
+    )
+
+
+def _parse_total(xml_text: str) -> int | None:
+    """Число подходящих записей из opensearch:totalResults."""
+    try:
+        total = ET.fromstring(xml_text).findtext(OPENSEARCH_TOTAL)
+    except ET.ParseError:
+        return None
+    return int(total) if total is not None and total.strip().isdigit() else None
 
 
 def _quote_term(query: str) -> str:

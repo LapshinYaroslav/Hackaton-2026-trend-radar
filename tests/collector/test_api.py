@@ -1,17 +1,20 @@
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 import math
 
 import pytest
 
+from collector.adapters.base import totals_signature
 from collector.api import DocumentCollector
 from collector.constants import (
+    SOURCE_TOTALS_TTL_HOURS,
     WINDOW_BEFORE_END,
     WINDOW_BEFORE_START,
     WINDOW_NOW_END,
     WINDOW_NOW_START,
 )
+from collector.db import MemoryCache
 from collector.exceptions import InvalidSourceTypeError
-from collector.models import Candidate, Document, Technology
+from collector.models import Candidate, Document, SourceTotal, Technology
 from tests.collector.fakes import FakeAdapter, doc
 
 BOTH_WINDOWS = {
@@ -249,3 +252,125 @@ def test_candidate_cap_and_mainstream_cut_before_search2() -> None:
     searched_ids = {call[0] for call in s1.search_calls}
     assert "photonic inference" in searched_ids
     assert "transformer" not in searched_ids
+
+
+def _cache_with_totals(age_hours: float, n_total: int = 7) -> MemoryCache:
+    """Кэш с готовыми итогами источника s1 заданного возраста.
+
+    Подпись способа подсчёта берётся у того же FakeAdapter: проверяем именно
+    протухание по времени, а не смену способа.
+    """
+    cache = MemoryCache()
+    stamp = datetime.now(timezone.utc) - timedelta(hours=age_hours)
+    cache.put_source_totals(
+        [
+            SourceTotal(source="s1", window=window, n_total=n_total, collected_at=stamp,
+                        type_filter=None, totals_signature=totals_signature(FakeAdapter("s1", "paper")))
+            for window in ("before", "now")
+        ]
+    )
+    return cache
+
+
+def test_fresh_totals_are_taken_from_cache() -> None:
+    s1 = FakeAdapter("s1", "paper", totals=BOTH_WINDOWS)
+    totals = DocumentCollector(
+        adapters=[s1], cache=_cache_with_totals(age_hours=1)
+    ).probe_source_totals()
+
+    assert s1.count_calls == []
+    assert {row.n_total for row in totals} == {7}
+
+
+def test_stale_totals_are_probed_again() -> None:
+    """Итоги старше суток перепрашиваются: корпус источника за это время меняется."""
+    s1 = FakeAdapter("s1", "paper", totals=BOTH_WINDOWS)
+    totals = DocumentCollector(
+        adapters=[s1], cache=_cache_with_totals(age_hours=SOURCE_TOTALS_TTL_HOURS + 1)
+    ).probe_source_totals()
+
+    assert len(s1.count_calls) == 2
+    assert {row.n_total for row in totals} == {1000, 1250}
+
+
+def test_unavailable_source_is_retried_by_a_new_run() -> None:
+    """Одна неудачная проба не выключает источник из growth навсегда."""
+    cache = MemoryCache()
+    broken = FakeAdapter("s1", "paper", totals={})
+    DocumentCollector(adapters=[broken], cache=cache).probe_source_totals()
+    assert all(not row.available for row in cache.get_source_totals() or [])
+
+    fixed = FakeAdapter("s1", "paper", totals=BOTH_WINDOWS)
+    totals = DocumentCollector(adapters=[fixed], cache=cache).probe_source_totals()
+
+    assert len(fixed.count_calls) == 2
+    assert all(row.available for row in totals)
+
+
+def test_broken_source_is_probed_once_per_process() -> None:
+    """Внутри одного прогона недоступный источник не перепрашивается на каждой технологии."""
+    broken = FakeAdapter("s1", "paper", totals={})
+    collector = DocumentCollector(adapters=[broken], cache=MemoryCache())
+    for _ in range(3):
+        collector.probe_source_totals()
+    assert len(broken.count_calls) == 2
+
+    collector.probe_source_totals(force=True)
+    assert len(broken.count_calls) == 4
+
+
+def _totals_rows(source: str, windows: tuple[str, ...], n_total: int,
+                 age_hours: float = 1.0) -> list[SourceTotal]:
+    """Готовые строки итогов одного источника заданного возраста."""
+    stamp = datetime.now(timezone.utc) - timedelta(hours=age_hours)
+    return [SourceTotal(source=source, window=window, n_total=n_total, collected_at=stamp,
+                        type_filter=None,
+                        totals_signature=totals_signature(FakeAdapter(source, "paper")))
+            for window in windows]
+
+
+def test_partial_run_keeps_totals_of_other_sources() -> None:
+    """Прогон по одному источнику не стирает из кэша итоги остальных.
+
+    Без слияния фоновый добор одного arXiv унёс бы корпуса OpenAlex и TechCrunch,
+    и growth перестал бы считаться у всех технологий сразу: поправку на фон брать
+    было бы неоткуда.
+    """
+    cache = MemoryCache()
+    cache.put_source_totals(_totals_rows("s2", ("before", "now"), n_total=500))
+
+    DocumentCollector(adapters=[FakeAdapter("s1", "paper", totals=BOTH_WINDOWS)],
+                      cache=cache).probe_source_totals()
+
+    saved = {(row.source, row.window): row.n_total for row in cache.get_source_totals() or []}
+    assert saved[("s2", "before")] == 500
+    assert saved[("s2", "now")] == 500
+    assert saved[("s1", "before")] == 1000
+
+
+def test_partial_run_keeps_other_windows_of_the_same_source() -> None:
+    """Опрос по окнам роста не стирает годовые итоги того же источника."""
+    years = ("2020", "2021", "2022", "2023", "2024", "2025")
+    cache = MemoryCache()
+    cache.put_source_totals(_totals_rows("s1", years, n_total=42))
+
+    DocumentCollector(adapters=[FakeAdapter("s1", "paper", totals=BOTH_WINDOWS)],
+                      cache=cache).probe_source_totals()
+
+    saved = {(row.source, row.window): row.n_total for row in cache.get_source_totals() or []}
+    assert all(saved[("s1", year)] == 42 for year in years)
+    assert saved[("s1", "now")] == 1250
+
+
+def test_fresh_total_replaces_stale_one_without_duplicating_it() -> None:
+    """Пара (источник, окно) остаётся в единственном экземпляре, побеждает свежая."""
+    cache = MemoryCache()
+    cache.put_source_totals(_totals_rows("s1", ("before", "now"), n_total=7,
+                                         age_hours=SOURCE_TOTALS_TTL_HOURS + 1))
+
+    DocumentCollector(adapters=[FakeAdapter("s1", "paper", totals=BOTH_WINDOWS)],
+                      cache=cache).probe_source_totals()
+
+    saved = cache.get_source_totals() or []
+    assert len(saved) == 2
+    assert {(row.window, row.n_total) for row in saved} == {("before", 1000), ("now", 1250)}

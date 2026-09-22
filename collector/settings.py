@@ -18,6 +18,7 @@ def _env(name: str) -> str | None:
 class Settings:
     database_url: str | None = None
     openalex_mailto: str | None = None
+    openalex_api_key: str | None = None
     max_candidates: int = DEFAULT_MAX_CANDIDATES
     max_workers: int = DEFAULT_MAX_WORKERS
     max_docs_per_source: int = DEFAULT_MAX_DOCS_PER_SOURCE
@@ -27,8 +28,10 @@ class Settings:
     @classmethod
     def from_env(cls) -> Settings:
         return cls(
-            database_url=_env("COLLECTOR_DATABASE_URL"),
+            database_url=_env("DATABASE_URL"),
             openalex_mailto=_env("COLLECTOR_OPENALEX_MAILTO"),
+            # OPEN_ALEX — второе имя того же ключа, оно уже лежит в .env у команды.
+            openalex_api_key=_env("OPENALEX_API_KEY") or _env("OPEN_ALEX"),
             max_candidates=int(_env("COLLECTOR_MAX_CANDIDATES") or DEFAULT_MAX_CANDIDATES),
             max_workers=int(_env("COLLECTOR_MAX_WORKERS") or DEFAULT_MAX_WORKERS),
             max_docs_per_source=int(

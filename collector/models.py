@@ -7,6 +7,7 @@ from datetime import date, datetime, timezone
 from typing import Any
 
 from collector.constants import (
+    ALLOWED_COUNTER_WINDOWS,
     ALLOWED_SOURCE_TYPES,
     ALLOWED_TRUST_LEVELS,
     ALLOWED_WINDOWS,
@@ -14,6 +15,7 @@ from collector.constants import (
     CUTOFF_DATE,
 )
 from collector.exceptions import InvalidSourceTypeError
+from collector.query import build_query, clean_terms
 
 
 def parse_utc_date(value: date | datetime | str) -> date:
@@ -103,6 +105,9 @@ class SourceTotal:
     window: str
     n_total: int
     available: bool = True
+    collected_at: datetime | None = None  # служебное, в to_dict() не попадает
+    type_filter: str | None = None  # под каким фильтром посчитан корпус; в to_dict() не идёт
+    totals_signature: str | None = None  # отпечаток запроса, которым посчитан; служебное
 
     def __post_init__(self) -> None:
         source = self.source.strip()
@@ -120,6 +125,95 @@ class SourceTotal:
         return {"source": self.source, "window": self.window, "n_total": self.n_total}
 
 
+@dataclass(frozen=True)
+class SearchTerms:
+    """Термины кандидата и собранный из них булев запрос (pipeline.md 0.2, «Контракты»).
+
+    query понимают OpenAlex и arXiv. TechCrunch булеву логику не читает и работает
+    по списку terms — поэтому оба представления лежат рядом.
+    """
+
+    terms: list[str]
+    context_terms: list[str]
+    query: str
+    violations: list[dict[str, Any]] = field(default_factory=list)
+
+    @property
+    def usable(self) -> bool:
+        """Собрался ли запрос: без него считать счётчики нельзя."""
+        return bool(self.query)
+
+
+@dataclass(frozen=True)
+class Counter:
+    """Сколько записей источника подходит под запрос за окно. Документы не выгружаются."""
+
+    tech_key: str
+    source: str
+    window: str
+    date_from: date
+    date_to: date
+    n: int
+    type_filter: str | None = None
+    # Семантика запроса: фраза или слова, по каким полям, с каким фильтром типа.
+    # Два источника могут искать одну строку по-разному, и без этого поля их числа
+    # в кэше неразличимы. Часть ключа строки вместе с (tech_key, terms_hash, source, window).
+    query_variant: str | None = None
+
+    def __post_init__(self) -> None:
+        window = str(self.window).strip()
+        if window not in ALLOWED_COUNTER_WINDOWS:
+            raise ValueError(f"invalid counter window={window!r}")
+        if not self.tech_key.strip() or not self.source.strip():
+            raise ValueError("tech_key and source must be non-empty")
+        if self.n < 0:
+            raise ValueError("n must be >= 0")
+        if self.date_from >= self.date_to:
+            raise ValueError("date_from must be earlier than date_to")
+        object.__setattr__(self, "window", window)
+        object.__setattr__(self, "tech_key", self.tech_key.strip())
+        object.__setattr__(self, "source", self.source.strip())
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "tech_key": self.tech_key,
+            "source": self.source,
+            "window": self.window,
+            "date_from": self.date_from.isoformat(),
+            "date_to": self.date_to.isoformat(),
+            "type_filter": self.type_filter,
+            "query_variant": self.query_variant,
+            "n": self.n,
+        }
+
+
+@dataclass
+class CounterResult:
+    """Выход поиска №2 версии 0.2: только числа.
+
+    Поля documents здесь нет намеренно. Признаки принимают эту структуру, а поиск №1
+    возвращает RecentSearchResult без счётчиков — перепутать два поиска не даст система типов.
+    """
+
+    candidate_id: str
+    tech_key: str
+    terms_hash: str
+    counters: list[Counter] = field(default_factory=list)
+    source_totals: list[SourceTotal] = field(default_factory=list)
+    query_id: str | None = None
+    cache_hit: bool = False
+    skipped_as_mainstream: bool = False
+
+    def to_contract_dict(self) -> dict[str, Any]:
+        """Проводной формат для Ярослава. Недоступные источники в итоги не идут."""
+        return {
+            "candidate_id": self.candidate_id,
+            "tech_key": self.tech_key,
+            "counters": [row.to_dict() for row in self.counters],
+            "source_totals": [row.to_dict() for row in self.source_totals if row.available],
+        }
+
+
 @dataclass
 class Candidate:
     """Input from Danya (query mode, Search #2)."""
@@ -129,11 +223,17 @@ class Candidate:
     query_id: str | None = None
     name_ru: str | None = None
     aliases: list[str] = field(default_factory=list)
+    # Два списка терминов для счётчиков (pipeline.md 0.2). aliases остаётся для
+    # collect_history: он по-прежнему выгружает документы поиску №1 и инсайтам.
+    terms: list[str] = field(default_factory=list)
+    context_terms: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if not self.candidate_id.strip() or not self.name_en.strip():
             raise ValueError("candidate_id and name_en are required")
-        self.aliases = [str(item).strip() for item in (self.aliases or []) if str(item).strip()]
+        self.aliases = _clean_list(self.aliases)
+        self.terms = _clean_list(self.terms)
+        self.context_terms = _clean_list(self.context_terms)
 
     @classmethod
     def from_dict(cls, payload: dict[str, Any]) -> Candidate:
@@ -143,6 +243,8 @@ class Candidate:
             name_ru=_optional_str(payload.get("name_ru")),
             name_en=str(payload["name_en"]),
             aliases=list(payload.get("aliases") or []),
+            terms=list(payload.get("terms") or []),
+            context_terms=list(payload.get("context_terms") or []),
         )
 
 
@@ -155,11 +257,15 @@ class Technology:
     aliases: list[str] = field(default_factory=list)
     label: str | None = None
     queries: list[str] | None = None
+    terms: list[str] = field(default_factory=list)
+    context_terms: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if not self.tech_id.strip() or not self.name_en.strip():
             raise ValueError("tech_id and name_en are required")
-        self.aliases = [str(item).strip() for item in (self.aliases or []) if str(item).strip()]
+        self.aliases = _clean_list(self.aliases)
+        self.terms = _clean_list(self.terms)
+        self.context_terms = _clean_list(self.context_terms)
 
     def as_candidate(self) -> Candidate:
         return Candidate(
@@ -167,6 +273,8 @@ class Technology:
             query_id="training",
             name_en=self.name_en,
             aliases=self.aliases,
+            terms=self.terms,
+            context_terms=self.context_terms,
         )
 
     @classmethod
@@ -177,6 +285,8 @@ class Technology:
             aliases=list(payload.get("aliases") or []),
             label=_optional_str(payload.get("label")),
             queries=list(payload["queries"]) if payload.get("queries") else None,
+            terms=list(payload.get("terms") or []),
+            context_terms=list(payload.get("context_terms") or []),
         )
 
 
@@ -221,6 +331,24 @@ class RecentSearchResult:
 
 def copy_document(doc: Document, **changes: Any) -> Document:
     return replace(doc, **changes)
+
+
+def build_search_terms(terms: list[str], context_terms: list[str]) -> SearchTerms:
+    """Два списка терминов -> булев запрос. Единственное место сборки (collector.query)."""
+    query, violations = build_query(terms, context_terms)
+    good_terms, _ = clean_terms(terms, "terms")
+    good_context, _ = clean_terms(context_terms, "context_terms")
+    return SearchTerms(
+        terms=good_terms,
+        context_terms=good_context,
+        query=query,
+        violations=violations,
+    )
+
+
+def _clean_list(values: list[str] | None) -> list[str]:
+    """Строки без пустых и без краевых пробелов. Порядок сохраняется."""
+    return [str(item).strip() for item in (values or []) if str(item).strip()]
 
 
 def _optional_str(value: Any) -> str | None:
