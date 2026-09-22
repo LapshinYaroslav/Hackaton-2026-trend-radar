@@ -1,0 +1,164 @@
+[
+  {
+    "source": "arxiv",
+    "window": "2020",
+    "n_total": 181294,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "7c58be291141",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "arxiv",
+    "window": "2021",
+    "n_total": 183007,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "7c58be291141",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "arxiv",
+    "window": "2022",
+    "n_total": 199226,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "7c58be291141",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "arxiv",
+    "window": "2023",
+    "n_total": 233029,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "7c58be291141",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "arxiv",
+    "window": "2024",
+    "n_total": 268109,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "7c58be291141",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "arxiv",
+    "window": "2025",
+    "n_total": 333215,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "7c58be291141",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "openalex",
+    "window": "2020",
+    "n_total": 6258691,
+    "available": true,
+    "type_filter": "article",
+    "totals_signature": "d19a22922ede",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "openalex",
+    "window": "2021",
+    "n_total": 5529514,
+    "available": true,
+    "type_filter": "article",
+    "totals_signature": "d19a22922ede",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "openalex",
+    "window": "2022",
+    "n_total": 5663441,
+    "available": true,
+    "type_filter": "article",
+    "totals_signature": "d19a22922ede",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "openalex",
+    "window": "2023",
+    "n_total": 5866015,
+    "available": true,
+    "type_filter": "article",
+    "totals_signature": "d19a22922ede",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "openalex",
+    "window": "2024",
+    "n_total": 6558065,
+    "available": true,
+    "type_filter": "article",
+    "totals_signature": "d19a22922ede",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "openalex",
+    "window": "2025",
+    "n_total": 8234580,
+    "available": true,
+    "type_filter": "article",
+    "totals_signature": "d19a22922ede",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "techcrunch",
+    "window": "2020",
+    "n_total": 11158,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "54a6a2052b0d",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "techcrunch",
+    "window": "2021",
+    "n_total": 12093,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "54a6a2052b0d",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "techcrunch",
+    "window": "2022",
+    "n_total": 11295,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "54a6a2052b0d",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "techcrunch",
+    "window": "2023",
+    "n_total": 8598,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "54a6a2052b0d",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "techcrunch",
+    "window": "2024",
+    "n_total": 7888,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "54a6a2052b0d",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  },
+  {
+    "source": "techcrunch",
+    "window": "2025",
+    "n_total": 6002,
+    "available": true,
+    "type_filter": null,
+    "totals_signature": "54a6a2052b0d",
+    "collected_at": "2026-09-21T20:13:32.523898+03:00"
+  }
+]
