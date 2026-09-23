@@ -25,6 +25,7 @@ from collector.constants import (
     CUTOFF_DATE,
     DEFAULT_MAX_CANDIDATES,
     DEFAULT_RECENT_DAYS,
+    DEFAULT_RECENT_DOCS_PER_SUBQUERY,
     SOLE_SOURCE_WEAK_TYPES,
     SOURCE_TOTALS_TTL_HOURS,
     WINDOWS,
@@ -51,6 +52,14 @@ from collector.settings import Settings
 logger = logging.getLogger(__name__)
 
 MainstreamPredicate = Callable[[Candidate], bool]
+
+# Поиск №1: язык подзапроса -> источник -> параметры его search(). Источника нет в
+# списке языка — подзапрос туда не идёт. ru уходит только в OpenAlex с фильтром языка:
+# arXiv и TechCrunch англоязычные. arXiv ищет слова по отдельности (замер А3).
+RECENT_ROUTES: dict[str, dict[str, dict]] = {
+    "en": {"openalex": {}, "arxiv": {"words": True}, "techcrunch": {}},
+    "ru": {"openalex": {"language": "ru"}},
+}
 
 
 def search_terms(name_en: str, aliases: list[str] | None = None) -> list[str]:
@@ -224,21 +233,36 @@ class DocumentCollector:
 
     def search_recent(
         self,
-        subqueries: Sequence[str],
+        subqueries: Sequence[str | dict],
         *,
         date_from: date | None = None,
         date_to_exclusive: date | None = None,
+        limit: int = DEFAULT_RECENT_DOCS_PER_SUBQUERY,
     ) -> RecentSearchResult:
-        """Fresh documents by topic subqueries. Result = candidate pool, not features."""
+        """Fresh documents by topic subqueries. Result = candidate pool, not features.
+
+        Вход — подзапросы шага 2.2 ({subquery_id, language, text}) или строки (CLI):
+        строка считается английским подзапросом. Источники выбираются по языку
+        (RECENT_ROUTES), у каждого документа — subquery_id, по которым он найден.
+        """
         start, end = _recent_bounds(date_from, date_to_exclusive)
-        queries = [q.strip() for q in subqueries if q and q.strip()]
-        documents = self._search_queries(queries, start, end, apply_feature_window=False)
-        return RecentSearchResult(
-            documents=documents,
-            subqueries=queries,
-            date_from=start,
-            date_to=end,
-        )
+        items = _recent_items(subqueries)
+        found: list[tuple[Document, str]] = []
+        for item in items:
+            for adapter in self.adapters:
+                options = _route(adapter.source, item["language"])
+                if options is None:
+                    continue
+                try:
+                    docs = adapter.search(item["text"], start, end, limit=limit, **options)
+                except AdapterError as exc:
+                    logger.warning("search failed for %s / %r: %s", adapter.source, item["text"], exc)
+                    continue
+                found += [(self._normalize_document(doc, adapter.source), item["subquery_id"])
+                          for doc in docs]
+        documents, ids = _dedupe_with_ids(found)
+        return RecentSearchResult(documents=documents, subqueries=items, date_from=start,
+                                  date_to=end, subquery_ids=ids)
 
     def collect_history(self, candidate: Candidate, *, use_cache: bool = True) -> CollectionResult:
         """History of one candidate for 2020-09-01 .. 2026-09-01. Input to compute_features."""
@@ -561,17 +585,60 @@ def collect_training(
 
 
 def search_recent(
-    subqueries: Sequence[str],
+    subqueries: Sequence[str | dict],
     *,
     collector: DocumentCollector | None = None,
     date_from: date | None = None,
     date_to_exclusive: date | None = None,
+    limit: int = DEFAULT_RECENT_DOCS_PER_SUBQUERY,
 ) -> dict:
     """Query mode, Search #1 (pipeline.md step 3): fresh documents by topic subqueries."""
     engine = collector or build_collector()
     return engine.search_recent(
-        subqueries, date_from=date_from, date_to_exclusive=date_to_exclusive
+        subqueries, date_from=date_from, date_to_exclusive=date_to_exclusive, limit=limit
     ).to_dict()
+
+
+def _recent_items(subqueries: Sequence[str | dict]) -> list[dict[str, str]]:
+    """Подзапросы к одному виду {subquery_id, language, text}. Строка — английский подзапрос."""
+    items: list[dict[str, str]] = []
+    for number, raw in enumerate(subqueries, start=1):
+        item = {"language": "en", "text": raw} if isinstance(raw, str) else dict(raw)
+        text = str(item.get("text") or "").strip()
+        if not text:
+            continue
+        language = str(item.get("language") or "").strip()
+        if language not in RECENT_ROUTES:
+            raise ValueError(f"подзапрос {text!r}: язык {language!r} не поддержан, "
+                             f"допустимы {sorted(RECENT_ROUTES)}")
+        items.append({"subquery_id": str(item.get("subquery_id") or f"s{number}"),
+                      "language": language, "text": text})
+    return items
+
+
+def _route(source: str, language: str) -> dict | None:
+    """Параметры search() источника для языка или None, если подзапрос туда не идёт.
+
+    Источник не из списка (например, заглушка в тестах) получает английские подзапросы
+    без параметров, как до маршрутизации, и не получает русские.
+    """
+    routes = RECENT_ROUTES[language]
+    return routes.get(source, {} if language == "en" else None)
+
+
+def _dedupe_with_ids(found: Iterable[tuple[Document, str]]) -> tuple[list[Document], dict[str, list[str]]]:
+    """Один документ на url; все subquery_id, по которым он нашёлся, в порядке находок."""
+    kept: list[Document] = []
+    ids: dict[str, list[str]] = {}
+    for doc, subquery_id in found:
+        if not doc.url:
+            continue
+        if doc.url not in ids:
+            ids[doc.url] = []
+            kept.append(doc)
+        if subquery_id not in ids[doc.url]:
+            ids[doc.url].append(subquery_id)
+    return kept, ids
 
 
 def collect_history(

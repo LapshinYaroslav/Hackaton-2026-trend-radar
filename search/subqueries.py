@@ -1,19 +1,42 @@
 """Шаг 2 режима «Запрос»: тема пользователя -> подзапросы на русском и английском."""
 import argparse
+import hashlib
 import json
 import re
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
-from search.llm_yandex_gpt import ask_llm
+from collector.query import OPERATOR_RE
+from search.llm_yandex_gpt import ask_llm, build_model_uri
+
+ROOT = Path(__file__).resolve().parents[1]
+CACHE_DIR = ROOT / "data" / "interim" / "cache" / "subqueries"
+PROMPT_VERSION = "subq-v2"
 
 N_SUBQUERIES_RU = 5
-N_SUBQUERIES_EN = 5
+N_SUBQUERIES_EN = 8
 LIMITS = {"ru": N_SUBQUERIES_RU, "en": N_SUBQUERIES_EN}
+# Меньше минимума после валидации — повтор по этому языку.
+MIN_SUBQUERIES = {"ru": 3, "en": 6}
 SUBQUERY_TEMPERATURE = 0.3
+RETRY_TEMPERATURE = 0.8
 MAX_TOKENS = 400
 MAX_TOPIC_WORKERS = 8  # сколько тем обрабатывать одновременно в пакетном режиме
+
+MIN_WORDS = 2
+MAX_WORDS = 4
+FORBIDDEN_CHARS = '"(),:;/'
+YEAR_RE = re.compile(r"\b(?:19\d\d|20\d\d|2100)\b")
+# Слова зрелых областей: метрики, стандарты, регулирование, учебные «задачи» и «инструменты».
+MATURE_WORDS = frozenset({
+    "metric", "metrics", "standard", "standards", "compliance", "regulation", "regulatory",
+    "framework", "frameworks", "task", "tasks", "tool", "tools",
+})
+MATURE_STEMS_RU = ("метрик", "стандарт", "регулир", "нормати")
+JACCARD_DUPLICATE = 0.6
+MISSING_VERSION = "версия модели неизвестна: API не вернул modelVersion"
 
 CYRILLIC_RE = re.compile(r"[а-яё]", re.IGNORECASE)
 FENCE_RE = re.compile(r"^```(?:json)?\s*|\s*```$", re.IGNORECASE)
@@ -42,7 +65,7 @@ def build_system_prompt(language: str) -> str:
 2. Подзапрос — более узкое название того же подхода: конкретный метод, алгоритм, материал, протокол, класс устройств или прикладная задача внутри темы.
 3. Тему можно только углублять, обобщать нельзя. Если тема «X в Y», то «X», «Y» и «X технологии» запрещены: они шире темы, и по ним найдутся документы из посторонних областей.
 4. Никаких имён собственных: ни компаний, ни продуктов, ни учёных, ни организаций, ни стран.
-5. Короткая ключевая фраза из 2-6 слов. Не предложение. Без кавычек, без поисковых операторов, без годов и чисел.
+5. Короткая ключевая фраза из 2-4 слов. Не предложение. Без кавычек, без поисковых операторов, без годов и чисел.
 6. Без оценочных и мета-слов: тренды, слабые сигналы, перспективные, прорывные, будущее, emerging, future, breakthrough.
 7. Подзапросы покрывают разные поднаправления темы и не перефразируют друг друга.
 8. {LANGUAGE_RULES[language]}
@@ -51,7 +74,7 @@ def build_system_prompt(language: str) -> str:
 Плохо, это обобщение: водородные технологии, возобновляемая энергетика, применение водорода, hydrogen energy.
 Хорошо, это углубление: твердооксидные топливные элементы, электролиз протонообменной мембраны, металлогидридное хранение водорода, solid oxide electrolysis cells, ammonia cracking catalysts.
 
-9. Подзапросы относятся к разным типам: конкретный алгоритм или метод; аппаратная платформа или материал; прикладная задача внутри темы; протокол, стандарт или безопасность; измерение, метрология или оценка качества.
+9. Каждый подзапрос — класс технических подходов или решений внутри темы, по которому сейчас идут исследования и разработки. Не учебная дисциплина и не раздел учебника, не метрика качества, не стандарт, не нормативное регулирование.
 
 Ответ строго один JSON-объект без пояснений и без markdown:
 {{"{language}": ["...", "..."]}}"""
@@ -84,87 +107,195 @@ def stems(text: str) -> set[str]:
     return {word[:STEM_LENGTH] for word in words if len(word) > 2 and word not in STOP_WORDS}
 
 
-def clean_subqueries(items: list, language: str, topic: str = "") -> list[str]:
-    """Отбрасывает пустые, чужой язык, мета-слова, обобщения темы и дубли. Порядок сохраняется."""
+def _format_reason(text: str) -> str | None:
+    """Правила формы: число слов, запрещённые символы, операторы, годы."""
+    words = len(text.split())
+    if not MIN_WORDS <= words <= MAX_WORDS:
+        return f"слов {words}, нужно {MIN_WORDS}-{MAX_WORDS}"
+    bad = [char for char in FORBIDDEN_CHARS if char in text]
+    if bad:
+        return f"символ {bad[0]}"
+    if OPERATOR_RE.search(text):
+        return "поисковый оператор"
+    if YEAR_RE.search(text):
+        return "год"
+    return None
+
+
+def _vocabulary_reason(low: str) -> str | None:
+    """Правила словаря: мета-слова и слова зрелых областей.
+
+    Стоп-листа компаний здесь нет намеренно: в labels/company_stoplist.txt лежат и термины
+    слабых сигналов (certified unlearning, sovereign ai), и правило отбрасывало бы именно
+    искомые направления. За прогоны А3 и Б7 оно не сработало ни разу.
+    """
+    meta = [word for word in sorted(META_WORDS) if word in low]
+    if meta:
+        return f"мета-слово {meta[0]}"
+    for word in WORD_RE.findall(low):
+        if word in MATURE_WORDS or word.startswith(MATURE_STEMS_RU):
+            return f"слово зрелой области {word}"
+    return None
+
+
+def jaccard(left: set[str], right: set[str]) -> float:
+    """Доля общих основ среди всех основ двух подзапросов."""
+    union = left | right
+    return len(left & right) / len(union) if union else 0.0
+
+
+def check_subqueries(items: list, language: str, topic: str = "",
+                     kept: list[str] | None = None) -> tuple[list[str], list[tuple[str, str]]]:
+    """Прошедшие подзапросы и отброшенные с причиной. kept — уже принятые раньше (для дублей).
+
+    Правило «обобщение темы» работает только для ru: тема приходит по-русски, и у
+    английского подзапроса с ней нет общих основ, поэтому en оно не отбрасывает никогда.
+    """
     topic_stems = stems(topic) if topic else set()
-    cleaned: list[str] = []
-    seen: set[str] = set()
+    accepted = list(kept or [])
+    rejected: list[tuple[str, str]] = []
     for item in items:
-        if not isinstance(item, str):
-            continue
-        text = item.strip().strip('"\'«»').strip()
+        text = item.strip().strip('"\'«»').strip() if isinstance(item, str) else ""
         if not text:
-            continue
-        has_cyrillic = bool(CYRILLIC_RE.search(text))
-        if (language == "ru") != has_cyrillic:
+            rejected.append((str(item), "пусто или не строка"))
             continue
         low = text.casefold()
-        if any(word in low for word in META_WORDS) or low in seen:
-            continue
-        if topic_stems and not stems(text) - topic_stems:
-            continue  # ни одного слова сверх темы: это перифраз или обобщение
-        seen.add(low)
-        cleaned.append(text)
-    return cleaned
+        reason = ("чужой язык" if (language == "ru") != bool(CYRILLIC_RE.search(text))
+                  else _format_reason(text) or _vocabulary_reason(low))
+        if reason is None and low in {old.casefold() for old in accepted}:
+            reason = "дубликат"
+        if reason is None:
+            close = [old for old in accepted if jaccard(stems(text), stems(old)) >= JACCARD_DUPLICATE]
+            reason = f"дубликат по основам: {close[0]}" if close else None
+        if reason is None and topic_stems and not stems(text) - topic_stems:
+            reason = "обобщение темы"  # ни одного слова сверх темы: перифраз или обобщение
+        if reason:
+            rejected.append((text, reason))
+        else:
+            accepted.append(text)
+    return accepted[len(kept or []):], rejected
 
 
-def _request_language(topic: str, language: str) -> tuple[dict, list[str], list[str]]:
-    """Один вызов LLM за подзапросами одного языка."""
-    warnings: list[str] = []
-    answer = ask_llm(build_system_prompt(language), build_user_prompt(topic), purpose="subqueries",
-                     temperature=SUBQUERY_TEMPERATURE, max_tokens=MAX_TOKENS)
+def clean_subqueries(items: list, language: str, topic: str = "") -> list[str]:
+    """Прошедшие подзапросы в исходном порядке; причины отказа — в check_subqueries."""
+    return check_subqueries(items, language, topic)[0]
+
+
+def retry_note(rejected: list[tuple[str, str]]) -> str:
+    """Строка к промпту повтора: какие подзапросы отброшены и почему."""
+    listed = "; ".join(f"«{text}» — {reason}" for text, reason in rejected) or "их было слишком мало"
+    return (f"\n\nПрошлый ответ не подошёл. Отброшены: {listed}. "
+            "Дай новые подзапросы, соблюдая все требования.")
+
+
+def _request_language(topic: str, language: str, temperature: float = SUBQUERY_TEMPERATURE,
+                      note: str = "") -> tuple[dict, list, list[str]]:
+    """Один вызов LLM за подзапросами одного языка. Возвращает ответ, сырой список, предупреждения."""
+    answer = ask_llm(build_system_prompt(language) + note, build_user_prompt(topic),
+                     purpose="subqueries", temperature=temperature, max_tokens=MAX_TOKENS)
     if answer["error"]:
-        warnings.append(f"вызов LLM ({language}) не удался: {answer['error']}")
-        return answer, [], warnings
+        return answer, [], [f"вызов LLM ({language}) не удался: {answer['error']}"]
     try:
-        parsed = parse_response(answer["text"], (language,))
+        return answer, parse_response(answer["text"], (language,))[language], []
     except ValueError as exc:
-        warnings.append(f"разбор ответа ({language}) не удался: {exc}")
-        return answer, [], warnings
-    return answer, clean_subqueries(parsed[language], language, topic), warnings
+        return answer, [], [f"разбор ответа ({language}) не удался: {exc}"]
 
 
-def _request_round(topic: str, languages: tuple) -> tuple[str, dict, list[str]]:
-    """Языки запрашиваются параллельно: ответ вдвое короче, время — как у одного вызова."""
-    found: dict[str, list[str]] = {}
-    warnings: list[str] = []
-    model_uri = ""
-    with ThreadPoolExecutor(max_workers=len(languages)) as pool:
-        futures = {lang: pool.submit(_request_language, topic, lang) for lang in languages}
-        for lang, future in futures.items():
-            answer, items, part_warnings = future.result()
-            model_uri = model_uri or answer["model_uri"]
-            found[lang] = items
-            warnings += part_warnings
-    return model_uri, found, warnings
+def _request_round(topic: str, requests: dict) -> dict:
+    """Языки запрашиваются параллельно. requests: язык -> (температура, дописка к промпту)."""
+    with ThreadPoolExecutor(max_workers=len(requests)) as pool:
+        futures = {lang: pool.submit(_request_language, topic, lang, temp, note)
+                   for lang, (temp, note) in requests.items()}
+        return {lang: future.result() for lang, future in futures.items()}
 
 
-def generate_subqueries(topic: str, query_id: str) -> dict:
-    """Тема пользователя -> до 5 русских и 5 английских подзапросов. При нехватке один повтор."""
+def _collect(topic: str, found: dict, rejected: dict, answers: list, warnings: list, round_: dict) -> None:
+    """Проверяет ответы одного круга и дописывает принятые к found, отказы — в rejected."""
+    for lang, (answer, items, part_warnings) in round_.items():
+        answers.append(answer)
+        warnings += part_warnings
+        good, bad = check_subqueries(items, lang, topic, found[lang])
+        found[lang] += good
+        rejected[lang] += bad
+        warnings += [f"отброшен ({lang}): «{text}» — {reason}" for text, reason in bad]
+
+
+def generate_subqueries(topic: str, query_id: str, use_cache: bool = True) -> dict:
+    """Тема -> до 8 английских и 5 русских подзапросов. Меньше минимума — один повтор с T=0.8."""
     if not topic or not topic.strip():
         raise ValueError("тема пустая")
-    model_uri, found, warnings = _request_round(topic, ("ru", "en"))
-    short = tuple(lang for lang in ("ru", "en") if len(found[lang]) < LIMITS[lang])
+    model_uri = build_model_uri()
+    key = cache_key(topic, model_uri)
+    cached = _cache_get(key) if use_cache else None
+    if cached is not None:
+        return _with_ids(cached, query_id)
+    found, rejected = {"ru": [], "en": []}, {"ru": [], "en": []}
+    answers, warnings = [], []
+    first = {lang: (SUBQUERY_TEMPERATURE, "") for lang in ("ru", "en")}
+    _collect(topic, found, rejected, answers, warnings, _request_round(topic, first))
+    short = [lang for lang in ("ru", "en") if len(found[lang]) < MIN_SUBQUERIES[lang]]
     if short:
         warnings.append(f"подзапросов меньше нужного ({', '.join(short)}), выполнен повтор")
-        retry_uri, retry_found, retry_warnings = _request_round(topic, short)
-        model_uri = model_uri or retry_uri
-        warnings += retry_warnings
-        for lang in short:
-            found[lang] = clean_subqueries(found[lang] + retry_found[lang], lang, topic)
-    subqueries = []
+        retry = {lang: (RETRY_TEMPERATURE, retry_note(rejected[lang])) for lang in short}
+        _collect(topic, found, rejected, answers, warnings, _request_round(topic, retry))
+    # Без английских подзапросов поиск №1 пуст: arXiv и TechCrunch получают только en.
+    # Без русских — только нет русских документов OpenAlex, запрос продолжается.
+    if not found["en"]:
+        raise ValueError("нет ни одного годного английского подзапроса; "
+                         f"нарушения: {[w for w in warnings if not w.startswith('подзапросов')]}")
     for lang in ("ru", "en"):
-        texts = found[lang][:LIMITS[lang]]
-        if len(texts) < LIMITS[lang]:
-            warnings.append(f"подзапросов на языке {lang}: {len(texts)} из {LIMITS[lang]}")
-        for number, text in enumerate(texts, start=1):
-            subqueries.append({"subquery_id": f"{query_id}-{lang}-{number}", "language": lang, "text": text})
-    return {"query_id": query_id, "topic": topic.strip(), "subqueries": subqueries,
-            "model_uri": model_uri, "warnings": warnings}
+        if len(found[lang]) < MIN_SUBQUERIES[lang]:
+            warnings.append(f"подзапросов на языке {lang}: {len(found[lang])} из {LIMITS[lang]}")
+    # Версия из ответа API. None допустим только с записью в warnings: иначе в выходе
+    # не отличить «версия не пришла» от «поле забыли заполнить».
+    version = next((a["model_version"] for a in answers if a.get("model_version")), None)
+    if version is None:
+        warnings.append(MISSING_VERSION)
+    result = {"query_id": query_id, "topic": topic.strip(),
+              "subqueries": [{"language": lang, "text": text} for lang in ("ru", "en")
+                             for text in found[lang][:LIMITS[lang]]],
+              "model_uri": model_uri, "model_version": version,
+              "prompt_version": PROMPT_VERSION, "warnings": warnings}
+    _cache_put(key, result)
+    return _with_ids(result, query_id)
+
+
+def _with_ids(result: dict, query_id: str) -> dict:
+    """Проставляет query_id и subquery_id вида q7-en-1: из кэша ответ приходит с чужим query_id."""
+    numbers = {"ru": 0, "en": 0}
+    subqueries = []
+    for item in result["subqueries"]:
+        numbers[item["language"]] += 1
+        subqueries.append({"subquery_id": f"{query_id}-{item['language']}-{numbers[item['language']]}",
+                           "language": item["language"], "text": item["text"]})
+    return {**result, "query_id": query_id, "subqueries": subqueries}
+
+
+def normalize_topic(topic: str) -> str:
+    """Тема для ключа кэша: нижний регистр, одиночные пробелы."""
+    return " ".join(topic.casefold().split())
+
+
+def cache_key(topic: str, model_uri: str) -> str:
+    """sha256 от (нормализованная тема, версия промпта, URI модели)."""
+    raw = json.dumps([normalize_topic(topic), PROMPT_VERSION, model_uri], ensure_ascii=False)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def _cache_get(key: str) -> dict | None:
+    """Ответ из файлового кэша или None."""
+    path = CACHE_DIR / f"{key}.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
+def _cache_put(key: str, result: dict) -> None:
+    """Кладёт ответ в файловый кэш."""
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    (CACHE_DIR / f"{key}.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def generate_subqueries_many(topics: list, query_ids: list | None = None,
-                             max_workers: int = MAX_TOPIC_WORKERS) -> list[dict]:
+                             max_workers: int = MAX_TOPIC_WORKERS, use_cache: bool = True) -> list[dict]:
     """Пакет тем: темы идут параллельно, порядок результатов совпадает с порядком тем."""
     ids = list(query_ids) if query_ids else [f"q{number}" for number in range(1, len(topics) + 1)]
     if len(ids) != len(topics):
@@ -172,7 +303,7 @@ def generate_subqueries_many(topics: list, query_ids: list | None = None,
     if not topics:
         return []
     with ThreadPoolExecutor(max_workers=min(max_workers, len(topics))) as pool:
-        return list(pool.map(generate_subqueries, topics, ids))
+        return list(pool.map(lambda topic, qid: generate_subqueries(topic, qid, use_cache), topics, ids))
 
 
 def _main() -> None:

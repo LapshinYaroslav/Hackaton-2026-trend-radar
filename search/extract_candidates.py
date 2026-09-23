@@ -20,7 +20,7 @@ from typing import Any, Iterable
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from search.llm_yandex_gpt import ask_llm
+from search.llm_yandex_gpt import ask_llm, build_model_uri
 
 ROOT = Path(__file__).resolve().parents[1]
 PROMPT_PATH = Path(__file__).resolve().parent / "prompts" / "extract_candidates.txt"
@@ -88,8 +88,15 @@ def parse_llm_json(text: str) -> dict:
     return data
 
 
-def _cache_key(payload: str) -> str:
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+def _cache_key(payload: str, model_uri: str) -> str:
+    """Ключ кэша: отпечаток пачки (промпт целиком и документы) плюс модель.
+
+    Двухступенчато — sha(sha(пачка) | модель): новый ключ выводится из прежнего отпечатка
+    и model_uri, который лежит в каждом файле кэша, поэтому старые ответы переносятся
+    под новый ключ без сети (задача Д4).
+    """
+    batch = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    return hashlib.sha256(f"{batch}|{model_uri}".encode("utf-8")).hexdigest()
 
 
 def _cache_get(key: str) -> dict | None:
@@ -119,7 +126,12 @@ def call_llm_batch(
     system_prompt = load_system_prompt()
     user_prompt = build_user_prompt(topic, numbered_docs)
     cache_payload = system_prompt + "\n---\n" + user_prompt
-    key = _cache_key(cache_payload)
+    try:
+        key = _cache_key(cache_payload, build_model_uri())
+    except ValueError as exc:
+        # Нет YANDEX_FOLDER_ID / модель не разрешена: та же реакция, что на отказ ask_llm
+        warnings.append(f"настройка LLM: {exc}")
+        return [], warnings
 
     if use_cache:
         cached = _cache_get(key)

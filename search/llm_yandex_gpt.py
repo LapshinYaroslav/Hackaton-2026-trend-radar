@@ -14,7 +14,11 @@ LOG_FILE = ROOT / "logs" / "llm_calls.jsonl"
 
 COMPLETION_URL = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
 SESSION = requests.Session()  # keep-alive: TLS-рукопожатие не повторяется на каждый вызов
-ALLOWED_MODELS = {"yandexgpt", "yandexgpt-lite"}
+# Явные имена моделей идут в URI без ветки: gpt://<folder>/yandexgpt-5-pro. Старые
+# псевдонимы — с веткой /latest, за которой модель может смениться. По документации
+# AI Studio (23.09.2026) yandexgpt/latest — это YandexGPT Pro 5, то есть yandexgpt-5-pro.
+EXPLICIT_MODELS = {"yandexgpt-5-pro", "yandexgpt-5.1"}
+ALLOWED_MODELS = {"yandexgpt", "yandexgpt-lite"} | EXPLICIT_MODELS
 DEFAULT_MODEL = "yandexgpt-lite"
 DEFAULT_TIMEOUT = 60
 
@@ -24,6 +28,7 @@ MAX_CONCURRENT_CALLS = 10
 CALL_LIMIT = threading.Semaphore(MAX_CONCURRENT_CALLS)
 RETRY_ATTEMPTS = 3
 RETRY_DELAY = 0.5
+TIMEOUT_ATTEMPTS = 2  # первая попытка и один повтор при таймауте
 
 
 def build_model_uri() -> str:
@@ -34,6 +39,8 @@ def build_model_uri() -> str:
         raise ValueError("В .env нет YANDEX_FOLDER_ID")
     if model not in ALLOWED_MODELS:
         raise ValueError(f"Модель {model!r} не разрешена, выберите из {sorted(ALLOWED_MODELS)}")
+    if model in EXPLICIT_MODELS:
+        return f"gpt://{folder_id}/{model}"
     return f"gpt://{folder_id}/{model}/latest"
 
 
@@ -47,12 +54,26 @@ def _log_call(record: dict) -> None:
         print(f"Предупреждение: не удалось записать лог вызова LLM: {exc}")
 
 
+def _post_once(body: dict, headers: dict):
+    """Один POST; при таймауте — ровно один повтор с теми же параметрами, затем ошибка.
+
+    Таймаут — сбой связи, а не содержания ответа, поэтому температура и промпт не меняются.
+    Замер Б7 (23.09.2026): один вызов из десяти не уложился в 60 с.
+    """
+    for attempt in range(TIMEOUT_ATTEMPTS):
+        try:
+            with CALL_LIMIT:
+                return SESSION.post(COMPLETION_URL, headers=headers, json=body, timeout=DEFAULT_TIMEOUT)
+        except requests.Timeout:
+            if attempt == TIMEOUT_ATTEMPTS - 1:
+                raise
+
+
 def _post_with_retry(body: dict, headers: dict) -> dict:
     """POST под ограничением конкурентности, с повтором при 429 и растущей паузой."""
     delay = RETRY_DELAY
     for attempt in range(RETRY_ATTEMPTS):
-        with CALL_LIMIT:
-            response = SESSION.post(COMPLETION_URL, headers=headers, json=body, timeout=DEFAULT_TIMEOUT)
+        response = _post_once(body, headers)
         if getattr(response, "status_code", 200) == 429 and attempt < RETRY_ATTEMPTS - 1:
             time.sleep(delay)
             delay *= 2

@@ -16,6 +16,9 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 SIGNALS_XLSX = ROOT / "data" / "raw" / "dataset.xlsx"
 NEGATIVES_CSV = ROOT / "labels" / "negatives.csv"
+# Многословная часть стоп-листа компаний, собранная из датасета один раз
+# (scripts/build_company_stoplist.py). Лежит в git: у жюри датасета организаторов нет.
+COMPANY_STOPLIST_TXT = ROOT / "labels" / "company_stoplist.txt"
 
 # Хвостовые скобки: только в самом конце строки и без вложенных скобок внутри.
 TAIL_PARENS = re.compile(r"\s*\(([^()]*)\)\s*$")
@@ -108,6 +111,19 @@ def load_all() -> pd.DataFrame:
 
 
 def company_stoplist() -> list[str]:
+    """Стоп-лист компаний из labels/company_stoplist.txt: по фразе на строку.
+
+    Читается только файл, датасет не нужен. Нет файла — ошибка с подсказкой, как его собрать.
+    """
+    if not COMPANY_STOPLIST_TXT.exists():
+        raise FileNotFoundError(
+            f"нет {COMPANY_STOPLIST_TXT.relative_to(ROOT)}: собери его командой "
+            "python -m scripts.build_company_stoplist (нужен data/raw/dataset.xlsx)")
+    lines = COMPANY_STOPLIST_TXT.read_text(encoding="utf-8").splitlines()
+    return sorted({line.strip() for line in lines if line.strip()})
+
+
+def company_stoplist_from_xlsx() -> list[str]:
     """Названия компаний из датасета сигналов: у негативов такой колонки нет.
 
     Остаются только многословные элементы, они сопоставляются как целая фраза.

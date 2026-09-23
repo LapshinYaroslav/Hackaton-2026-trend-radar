@@ -128,6 +128,27 @@ class AskLlmTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 llm.build_model_uri()
 
+    def test_timeout_retried_once_with_same_body(self):
+        """Таймаут: один повтор с тем же телом запроса, затем ответ."""
+        result, post = self._call(side_effect=[requests.ReadTimeout("медленно"), FakeResponse(BODY)])
+        self.assertIsNone(result["error"])
+        self.assertEqual(post.call_count, 2)
+        self.assertEqual(post.call_args_list[0].kwargs["json"], post.call_args_list[1].kwargs["json"])
+
+    def test_second_timeout_is_error(self):
+        """Два таймаута подряд: ошибка в ответе, третьей попытки нет."""
+        result, post = self._call(side_effect=[requests.ReadTimeout("раз"), requests.ReadTimeout("два")])
+        self.assertIn("ReadTimeout", result["error"])
+        self.assertIsNone(result["model_version"])
+        self.assertEqual(post.call_count, 2)
+
+    def test_explicit_model_uri_without_branch(self):
+        """Явное имя модели идёт в URI без /latest, старый псевдоним — с ним."""
+        with patch.dict("os.environ", {**ENV, "YANDEX_GPT_MODEL": "yandexgpt-5-pro"}):
+            self.assertEqual(llm.build_model_uri(), "gpt://b1gtest/yandexgpt-5-pro")
+        with patch.dict("os.environ", {**ENV, "YANDEX_GPT_MODEL": "yandexgpt"}):
+            self.assertEqual(llm.build_model_uri(), "gpt://b1gtest/yandexgpt/latest")
+
     def test_missing_api_key(self):
         """Без ключа в .env вызов не делается."""
         with patch.dict("os.environ", {**ENV, "YANDEX_API_KEY": ""}):

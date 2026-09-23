@@ -32,6 +32,8 @@ class FakeAdapter:
         self.fail_source_type = fail_source_type
         self.counts = counts or {}
         self.search_calls: list[tuple[str, date, date, int]] = []
+        # Параметры search() сверх общих: words у arXiv, language у OpenAlex (поиск №1).
+        self.search_options: list[dict] = []
         self.count_calls: list[tuple[date, date]] = []
         self.match_calls: list[tuple[str, date, date]] = []
 
@@ -42,8 +44,10 @@ class FakeAdapter:
         date_to_exclusive: date,
         *,
         limit: int,
+        **options,
     ) -> list[Document]:
         self.search_calls.append((query, date_from, date_to_exclusive, limit))
+        self.search_options.append(options)
         if self.fail_source_type is not None:
             require_source_type(self.fail_source_type, self.source)
         matched = [

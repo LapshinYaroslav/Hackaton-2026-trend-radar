@@ -10,6 +10,9 @@ import httpx
 
 from collector.settings import Settings
 
+# Паузы перед повторами после ответа 429, в секундах. Две паузы — три попытки всего.
+RETRY_429_DELAYS_S = (10, 30)
+
 
 class HttpTransport(Protocol):
     def get(
@@ -57,7 +60,17 @@ class HttpxTransport:
         headers: dict[str, str] | None = None,
         timeout: float | None = None,
     ) -> httpx.Response:
-        response = self._client.get(url, params=params, headers=headers, timeout=timeout)
+        """GET с повтором при 429: пауза 10 с, повтор, пауза 30 с, повтор; третий 429 — ошибка.
+
+        Одинаково для всех источников. Без повтора 429 в счётчиках давал неполное покрытие
+        и no_counters (прогон Г6: 2 кандидата из 19). Пауза повтора больше паузы arXiv в 3 с,
+        и запрос остаётся один: ждёт тот же поток, параллельного соединения нет.
+        """
+        for delay in (*RETRY_429_DELAYS_S, None):
+            response = self._client.get(url, params=params, headers=headers, timeout=timeout)
+            if response.status_code != 429 or delay is None:
+                break
+            time.sleep(delay)
         response.raise_for_status()
         return response
 
