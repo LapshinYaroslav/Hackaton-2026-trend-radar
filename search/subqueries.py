@@ -176,11 +176,6 @@ def check_subqueries(items: list, language: str, topic: str = "",
     return accepted[len(kept or []):], rejected
 
 
-def clean_subqueries(items: list, language: str, topic: str = "") -> list[str]:
-    """Прошедшие подзапросы в исходном порядке; причины отказа — в check_subqueries."""
-    return check_subqueries(items, language, topic)[0]
-
-
 def retry_note(rejected: list[tuple[str, str]]) -> str:
     """Строка к промпту повтора: какие подзапросы отброшены и почему."""
     listed = "; ".join(f"«{text}» — {reason}" for text, reason in rejected) or "их было слишком мало"

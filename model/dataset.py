@@ -27,8 +27,6 @@ TAIL_PARENS = re.compile(r"\s*\(([^()]*)\)\s*$")
 # На s8 именно внутренняя скобка ломала нормализатор: английское слово посреди русской
 # фразы, и модель отвечала смесью алфавитов пять попыток подряд.
 INLINE_PARENS = re.compile(r"\s*\(([^()]*)\)")
-WORD = re.compile(r"[^\W_]+", re.UNICODE)
-LATIN = re.compile(r"[a-zA-Z]")
 MIN_COMPANY_LEN = 4
 
 
@@ -46,19 +44,6 @@ def strip_inline_parens(name: str) -> tuple[str, str]:
     inside = [item.strip() for item in INLINE_PARENS.findall(name) if item.strip()]
     text = " ".join(INLINE_PARENS.sub(" ", name).split())
     return text, "; ".join(inside)
-
-
-def latin_word_share(text: str) -> float:
-    """Доля слов с латинскими буквами. Пустая строка — ноль."""
-    words = WORD.findall(str(text))
-    if not words:
-        return 0.0
-    return sum(1 for word in words if LATIN.search(word)) / len(words)
-
-
-def word_count(text: str) -> int:
-    """Число слов в строке."""
-    return len(WORD.findall(str(text)))
 
 
 def load_signals() -> pd.DataFrame:

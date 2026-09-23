@@ -1,8 +1,7 @@
-"""Предобработка названий: отделение хвостовых скобок и подсчёт латиницы."""
+"""Предобработка названий: отделение хвостовых и внутренних скобок."""
 import pytest
 
-from model.dataset import (latin_word_share, split_tail_parens, strip_inline_parens,
-                           word_count)
+from model.dataset import split_tail_parens, strip_inline_parens
 
 
 @pytest.mark.parametrize(
@@ -59,18 +58,6 @@ def test_nested_parens_are_not_split():
 
 def test_name_without_parens_is_unchanged():
     assert split_tail_parens("  Частные сети 5G  ") == ("Частные сети 5G", "")
-
-
-def test_latin_share_counts_words_with_latin_letters():
-    assert latin_word_share("Сети LoRaWAN для датчиков") == pytest.approx(0.25, abs=1e-9)
-    assert latin_word_share("web application firewall") == 1.0
-    assert latin_word_share("датчики") == 0.0
-    assert latin_word_share("") == 0.0
-
-
-def test_word_count_ignores_punctuation():
-    assert word_count("Частные сети 5G на промышленных площадках") == 6
-    assert word_count("ISO 20022, ISO 8583") == 4
 
 
 def test_company_stoplist_file_matches_xlsx():

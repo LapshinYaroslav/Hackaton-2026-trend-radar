@@ -513,31 +513,3 @@ def test_arxiv_calls_https_directly() -> None:
     ArxivAdapter(transport=transport, min_interval_s=0).search("photonic", WINDOW_BEFORE_START,
                                                                 WINDOW_BEFORE_END, limit=5)
     assert transport.calls[0][1] == "https://export.arxiv.org/api/query"
-
-
-def test_arxiv_partial_fallback_counts_and_subtracts() -> None:
-    """total > 2000: окна до даты 2000-й записи — из записей, остальные счётчиками, последнее — вычитанием."""
-    from collector.constants import COUNTER_WINDOWS
-
-    days = ["2015-01-01T00:00:00Z"] * 1200 + ["2020-10-01T00:00:00Z"] * 500 + ["2021-10-01T00:00:00Z"] * 299 \
-        + ["2022-03-01T00:00:00Z"]
-    counter = lambda n: httpx.Response(200, text=_atom_feed(n, []))
-    # окно 2021 закончилось 2022-09-01 — позже последней записи, значит, неполное; неполные: 2021..2025.
-    transport = ScriptedTransport([httpx.Response(200, text=_atom_feed(2500, days)),
-                                   counter(310), counter(90), counter(50), counter(30)])
-    adapter = ArxivAdapter(transport=transport, min_interval_s=0)
-    counts = adapter.count_windows_partial(build_search_terms(["edge model compression"], []), COUNTER_WINDOWS)
-    assert counts["prev6"] == 1200 and counts["2020"] == 500
-    assert [counts[w] for w in ("2021", "2022", "2023", "2024")] == [310, 90, 50, 30]
-    assert counts["2025"] == 2500 - (1200 + 500 + 310 + 90 + 50 + 30)
-    assert sum(counts.values()) == 2500 and len(transport.calls) == 5
-
-
-def test_arxiv_partial_small_total_is_one_call() -> None:
-    """total ≤ 2000 — обычная раскладка одиночного вызова, без счётчиков."""
-    from collector.constants import COUNTER_WINDOWS
-
-    transport = ScriptedTransport([httpx.Response(200, text=_atom_feed(2, ["2015-01-01T00:00:00Z", "2025-10-01T00:00:00Z"]))])
-    counts = ArxivAdapter(transport=transport, min_interval_s=0).count_windows_partial(
-        build_search_terms(["edge model compression"], []), COUNTER_WINDOWS)
-    assert counts["prev6"] == 1 and counts["2025"] == 1 and len(transport.calls) == 1
