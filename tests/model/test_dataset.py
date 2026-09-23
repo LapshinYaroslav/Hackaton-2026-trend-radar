@@ -1,8 +1,7 @@
-"""Предобработка названий: отделение хвостовых скобок и подсчёт латиницы."""
+"""Предобработка названий: отделение хвостовых и внутренних скобок."""
 import pytest
 
-from model.dataset import (latin_word_share, split_tail_parens, strip_inline_parens,
-                           word_count)
+from model.dataset import split_tail_parens, strip_inline_parens
 
 
 @pytest.mark.parametrize(
@@ -61,13 +60,20 @@ def test_name_without_parens_is_unchanged():
     assert split_tail_parens("  Частные сети 5G  ") == ("Частные сети 5G", "")
 
 
-def test_latin_share_counts_words_with_latin_letters():
-    assert latin_word_share("Сети LoRaWAN для датчиков") == pytest.approx(0.25, abs=1e-9)
-    assert latin_word_share("web application firewall") == 1.0
-    assert latin_word_share("датчики") == 0.0
-    assert latin_word_share("") == 0.0
+def test_company_stoplist_file_matches_xlsx():
+    """Файл в git совпадает со стоп-листом из датасета. Без датасета тест пропускается."""
+    from model import dataset
+
+    if not dataset.SIGNALS_XLSX.exists():
+        pytest.skip("нет data/raw/dataset.xlsx")
+    assert set(dataset.company_stoplist()) == set(dataset.company_stoplist_from_xlsx())
 
 
-def test_word_count_ignores_punctuation():
-    assert word_count("Частные сети 5G на промышленных площадках") == 6
-    assert word_count("ISO 20022, ISO 8583") == 4
+def test_company_stoplist_without_file_explains(tmp_path, monkeypatch):
+    """Нет файла стоп-листа — FileNotFoundError с командой сборки, а не падение на xlsx."""
+    from model import dataset
+
+    monkeypatch.setattr(dataset, "COMPANY_STOPLIST_TXT", tmp_path / "company_stoplist.txt")
+    monkeypatch.setattr(dataset, "ROOT", tmp_path)
+    with pytest.raises(FileNotFoundError, match="build_company_stoplist"):
+        dataset.company_stoplist()

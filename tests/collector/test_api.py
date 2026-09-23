@@ -374,3 +374,47 @@ def test_fresh_total_replaces_stale_one_without_duplicating_it() -> None:
     saved = cache.get_source_totals() or []
     assert len(saved) == 2
     assert {(row.window, row.n_total) for row in saved} == {("before", 1000), ("now", 1250)}
+
+
+def _recent_sources() -> tuple[FakeAdapter, FakeAdapter, FakeAdapter]:
+    """Три источника поиска №1 с настоящими именами: маршрутизация идёт по имени."""
+    fresh = [doc(source="x", source_type="paper", published_at="2026-09-10", url="https://x/1")]
+    return (FakeAdapter("openalex", "paper", documents=fresh),
+            FakeAdapter("arxiv", "preprint", documents=fresh),
+            FakeAdapter("techcrunch", "news", documents=fresh))
+
+
+def test_search_recent_routes_by_language() -> None:
+    """ru — только OpenAlex с language:ru; en — все три, arXiv со словами по отдельности."""
+    openalex, arxiv, techcrunch = _recent_sources()
+    DocumentCollector(adapters=[openalex, arxiv, techcrunch]).search_recent(
+        [{"subquery_id": "q1-ru-1", "language": "ru", "text": "квантовые сенсоры"},
+         {"subquery_id": "q1-en-1", "language": "en", "text": "quantum sensing"}],
+        date_from=date(2026, 9, 1), date_to_exclusive=date(2026, 9, 18))
+
+    assert [call[0] for call in openalex.search_calls] == ["квантовые сенсоры", "quantum sensing"]
+    assert openalex.search_options == [{"language": "ru"}, {}]
+    assert [call[0] for call in arxiv.search_calls] == ["quantum sensing"]
+    assert arxiv.search_options == [{"words": True}]
+    assert [call[0] for call in techcrunch.search_calls] == ["quantum sensing"]
+    assert techcrunch.search_calls[0][3] == 25
+
+
+def test_search_recent_documents_carry_subquery_ids() -> None:
+    """Документ, найденный двумя подзапросами, один, и у него оба subquery_id."""
+    openalex, _, _ = _recent_sources()
+    result = DocumentCollector(adapters=[openalex]).search_recent(
+        [{"subquery_id": "q1-en-1", "language": "en", "text": "quantum sensing"},
+         {"subquery_id": "q1-en-2", "language": "en", "text": "quantum sensors"}],
+        date_from=date(2026, 9, 1), date_to_exclusive=date(2026, 9, 18))
+
+    documents = result.to_dict()["documents"]
+    assert len(documents) == 1
+    assert documents[0]["subquery_ids"] == ["q1-en-1", "q1-en-2"]
+
+
+def test_search_recent_rejects_unknown_language() -> None:
+    """Язык без маршрута — ошибка, а не тихая отправка во все источники."""
+    with pytest.raises(ValueError):
+        DocumentCollector(adapters=list(_recent_sources())).search_recent(
+            [{"subquery_id": "q1-de-1", "language": "de", "text": "quanten sensorik"}])

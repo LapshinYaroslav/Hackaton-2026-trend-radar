@@ -128,6 +128,43 @@ class AskLlmTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 llm.build_model_uri()
 
+    def test_timeout_retried_once_with_same_body(self):
+        """Таймаут: один повтор с тем же телом запроса, затем ответ."""
+        result, post = self._call(side_effect=[requests.ReadTimeout("медленно"), FakeResponse(BODY)])
+        self.assertIsNone(result["error"])
+        self.assertEqual(post.call_count, 2)
+        self.assertEqual(post.call_args_list[0].kwargs["json"], post.call_args_list[1].kwargs["json"])
+
+    def test_second_timeout_is_error(self):
+        """Два таймаута подряд: ошибка в ответе, третьей попытки нет."""
+        result, post = self._call(side_effect=[requests.ReadTimeout("раз"), requests.ReadTimeout("два")])
+        self.assertIn("ReadTimeout", result["error"])
+        self.assertIsNone(result["model_version"])
+        self.assertEqual(post.call_count, 2)
+
+    def test_qwen_goes_through_openai_compatible_api(self):
+        """Qwen3 235B: chat/completions, URI с /latest, ответ из choices."""
+        body = {"choices": [{"message": {"content": "ответ qwen"}}], "model": "qwen3", "usage": {}}
+        with patch.dict("os.environ", ENV), patch.object(llm, "LOG_FILE", self.log_file), \
+             patch.object(llm.SESSION, "post", return_value=FakeResponse(body)) as post:
+            result = llm.ask_llm("с", "п", purpose="t", temperature=0.2, model="qwen3-235b-a22b-fp8")
+        self.assertEqual(result["text"], "ответ qwen")
+        self.assertEqual(post.call_args.args[0], llm.OPENAI_URL)
+        sent = post.call_args.kwargs["json"]
+        self.assertEqual(sent["model"], "gpt://b1gtest/qwen3-235b-a22b-fp8/latest")
+        self.assertEqual(sent["messages"][0], {"role": "system", "content": "с"})
+
+    def test_model_argument_overrides_env(self):
+        with patch.dict("os.environ", ENV):
+            self.assertEqual(llm.build_model_uri("yandexgpt-5-pro"), "gpt://b1gtest/yandexgpt-5-pro")
+
+    def test_explicit_model_uri_without_branch(self):
+        """Явное имя модели идёт в URI без /latest, старый псевдоним — с ним."""
+        with patch.dict("os.environ", {**ENV, "YANDEX_GPT_MODEL": "yandexgpt-5-pro"}):
+            self.assertEqual(llm.build_model_uri(), "gpt://b1gtest/yandexgpt-5-pro")
+        with patch.dict("os.environ", {**ENV, "YANDEX_GPT_MODEL": "yandexgpt"}):
+            self.assertEqual(llm.build_model_uri(), "gpt://b1gtest/yandexgpt/latest")
+
     def test_missing_api_key(self):
         """Без ключа в .env вызов не делается."""
         with patch.dict("os.environ", {**ENV, "YANDEX_API_KEY": ""}):

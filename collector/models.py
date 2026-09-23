@@ -316,14 +316,18 @@ class RecentSearchResult:
     """Search #1 output: fresh documents for candidate extraction. Not for features."""
 
     documents: list[Document] = field(default_factory=list)
-    subqueries: list[str] = field(default_factory=list)
+    subqueries: list[dict[str, str]] = field(default_factory=list)
     date_from: date | None = None
     date_to: date | None = None
+    # url документа -> subquery_id, по которым он найден. Отдельно от Document:
+    # поля документа — контракт (methodology.md, раздел 5), его не расширяем.
+    subquery_ids: dict[str, list[str]] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
-            "documents": [doc.to_dict() for doc in self.documents],
-            "subqueries": list(self.subqueries),
+            "documents": [{**doc.to_dict(), "subquery_ids": list(self.subquery_ids.get(doc.url, []))}
+                          for doc in self.documents],
+            "subqueries": [dict(item) for item in self.subqueries],
             "date_from": self.date_from.isoformat() if self.date_from else None,
             "date_to": self.date_to.isoformat() if self.date_to else None,
         }

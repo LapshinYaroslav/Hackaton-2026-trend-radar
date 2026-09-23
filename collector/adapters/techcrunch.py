@@ -28,6 +28,18 @@ MIN_INTERVAL_S = 1.0
 # десять запросов по секунде на каждый термин.
 PAGE_SIZE = 100
 
+# Задача Л: семь счётчиков одним диапазоном с раскладкой по окнам локально. Флаг читает
+# только оркестратор; обучающая таблица и гейт считаются по кэшу. Сверка Л2 (23.09.2026,
+# 156 технологий): 138 одиночным вызовом, 18 — откат (X-WP-Total > 600); по полю date
+# совпали все 966 пар (технология, окно), max |Δscore| = 0.0 — правило принятия выполнено.
+TECHCRUNCH_ONE_CALL_COUNTS = True
+# Больше записей — откат на семь вызовов count_matching: 6 страниц по 100.
+ONE_CALL_MAX_POSTS = 600
+# Поле даты для раскладки. after/before у WordPress сравнивают с локальной датой записи
+# (date, время сайта), а не с date_gmt: сверка Л2 — date совпало в 966 парах из 966,
+# date_gmt разошлось в 18 (все у границы окон 2022/2023, на признаки не влияют).
+ONE_CALL_DATE_FIELD = "date"
+
 
 class TechCrunchAdapter:
     source = "techcrunch"
@@ -118,6 +130,49 @@ class TechCrunchAdapter:
             if total is not None:
                 best = total if best is None else max(best, total)
         return best
+
+    def fetch_post_dates(self, search: SearchTerms, date_from: date,
+                         date_to_exclusive: date) -> list[dict[str, str]] | None:
+        """Даты всех записей по фразе за диапазон, постранично. None — нужен откат на семь счётчиков.
+
+        Та же строка поиска и те же after/before/status, что у count_matching, только диапазон
+        один на все окна и поля — одни даты. Откат: терминов не один, X-WP-Total неизвестен
+        или больше ONE_CALL_MAX_POSTS, любой сбой, записей получено не столько, сколько обещано.
+        """
+        if len(search.terms) != 1:
+            return None
+        posts: list[dict[str, str]] = []
+        total: int | None = None
+        for page in range(1, ONE_CALL_MAX_POSTS // PAGE_SIZE + 1):
+            params = {**_posts_params(search=search.terms[0], date_from=date_from,
+                                      date_to_exclusive=date_to_exclusive, page=page, per_page=PAGE_SIZE),
+                      "_fields": "date,date_gmt"}
+            self._limiter.wait()
+            try:
+                response = self._transport.get(POSTS_URL, params=params)
+                batch = response.json()
+            except (httpx.HTTPError, ValueError):
+                return None
+            header = response.headers.get("X-WP-Total")
+            if header is None or not str(header).isdigit():
+                return None
+            total = int(header)
+            if total > ONE_CALL_MAX_POSTS:
+                return None
+            posts += [post for post in batch if isinstance(post, dict)]
+            if len(posts) >= total or len(batch) < PAGE_SIZE:  # короткая страница — последняя
+                break
+        return posts if total is not None and len(posts) == total else None
+
+    def count_windows_one_call(self, search: SearchTerms,
+                               windows: dict[str, tuple[date, date]]) -> dict[str, int] | None:
+        """Счётчики по окнам одним диапазоном (постранично) с раскладкой локально по ONE_CALL_DATE_FIELD."""
+        if not windows:
+            return None
+        start = min(bounds[0] for bounds in windows.values())
+        end = max(bounds[1] for bounds in windows.values())
+        posts = self.fetch_post_dates(search, start, end)
+        return None if posts is None else split_by_windows(posts, windows, ONE_CALL_DATE_FIELD)
 
     def totals_request(self, date_from: date, date_to_exclusive: date) -> tuple[str, dict[str, Any]]:
         """Запрос корпусного итога: та же выдача без поискового слова, нужен заголовок."""
@@ -221,6 +276,22 @@ def _posts_params(
     if search:
         params["search"] = search
     return params
+
+
+def split_by_windows(posts: list[dict[str, str]], windows: dict[str, tuple[date, date]],
+                     field: str) -> dict[str, int]:
+    """Раскладка записей по окнам по полю даты field ('date' или 'date_gmt').
+
+    Границы строгие с обеих сторон, как у after/before WordPress: запись ровно в полночь
+    первого дня окна не попадает ни в одно окно — так же она не попадала в обучающие счётчики.
+    """
+    counts = {name: 0 for name in windows}
+    for post in posts:
+        stamp = datetime.fromisoformat(str(post.get(field) or "")[:19])
+        for name, (lower, upper) in windows.items():
+            if datetime.combine(lower, datetime.min.time()) < stamp < datetime.combine(upper, datetime.min.time()):
+                counts[name] += 1
+    return counts
 
 
 def _start_of_day(value: date) -> str:

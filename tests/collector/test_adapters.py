@@ -95,7 +95,7 @@ def test_arxiv_maps_preprint_and_counts_its_own_totals() -> None:
     adapter = ArxivAdapter(transport=transport, min_interval_s=0)
 
     assert adapter.count_total(WINDOW_BEFORE_START, WINDOW_BEFORE_END) == 500
-    assert transport.calls[0][1] == "http://export.arxiv.org/api/query"
+    assert transport.calls[0][1] == "https://export.arxiv.org/api/query"
     assert "api.openalex.org" not in transport.calls[0][1]
     docs = adapter.search("optical", WINDOW_BEFORE_START, WINDOW_BEFORE_END, limit=10)
     assert docs[0].source == "arxiv"
@@ -359,3 +359,157 @@ def test_unusable_terms_give_no_count() -> None:
         broken, WINDOW_BEFORE_START, WINDOW_BEFORE_END
     ) is None
     assert oa.calls == [] and ax.calls == []
+
+
+def test_arxiv_recent_search_uses_words_counters_keep_phrase() -> None:
+    """Поиск №1 ищет слова по отдельности, счётчик признаков — по-прежнему фразой."""
+    atom = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<feed xmlns="http://www.w3.org/2005/Atom" '
+        'xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">'
+        "<opensearch:totalResults>5</opensearch:totalResults></feed>"
+    )
+    transport = ScriptedTransport([httpx.Response(200, text="<feed/>"), httpx.Response(200, text=atom)])
+    adapter = ArxivAdapter(transport=transport, min_interval_s=0)
+
+    adapter.search("edge model compression", WINDOW_BEFORE_START, WINDOW_BEFORE_END, limit=5, words=True)
+    adapter.count_matching(build_search_terms(["edge model compression"], []),
+                           WINDOW_BEFORE_START, WINDOW_BEFORE_END)
+    recent = transport.calls[0][2]["params"]["search_query"]
+    counter = transport.calls[1][2]["params"]["search_query"]
+    assert recent.startswith("all:edge AND all:model AND all:compression AND submittedDate:")
+    assert '"edge model compression"' in counter
+    assert "all:edge AND" not in counter
+
+
+def test_arxiv_search_default_is_phrase() -> None:
+    """Без words поиск arXiv остаётся фразовым: выгрузка истории кандидата не меняется."""
+    transport = ScriptedTransport([httpx.Response(200, text="<feed/>")])
+    ArxivAdapter(transport=transport, min_interval_s=0).search(
+        "edge model compression", WINDOW_BEFORE_START, WINDOW_BEFORE_END, limit=5)
+    assert transport.calls[0][2]["params"]["search_query"].startswith('all:"edge model compression" AND ')
+
+
+def test_openalex_language_filter_only_when_asked() -> None:
+    """language:ru попадает в фильтр только по запросу; обычный поиск его не получает."""
+    empty = {"results": [], "meta": {"count": 0, "next_cursor": None}}
+    transport = ScriptedTransport([httpx.Response(200, json=empty), httpx.Response(200, json=empty)])
+    adapter = OpenAlexAdapter(transport=transport, min_interval_s=0)
+
+    adapter.search("квантовые сенсоры", WINDOW_BEFORE_START, WINDOW_BEFORE_END, limit=5, language="ru")
+    adapter.search("quantum sensing", WINDOW_BEFORE_START, WINDOW_BEFORE_END, limit=5)
+    assert "language:ru" in transport.calls[0][2]["params"]["filter"]
+    assert "language" not in transport.calls[1][2]["params"]["filter"]
+
+
+def _atom_feed(total: int, published: list[str]) -> str:
+    """Лента Atom с totalResults и записями с заданными датами первой версии."""
+    entries = "".join(
+        f"<entry><id>http://arxiv.org/abs/{i}</id><title>t{i}</title>"
+        f"<published>{day}</published><updated>2026-01-01T00:00:00Z</updated></entry>"
+        for i, day in enumerate(published))
+    return ('<?xml version="1.0" encoding="UTF-8"?>'
+            '<feed xmlns="http://www.w3.org/2005/Atom" '
+            'xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">'
+            f"<opensearch:totalResults>{total}</opensearch:totalResults>{entries}</feed>")
+
+
+def test_arxiv_one_call_splits_by_first_version_date() -> None:
+    """Записи раскладываются по окнам по <published>; граница окна полуоткрытая."""
+    from collector.constants import COUNTER_WINDOWS
+
+    days = ["2015-03-01T10:00:00Z", "2020-08-31T23:59:59Z", "2020-09-01T00:00:00Z", "2025-12-01T00:00:00Z"]
+    transport = ScriptedTransport([httpx.Response(200, text=_atom_feed(4, days))])
+    adapter = ArxivAdapter(transport=transport, min_interval_s=0)
+
+    counts = adapter.count_windows_one_call(build_search_terms(["edge model compression"], []),
+                                            COUNTER_WINDOWS)
+    assert counts == {"prev6": 2, "2020": 1, "2021": 0, "2022": 0, "2023": 0, "2024": 0, "2025": 1}
+    params = transport.calls[0][2]["params"]
+    assert params["sortBy"] == "submittedDate" and params["sortOrder"] == "ascending"
+    assert params["max_results"] == 2000
+    assert '"edge model compression"' in params["search_query"]
+    assert "submittedDate:[201409010000 TO 202608312359]" in params["search_query"]
+
+
+def test_arxiv_one_call_falls_back_when_too_many_or_incomplete() -> None:
+    """totalResults больше потолка или записей меньше обещанного — None, откат на семь счётчиков."""
+    from collector.constants import COUNTER_WINDOWS
+
+    terms = build_search_terms(["edge model compression"], [])
+    too_many = ScriptedTransport([httpx.Response(200, text=_atom_feed(2001, ["2021-01-01T00:00:00Z"]))])
+    short = ScriptedTransport([httpx.Response(200, text=_atom_feed(3, ["2021-01-01T00:00:00Z"]))])
+    assert ArxivAdapter(transport=too_many, min_interval_s=0).count_windows_one_call(terms, COUNTER_WINDOWS) is None
+    assert ArxivAdapter(transport=short, min_interval_s=0).count_windows_one_call(terms, COUNTER_WINDOWS) is None
+
+
+def test_openalex_institutions_count_distinct_groups() -> None:
+    """Число организаций — число групп authorships.institutions.id без unknown; работы — meta.count."""
+    groups = [{"key": "https://openalex.org/I1", "count": 5}, {"key": "https://openalex.org/I2", "count": 1},
+              {"key": "unknown", "count": 3}]
+    transport = ScriptedTransport([httpx.Response(200, json={"meta": {"count": 7}, "group_by": groups})])
+    adapter = OpenAlexAdapter(transport=transport, min_interval_s=0)
+
+    got = adapter.count_institutions(build_search_terms(["edge model compression"], []),
+                                     WINDOW_BEFORE_START, WINDOW_BEFORE_END)
+    assert got == {"works": 7, "institutions": 2, "capped": False}
+    params = transport.calls[0][2]["params"]
+    assert params["group_by"] == "authorships.institutions.id" and params["per_page"] == 200
+    assert "type:article" in params["filter"]
+
+
+def test_openalex_institutions_capped_at_page() -> None:
+    """200 групп на странице — число не точное, capped=True."""
+    groups = [{"key": f"https://openalex.org/I{i}", "count": 1} for i in range(200)]
+    transport = ScriptedTransport([httpx.Response(200, json={"meta": {"count": 999}, "group_by": groups})])
+    got = OpenAlexAdapter(transport=transport, min_interval_s=0).count_institutions(
+        build_search_terms(["humanoid robot"], []), WINDOW_BEFORE_START, WINDOW_BEFORE_END)
+    assert got == {"works": 999, "institutions": 200, "capped": True}
+
+
+def test_techcrunch_split_windows_strict_bounds_and_field() -> None:
+    """Полночь первого дня окна не попадает никуда (after/before строгие); date и date_gmt различаются."""
+    from datetime import date as d
+    from collector.adapters.techcrunch import split_by_windows
+
+    windows = {"2020": (d(2020, 9, 1), d(2021, 9, 1)), "2021": (d(2021, 9, 1), d(2022, 9, 1))}
+    posts = [{"date": "2021-09-01T00:00:00", "date_gmt": "2021-09-01T07:00:00"},
+             {"date": "2021-08-31T23:30:00", "date_gmt": "2021-09-01T06:30:00"},
+             {"date": "2021-09-01T00:00:01", "date_gmt": "2021-09-01T07:00:01"}]
+    assert split_by_windows(posts, windows, "date") == {"2020": 1, "2021": 1}
+    assert split_by_windows(posts, windows, "date_gmt") == {"2020": 0, "2021": 3}
+
+
+def test_techcrunch_one_call_pages_and_params() -> None:
+    """Одна фраза, один диапазон, _fields только даты, страницы до X-WP-Total."""
+    from collector.constants import COUNTER_WINDOWS
+
+    page = lambda n: [{"date": "2023-05-01T10:00:00", "date_gmt": "2023-05-01T17:00:00"}] * n
+    transport = ScriptedTransport([httpx.Response(200, json=page(100), headers={"X-WP-Total": "150"}),
+                                   httpx.Response(200, json=page(50), headers={"X-WP-Total": "150"})])
+    adapter = TechCrunchAdapter(transport=transport, min_interval_s=0)
+    counts = adapter.count_windows_one_call(build_search_terms(["edge model compression"], []), COUNTER_WINDOWS)
+    assert counts["2022"] == 150 and sum(counts.values()) == 150
+    params = transport.calls[0][2]["params"]
+    assert params["search"] == "edge model compression" and params["_fields"] == "date,date_gmt"
+    assert params["after"] == "2014-09-01T00:00:00" and params["before"] == "2026-09-01T00:00:00"
+    assert params["per_page"] == 100 and params["status"] == "publish" and len(transport.calls) == 2
+
+
+def test_techcrunch_one_call_falls_back_over_600_or_short() -> None:
+    from collector.constants import COUNTER_WINDOWS
+
+    terms = build_search_terms(["edge model compression"], [])
+    many = ScriptedTransport([httpx.Response(200, json=[], headers={"X-WP-Total": "601"})])
+    short = ScriptedTransport([httpx.Response(200, json=[{"date": "2023-05-01T10:00:00"}] * 3,
+                                              headers={"X-WP-Total": "5"})])
+    assert TechCrunchAdapter(transport=many, min_interval_s=0).count_windows_one_call(terms, COUNTER_WINDOWS) is None
+    assert TechCrunchAdapter(transport=short, min_interval_s=0).count_windows_one_call(terms, COUNTER_WINDOWS) is None
+
+
+def test_arxiv_calls_https_directly() -> None:
+    """Запросы arXiv сразу на https: http давал 301 на каждый вызов (задача Л4.1)."""
+    transport = ScriptedTransport([httpx.Response(200, text="<feed/>")])
+    ArxivAdapter(transport=transport, min_interval_s=0).search("photonic", WINDOW_BEFORE_START,
+                                                                WINDOW_BEFORE_END, limit=5)
+    assert transport.calls[0][1] == "https://export.arxiv.org/api/query"

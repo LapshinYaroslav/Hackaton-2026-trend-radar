@@ -23,13 +23,22 @@ from collector.http import HttpTransport, HttpxTransport, RateLimiter
 from collector.models import Document, SearchTerms, parse_utc_date, require_source_type
 from collector.settings import Settings
 
-ARXIV_API = "http://export.arxiv.org/api/query"
+# Сразу https: http отвечал 301 на каждый запрос и переадресовывал сюда же с теми же параметрами
+# (задача Л4.1, 23.09.2026: тело ответа по обоим адресам совпало побайтно).
+ARXIV_API = "https://export.arxiv.org/api/query"
 ATOM = "{http://www.w3.org/2005/Atom}"
 OPENSEARCH_TOTAL = "{http://a9.com/-/spec/opensearch/1.1/}totalResults"
 ARXIV_NS = "{http://arxiv.org/schemas/atom}"
 
 # arXiv просит не чаще одного запроса в три секунды.
 MIN_INTERVAL_S = 3.1
+
+# Задача В: семь счётчиков одним запросом. Читает только оркестратор (pipeline/fetch.py);
+# обучающая таблица и гейт считаются по кэшу и флаг не видят. Сверка 23.09.2026 на 156
+# технологиях: 6 пар (технология, окно) из 1029 не совпали, |Δscore| не больше 1.5e-4.
+ARXIV_ONE_CALL_COUNTS = True
+# Потолок одного ответа Atom API. Больше записей — откат на семь счётчиков.
+ONE_CALL_MAX_RESULTS = 2000
 
 
 class ArxivAdapter:
@@ -55,12 +64,15 @@ class ArxivAdapter:
         date_to_exclusive: date,
         *,
         limit: int,
+        words: bool = False,
     ) -> list[Document]:
+        """Документы по запросу. words=True — каждое слово отдельно (поиск №1), иначе фраза."""
         collected: list[Document] = []
         start = 0
         page = min(50, max(1, limit))
         while len(collected) < limit:
-            raw = self._query_atom(query, date_from, date_to_exclusive, start=start, max_results=page)
+            raw = self._query_atom(query, date_from, date_to_exclusive, start=start,
+                                   max_results=page, words=words)
             entries = _parse_entries(raw)
             if not entries:
                 break
@@ -97,6 +109,49 @@ class ArxivAdapter:
         except AdapterError:
             return None
 
+    def _one_call_raw(self, search: SearchTerms,
+                      windows: dict[str, tuple[date, date]]) -> tuple[int, list[dict[str, str]]] | None:
+        """Один запрос на весь диапазон окон: totalResults и до ONE_CALL_MAX_RESULTS самых ранних записей.
+
+        Записи отсортированы по дате подачи по возрастанию. None — запрос не собрался или
+        источник не ответил.
+        """
+        if not search.usable or not windows:
+            return None
+        start = min(bounds[0] for bounds in windows.values())
+        end = max(bounds[1] for bounds in windows.values())
+        query = f"({search.query}) AND {_submitted_range(start, end)}"
+        params = {**_atom_params(query, start=0, max_results=ONE_CALL_MAX_RESULTS),
+                  "sortBy": "submittedDate", "sortOrder": "ascending"}
+        self._limiter.wait()
+        try:
+            raw = self._transport.get(ARXIV_API, params=params).text
+            entries = _parse_entries(raw)
+        except (httpx.HTTPError, AdapterError):
+            return None
+        total = _parse_total(raw)
+        return None if total is None else (total, entries)
+
+    def count_windows_one_call(
+        self,
+        search: SearchTerms,
+        windows: dict[str, tuple[date, date]],
+    ) -> dict[str, int] | None:
+        """Счётчики по окнам одним запросом: записи сортируются по дате подачи и
+        раскладываются по окнам локально, по дате первой версии (<published>).
+
+        Проверено задачей В против count_matching по семи окнам. None — нужен откат на
+        count_matching: запрос не собрался, источник не ответил, записей больше
+        ONE_CALL_MAX_RESULTS или в ответе их меньше, чем обещает totalResults.
+        """
+        answer = self._one_call_raw(search, windows)
+        if answer is None:
+            return None
+        total, entries = answer
+        if total > ONE_CALL_MAX_RESULTS or len(entries) != total:
+            return None
+        return _split_entries(entries, windows)
+
     def totals_request(self, date_from: date, date_to_exclusive: date) -> tuple[str, dict[str, Any]]:
         """Весь корпус arXiv за окно: запрос по одной дате подачи, без терминов."""
         return ARXIV_API, _atom_params(
@@ -120,8 +175,10 @@ class ArxivAdapter:
         *,
         start: int,
         max_results: int,
+        words: bool = False,
     ) -> str:
-        search = f"all:{_quote_term(query)} AND {_submitted_range(date_from, date_to_exclusive)}"
+        match = _words_query(query) if words else f"all:{_quote_term(query)}"
+        search = f"{match} AND {_submitted_range(date_from, date_to_exclusive)}"
         return self._query_atom_raw(search, start=start, max_results=max_results)
 
     def _query_atom_raw(self, search: str, *, start: int, max_results: int) -> str:
@@ -174,6 +231,17 @@ def _submitted_range(date_from: date, date_to_exclusive: date) -> str:
     )
 
 
+def _split_entries(entries: list[dict[str, str]], windows: dict[str, tuple[date, date]]) -> dict[str, int]:
+    """Раскладка записей по окнам по дате первой версии (<published>)."""
+    counts = {name: 0 for name in windows}
+    for entry in entries:
+        day = parse_utc_date(entry["published"])
+        for name, (lower, upper) in windows.items():
+            if lower <= day < upper:
+                counts[name] += 1
+    return counts
+
+
 def _parse_total(xml_text: str) -> int | None:
     """Число подходящих записей из opensearch:totalResults."""
     try:
@@ -188,6 +256,17 @@ def _quote_term(query: str) -> str:
     if " " in cleaned:
         return f'"{cleaned}"'
     return cleaned
+
+
+def _words_query(query: str) -> str:
+    """all:w1 AND all:w2: слова в любом месте записи, а не подряд.
+
+    Только для поиска №1. Замер А3 от 23.09.2026: фраза дала 0 документов в 13 парах
+    «подзапрос × arXiv» из 20, слова по отдельности — в 5 из 18 (два счётчика не получены,
+    429). Счётчики признаков
+    (count_matching) по-прежнему считают фразой: на ней обучена модель.
+    """
+    return " AND ".join(f"all:{word}" for word in query.split())
 
 
 def _parse_entries(xml_text: str) -> list[dict[str, str]]:

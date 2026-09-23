@@ -33,6 +33,12 @@ PAGE_SIZE = 100
 # meta.count. Взят publication_year как самое дешёвое — в годовом окне групп одна-две.
 COUNT_GROUP_BY = "publication_year"
 
+# Разные организации авторов: группировка по точному id организации, страница 200 —
+# потолок OpenAlex для group_by. Замер 23.09.2026: groups_count равен числу групп на
+# странице (200 у «humanoid robot» при 26 007 работах), а не общему числу.
+INSTITUTION_GROUP_BY = "authorships.institutions.id"
+INSTITUTION_PAGE = 200
+
 _TYPE_MAP = {
     "article": "paper",
     "journal-article": "paper",
@@ -89,7 +95,9 @@ class OpenAlexAdapter:
         date_to_exclusive: date,
         *,
         limit: int,
+        language: str | None = None,
     ) -> list[Document]:
+        """Документы по запросу. language — фильтр OpenAlex по языку работы (поиск №1, ru)."""
         collected: list[Document] = []
         cursor = "*"
         per_page = min(PAGE_SIZE, max(1, limit))
@@ -100,6 +108,7 @@ class OpenAlexAdapter:
                 date_to_exclusive=date_to_exclusive,
                 per_page=min(per_page, limit - len(collected)),
                 cursor=cursor,
+                language=language,
             )
             results = payload.get("results") or []
             for work in results:
@@ -134,6 +143,31 @@ class OpenAlexAdapter:
         count = (payload.get("meta") or {}).get("count")
         return int(count) if count is not None else None
 
+    def count_institutions(
+        self,
+        search: SearchTerms,
+        date_from: date,
+        date_to_exclusive: date,
+    ) -> dict[str, Any] | None:
+        """Работы и разные организации авторов по фразе одним дешёвым вызовом (group_by, 1 кредит).
+
+        Группа authorships.institutions.id — одна организация, её count — число работ с ней,
+        поэтому число групп — число разных организаций, а не пар «работа–организация».
+        Сверено 23.09.2026 полной выгрузкой: 32 группы = 32 разные организации на 14 работах.
+        lineage не подходит: добавляет родительские организации (39 групп на тех же работах).
+        Групп больше INSTITUTION_PAGE одним вызовом не узнать: тогда capped=True, число — нижняя граница.
+        meta.count тот же, что у count_matching: фильтры одни, поле группировки на него не влияет.
+        """
+        if not search.usable:
+            return None
+        payload = self._get_works(search=search.query, date_from=date_from, date_to_exclusive=date_to_exclusive,
+                                  per_page=INSTITUTION_PAGE, cursor=None, type_filter=OPENALEX_TYPE_FILTER,
+                                  group_by=INSTITUTION_GROUP_BY)
+        works = (payload.get("meta") or {}).get("count")
+        groups = [g for g in payload.get("group_by") or [] if "unknown" not in str(g.get("key")).lower()]
+        return {"works": int(works) if works is not None else None, "institutions": len(groups),
+                "capped": len(payload.get("group_by") or []) >= INSTITUTION_PAGE}
+
     def totals_request(self, date_from: date, date_to_exclusive: date) -> tuple[str, dict[str, Any]]:
         """Запрос корпусного итога: тот же фильтр типа, что и у счётчика технологии.
 
@@ -165,6 +199,7 @@ class OpenAlexAdapter:
         cursor: str | None,
         type_filter: str | None = None,
         group_by: str | None = None,
+        language: str | None = None,
     ) -> dict[str, Any]:
         params = self._works_params(
             search=search,
@@ -174,6 +209,7 @@ class OpenAlexAdapter:
             cursor=cursor,
             type_filter=type_filter,
             group_by=group_by,
+            language=language,
         )
         return self._get(OPENALEX_WORKS, params)
 
@@ -187,8 +223,13 @@ class OpenAlexAdapter:
         cursor: str | None,
         type_filter: str | None = None,
         group_by: str | None = None,
+        language: str | None = None,
     ) -> dict[str, Any]:
-        """Параметры запроса к works. Отдельно от отправки: по ним считается подпись."""
+        """Параметры запроса к works. Отдельно от отправки: по ним считается подпись.
+
+        language добавляет фильтр только когда передан: у счётчиков и корпусных итогов
+        его нет, поэтому их параметры и подписи не меняются.
+        """
         date_to = inclusive_end(date_to_exclusive)
         filters = [
             f"from_publication_date:{date_from.isoformat()}",
@@ -196,6 +237,8 @@ class OpenAlexAdapter:
         ]
         if type_filter:
             filters.append(f"type:{type_filter}")
+        if language:
+            filters.append(f"language:{language}")
         params: dict[str, Any] = {
             "filter": ",".join(filters),
             "per_page": per_page,

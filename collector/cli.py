@@ -7,6 +7,8 @@ import json
 import sys
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from collector.api import build_collector
 from collector.models import Candidate, Technology
 
@@ -43,6 +45,8 @@ def main(argv: list[str] | None = None) -> int:
     many.add_argument("--max-candidates", type=int, default=None)
 
     args = parser.parse_args(argv)
+    # Ключи и настройки из .env: Settings.from_env читает только окружение процесса.
+    load_dotenv()
     collector = build_collector()
     if args.refresh_totals:
         collector.probe_source_totals(force=True)
