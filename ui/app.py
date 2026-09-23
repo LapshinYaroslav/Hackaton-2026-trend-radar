@@ -1,11 +1,9 @@
 """
-Интерфейс Streamlit под финальные требования ТЗ (Газпромбанк.Тех).
+Дашборд по контракту docs/contracts/query_result.example.json.
 
-Данные:
-1) API_URL → GET /search (в Docker: http://api:8000);
-2) иначе мок docs/contracts/api_response.json.
-
-Streamlit перезапускает скрипт при каждом клике → состояние в st.session_state.
+Без Docker: если API_URL не задан, читаем файл примера локально.
+Если API_URL задан — POST /queries и опрос GET, пока status != done.
+Старый api_response.json больше не используем.
 """
 
 from __future__ import annotations
@@ -14,14 +12,22 @@ from pathlib import Path
 import json
 import os
 import time
-from typing import Optional
 
 import requests
 import streamlit as st
 
 ROOT = Path(__file__).resolve().parent.parent
-CONTRACT_PATH = ROOT / "docs" / "contracts" / "api_response.json"
-TOP_N = 15
+EXAMPLE_PATH = ROOT / "docs" / "contracts" / "query_result.example.json"
+
+AREAS = [
+    "Edge",
+    "Защита ИИ",
+    "Индустриальный ИИ",
+    "Инфраструктура ИИ",
+    "Роботы",
+    "Финтех",
+    "Другое",
+]
 SCORE_HIGH = 0.75
 
 SOURCE_TYPE_RU = {
@@ -36,360 +42,297 @@ SOURCE_TYPE_RU = {
     "blog": "блог",
 }
 
-TAB_TOP = "ТОП-15"
-TAB_CANDIDATES = "Кандидаты"
-TAB_REJECTED = "Отклонённые"
+TRUST_RU = {"high": "высокий", "medium": "средний", "low": "низкий"}
+
+VIEW_TOP = "ТОП"
+VIEW_LIST = "Кандидаты"
+VIEW_EXCLUDED = "Исключённые"
+VIEW_CARD = "Карточка"
 
 
-def load_mock_response() -> dict:
-    with CONTRACT_PATH.open(encoding="utf-8") as f:
-        return json.load(f)
+def load_example() -> dict:
+    data = json.loads(EXAMPLE_PATH.read_text(encoding="utf-8"))
+    data.pop("_note", None)
+    data["status"] = "done"
+    return data
 
 
-def fetch_from_api(query: str, api_url: str) -> dict:
-    url = api_url.rstrip("/") + "/search"
-    response = requests.get(url, params={"q": query}, timeout=120)
-    response.raise_for_status()
-    return response.json()
+def api_base() -> str:
+    return (os.getenv("API_URL") or "").strip().rstrip("/")
 
 
 def init_state() -> None:
     defaults = {
-        "insight_id": None,
         "result": None,
         "error": None,
-        "active_tab": TAB_TOP,
-        "searching": False,
+        "view": VIEW_TOP,
+        "rank": None,
+        "query_id": None,
+        "progress_stage": "",
+        "progress_done": 0,
+        "progress_total": 6,
+        "polling": False,
     }
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
 
 
-def find_signal(signals: list, candidate_id: Optional[str]) -> Optional[dict]:
-    if not candidate_id:
-        return None
-    for signal in signals:
-        if signal.get("candidate_id") == candidate_id:
-            return signal
-    return None
-
-
-def top_signals(signals: list) -> list:
-    """Сортировка по score убыв., не больше 15 — как требует ТЗ."""
-    ranked = sorted(
-        signals,
-        key=lambda s: float(s.get("score") or 0.0),
-        reverse=True,
-    )
-    return ranked[:TOP_N]
-
-
-def run_search(query: str) -> None:
-    st.session_state.insight_id = None
+def start_local(topic: str, area: str | None) -> None:
+    data = load_example()
+    data["topic"] = topic
+    data["area"] = area
+    st.session_state.result = data
+    st.session_state.query_id = data.get("query_id")
+    st.session_state.polling = False
     st.session_state.error = None
-    st.session_state.active_tab = TAB_TOP
-    query = (query or "").strip()
-    if not query:
-        st.session_state.error = "Введите направление поиска."
-        st.session_state.result = None
-        return
-
-    api_url = (os.getenv("API_URL") or "").strip()
-
-    with st.spinner(
-        "Идёт поиск по открытым источникам и оценка кандидатов. "
-        "Это может занять несколько минут…"
-    ):
-        try:
-            if api_url:
-                data = fetch_from_api(query, api_url)
-            else:
-                time.sleep(0.4)
-                data = dict(load_mock_response())
-                data["query"] = query
-
-            status = (data.get("status") or "done").lower()
-            if status == "error":
-                st.session_state.result = data
-                st.session_state.error = data.get("error_ru") or (
-                    "Поиск завершился с ошибкой. Попробуйте другой запрос."
-                )
-                return
-            if status == "running":
-                st.session_state.result = data
-                st.session_state.error = None
-                return
-
-            st.session_state.result = data
-        except requests.RequestException as exc:
-            st.session_state.result = None
-            st.session_state.error = (
-                "Не удалось связаться с API. Проверьте, что сервис api запущен "
-                f"и API_URL верный. ({exc})"
-            )
-        except Exception as exc:  # noqa: BLE001
-            st.session_state.result = None
-            st.session_state.error = (
-                f"Не удалось получить результат. Попробуйте ещё раз. ({exc})"
-            )
+    st.session_state.view = VIEW_TOP
+    st.session_state.rank = None
 
 
-def render_source_card(source: dict) -> None:
-    trust = (source.get("trust_level") or "").lower()
-    low_trust = trust in {"low", "низкий"}
-    raw_type = source.get("source_type") or "—"
-    type_ru = SOURCE_TYPE_RU.get(raw_type, raw_type)
-    title = source.get("title") or "Без названия"
-
-    with st.container(border=True):
-        if low_trust:
-            st.warning("Источник с низким уровнем доверия")
-        st.markdown(f"**{'⚠️ ' if low_trust else ''}{title}**")
-        url = source.get("url")
-        if url:
-            st.markdown(f"Ссылка: [{url}]({url})")
-        else:
-            st.write("Ссылка: —")
-        st.write(f"Дата публикации: {source.get('published_at', '—')}")
-        st.write(f"Тип: {type_ru}")
-        st.write(f"Язык оригинала: {source.get('language', '—')}")
-        st.write(f"Уровень доверия: {source.get('trust_level', '—')}")
-        summary = source.get("summary_ru")
-        if summary:
-            label = "Резюме"
-            if source.get("summary_generated"):
-                label += " (сгенерированное резюме)"
-            st.write(f"{label}: {summary}")
-
-
-def render_insight(signal: dict) -> None:
-    if st.button("← Назад к списку"):
-        st.session_state.insight_id = None
-        st.rerun()
-
-    insight = signal.get("insight") or {}
-    score = signal.get("score")
-    st.title(signal.get("name_ru", "Инсайт"))
-    st.write(f"**Уверенность модели (скоринг):** {score if score is not None else '—'}")
-
-    st.subheader("Описание технологии")
-    st.write(insight.get("description_ru") or "Нет описания")
-
-    st.subheader("Преимущества")
-    advantages = insight.get("advantages_ru") or []
-    if advantages:
-        for item in advantages:
-            st.write(f"- {item}")
-    else:
-        st.write("—")
-
-    st.subheader("Кейс-примеры")
-    cases = insight.get("cases_ru") or []
-    if cases:
-        for item in cases:
-            st.write(f"- {item}")
-    else:
-        st.write("—")
-
-    st.subheader("Оценки в аналитических отчётах")
-    st.write(insight.get("analyst_notes_ru") or "—")
-
-    st.subheader("Почему это слабый сигнал (зарождающийся тренд)")
-    st.write(insight.get("weak_signal_explanation_ru") or "—")
-
-    st.subheader("Почему модель присвоила такую уверенность")
-    st.caption(
-        "Ключевые предикторы = вклады признаков модели "
-        "(вес × стандартизованное значение)."
+def start_remote(topic: str, area: str | None) -> None:
+    response = requests.post(
+        api_base() + "/queries",
+        json={"topic": topic, "area": area},
+        timeout=30,
     )
-    features = signal.get("top_features") or []
-    if not features:
-        st.write("—")
-    for feature in features:
-        name = feature.get("name")
-        contrib = feature.get("contribution")
-        text = feature.get("explanation_ru", "")
-        if name is not None and contrib is not None:
-            st.write(f"- **{name}** (вклад {contrib:+}): {text}")
-        else:
-            st.write(f"- {text}")
+    response.raise_for_status()
+    st.session_state.query_id = response.json()["query_id"]
+    st.session_state.result = None
+    st.session_state.polling = True
+    st.session_state.error = None
+    st.session_state.view = VIEW_TOP
+    st.session_state.rank = None
 
-    st.subheader("Источники")
-    sources = signal.get("sources") or []
-    if not sources:
-        st.write("Источники не переданы.")
+
+def poll_remote() -> None:
+    query_id = st.session_state.query_id
+    response = requests.get(f"{api_base()}/queries/{query_id}", timeout=30)
+    response.raise_for_status()
+    data = response.json()
+    st.session_state.progress_stage = data.get("progress_stage") or ""
+    st.session_state.progress_done = int(data.get("progress_done") or 0)
+    st.session_state.progress_total = int(data.get("progress_total") or 6)
+    status = (data.get("status") or "").lower()
+    if status == "done":
+        st.session_state.result = data
+        st.session_state.polling = False
+    elif status == "error":
+        st.session_state.error = data.get("error") or "Ошибка расчёта"
+        st.session_state.polling = False
+
+
+def render_sources(sources: list) -> None:
     for source in sources:
-        render_source_card(source)
+        trust = (source.get("trust_level") or "").lower()
+        low = trust == "low"
+        title = source.get("title") or "Без названия"
+        with st.container(border=True):
+            if low:
+                st.warning("Источник с низким уровнем доверия")
+            st.markdown(f"**{'⚠️ ' if low else ''}{title}**")
+            url = source.get("url")
+            if url:
+                st.markdown(f"Ссылка: [{url}]({url})")
+            st.write(f"Дата: {source.get('published_at', '—')}")
+            raw_type = source.get("source_type") or "—"
+            st.write(f"Тип: {SOURCE_TYPE_RU.get(raw_type, raw_type)}")
+            st.write(f"Язык оригинала: {source.get('language', '—')}")
+            st.write(f"Доверие: {TRUST_RU.get(trust, trust or '—')}")
 
 
-def render_signals_tab(signals: list) -> None:
-    ranked = top_signals(signals)
-    if not ranked:
-        st.info("В выдаче пока нет слабых сигналов. Нажмите «Найти сигналы».")
-        return
-
+def render_card(item: dict) -> None:
+    if st.button("← Назад к ТОП"):
+        st.session_state.view = VIEW_TOP
+        st.session_state.rank = None
+        st.rerun()
+    st.title(item.get("name_ru") or "Карточка")
+    st.write(f"**Английское название:** {item.get('name_en', '—')}")
+    score = item.get("score")
+    st.write(f"**Уверенность модели:** {score if score is not None else '—'}")
+    st.subheader("Почему это слабый сигнал")
+    for line in item.get("explanation_ru") or []:
+        st.write(f"- {line}")
     st.caption(
-        f"Показано {len(ranked)} из максимум {TOP_N} (сортировка по уверенности модели)."
+        "Полный отчёт (описание, преимущество, кейс) появится после генерации инсайта. "
+        "Числа модели уже показаны выше и не пересказываются языковой моделью."
     )
-    for index, signal in enumerate(ranked, start=1):
-        predictors = "; ".join(
-            f.get("explanation_ru", "")
-            for f in (signal.get("top_features") or [])
-            if f.get("explanation_ru")
-        )
+    st.subheader("Источники")
+    render_sources(item.get("sources") or [])
+
+
+def render_top(items: list) -> None:
+    if not items:
+        st.info("В ТОП пока нет технологий выше порога.")
+        return
+    st.caption(f"Показано {len(items)}. Если меньше 15 — столько прошло порог модели.")
+    for item in items:
         left, right = st.columns([4, 1])
         with left:
-            st.markdown(f"**{index}. {signal.get('name_ru', '')}**")
-            score = signal.get("score")
+            st.markdown(f"**{item.get('rank', '—')}. {item.get('name_ru', '')}**")
+            st.write(item.get("name_en") or "")
+            score = item.get("score")
             score_txt = f"{score:.2f}" if isinstance(score, (int, float)) else "—"
-            st.write(f"Скоринг (уверенность модели): {score_txt}")
-            st.write(f"Ключевые предикторы: {predictors or '—'}")
+            st.write(f"Скоринг: {score_txt}")
+            preds = "; ".join(item.get("explanation_ru") or [])
+            st.write(f"Ключевые предикторы: {preds or '—'}")
         with right:
-            cid = signal.get("candidate_id") or f"row_{index}"
-            if st.button("Смотреть инсайт", key=f"insight_{cid}"):
-                st.session_state.insight_id = signal.get("candidate_id")
+            rank = item.get("rank")
+            if st.button("Смотреть", key=f"card_{rank}"):
+                st.session_state.rank = rank
+                st.session_state.view = VIEW_CARD
                 st.rerun()
         st.divider()
 
 
-def render_candidates_tab(candidates: list, stats: dict) -> None:
-    st.caption(
-        "Плюс по ТЗ: список технологий-кандидатов на слабый сигнал "
-        "(до фильтра мейнстрима / порога)."
-    )
-    if not candidates:
-        # Фоллбек: если API ещё не отдаёт candidates — хотя бы число из stats
-        found = stats.get("candidates_found")
-        st.info(
-            "Список кандидатов не передан API. "
-            f"В статистике указано найдено: {found if found is not None else '—'}."
-        )
+def render_excluded(items: list) -> None:
+    if not items:
+        st.info("Исключённых кандидатов нет.")
         return
-
-    rows = [
-        {
-            "ID": c.get("candidate_id", "—"),
-            "Технология": c.get("name_ru", "—"),
-            "Статус": c.get("stage_ru", "—"),
-        }
-        for c in candidates
-    ]
-    st.dataframe(rows, use_container_width=True, hide_index=True)
-
-
-def render_rejected_tab(rejected: list) -> None:
-    st.caption(
-        "Логика исключения зрелых трендов, стандартов, хайпа и шума — требование ТЗ."
-    )
-    if not rejected:
-        st.info("Отклонённых кандидатов нет.")
-        return
-    for item in rejected:
+    for item in items:
         with st.container(border=True):
             st.markdown(f"**{item.get('name_ru', 'Без названия')}**")
+            st.write(item.get("name_en") or "")
+            score = item.get("score")
+            if score is None:
+                st.write("Скоринг: не оценён")
+            else:
+                st.write(f"Скоринг: {score:.2f}")
             st.write(f"Причина исключения: {item.get('reason_ru', '—')}")
+
+
+def render_candidates(data: dict) -> None:
+    top = data.get("top") or []
+    excluded = data.get("excluded") or []
+    st.caption(
+        "В контракте пока нет полного списка из 64 имён. "
+        "Показываем тех, кто попал в ТОП, и тех, кого исключили."
+    )
+    rows = []
+    for item in top:
+        rows.append(
+            {
+                "Где": "ТОП",
+                "Название": item.get("name_ru"),
+                "English": item.get("name_en"),
+                "Скоринг": item.get("score"),
+            }
+        )
+    for item in excluded:
+        rows.append(
+            {
+                "Где": "исключён",
+                "Название": item.get("name_ru"),
+                "English": item.get("name_en"),
+                "Скоринг": item.get("score"),
+            }
+        )
+    st.dataframe(rows, use_container_width=True, hide_index=True)
 
 
 def render_stats(data: dict) -> None:
     stats = data.get("stats") or {}
-    signals = data.get("signals") or []
-    candidates = data.get("candidates") or []
-
-    sources = stats.get("sources_processed", "—")
-    found = stats.get("candidates_found")
-    if found is None:
-        found = len(candidates) if candidates else "—"
-    above = stats.get("signals_above_75")
+    above = stats.get("above_075")
     if above is None:
         above = sum(
             1
-            for s in signals
-            if isinstance(s.get("score"), (int, float)) and s["score"] >= SCORE_HIGH
+            for item in (data.get("top") or [])
+            if isinstance(item.get("score"), (int, float)) and item["score"] >= SCORE_HIGH
         )
-
     c1, c2, c3 = st.columns(3)
-    c1.metric("Обработано источников", sources)
-    c2.metric("Найдено кандидатов", found)
+    c1.metric("Обработано источников", stats.get("documents_total", "—"))
+    c2.metric("Найдено кандидатов", stats.get("candidates_found", "—"))
     c3.metric("Сигналы > 75%", above)
-
-    # Переход к списку кандидатов (плюс ТЗ)
-    if st.button("Перейти к списку кандидатов", key="goto_candidates"):
-        st.session_state.active_tab = TAB_CANDIDATES
+    if st.button("Перейти к списку кандидатов"):
+        st.session_state.view = VIEW_LIST
         st.rerun()
 
 
 st.set_page_config(page_title="Радар слабых сигналов", layout="wide")
 init_state()
 
-data = st.session_state.result
-signals = (data or {}).get("signals") or []
+if st.session_state.polling and st.session_state.query_id and api_base():
+    try:
+        poll_remote()
+    except requests.RequestException as exc:
+        st.session_state.error = f"Не удалось опросить API. ({exc})"
+        st.session_state.polling = False
 
-selected = find_signal(signals, st.session_state.insight_id)
-if selected is not None:
-    render_insight(selected)
-    st.stop()
+data = st.session_state.result
+if (
+    data
+    and st.session_state.view == VIEW_CARD
+    and st.session_state.rank is not None
+):
+    chosen = next(
+        (item for item in (data.get("top") or []) if item.get("rank") == st.session_state.rank),
+        None,
+    )
+    if chosen:
+        render_card(chosen)
+        st.stop()
 
 st.title("Радар слабых сигналов")
-api_configured = bool((os.getenv("API_URL") or "").strip())
-mode = (
-    "API: " + os.getenv("API_URL", "")
-    if api_configured
-    else "мок-файл (API_URL не задан)"
-)
-st.caption(
-    f"Режим данных: {mode}. Интерфейс на русском · Streamlit (допускается ТЗ)."
-)
+mode = f"API: {api_base()}" if api_base() else "локальный пример контракта (без Docker)"
+st.caption(mode)
 
 st.subheader("Поисковый запрос")
-default_q = (data or {}).get("query") or "технологии в медицине"
-query = st.text_input(
-    "Технологическое направление (свободная форма)",
-    value=default_q,
-    placeholder="например: технологии в ИИ",
+topic = st.text_input(
+    "Технологическое направление",
+    value=(data or {}).get("topic") or "роботы для промышленности",
 )
+area_label = st.selectbox("Область", AREAS, index=AREAS.index("Роботы"))
+area = None if area_label == "Другое" else area_label
 
 if st.button("Найти сигналы", type="primary"):
-    run_search(query)
+    st.session_state.error = None
+    if not topic.strip():
+        st.session_state.error = "Введите тему."
+    elif api_base():
+        try:
+            start_remote(topic.strip(), area)
+        except requests.RequestException as exc:
+            st.session_state.error = (
+                "API недоступен. Запустите его локально или уберите API_URL. "
+                f"({exc})"
+            )
+    else:
+        with st.spinner("Считаем пример контракта…"):
+            time.sleep(0.4)
+        start_local(topic.strip(), area)
     st.rerun()
 
 if st.session_state.error:
     st.error(st.session_state.error)
 
-if data is None:
+if st.session_state.polling:
+    total = max(int(st.session_state.progress_total or 1), 1)
+    done = int(st.session_state.progress_done or 0)
+    st.progress(min(done / total, 1.0))
     st.info(
-        "Введите направление и нажмите «Найти сигналы». "
-        "Система покажет ТОП-15, кандидатов и причины отклонения."
+        f"Стадия: {st.session_state.progress_stage or 'запуск'} "
+        f"({done}/{total}). Расчёт может занять несколько минут."
     )
-    st.stop()
-
-status = (data.get("status") or "done").lower()
-if status == "running":
-    st.warning("Запрос ещё обрабатывается. Обновите страницу или повторите поиск позже.")
-elif status == "done":
-    st.success(f"Запрос выполнен: «{data.get('query', '')}»")
-
-render_stats(data)
-
-# st.tabs не умеет выбрать вкладку программно → radio как переключатель разделов
-tab_labels = [TAB_TOP, TAB_CANDIDATES, TAB_REJECTED]
-current = st.session_state.active_tab
-if current not in tab_labels:
-    current = TAB_TOP
-chosen = st.radio(
-    "Разделы выдачи",
-    tab_labels,
-    index=tab_labels.index(current),
-    horizontal=True,
-    label_visibility="collapsed",
-)
-if chosen != st.session_state.active_tab:
-    st.session_state.active_tab = chosen
+    time.sleep(0.6)
     st.rerun()
 
-if st.session_state.active_tab == TAB_TOP:
-    render_signals_tab(signals)
-elif st.session_state.active_tab == TAB_CANDIDATES:
-    render_candidates_tab(data.get("candidates") or [], data.get("stats") or {})
+if data is None:
+    st.info("Введите тему, выберите область и нажмите «Найти сигналы».")
+    st.stop()
+
+st.success(f"Запрос: «{data.get('topic', '')}» · область: {data.get('area') or 'не задана'}")
+render_stats(data)
+
+views = [VIEW_TOP, VIEW_LIST, VIEW_EXCLUDED]
+current = st.session_state.view if st.session_state.view in views else VIEW_TOP
+chosen_view = st.radio("Разделы", views, index=views.index(current), horizontal=True)
+if chosen_view != st.session_state.view:
+    st.session_state.view = chosen_view
+    st.rerun()
+
+if st.session_state.view == VIEW_LIST:
+    render_candidates(data)
+elif st.session_state.view == VIEW_EXCLUDED:
+    render_excluded(data.get("excluded") or [])
 else:
-    render_rejected_tab(data.get("rejected") or [])
+    render_top(data.get("top") or [])
