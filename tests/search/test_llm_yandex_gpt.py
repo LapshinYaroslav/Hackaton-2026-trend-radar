@@ -142,6 +142,22 @@ class AskLlmTest(unittest.TestCase):
         self.assertIsNone(result["model_version"])
         self.assertEqual(post.call_count, 2)
 
+    def test_qwen_goes_through_openai_compatible_api(self):
+        """Qwen3 235B: chat/completions, URI с /latest, ответ из choices."""
+        body = {"choices": [{"message": {"content": "ответ qwen"}}], "model": "qwen3", "usage": {}}
+        with patch.dict("os.environ", ENV), patch.object(llm, "LOG_FILE", self.log_file), \
+             patch.object(llm.SESSION, "post", return_value=FakeResponse(body)) as post:
+            result = llm.ask_llm("с", "п", purpose="t", temperature=0.2, model="qwen3-235b-a22b-fp8")
+        self.assertEqual(result["text"], "ответ qwen")
+        self.assertEqual(post.call_args.args[0], llm.OPENAI_URL)
+        sent = post.call_args.kwargs["json"]
+        self.assertEqual(sent["model"], "gpt://b1gtest/qwen3-235b-a22b-fp8/latest")
+        self.assertEqual(sent["messages"][0], {"role": "system", "content": "с"})
+
+    def test_model_argument_overrides_env(self):
+        with patch.dict("os.environ", ENV):
+            self.assertEqual(llm.build_model_uri("yandexgpt-5-pro"), "gpt://b1gtest/yandexgpt-5-pro")
+
     def test_explicit_model_uri_without_branch(self):
         """Явное имя модели идёт в URI без /latest, старый псевдоним — с ним."""
         with patch.dict("os.environ", {**ENV, "YANDEX_GPT_MODEL": "yandexgpt-5-pro"}):

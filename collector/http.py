@@ -35,11 +35,11 @@ class RateLimiter:
 
     def wait(self) -> None:
         with self._lock:
-            now = time.monotonic()
+            now = time.perf_counter()
             sleep_for = self._min_interval_s - (now - self._last)
             if sleep_for > 0:
                 time.sleep(sleep_for)
-            self._last = time.monotonic()
+            self._last = time.perf_counter()
 
 
 class HttpxTransport:

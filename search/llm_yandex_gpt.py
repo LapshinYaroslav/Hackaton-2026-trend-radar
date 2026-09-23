@@ -13,12 +13,16 @@ ROOT = Path(__file__).resolve().parents[1]
 LOG_FILE = ROOT / "logs" / "llm_calls.jsonl"
 
 COMPLETION_URL = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
+# Модели не от Yandex в AI Studio доступны только через OpenAI-совместимый API (документация
+# AI Studio, 23.09.2026): тот же ключ Api-Key, URI модели gpt://<folder>/<model>/latest.
+OPENAI_URL = "https://llm.api.cloud.yandex.net/v1/chat/completions"
+OPENAI_MODELS = {"qwen3-235b-a22b-fp8"}
 SESSION = requests.Session()  # keep-alive: TLS-рукопожатие не повторяется на каждый вызов
 # Явные имена моделей идут в URI без ветки: gpt://<folder>/yandexgpt-5-pro. Старые
 # псевдонимы — с веткой /latest, за которой модель может смениться. По документации
 # AI Studio (23.09.2026) yandexgpt/latest — это YandexGPT Pro 5, то есть yandexgpt-5-pro.
 EXPLICIT_MODELS = {"yandexgpt-5-pro", "yandexgpt-5.1"}
-ALLOWED_MODELS = {"yandexgpt", "yandexgpt-lite"} | EXPLICIT_MODELS
+ALLOWED_MODELS = {"yandexgpt", "yandexgpt-lite"} | EXPLICIT_MODELS | OPENAI_MODELS
 DEFAULT_MODEL = "yandexgpt-lite"
 DEFAULT_TIMEOUT = 60
 
@@ -31,10 +35,11 @@ RETRY_DELAY = 0.5
 TIMEOUT_ATTEMPTS = 2  # первая попытка и один повтор при таймауте
 
 
-def build_model_uri() -> str:
+def build_model_uri(model: str | None = None) -> str:
+    """URI модели: явная модель из аргумента или YANDEX_GPT_MODEL из .env."""
     load_dotenv()
     folder_id = os.getenv("YANDEX_FOLDER_ID", "").strip()
-    model = os.getenv("YANDEX_GPT_MODEL", "").strip() or DEFAULT_MODEL
+    model = model or os.getenv("YANDEX_GPT_MODEL", "").strip() or DEFAULT_MODEL
     if not folder_id:
         raise ValueError("В .env нет YANDEX_FOLDER_ID")
     if model not in ALLOWED_MODELS:
@@ -54,7 +59,7 @@ def _log_call(record: dict) -> None:
         print(f"Предупреждение: не удалось записать лог вызова LLM: {exc}")
 
 
-def _post_once(body: dict, headers: dict):
+def _post_once(body: dict, headers: dict, url: str = COMPLETION_URL):
     """Один POST; при таймауте — ровно один повтор с теми же параметрами, затем ошибка.
 
     Таймаут — сбой связи, а не содержания ответа, поэтому температура и промпт не меняются.
@@ -63,17 +68,17 @@ def _post_once(body: dict, headers: dict):
     for attempt in range(TIMEOUT_ATTEMPTS):
         try:
             with CALL_LIMIT:
-                return SESSION.post(COMPLETION_URL, headers=headers, json=body, timeout=DEFAULT_TIMEOUT)
+                return SESSION.post(url, headers=headers, json=body, timeout=DEFAULT_TIMEOUT)
         except requests.Timeout:
             if attempt == TIMEOUT_ATTEMPTS - 1:
                 raise
 
 
-def _post_with_retry(body: dict, headers: dict) -> dict:
+def _post_with_retry(body: dict, headers: dict, url: str = COMPLETION_URL) -> dict:
     """POST под ограничением конкурентности, с повтором при 429 и растущей паузой."""
     delay = RETRY_DELAY
     for attempt in range(RETRY_ATTEMPTS):
-        response = _post_once(body, headers)
+        response = _post_once(body, headers, url)
         if getattr(response, "status_code", 200) == 429 and attempt < RETRY_ATTEMPTS - 1:
             time.sleep(delay)
             delay *= 2
@@ -83,33 +88,46 @@ def _post_with_retry(body: dict, headers: dict) -> dict:
     raise requests.HTTPError("429 после всех повторов")
 
 
+def _request(model_uri: str, openai: bool, system_prompt: str, user_prompt: str, temperature: float,
+             json_object: bool, max_tokens: int) -> tuple[str, dict]:
+    """Адрес и тело запроса: completion YandexGPT или OpenAI-совместимый chat/completions."""
+    if openai:
+        return OPENAI_URL, {"model": model_uri, "temperature": temperature, "max_tokens": max_tokens,
+                            "messages": [{"role": "system", "content": system_prompt},
+                                         {"role": "user", "content": user_prompt}]}
+    return COMPLETION_URL, {
+        "modelUri": model_uri,
+        "completionOptions": {"stream": False, "temperature": temperature, "maxTokens": str(max_tokens)},
+        "messages": [{"role": "system", "text": system_prompt}, {"role": "user", "text": user_prompt}],
+        "json_object": json_object,
+    }
+
+
+def _read_answer(payload: dict, openai: bool) -> tuple[str, str | None, dict]:
+    """Текст ответа, версия модели и расход токенов из ответа API."""
+    if openai:
+        return payload["choices"][0]["message"]["content"], payload.get("model"), payload.get("usage", {})
+    data = payload.get("result", payload)
+    return data["alternatives"][0]["message"]["text"], data.get("modelVersion"), data.get("usage", {})
+
+
 def ask_llm(system_prompt: str, user_prompt: str, purpose: str, temperature: float = 0.3,
-            json_object: bool = True, max_tokens: int = 2000) -> dict:
+            json_object: bool = True, max_tokens: int = 2000, model: str | None = None) -> dict:
     load_dotenv()
     api_key = os.getenv("YANDEX_API_KEY", "").strip()
     if not api_key:
         raise ValueError("В .env нет YANDEX_API_KEY")
-    model_uri = build_model_uri()
-    body = {
-        "modelUri": model_uri,
-        "completionOptions": {"stream": False, "temperature": temperature, "maxTokens": str(max_tokens)},
-        "messages": [
-            {"role": "system", "text": system_prompt},
-            {"role": "user", "text": user_prompt},
-        ],
-        "json_object": json_object,
-    }
+    model_uri = build_model_uri(model)
+    openai = (model or os.getenv("YANDEX_GPT_MODEL", "").strip()) in OPENAI_MODELS
+    url, body = _request(model_uri, openai, system_prompt, user_prompt, temperature, json_object, max_tokens)
     headers = {"Authorization": f"Api-Key {api_key}", "x-folder-id": os.getenv("YANDEX_FOLDER_ID", "").strip(),
                "Content-Type": "application/json"}
     result = {"text": None, "model_uri": model_uri, "model_version": None,
               "usage": {}, "elapsed_s": 0.0, "error": None}
     started = time.monotonic()
     try:
-        payload = _post_with_retry(body, headers)
-        data = payload.get("result", payload)
-        result["text"] = data["alternatives"][0]["message"]["text"]
-        result["model_version"] = data.get("modelVersion")
-        result["usage"] = data.get("usage", {})
+        payload = _post_with_retry(body, headers, url)
+        result["text"], result["model_version"], result["usage"] = _read_answer(payload, openai)
     except (requests.RequestException, ValueError, KeyError, IndexError, TypeError) as exc:
         result["error"] = f"{type(exc).__name__}: {exc}"
     result["elapsed_s"] = round(time.monotonic() - started, 3)

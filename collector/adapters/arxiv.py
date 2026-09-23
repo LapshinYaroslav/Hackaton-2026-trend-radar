@@ -23,7 +23,9 @@ from collector.http import HttpTransport, HttpxTransport, RateLimiter
 from collector.models import Document, SearchTerms, parse_utc_date, require_source_type
 from collector.settings import Settings
 
-ARXIV_API = "http://export.arxiv.org/api/query"
+# Сразу https: http отвечал 301 на каждый запрос и переадресовывал сюда же с теми же параметрами
+# (задача Л4.1, 23.09.2026: тело ответа по обоим адресам совпало побайтно).
+ARXIV_API = "https://export.arxiv.org/api/query"
 ATOM = "{http://www.w3.org/2005/Atom}"
 OPENSEARCH_TOTAL = "{http://a9.com/-/spec/opensearch/1.1/}totalResults"
 ARXIV_NS = "{http://arxiv.org/schemas/atom}"
@@ -37,6 +39,10 @@ MIN_INTERVAL_S = 3.1
 ARXIV_ONE_CALL_COUNTS = True
 # Потолок одного ответа Atom API. Больше записей — откат на семь счётчиков.
 ONE_CALL_MAX_RESULTS = 2000
+# Задача Л5.3: при totalResults > ONE_CALL_MAX_RESULTS — частичный откат (count_windows_partial)
+# вместо семи счётчиков. Включается только если на всех проверочных технологиях частичный
+# откат даёт ровно те же 7 чисел, что семь обычных счётчиков.
+ARXIV_PARTIAL_FALLBACK = False
 
 
 class ArxivAdapter:
@@ -107,18 +113,12 @@ class ArxivAdapter:
         except AdapterError:
             return None
 
-    def count_windows_one_call(
-        self,
-        search: SearchTerms,
-        windows: dict[str, tuple[date, date]],
-    ) -> dict[str, int] | None:
-        """Счётчики по окнам одним запросом: записи сортируются по дате подачи и
-        раскладываются по окнам локально, по дате первой версии (<published>).
+    def _one_call_raw(self, search: SearchTerms,
+                      windows: dict[str, tuple[date, date]]) -> tuple[int, list[dict[str, str]]] | None:
+        """Один запрос на весь диапазон окон: totalResults и до ONE_CALL_MAX_RESULTS самых ранних записей.
 
-        Не подключено к рабочему пути (флаг ARXIV_ONE_CALL_COUNTS): проверяется задачей В
-        против count_matching по семи окнам. None — нужен откат на count_matching:
-        запрос не собрался, источник не ответил, записей больше ONE_CALL_MAX_RESULTS или
-        в ответе их меньше, чем обещает totalResults.
+        Записи отсортированы по дате подачи по возрастанию. None — запрос не собрался или
+        источник не ответил.
         """
         if not search.usable or not windows:
             return None
@@ -134,15 +134,59 @@ class ArxivAdapter:
         except (httpx.HTTPError, AdapterError):
             return None
         total = _parse_total(raw)
-        if total is None or total > ONE_CALL_MAX_RESULTS or len(entries) != total:
+        return None if total is None else (total, entries)
+
+    def count_windows_one_call(
+        self,
+        search: SearchTerms,
+        windows: dict[str, tuple[date, date]],
+    ) -> dict[str, int] | None:
+        """Счётчики по окнам одним запросом: записи сортируются по дате подачи и
+        раскладываются по окнам локально, по дате первой версии (<published>).
+
+        Проверено задачей В против count_matching по семи окнам. None — нужен откат на
+        count_matching: запрос не собрался, источник не ответил, записей больше
+        ONE_CALL_MAX_RESULTS или в ответе их меньше, чем обещает totalResults.
+        """
+        answer = self._one_call_raw(search, windows)
+        if answer is None:
             return None
-        counts = {name: 0 for name in windows}
-        for entry in entries:
-            day = parse_utc_date(entry["published"])
-            for name, (lower, upper) in windows.items():
-                if lower <= day < upper:
-                    counts[name] += 1
-        return counts
+        total, entries = answer
+        if total > ONE_CALL_MAX_RESULTS or len(entries) != total:
+            return None
+        return _split_entries(entries, windows)
+
+    def count_windows_partial(
+        self,
+        search: SearchTerms,
+        windows: dict[str, tuple[date, date]],
+    ) -> dict[str, int] | None:
+        """Как count_windows_one_call, но при totalResults > ONE_CALL_MAX_RESULTS — частичный откат.
+
+        Пришли ONE_CALL_MAX_RESULTS самых ранних записей. Окна, целиком лежащие до даты
+        последней из них, по этим записям точны. Остальные окна, кроме последнего, считаются
+        count_matching, а последнее — вычитанием: окна разбивают весь диапазон без пропусков,
+        поэтому оно равно totalResults минус сумма остальных. Задача Л5.3.
+        """
+        answer = self._one_call_raw(search, windows)
+        if answer is None:
+            return None
+        total, entries = answer
+        if total <= ONE_CALL_MAX_RESULTS:
+            return _split_entries(entries, windows) if len(entries) == total else None
+        if len(entries) != ONE_CALL_MAX_RESULTS:
+            return None
+        last_day = parse_utc_date(entries[-1]["published"])
+        full = [name for name, (_, upper) in windows.items() if upper <= last_day]
+        counts = {name: n for name, n in _split_entries(entries, windows).items() if name in full}
+        rest = [name for name in windows if name not in full]
+        for name in rest[:-1]:
+            number = self.count_matching(search, *windows[name])
+            if number is None:
+                return None
+            counts[name] = number
+        counts[rest[-1]] = total - sum(counts.values())
+        return {name: counts[name] for name in windows}
 
     def totals_request(self, date_from: date, date_to_exclusive: date) -> tuple[str, dict[str, Any]]:
         """Весь корпус arXiv за окно: запрос по одной дате подачи, без терминов."""
@@ -221,6 +265,17 @@ def _submitted_range(date_from: date, date_to_exclusive: date) -> str:
     return (
         f"submittedDate:[{date_from.strftime('%Y%m%d')}0000 TO {date_to.strftime('%Y%m%d')}2359]"
     )
+
+
+def _split_entries(entries: list[dict[str, str]], windows: dict[str, tuple[date, date]]) -> dict[str, int]:
+    """Раскладка записей по окнам по дате первой версии (<published>)."""
+    counts = {name: 0 for name in windows}
+    for entry in entries:
+        day = parse_utc_date(entry["published"])
+        for name, (lower, upper) in windows.items():
+            if lower <= day < upper:
+                counts[name] += 1
+    return counts
 
 
 def _parse_total(xml_text: str) -> int | None:
