@@ -17,7 +17,7 @@ python -m collector history --candidate candidate.json --output search2.json
 
 ## Что уже можно поднять
 
-Сейчас UI и заглушка API работают на мок-контракте [`docs/contracts/api_response.json`](docs/contracts/api_response.json). Живой пайплайн (поиск, модель) подключается командой позже — формат ответа тот же.
+Актуальный пример ответа оркестратора: [`docs/contracts/query_result.example.json`](docs/contracts/query_result.example.json). Старый `api_response.json` не используем. Пока оркестратора нет, API через несколько секунд отдаёт этот пример. PostgreSQL для этого мока не нужен.
 
 Сервисы Docker Compose:
 
@@ -70,21 +70,30 @@ docker compose down -v
 docker compose up --build -d
 ```
 
-## Локально только UI (без Docker)
-
-Нужны Python 3.9+ (лучше 3.11) и venv:
+## Локально без Docker
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r ui/requirements.txt
+pip install -r ui/requirements.txt -r api/requirements.txt
+```
+
+Только интерфейс (читает файл примера):
+
+```bash
 streamlit run ui/app.py
 ```
 
-Без `API_URL` интерфейс читает мок-файл. Чтобы ходить в API на хосте:
+Интерфейс через API (прогресс по стадиям, тот же пример):
 
 ```bash
-export API_URL=http://localhost:8000
+.venv/bin/python -m uvicorn api.main:app --app-dir . --host 127.0.0.1 --port 8000
+```
+
+Во втором окне:
+
+```bash
+export API_URL=http://127.0.0.1:8000
 streamlit run ui/app.py
 ```
 

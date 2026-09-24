@@ -1,0 +1,145 @@
+{
+  "_note": "ПРИМЕР контракта для разработки БД и UI. Числа и названия условные, не результат модели.",
+  "query_id": "q-example-001",
+  "topic": "роботы для промышленности",
+  "area": "Роботы",
+  "model_version": "s2a1-v1",
+  "threshold": 0.325,
+  "cutoff_date": "2026-09-01",
+  "subqueries": [
+    {"subquery_id": "q-example-001-en-1", "language": "en", "text": "robotic teleoperation data"},
+    {"subquery_id": "q-example-001-en-2", "language": "en", "text": "dexterous robotic manipulation"},
+    {"subquery_id": "q-example-001-ru-1", "language": "ru", "text": "коллаборативные промышленные роботы"}
+  ],
+  "stats": {
+    "documents_by_source": {"openalex": 175, "arxiv": 105, "techcrunch": 70, "openalex_ru": 1},
+    "documents_total": 287,
+    "candidates_found": 64,
+    "candidates_scored": 52,
+    "above_threshold": 21,
+    "above_075": 9
+  },
+  "top": [
+    {
+      "rank": 1,
+      "name_ru": "Данные телеуправления роботами как отдельная индустрия",
+      "name_en": "robotic teleoperation data",
+      "score": 0.9525,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 14",
+        "Упоминания свежие: 86% за последние два года"
+      ],
+      "contributions": {
+        "share_news_wordmatch": 1.62,
+        "recency": 0.94,
+        "age_first_arxiv": 0.41,
+        "share_prev6": 0.18,
+        "volume": 0.01,
+        "growth_research": -0.02
+      },
+      "counters": {
+        "n_research": 14,
+        "n_market": 9,
+        "recency": 0.86,
+        "age_first_arxiv": 2.1,
+        "share_prev6": 0.0
+      },
+      "sources": [
+        {
+          "title": "Scaling teleoperation data collection for robot foundation models",
+          "url": "https://example.org/doc-1",
+          "published_at": "2026-07-02",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Startup raises seed round to sell robot training data",
+          "url": "https://example.org/doc-2",
+          "published_at": "2026-05-18",
+          "source": "techcrunch",
+          "source_type": "news",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "name_ru": "Кисти с высокой ловкостью для роботов",
+      "name_en": "dexterous robotic hand",
+      "score": 0.7812,
+      "explanation_ru": [
+        "Молодой термин: первый препринт 3 года назад",
+        "Упоминания свежие: 71% за последние два года"
+      ],
+      "contributions": {
+        "share_news_wordmatch": 0.35,
+        "recency": 0.66,
+        "age_first_arxiv": 0.52,
+        "share_prev6": 0.09,
+        "volume": 0.0,
+        "growth_research": -0.01
+      },
+      "counters": {
+        "n_research": 212,
+        "n_market": 11,
+        "recency": 0.71,
+        "age_first_arxiv": 3.0,
+        "share_prev6": 0.04
+      },
+      "sources": [
+        {
+          "title": "A low-cost dexterous hand for industrial assembly",
+          "url": "https://example.org/doc-3",
+          "published_at": "2026-08-11",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "name_ru": "Гуманоидные роботы",
+      "name_en": "humanoid robot",
+      "score": 0.1562,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Термин давно в науке: первый препринт 12 лет назад"
+    },
+    {
+      "name_ru": "Промышленные роботы-манипуляторы",
+      "name_en": "industrial robotic manipulator",
+      "score": 0.0931,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 8 412 публикаций — технология уже хорошо изучена"
+    },
+    {
+      "name_ru": "Роботизированный цех будущего",
+      "name_en": "future robotic workshop",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: фраза не встречается в OpenAlex"
+    },
+    {
+      "name_ru": "Модульные захваты",
+      "name_en": "modular gripper",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов"
+    }
+  ],
+  "timings": {
+    "subqueries": 3.1,
+    "search": 23.7,
+    "candidates": 64.0,
+    "trace_check": 8.2,
+    "counters": 402.5,
+    "ranking": 0.4,
+    "total": 501.9
+  },
+  "warnings": []
+}
