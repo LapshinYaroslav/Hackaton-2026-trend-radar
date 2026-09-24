@@ -33,10 +33,10 @@ COMBOS = [(value, weight) for value in GRID_C for weight in GRID_WEIGHT]
 
 
 def pipeline_for(penalty: float, class_weight: str | None,
-                 mode: str = NORMALIZATION) -> Pipeline:
+                 mode: str = NORMALIZATION, columns: list[str] = FEATURES) -> Pipeline:
     """Тот же пайплайн, что в обучении, но с заданными гиперпараметрами."""
     return Pipeline([
-        ("area_scaler", AreaScaler(FEATURES, mode)),
+        ("area_scaler", AreaScaler(columns, mode)),
         ("imputer", SimpleImputer(strategy="median")),
         ("logistic", LogisticRegression(C=penalty, class_weight=class_weight,
                                         max_iter=5000, random_state=SEED)),
@@ -45,12 +45,13 @@ def pipeline_for(penalty: float, class_weight: str | None,
 
 def inner_probabilities(frame: pd.DataFrame, rows: np.ndarray, combo: tuple,
                         splits: list[tuple[np.ndarray, np.ndarray]],
-                        mode: str = NORMALIZATION) -> np.ndarray:
+                        mode: str = NORMALIZATION,
+                        columns: list[str] = FEATURES) -> np.ndarray:
     """Предсказания вне обучения внутри обучающей части при заданной комбинации."""
-    features, labels = frame[FEATURES + ["area"]], frame["label"]
+    features, labels = frame[columns + ["area"]], frame["label"]
     probability = np.full(len(rows), np.nan)
     for fit_part, hold in splits:
-        model = pipeline_for(*combo, mode=mode).fit(features.iloc[rows[fit_part]],
+        model = pipeline_for(*combo, mode=mode, columns=columns).fit(features.iloc[rows[fit_part]],
                                          labels.iloc[rows[fit_part]])
         probability[hold] = model.predict_proba(features.iloc[rows[hold]])[:, 1]
     return probability
@@ -59,12 +60,13 @@ def inner_probabilities(frame: pd.DataFrame, rows: np.ndarray, combo: tuple,
 def choose_inside(frame: pd.DataFrame, rows: np.ndarray, criterion: str,
                   splits: list[tuple[np.ndarray, np.ndarray]],
                   combos: list[tuple] | None = None,
-                  mode: str = NORMALIZATION) -> tuple[tuple, float, float]:
+                  mode: str = NORMALIZATION,
+                  columns: list[str] = FEATURES) -> tuple[tuple, float, float]:
     """Лучшая комбинация и порог по внутренней кросс-валидации обучающей части."""
     labels = frame["label"].iloc[rows].to_numpy()
     best = (None, 0.5, -np.inf)
     for combo in (combos if combos is not None else COMBOS):
-        probability = inner_probabilities(frame, rows, combo, splits, mode)
+        probability = inner_probabilities(frame, rows, combo, splits, mode, columns)
         scores = [score_at(labels, probability, float(point))[criterion]
                   for point in THRESHOLD_GRID]
         position = int(np.nanargmax(scores))
@@ -91,9 +93,10 @@ def _area_splits(frame: pd.DataFrame, rows: np.ndarray) -> list[tuple[np.ndarray
 
 def nested_cv(frame: pd.DataFrame, criterion: str,
               combos: list[tuple] | None = None,
-              mode: str = NORMALIZATION) -> tuple[pd.DataFrame, list[dict]]:
+              mode: str = NORMALIZATION,
+              columns: list[str] = FEATURES) -> tuple[pd.DataFrame, list[dict]]:
     """Вложенная кросс-валидация: метрики по повторам и что выбиралось внутри."""
-    features, labels, groups = frame[FEATURES + ["area"]], frame["label"], frame["group"]
+    features, labels, groups = frame[columns + ["area"]], frame["label"], frame["group"]
     truth = labels.to_numpy()
     rows, picks = [], []
     for repeat in range(N_REPEATS):
@@ -103,8 +106,8 @@ def nested_cv(frame: pd.DataFrame, criterion: str,
         for train, test in outer.split(features, labels, groups):
             splits = _grouped_splits(frame, train, SEED + repeat)
             combo, threshold, _ = choose_inside(frame, train, criterion, splits,
-                                                combos, mode)
-            model = pipeline_for(*combo, mode=mode).fit(features.iloc[train],
+                                                combos, mode, columns)
+            model = pipeline_for(*combo, mode=mode, columns=columns).fit(features.iloc[train],
                                                        labels.iloc[train])
             predicted[test] = model.predict_proba(features.iloc[test])[:, 1] >= threshold
             picks.append({"повтор": repeat, "C": combo[0], "class_weight": combo[1],
@@ -116,16 +119,18 @@ def nested_cv(frame: pd.DataFrame, criterion: str,
 
 def nested_loao(frame: pd.DataFrame, criterion: str,
                 combos: list[tuple] | None = None,
-                mode: str = NORMALIZATION) -> pd.DataFrame:
+                mode: str = NORMALIZATION,
+                columns: list[str] = FEATURES) -> pd.DataFrame:
     """Leave-one-area-out: выбор идёт по пяти обучающим областям, шестая не видна."""
-    features, labels = frame[FEATURES + ["area"]], frame["label"]
+    features, labels = frame[columns + ["area"]], frame["label"]
     rows = []
     for area in sorted(frame["area"].astype(str).unique()):
         test = np.flatnonzero((frame["area"].astype(str) == area).to_numpy())
         train = np.flatnonzero((frame["area"].astype(str) != area).to_numpy())
         combo, threshold, _ = choose_inside(frame, train, criterion,
-                                            _area_splits(frame, train), combos, mode)
-        model = pipeline_for(*combo, mode=mode).fit(features.iloc[train],
+                                            _area_splits(frame, train), combos, mode,
+                                            columns)
+        model = pipeline_for(*combo, mode=mode, columns=columns).fit(features.iloc[train],
                                                    labels.iloc[train])
         probability = model.predict_proba(features.iloc[test])[:, 1]
         got = score_at(labels.iloc[test].to_numpy(), probability, threshold)

@@ -65,3 +65,44 @@ def test_missing_value_is_not_put_into_text() -> None:
 @pytest.mark.parametrize("reason", ["no_trace", "trace_unknown", "cap", "bad_name", "no_counters", "beyond_top"])
 def test_special_reasons_have_text(reason) -> None:
     assert reasons.SPECIAL[reason]
+
+
+# Патентный признак s2a2-v1: числа патентов и публикаций, правильные формы слов.
+S2A2 = {"share_news_wordmatch": 0.1, "recency": 0.47, "share_patent": 0.02,
+        "age_first_arxiv": 9.0, "share_prev6": 0.62, "growth_research": 0.1}
+
+
+@pytest.mark.parametrize("number, expected", [
+    (0, "0 патентов"), (1, "1 патент"), (3, "3 патента"), (11, "11 патентов"), (21, "21 патент"),
+    (690, "690 патентов"), (1223, "1 223 патента"), (112, "112 патентов")])
+def test_plural_forms_and_thousands(number, expected) -> None:
+    assert reasons.plural(number, "патент", "патента", "патентов") == expected
+
+
+def test_share_patent_for_signal_names_patents_and_publications() -> None:
+    contributions = {key: (0.9 if key == "share_patent" else 0.0) for key in S2A2}
+    texts = reasons.explanation_top(S2A2, contributions, COUNTERS, n_pat=3)
+    assert texts == ["Патентов мало относительно научных работ: 3 патента на 155 публикаций"]
+
+
+def test_share_patent_against_signal_names_patents_and_publications() -> None:
+    contributions = {key: (-0.9 if key == "share_patent" else 0.0) for key in S2A2}
+    counters = {"2024": {"openalex": 1200, "arxiv": 1}}
+    text = reasons.reason_below(S2A2, contributions, counters, n_pat=690)
+    assert text == "Технология активно патентуется: 690 патентов на 1 201 публикацию"
+
+
+def test_share_patent_without_count_is_not_used() -> None:
+    """Сбой Роспатента: n_pat нет, число патентов не выдумывается — берётся следующий признак."""
+    features = {**S2A2, "share_patent": float("nan")}
+    contributions = {key: (-0.9 if key == "share_patent" else 0.0) for key in S2A2}
+    contributions["recency"] = -0.1
+    text = reasons.reason_below(features, contributions, COUNTERS, n_pat=None)
+    assert text.startswith("Интерес не нарастает")
+
+
+def test_every_s2a2_feature_has_templates_and_volume_is_not_among_them() -> None:
+    """У каждого признака s2a2-v1 есть шаблон «за» и «против»; volume в наборе нет."""
+    from model.config import FEATURES_S2A2
+    assert "volume" not in FEATURES_S2A2
+    assert set(FEATURES_S2A2) <= set(reasons.POSITIVE) and set(FEATURES_S2A2) <= set(reasons.NEGATIVE)

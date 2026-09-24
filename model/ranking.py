@@ -38,10 +38,11 @@ def _plain(value: float | None) -> float | None:
 def _normalise(candidate: str | Mapping) -> dict:
     """Кандидат принимается строкой или словарём с терминами и областью."""
     if isinstance(candidate, str):
-        return {"name": candidate, "terms": None, "context_terms": None, "area": ""}
+        return {"name": candidate, "terms": None, "context_terms": None, "area": "",
+                "n_pat": None}
     return {"name": candidate["name"], "terms": candidate.get("terms"),
             "context_terms": candidate.get("context_terms"),
-            "area": candidate.get("area", "")}
+            "area": candidate.get("area", ""), "n_pat": candidate.get("n_pat")}
 
 
 def score_candidate(candidate: str | Mapping, *, area: str = "",
@@ -54,7 +55,8 @@ def score_candidate(candidate: str | Mapping, *, area: str = "",
     where = spec["area"] or area
     built = candidate_features(spec["name"], terms=spec["terms"],
                                context_terms=spec["context_terms"], area=where,
-                               fetch=fetch)
+                               fetch=fetch, n_pat=spec["n_pat"],
+                               version=meta["model_version"])
     area_known = where in known_areas(artifact) and where != OTHER_AREA
     answer = {
         "name": built["name"], "area": where, "area_known": area_known,

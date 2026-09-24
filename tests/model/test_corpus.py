@@ -85,3 +85,61 @@ def test_extra_windows_do_not_break_the_check(tmp_path) -> None:
     rows = _rows() + [{"source": "arxiv", "window": "prev6", "n_total": 5,
                        "available": True}]
     assert len(load_training_totals(_write(tmp_path, rows))) == len(rows)
+
+
+# Снимок патентных счётчиков обучения (s2a2-v1).
+from model.config import ROSPATENT_DATASETS  # noqa: E402
+from model.corpus import (PatentSnapshotError, TRAINING_PATENTS,  # noqa: E402
+                          load_training_patents)
+
+
+def _snapshot(tmp_path, items, datasets=None):
+    path = tmp_path / "patents.json"
+    path.write_text(json.dumps({"datasets": datasets or ROSPATENT_DATASETS, "items": items}),
+                    encoding="utf-8")
+    return path
+
+
+def _items(count=160, n_pat=3):
+    return [{"tech_id": f"t{i}", "phrase": f"p{i}", "n_pat": n_pat} for i in range(count)]
+
+
+def test_real_patent_snapshot_has_160_rows() -> None:
+    frame = load_training_patents(ROSPATENT_DATASETS)
+    assert len(frame) == 160 and frame["tech_id"].is_unique and (frame["n_pat"] >= 0).all()
+    assert TRAINING_PATENTS.exists()
+
+
+def test_missing_patent_snapshot_is_a_refusal(tmp_path) -> None:
+    with pytest.raises(PatentSnapshotError):
+        load_training_patents(ROSPATENT_DATASETS, tmp_path / "нет.json")
+
+
+def test_incomplete_patent_snapshot_is_a_refusal(tmp_path) -> None:
+    with pytest.raises(PatentSnapshotError):
+        load_training_patents(ROSPATENT_DATASETS, _snapshot(tmp_path, _items(159)))
+
+
+def test_negative_count_in_snapshot_is_a_refusal(tmp_path) -> None:
+    items = _items()
+    items[5]["n_pat"] = -1
+    with pytest.raises(PatentSnapshotError):
+        load_training_patents(ROSPATENT_DATASETS, _snapshot(tmp_path, items))
+
+
+def test_snapshot_of_other_datasets_is_a_refusal(tmp_path) -> None:
+    with pytest.raises(PatentSnapshotError):
+        load_training_patents(ROSPATENT_DATASETS, _snapshot(tmp_path, _items(), ["us"]))
+
+
+def test_training_share_patent_equals_p0_on_every_row() -> None:
+    """share_patent обучающей таблицы (снимок) совпадает с П0 (кэш сбора) на всех 160 строках."""
+    import numpy as np
+
+    from model.train import training_table
+    from scripts.ru_patents_p0 import feature_table
+    stored = training_table().set_index("tech_id")["share_patent"]
+    p0 = feature_table().set_index("tech_id")["share_patent"].loc[stored.index]
+    assert len(stored) == 160
+    assert (stored.isna() == p0.isna()).all()
+    assert np.nanmax((stored - p0).abs().to_numpy()) <= 1e-12

@@ -20,15 +20,18 @@ from pathlib import Path
 
 import joblib
 
-from model.config import EXPLANATIONS, canonical
-from model.train import MODEL_PATH
+from model.config import DEFAULT_VERSION, EXPLANATIONS, canonical
+from model.train import existing_artifact
 
 _CACHE: dict[Path, dict] = {}
 
 
-def load(path: Path | None = None) -> dict:
-    """Артефакт с пайплайном и метаданными. Читается с диска один раз."""
-    path = path or MODEL_PATH
+def load(path: Path | None = None, version: str = DEFAULT_VERSION) -> dict:
+    """Артефакт версии с пайплайном и метаданными. Читается с диска один раз.
+
+    По умолчанию — боевая версия model.config.DEFAULT_VERSION; path перекрывает версию.
+    """
+    path = path or existing_artifact(version)
     if path not in _CACHE:
         _CACHE[path] = joblib.load(path)
     return _CACHE[path]

@@ -5,7 +5,7 @@ import math
 import pandas as pd
 import pytest
 
-from model.config import FEATURES, OTHER_AREA
+from model.config import FEATURES_S2A2, OTHER_AREA
 from model.predict import load, predict
 from model.ranking import (NO_COUNTERS, known_areas, rank_candidates,
                            score_candidate)
@@ -19,11 +19,11 @@ def test_known_technology_is_scored_with_all_fields() -> None:
     got = score_candidate(KNOWN)
     assert 0.0 <= got["score"] <= 1.0
     assert got["is_signal"] == (got["score"] >= got["threshold"])
-    assert set(got["contributions"]) == set(FEATURES)
-    assert set(got["features"]) == set(FEATURES)
+    assert set(got["contributions"]) == set(FEATURES_S2A2)
+    assert set(got["features"]) == set(FEATURES_S2A2)
     assert got["sources"] and got["counters"]
     assert got["skipped_reason"] is None
-    assert got["model_version"] and got["cutoff_date"]
+    assert got["model_version"] == "s2a2-v1" and got["cutoff_date"]
 
 
 def test_contributions_add_up_to_the_score() -> None:
