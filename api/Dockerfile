@@ -6,6 +6,7 @@ COPY api/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY api/main.py /app/main.py
+COPY search /app/search
 COPY docs/contracts /app/docs/contracts
 
 EXPOSE 8000

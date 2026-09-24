@@ -169,14 +169,48 @@ def get_query(query_id: str) -> dict:
         return _public(copy.deepcopy(job))
 
 
+def _find_card(job: dict, rank: int) -> Optional[dict]:
+    result = job.get("result") or {}
+    for item in result.get("top") or []:
+        if item.get("rank") == rank:
+            return item
+    return None
+
+
+def _fill_insight(query_id: str, rank: int) -> None:
+    from search.insights import generate_insight
+
+    with _lock:
+        job = _jobs.get(query_id)
+        card = _find_card(job, rank) if job else None
+        slot = (job or {}).get("insights", {}).get(rank)
+    if card is None or slot is None:
+        return
+    try:
+        content = generate_insight(card)
+        with _lock:
+            _jobs[query_id]["insights"][rank] = {"status": "ready", "content": content, "error": None}
+    except Exception as exc:  # noqa: BLE001
+        with _lock:
+            _jobs[query_id]["insights"][rank] = {"status": "error", "content": None, "error": str(exc)}
+
+
 @app.get("/queries/{query_id}/insights/{rank}")
 def get_insight(query_id: str, rank: int) -> dict:
-    """Пока без LLM: инсайт не на критическом пути (задача 2.9)."""
+    """Готовый отчёт, либо pending, пока модель пишет текст по документам."""
     with _lock:
         job = _jobs.get(query_id)
         if job is None:
             raise HTTPException(status_code=404, detail="запрос не найден")
-        status = job["status"]
-    if status != "done":
+        if job["status"] != "done":
+            return {"query_id": query_id, "rank": rank, "status": "pending"}
+        if _find_card(job, rank) is None:
+            raise HTTPException(status_code=404, detail="в ТОП нет карточки с таким номером")
+        insights = job.setdefault("insights", {})
+        slot = insights.get(rank)
+        if slot and slot["status"] in {"ready", "error"}:
+            return {"query_id": query_id, "rank": rank, **slot}
+        if slot is None or not slot.get("started"):
+            insights[rank] = {"status": "pending", "content": None, "error": None, "started": True}
+            threading.Thread(target=_fill_insight, args=(query_id, rank), daemon=True).start()
         return {"query_id": query_id, "rank": rank, "status": "pending"}
-    return {"query_id": query_id, "rank": rank, "status": "pending"}
