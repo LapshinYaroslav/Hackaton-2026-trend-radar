@@ -1,17 +1,22 @@
 """
-Общие части шага 4 (search/extract_terms.py, extract-v2): фрагменты документов, промпт
-с нумерацией, кэш ответов модели, слияние синонимов и отбор по числу документов.
+Шаг 4 режима «Запрос»: документы поиска №1 → список технологий-кандидатов.
 
-Прежний шаг 4 v1 (свой промпт и разбор ответа) удалён: в итоговый пайплайн он не вошёл.
+Вход: title + первые ~500 знаков text (пачками).
+Выход: до 30 уникальных кандидатов с terms / context_terms.
+LLM: search.llm_yandex_gpt.ask_llm (YandexGPT Pro через .env).
+Фрагменты, промпт с нумерацией, кэш и дедуп использует и search/extract_terms.py (extract-v2).
 """
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import re
+import sys
+import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -19,16 +24,26 @@ from sklearn.metrics.pairwise import cosine_similarity
 from search.llm_yandex_gpt import ask_llm, build_model_uri
 
 ROOT = Path(__file__).resolve().parents[1]
+PROMPT_PATH = Path(__file__).resolve().parent / "prompts" / "extract_candidates.txt"
 CACHE_DIR = ROOT / "data" / "cache" / "extract_candidates"
 
 SNIPPET_CHARS = 500
 BATCH_SIZE = 40
 MAX_CANDIDATES = 30
 SIMILARITY_THRESHOLD = 0.8
+MIN_WORDS = 2
+MAX_WORDS = 6
+EXTRACT_TEMPERATURE = 0.2
 MAX_TOKENS = 2500
 
+FENCE_RE = re.compile(r"^```(?:json)?\s*|\s*```$", re.IGNORECASE)
 PUNCT_RE = re.compile(r"[^\w\s\-]+", re.UNICODE)
 SPACE_RE = re.compile(r"\s+")
+WORD_RE = re.compile(r"[\w\-]+", re.UNICODE)
+
+
+def load_system_prompt() -> str:
+    return PROMPT_PATH.read_text(encoding="utf-8").strip()
 
 
 def snippet_from_doc(doc: dict[str, Any], limit: int = SNIPPET_CHARS) -> str:
@@ -59,8 +74,20 @@ def normalize_name(text: str) -> str:
     return SPACE_RE.sub(" ", low).strip()
 
 
-def _cache_key(payload: str, model_uri: str) -> str:
-    """Ключ кэша: отпечаток пачки (промпт целиком и документы) плюс модель.
+def word_count(text: str) -> int:
+    return len(WORD_RE.findall(text or ""))
+
+
+def parse_llm_json(text: str) -> dict:
+    stripped = FENCE_RE.sub("", (text or "").strip()).strip()
+    try:
+        data = json.loads(stripped)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"ответ модели не JSON: {exc}") from exc
+    if not isinstance(data, dict) or not isinstance(data.get("candidates"), list):
+        raise ValueError("в ответе нет списка candidates")
+    return data
+
 
 def _cache_key(payload: str, model_uri: str) -> str:
     """Ключ кэша: отпечаток пачки (промпт целиком и документы) плюс модель.
@@ -269,3 +296,129 @@ def dedupe_candidates(
 def select_top(items: list[dict], limit: int = MAX_CANDIDATES) -> list[dict]:
     ranked = sorted(items, key=lambda c: (-int(c.get("doc_count") or 0), c.get("name_en") or ""))
     return ranked[:limit]
+
+
+def extract_candidates(
+    documents: Iterable[dict[str, Any]],
+    topic: str,
+    query_id: str = "q1",
+    *,
+    batch_size: int = BATCH_SIZE,
+    max_candidates: int = MAX_CANDIDATES,
+    similarity_threshold: float = SIMILARITY_THRESHOLD,
+    use_cache: bool = True,
+) -> dict:
+    """
+    documents — словари с полями title и text (или body).
+    Возвращает контракт с terms/context_terms (не aliases).
+    """
+    if not topic or not str(topic).strip():
+        raise ValueError("тема пустая")
+
+    docs = list(documents)
+    warnings: list[str] = []
+    raw_all: list[dict] = []
+
+    # Глобальная нумерация 1..N — модель возвращает doc, UI/поиск поймут источник
+    snippets: list[tuple[int, str]] = []
+    for index, doc in enumerate(docs, start=1):
+        text = snippet_from_doc(doc)
+        if text:
+            snippets.append((index, text))
+
+    if not snippets:
+        return {
+            "query_id": query_id,
+            "topic": topic.strip(),
+            "candidates": [],
+            "warnings": ["нет документов с title/text"],
+        }
+
+    for start in range(0, len(snippets), batch_size):
+        batch = snippets[start : start + batch_size]
+        raw, batch_warnings = call_llm_batch(topic, batch, use_cache=use_cache)
+        warnings.extend(batch_warnings)
+        for item in raw:
+            cleaned = filter_raw_candidate(item, topic)
+            if cleaned is not None:
+                # doc в ответе — номер внутри пачки? В промпте номера глобальные [n]
+                # модель должна вернуть тот же n из промпта
+                raw_all.append(cleaned)
+
+    # Если модель вернула doc относительно пачки (1..batch) — поправим эвристикой:
+    # номера уже глобальные в промпте, оставляем как есть; отсекаем вне диапазона
+    max_doc = len(docs)
+    in_range = [c for c in raw_all if 1 <= c["doc"] <= max_doc]
+    if len(in_range) < len(raw_all):
+        warnings.append(
+            f"отброшены кандидаты с doc вне 1..{max_doc}: {len(raw_all) - len(in_range)}"
+        )
+        raw_all = in_range
+
+    merged = dedupe_candidates(raw_all, threshold=similarity_threshold)
+    top = select_top(merged, limit=max_candidates)
+
+    candidates = []
+    for number, item in enumerate(top, start=1):
+        candidates.append(
+            {
+                "candidate_id": f"{query_id}-c{number}",
+                "query_id": query_id,
+                "name_ru": item["name_ru"],
+                "name_en": item["name_en"],
+                "terms": item.get("terms") or [],
+                "context_terms": item.get("context_terms") or [],
+                "doc_ids": item.get("doc_ids") or [],
+                "doc_count": item.get("doc_count") or 0,
+                # временно для collector.Candidate, пока контракт aliases не обновлён
+                "aliases": list(item.get("terms") or []),
+            }
+        )
+
+    return {
+        "query_id": query_id,
+        "topic": topic.strip(),
+        "candidates": candidates,
+        "warnings": warnings,
+        "stats": {
+            "documents": len(docs),
+            "raw_mentions": len(raw_all),
+            "after_dedupe": len(merged),
+            "returned": len(candidates),
+        },
+    }
+
+
+def _load_docs(path: Path) -> list[dict]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(data, list):
+        return data
+    if isinstance(data, dict) and isinstance(data.get("documents"), list):
+        return data["documents"]
+    raise ValueError("ожидался JSON-список документов или объект с ключом documents")
+
+
+def _main() -> None:
+    parser = argparse.ArgumentParser(description="Шаг 4: извлечение технологий-кандидатов")
+    parser.add_argument("--docs", required=True, help="JSON с документами (title, text)")
+    parser.add_argument("--topic", required=True, help="тема пользователя")
+    parser.add_argument("--query-id", default="q1")
+    parser.add_argument("--no-cache", action="store_true")
+    args = parser.parse_args()
+    sys.stdout.reconfigure(encoding="utf-8")
+    started = time.monotonic()
+    result = extract_candidates(
+        _load_docs(Path(args.docs)),
+        args.topic,
+        query_id=args.query_id,
+        use_cache=not args.no_cache,
+    )
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print(
+        f"кандидатов: {len(result['candidates'])}, время: {time.monotonic() - started:.1f} с",
+        file=sys.stderr,
+    )
+
+
+if __name__ == "__main__":
+    _main()
