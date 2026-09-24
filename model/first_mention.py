@@ -114,3 +114,48 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+RAW = ROOT / "data" / "interim" / "raw"
+
+
+def norm_text(text: str) -> str:
+    """Текст без регистра, дефисов и пунктуации: «Data-Center» и «data center» равны."""
+    import html
+    import re
+    return re.sub(r"[^a-z0-9]+", " ", html.unescape(text).lower()).strip()
+
+
+def phrase_match_audit() -> pd.DataFrame:
+    """Сколько раз источник вернул документ, где искомой фразы нет.
+
+    Проверяются сырые ответы: у каждого непустого окна в кэше лежит один документ.
+    Если фразы в нём нет, счётчик этого окна считает не фразу, а что-то другое.
+    """
+    import re
+    rows = []
+    for path in sorted((RAW / "arxiv").glob("*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        found = re.search(r'\("([^"]+)"\)', payload.get("params", {}).get("search_query", ""))
+        body = payload.get("body", "")
+        total = re.search(r"<opensearch:totalResults>(\d+)<", body)
+        entry = re.search(r"<entry>(.*?)</entry>", body, re.S)
+        if not found or (total and int(total.group(1)) == 0) or not entry:
+            continue
+        rows.append({"источник": "arxiv", "фраза найдена":
+                     norm_text(found.group(1)) in " ".join(norm_text(entry.group(1)).split())})
+    for path in sorted((RAW / "techcrunch").glob("*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        phrase = payload.get("params", {}).get("search")
+        body = payload.get("body")
+        posts = body if isinstance(body, list) else json.loads(body) if body else []
+        if not phrase or not posts:
+            continue
+        text = " ".join(norm_text(json.dumps(posts[0], ensure_ascii=False)).split())
+        rows.append({"источник": "techcrunch", "фраза найдена": norm_text(phrase) in text})
+    audit = pd.DataFrame(rows)
+    return (audit.groupby("источник")["фраза найдена"]
+            .agg(**{"проверено окон": "size", "документ содержит фразу": "sum"})
+            .assign(**{"доля непопаданий": lambda f: (
+                1 - f["документ содержит фразу"] / f["проверено окон"]).round(3)})
+            .reset_index())
