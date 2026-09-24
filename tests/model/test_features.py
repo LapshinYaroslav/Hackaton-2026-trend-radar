@@ -19,7 +19,8 @@ import math
 import pandas as pd
 import pytest
 
-from model.features import FEATURE_NAMES, compute_features, growth_by_source
+from model.features import (FEATURE_NAMES, compute_features, growth_by_source,
+                            share_patent)
 
 
 def _counters(rows: list[tuple[str, str, int]]) -> pd.DataFrame:
@@ -381,3 +382,19 @@ def test_coverage_parameter_is_required():
     features = compute_features(_counters([("openalex", "all", 10)]), _totals([]),
                                 expected_sources=None)
     assert features["volume"] == pytest.approx(math.log(11), abs=1e-3)
+
+
+def test_share_patent_is_fraction_of_patents_plus_research():
+    assert share_patent(30, 90) == pytest.approx(0.25, abs=1e-12)
+
+
+def test_share_patent_without_patents_is_zero():
+    assert share_patent(0, 17) == 0.0
+
+
+def test_share_patent_only_patents_is_one():
+    assert share_patent(5, 0) == 1.0
+
+
+def test_share_patent_without_any_documents_is_nan():
+    assert math.isnan(share_patent(0, 0))

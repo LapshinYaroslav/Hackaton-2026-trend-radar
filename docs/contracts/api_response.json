@@ -21,26 +21,27 @@
       "candidate_id": "c42",
       "name_ru": "Нейроморфные чипы для периферийного ИИ",
       "score": 0.88,
-      "model_version": "v1",
+      "model_version": "s2a2-v1",
       "features": {
-        "volume": 4.95,
-        "growth": 1.14,
+        "share_news_wordmatch": 0.62,
         "recency": 0.71,
-        "share_research": 0.55,
-        "share_market": 0.20
+        "share_patent": 0.014,
+        "age_first_arxiv": 3.0,
+        "share_prev6": 0.05,
+        "growth_research": 0.40
       },
       "top_features": [
         {
-          "name": "growth",
-          "value": 1.14,
+          "name": "share_news_wordmatch",
+          "value": 0.62,
           "contribution": 1.6,
-          "explanation_ru": "Доля публикаций выросла быстрее отрасли в 3,1 раза"
+          "explanation_ru": "Про технологию пока мало научных публикаций: 214"
         },
         {
-          "name": "share_research",
-          "value": 0.55,
+          "name": "share_patent",
+          "value": 0.014,
           "contribution": 0.5,
-          "explanation_ru": "Высокая доля научных документов (paper/preprint/patent)"
+          "explanation_ru": "Патентов мало относительно научных работ: 3 патента на 214 публикаций"
         }
       ],
       "insight": {
@@ -84,26 +85,27 @@
       "candidate_id": "c17",
       "name_ru": "Фотонные процессоры инференса",
       "score": 0.81,
-      "model_version": "v1",
+      "model_version": "s2a2-v1",
       "features": {
-        "volume": 3.40,
-        "growth": 0.95,
+        "share_news_wordmatch": 0.48,
         "recency": 0.66,
-        "share_research": 0.62,
-        "share_market": 0.15
+        "share_patent": 0.0,
+        "age_first_arxiv": 2.0,
+        "share_prev6": 0.0,
+        "growth_research": 0.95
       },
       "top_features": [
         {
-          "name": "share_research",
-          "value": 0.62,
+          "name": "share_patent",
+          "value": 0.0,
           "contribution": 0.7,
-          "explanation_ru": "Преобладают научные и патентные документы, а не продуктовая пресса"
+          "explanation_ru": "Патентов мало относительно научных работ: 0 патентов на 57 публикаций"
         },
         {
           "name": "recency",
           "value": 0.66,
           "contribution": 0.4,
-          "explanation_ru": "Большая доля документов приходится на последние 24 месяца"
+          "explanation_ru": "Упоминания свежие: 66% за последние два года"
         }
       ],
       "insight": {

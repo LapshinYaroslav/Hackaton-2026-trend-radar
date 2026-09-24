@@ -4,6 +4,10 @@
 берётся признак с самым отрицательным вкладом, для кандидата в ТОП-15 — два с самыми
 положительными. Признак без значения (пропуск, модель подставила медиану) в текст
 не идёт: число в шаблоне было бы выдуманным.
+
+volume в боевой модели s2a2-v1 нет; его общая строка оставлена для воспроизведения
+отчётов s2a1-v1. share_patent (s2a2-v1) пишется числами патентов и публикаций:
+n_pat приходит от Роспатента отдельно, n_research — из счётчиков кандидата.
 """
 from __future__ import annotations
 
@@ -19,6 +23,7 @@ NEGATIVE = {
     "recency": "Интерес не нарастает: за последние два года {recency:.0%} всех упоминаний",
     "age_first_arxiv": "Термин давно в науке: первый препринт {age:.0f} лет назад",
     "share_prev6": "Значительная часть публикаций вышла до 2020 года ({share_prev6:.0%})",
+    "share_patent": "Технология активно патентуется: {patents} на {publications}",
     "volume": GENERIC_BELOW,
     "growth_research": GENERIC_BELOW,
 }
@@ -27,6 +32,7 @@ POSITIVE = {
     "recency": "Упоминания свежие: {recency:.0%} за последние два года",
     "age_first_arxiv": "Молодой термин: первый препринт {age:.0f} лет назад",
     "share_prev6": "Почти нет публикаций до 2020 года",
+    "share_patent": "Патентов мало относительно научных работ: {patents} на {publications}",
     "volume": GENERIC_ABOVE,
     "growth_research": GENERIC_ABOVE,
 }
@@ -53,30 +59,46 @@ def _known(value) -> bool:
     return value is not None and not (isinstance(value, float) and math.isnan(value))
 
 
-def _fill(template: str, features: Mapping, counters: Mapping) -> str:
+def plural(number: int, one: str, few: str, many: str) -> str:
+    """Число с существительным в нужной форме и пробелом между тысячами: 1 патент, 1 200 публикаций."""
+    tail, tens = number % 10, number % 100
+    word = one if tail == 1 and tens != 11 else few if 2 <= tail <= 4 and not 12 <= tens <= 14 else many
+    return f"{number:,}".replace(",", " ") + f" {word}"
+
+
+def _fill(template: str, features: Mapping, counters: Mapping, n_pat: int | None = None) -> str:
     """Подставляет числа в шаблон."""
-    return template.format(n_research=n_research(counters), recency=features.get("recency"),
+    research = n_research(counters)
+    return template.format(n_research=research, recency=features.get("recency"),
                            age=features.get("age_first_arxiv"),
-                           share_prev6=features.get("share_prev6"))
+                           share_prev6=features.get("share_prev6"),
+                           patents=plural(n_pat or 0, "патент", "патента", "патентов"),
+                           publications=plural(research, "публикацию", "публикации", "публикаций"))
 
 
-def reason_below(features: Mapping, contributions: Mapping[str, float], counters: Mapping) -> str:
+def _usable(name: str, features: Mapping, n_pat: int | None) -> bool:
+    """Признак идёт в текст, если у него есть значение; патентный — ещё и число патентов."""
+    return _known(features.get(name)) and (name != "share_patent" or n_pat is not None)
+
+
+def reason_below(features: Mapping, contributions: Mapping[str, float], counters: Mapping,
+                 n_pat: int | None = None) -> str:
     """Причина исключения: признак с самым отрицательным вкладом среди известных."""
     negative = sorted((value, name) for name, value in contributions.items()
-                      if value < 0 and _known(features.get(name)))
+                      if value < 0 and _usable(name, features, n_pat))
     if not negative:
         return GENERIC_BELOW
-    return _fill(NEGATIVE[negative[0][1]], features, counters)
+    return _fill(NEGATIVE[negative[0][1]], features, counters, n_pat)
 
 
 def explanation_top(features: Mapping, contributions: Mapping[str, float], counters: Mapping,
-                    count: int = 2) -> list[str]:
+                    count: int = 2, n_pat: int | None = None) -> list[str]:
     """Объяснение для ТОП-15: до двух признаков с самыми положительными вкладами."""
     positive = sorted(((value, name) for name, value in contributions.items()
-                       if value > 0 and _known(features.get(name))), reverse=True)
+                       if value > 0 and _usable(name, features, n_pat)), reverse=True)
     texts: list[str] = []
     for _, name in positive:
-        text = _fill(POSITIVE[name], features, counters)
+        text = _fill(POSITIVE[name], features, counters, n_pat)
         if text not in texts:
             texts.append(text)
         if len(texts) == count:

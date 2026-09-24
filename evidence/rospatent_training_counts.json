@@ -1,0 +1,997 @@
+{
+ "source": "rospatent",
+ "url": "https://searchplatform.rospatent.gov.ru/patsearch/v0.2/search",
+ "field": "total",
+ "query": "фраза в кавычках",
+ "window": {
+  "date_published": {
+   "range": {
+    "gte": "20200901",
+    "lte": "20260831"
+   }
+  }
+ },
+ "datasets": [
+  "ru_since_1994",
+  "cis",
+  "ap",
+  "cn",
+  "ch",
+  "au",
+  "gb",
+  "kr",
+  "ca",
+  "at",
+  "jp",
+  "ep",
+  "de",
+  "fr",
+  "pct",
+  "us",
+  "others"
+ ],
+ "collected_from": "2026-09-24T21:50:30",
+ "collected_to": "2026-09-24T22:01:55",
+ "items": [
+  {
+   "tech_id": "s1",
+   "phrase": "edge model compression",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:54:19"
+  },
+  {
+   "tech_id": "s2",
+   "phrase": "ai access control system",
+   "n_pat": 3,
+   "fetched_at": "2026-09-24T21:50:52"
+  },
+  {
+   "tech_id": "s3",
+   "phrase": "automated red teaming for ai",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:52:03"
+  },
+  {
+   "tech_id": "s4",
+   "phrase": "ai infrastructure security",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T21:51:04"
+  },
+  {
+   "tech_id": "s5",
+   "phrase": "cad generative design",
+   "n_pat": 2,
+   "fetched_at": "2026-09-24T21:52:55"
+  },
+  {
+   "tech_id": "s6",
+   "phrase": "autonomous procurement agents",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:52:31"
+  },
+  {
+   "tech_id": "s7",
+   "phrase": "ai predictive thermal management",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:51:07"
+  },
+  {
+   "tech_id": "s8",
+   "phrase": "neuromorphic chip",
+   "n_pat": 374,
+   "fetched_at": "2026-09-24T21:57:06"
+  },
+  {
+   "tech_id": "s9",
+   "phrase": "optical circuit switching",
+   "n_pat": 65,
+   "fetched_at": "2026-09-24T21:57:41"
+  },
+  {
+   "tech_id": "s10",
+   "phrase": "kv cache offloading",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:45"
+  },
+  {
+   "tech_id": "s11",
+   "phrase": "robotic application platform",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:59:01"
+  },
+  {
+   "tech_id": "s12",
+   "phrase": "quadruped inspection robot",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T21:58:30"
+  },
+  {
+   "tech_id": "s13",
+   "phrase": "robot safety certification",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:58:57"
+  },
+  {
+   "tech_id": "s14",
+   "phrase": "robotic teleoperation data",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:59:13"
+  },
+  {
+   "tech_id": "s15",
+   "phrase": "presentation attack detection",
+   "n_pat": 93,
+   "fetched_at": "2026-09-24T21:58:05"
+  },
+  {
+   "tech_id": "s16",
+   "phrase": "embedded npu",
+   "n_pat": 20,
+   "fetched_at": "2026-09-24T21:54:30"
+  },
+  {
+   "tech_id": "s17",
+   "phrase": "hybrid event based vision sensors",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:08"
+  },
+  {
+   "tech_id": "s18",
+   "phrase": "satellite edge computing",
+   "n_pat": 14,
+   "fetched_at": "2026-09-24T21:59:30"
+  },
+  {
+   "tech_id": "s19",
+   "phrase": "federated learning",
+   "n_pat": 4036,
+   "fetched_at": "2026-09-24T21:54:43"
+  },
+  {
+   "tech_id": "s20",
+   "phrase": "llm firewall",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:56"
+  },
+  {
+   "tech_id": "s21",
+   "phrase": "prompt injection defense",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:58:26"
+  },
+  {
+   "tech_id": "s22",
+   "phrase": "eu ai act compliance",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:54:38"
+  },
+  {
+   "tech_id": "s23",
+   "phrase": "differentially private synthetic data",
+   "n_pat": 6,
+   "fetched_at": "2026-09-24T21:53:53"
+  },
+  {
+   "tech_id": "s24",
+   "phrase": "confidential inference in tee",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:53:19"
+  },
+  {
+   "tech_id": "s25",
+   "phrase": "llm watermarking technique",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:59"
+  },
+  {
+   "tech_id": "s26",
+   "phrase": "robotics foundation model",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:59:20"
+  },
+  {
+   "tech_id": "s27",
+   "phrase": "vision foundation models",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T22:01:07"
+  },
+  {
+   "tech_id": "s28",
+   "phrase": "autonomous mineral exploration",
+   "n_pat": 2,
+   "fetched_at": "2026-09-24T21:52:28"
+  },
+  {
+   "tech_id": "s29",
+   "phrase": "industrial ai agent",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:23"
+  },
+  {
+   "tech_id": "s30",
+   "phrase": "vision guided robotic welding",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T22:01:33"
+  },
+  {
+   "tech_id": "s31",
+   "phrase": "ai-powered energy trading",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:51:16"
+  },
+  {
+   "tech_id": "s32",
+   "phrase": "wafer scale integration",
+   "n_pat": 304,
+   "fetched_at": "2026-09-24T22:01:40"
+  },
+  {
+   "tech_id": "s33",
+   "phrase": "ai compilers",
+   "n_pat": 4,
+   "fetched_at": "2026-09-24T21:50:56"
+  },
+  {
+   "tech_id": "s34",
+   "phrase": "small modular reactor",
+   "n_pat": 145,
+   "fetched_at": "2026-09-24T21:59:49"
+  },
+  {
+   "tech_id": "s35",
+   "phrase": "offline ai infrastructure",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:57:17"
+  },
+  {
+   "tech_id": "s36",
+   "phrase": "dexterous robotic hand",
+   "n_pat": 3,
+   "fetched_at": "2026-09-24T21:53:49"
+  },
+  {
+   "tech_id": "s37",
+   "phrase": "swarm robotics",
+   "n_pat": 44,
+   "fetched_at": "2026-09-24T22:00:19"
+  },
+  {
+   "tech_id": "s38",
+   "phrase": "edge ai inference chip",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:54:05"
+  },
+  {
+   "tech_id": "s39",
+   "phrase": "conversational ai debt collection",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:53:23"
+  },
+  {
+   "tech_id": "s40",
+   "phrase": "ai enabled banking system",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:51:00"
+  },
+  {
+   "tech_id": "s41",
+   "phrase": "blockchain credit scoring",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:52:43"
+  },
+  {
+   "tech_id": "s42",
+   "phrase": "stablecoin",
+   "n_pat": 265,
+   "fetched_at": "2026-09-24T22:00:10"
+  },
+  {
+   "tech_id": "s43",
+   "phrase": "federated learning",
+   "n_pat": 4036,
+   "fetched_at": "2026-09-24T21:54:43"
+  },
+  {
+   "tech_id": "s44",
+   "phrase": "edge analog compute in memory",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:54:12"
+  },
+  {
+   "tech_id": "s45",
+   "phrase": "neuromorphic edge processor",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:57:09"
+  },
+  {
+   "tech_id": "s46",
+   "phrase": "distributed ai orchestration",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:53:57"
+  },
+  {
+   "tech_id": "s47",
+   "phrase": "photonic inference accelerator",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:57:49"
+  },
+  {
+   "tech_id": "s48",
+   "phrase": "machine unlearning",
+   "n_pat": 7,
+   "fetched_at": "2026-09-24T21:56:41"
+  },
+  {
+   "tech_id": "s49",
+   "phrase": "interpretability as operational control",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:41"
+  },
+  {
+   "tech_id": "s50",
+   "phrase": "secure traffic authentication",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:59:34"
+  },
+  {
+   "tech_id": "s51",
+   "phrase": "cryptographic model signature",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:53:26"
+  },
+  {
+   "tech_id": "s52",
+   "phrase": "chain of thought monitoring",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:53:03"
+  },
+  {
+   "tech_id": "s53",
+   "phrase": "industrial time series foundation model",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:34"
+  },
+  {
+   "tech_id": "s54",
+   "phrase": "acoustic condition monitoring",
+   "n_pat": 13,
+   "fetched_at": "2026-09-24T21:50:44"
+  },
+  {
+   "tech_id": "s55",
+   "phrase": "ai process control",
+   "n_pat": 10,
+   "fetched_at": "2026-09-24T21:51:11"
+  },
+  {
+   "tech_id": "s56",
+   "phrase": "edge cloud computing orchestration",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:54:16"
+  },
+  {
+   "tech_id": "s57",
+   "phrase": "cxl memory pools",
+   "n_pat": 2,
+   "fetched_at": "2026-09-24T21:53:30"
+  },
+  {
+   "tech_id": "s58",
+   "phrase": "decentralized inference networks",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:53:42"
+  },
+  {
+   "tech_id": "s59",
+   "phrase": "space data center",
+   "n_pat": 31,
+   "fetched_at": "2026-09-24T22:00:02"
+  },
+  {
+   "tech_id": "s60",
+   "phrase": "photonic inference accelerator",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:57:49"
+  },
+  {
+   "tech_id": "s61",
+   "phrase": "low cost autonomous underwater vehicles",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:56:07"
+  },
+  {
+   "tech_id": "s62",
+   "phrase": "robot insurance",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T21:58:54"
+  },
+  {
+   "tech_id": "s63",
+   "phrase": "tactile vision language action model",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T22:00:27"
+  },
+  {
+   "tech_id": "s64",
+   "phrase": "first-person video data",
+   "n_pat": 2,
+   "fetched_at": "2026-09-24T21:54:49"
+  },
+  {
+   "tech_id": "s65",
+   "phrase": "conditional payment system",
+   "n_pat": 2,
+   "fetched_at": "2026-09-24T21:53:11"
+  },
+  {
+   "tech_id": "s66",
+   "phrase": "autonomous browser agent",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:52:19"
+  },
+  {
+   "tech_id": "s67",
+   "phrase": "machine micropayments",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:56:11"
+  },
+  {
+   "tech_id": "s68",
+   "phrase": "zero knowledge proof credentials",
+   "n_pat": 2,
+   "fetched_at": "2026-09-24T22:01:51"
+  },
+  {
+   "tech_id": "s69",
+   "phrase": "agent payment authorization protocol",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:50:48"
+  },
+  {
+   "tech_id": "s70",
+   "phrase": "artificial intelligence liability insurance",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:51:34"
+  },
+  {
+   "tech_id": "s71",
+   "phrase": "tokenized money market fund shares",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T22:00:34"
+  },
+  {
+   "tech_id": "s72",
+   "phrase": "edge ai on npu",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:54:09"
+  },
+  {
+   "tech_id": "s73",
+   "phrase": "on device fine tuning",
+   "n_pat": 16,
+   "fetched_at": "2026-09-24T21:57:21"
+  },
+  {
+   "tech_id": "s74",
+   "phrase": "on device small language model",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:57:25"
+  },
+  {
+   "tech_id": "s75",
+   "phrase": "edge to cloud routing",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:54:23"
+  },
+  {
+   "tech_id": "s76",
+   "phrase": "memory poisoning defense",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:56:57"
+  },
+  {
+   "tech_id": "s77",
+   "phrase": "large language model backdoor scan",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:49"
+  },
+  {
+   "tech_id": "s78",
+   "phrase": "iec 61131-3 code generation",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:19"
+  },
+  {
+   "tech_id": "s79",
+   "phrase": "process documentation automation",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:58:13"
+  },
+  {
+   "tech_id": "s80",
+   "phrase": "neuromorphic edge processor",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:57:09"
+  },
+  {
+   "tech_id": "s81",
+   "phrase": "on-device reinforcement learning",
+   "n_pat": 19,
+   "fetched_at": "2026-09-24T21:57:32"
+  },
+  {
+   "tech_id": "s82",
+   "phrase": "federated learning",
+   "n_pat": 4036,
+   "fetched_at": "2026-09-24T21:54:43"
+  },
+  {
+   "tech_id": "s83",
+   "phrase": "3d stacked memory compute",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:50:34"
+  },
+  {
+   "tech_id": "s84",
+   "phrase": "analog in memory computing",
+   "n_pat": 38,
+   "fetched_at": "2026-09-24T21:51:29"
+  },
+  {
+   "tech_id": "s85",
+   "phrase": "on-chip microfluidic cooling",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:57:29"
+  },
+  {
+   "tech_id": "s86",
+   "phrase": "silicon for ai agents",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:59:44"
+  },
+  {
+   "tech_id": "s87",
+   "phrase": "superconducting computing",
+   "n_pat": 93,
+   "fetched_at": "2026-09-24T22:00:15"
+  },
+  {
+   "tech_id": "s88",
+   "phrase": "zero shot transfer learning",
+   "n_pat": 15,
+   "fetched_at": "2026-09-24T22:01:55"
+  },
+  {
+   "tech_id": "s89",
+   "phrase": "soft robotic cells",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:59:57"
+  },
+  {
+   "tech_id": "s90",
+   "phrase": "medical microrobots",
+   "n_pat": 4,
+   "fetched_at": "2026-09-24T21:56:53"
+  },
+  {
+   "tech_id": "s91",
+   "phrase": "verified identity ai agent",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T22:00:55"
+  },
+  {
+   "tech_id": "s92",
+   "phrase": "large language model benchmarks",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:52"
+  },
+  {
+   "tech_id": "s93",
+   "phrase": "tokenized bank deposits",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T22:00:31"
+  },
+  {
+   "tech_id": "s94",
+   "phrase": "confidential edge computing",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:53:15"
+  },
+  {
+   "tech_id": "s95",
+   "phrase": "processing in pixel",
+   "n_pat": 5594,
+   "fetched_at": "2026-09-24T21:58:18"
+  },
+  {
+   "tech_id": "s96",
+   "phrase": "speculative decoding",
+   "n_pat": 47,
+   "fetched_at": "2026-09-24T22:00:06"
+  },
+  {
+   "tech_id": "s97",
+   "phrase": "biohybrid actuators",
+   "n_pat": 7,
+   "fetched_at": "2026-09-24T21:52:39"
+  },
+  {
+   "tech_id": "s98",
+   "phrase": "self-healing materials",
+   "n_pat": 313,
+   "fetched_at": "2026-09-24T21:59:38"
+  },
+  {
+   "tech_id": "s99",
+   "phrase": "electrohydraulic artificial muscles",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:54:26"
+  },
+  {
+   "tech_id": "s100",
+   "phrase": "post quantum cryptography",
+   "n_pat": 945,
+   "fetched_at": "2026-09-24T21:57:57"
+  },
+  {
+   "tech_id": "n1",
+   "phrase": "bluetooth low energy",
+   "n_pat": 60201,
+   "fetched_at": "2026-09-24T21:52:51"
+  },
+  {
+   "tech_id": "n2",
+   "phrase": "dedicated neural processing unit",
+   "n_pat": 23,
+   "fetched_at": "2026-09-24T21:53:45"
+  },
+  {
+   "tech_id": "n3",
+   "phrase": "automotive cmos image sensor",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T21:52:15"
+  },
+  {
+   "tech_id": "n4",
+   "phrase": "horizontal iot platform",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:55:01"
+  },
+  {
+   "tech_id": "n5",
+   "phrase": "ambient energy harvesting",
+   "n_pat": 92,
+   "fetched_at": "2026-09-24T21:51:20"
+  },
+  {
+   "tech_id": "n6",
+   "phrase": "ultra narrowband network",
+   "n_pat": 9,
+   "fetched_at": "2026-09-24T22:00:47"
+  },
+  {
+   "tech_id": "n7",
+   "phrase": "lorawan network",
+   "n_pat": 249,
+   "fetched_at": "2026-09-24T21:56:03"
+  },
+  {
+   "tech_id": "n8",
+   "phrase": "optical wireless communication",
+   "n_pat": 1036,
+   "fetched_at": "2026-09-24T21:57:45"
+  },
+  {
+   "tech_id": "n9",
+   "phrase": "ultrawideband positioning",
+   "n_pat": 9,
+   "fetched_at": "2026-09-24T22:00:51"
+  },
+  {
+   "tech_id": "n10",
+   "phrase": "2g 3g cellular networks",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T21:50:30"
+  },
+  {
+   "tech_id": "n11",
+   "phrase": "oauth 2.0 authentication system",
+   "n_pat": 4,
+   "fetched_at": "2026-09-24T21:57:13"
+  },
+  {
+   "tech_id": "n12",
+   "phrase": "manual penetration testing",
+   "n_pat": 14,
+   "fetched_at": "2026-09-24T21:56:46"
+  },
+  {
+   "tech_id": "n13",
+   "phrase": "web application firewall",
+   "n_pat": 1401,
+   "fetched_at": "2026-09-24T22:01:47"
+  },
+  {
+   "tech_id": "n14",
+   "phrase": "virus signature scanning",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T22:01:02"
+  },
+  {
+   "tech_id": "n15",
+   "phrase": "visual captcha challenge",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T22:01:36"
+  },
+  {
+   "tech_id": "n16",
+   "phrase": "traditional siem system",
+   "n_pat": 7,
+   "fetched_at": "2026-09-24T22:00:38"
+  },
+  {
+   "tech_id": "n17",
+   "phrase": "policy based data loss prevention",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:57:53"
+  },
+  {
+   "tech_id": "n18",
+   "phrase": "hardware security module",
+   "n_pat": 5484,
+   "fetched_at": "2026-09-24T21:54:57"
+  },
+  {
+   "tech_id": "n19",
+   "phrase": "automated security vulnerability scanning",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T21:52:07"
+  },
+  {
+   "tech_id": "n20",
+   "phrase": "sms one-time password",
+   "n_pat": 31,
+   "fetched_at": "2026-09-24T21:59:53"
+  },
+  {
+   "tech_id": "n21",
+   "phrase": "industrial robotic manipulator",
+   "n_pat": 30,
+   "fetched_at": "2026-09-24T21:55:30"
+  },
+  {
+   "tech_id": "n22",
+   "phrase": "rule based machine vision",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T21:59:27"
+  },
+  {
+   "tech_id": "n23",
+   "phrase": "vibration-based machinery health monitoring",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T22:00:58"
+  },
+  {
+   "tech_id": "n24",
+   "phrase": "manufacturing execution system",
+   "n_pat": 2097,
+   "fetched_at": "2026-09-24T21:56:50"
+  },
+  {
+   "tech_id": "n25",
+   "phrase": "blockchain traceability",
+   "n_pat": 35,
+   "fetched_at": "2026-09-24T21:52:47"
+  },
+  {
+   "tech_id": "n26",
+   "phrase": "metal binder jetting",
+   "n_pat": 207,
+   "fetched_at": "2026-09-24T21:57:01"
+  },
+  {
+   "tech_id": "n27",
+   "phrase": "profibus dp fieldbus",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:58:23"
+  },
+  {
+   "tech_id": "n28",
+   "phrase": "private 5g networks",
+   "n_pat": 87,
+   "fetched_at": "2026-09-24T21:58:09"
+  },
+  {
+   "tech_id": "n29",
+   "phrase": "robotic process automation",
+   "n_pat": 2425,
+   "fetched_at": "2026-09-24T21:59:05"
+  },
+  {
+   "tech_id": "n30",
+   "phrase": "industrial augmented reality",
+   "n_pat": 34,
+   "fetched_at": "2026-09-24T21:55:26"
+  },
+  {
+   "tech_id": "n31",
+   "phrase": "two phase immersion cooling",
+   "n_pat": 299,
+   "fetched_at": "2026-09-24T22:00:43"
+  },
+  {
+   "tech_id": "n32",
+   "phrase": "3d xpoint memory",
+   "n_pat": 1824,
+   "fetched_at": "2026-09-24T21:50:39"
+  },
+  {
+   "tech_id": "n33",
+   "phrase": "data center fpga acceleration",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:53:35"
+  },
+  {
+   "tech_id": "n34",
+   "phrase": "infiniband interconnect",
+   "n_pat": 3419,
+   "fetched_at": "2026-09-24T21:55:37"
+  },
+  {
+   "tech_id": "n35",
+   "phrase": "quantum combinatorial optimization",
+   "n_pat": 4,
+   "fetched_at": "2026-09-24T21:58:33"
+  },
+  {
+   "tech_id": "n36",
+   "phrase": "general purpose cpu clusters",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T21:54:53"
+  },
+  {
+   "tech_id": "n37",
+   "phrase": "ethernet fabric",
+   "n_pat": 298,
+   "fetched_at": "2026-09-24T21:54:35"
+  },
+  {
+   "tech_id": "n38",
+   "phrase": "power usage effectiveness",
+   "n_pat": 311,
+   "fetched_at": "2026-09-24T21:58:01"
+  },
+  {
+   "tech_id": "n39",
+   "phrase": "dna based data storage",
+   "n_pat": 73,
+   "fetched_at": "2026-09-24T21:54:01"
+  },
+  {
+   "tech_id": "n40",
+   "phrase": "hypervisor-based virtualization",
+   "n_pat": 155,
+   "fetched_at": "2026-09-24T21:55:12"
+  },
+  {
+   "tech_id": "n41",
+   "phrase": "reception robot",
+   "n_pat": 42,
+   "fetched_at": "2026-09-24T21:58:42"
+  },
+  {
+   "tech_id": "n42",
+   "phrase": "robotic weed control systems",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T21:59:16"
+  },
+  {
+   "tech_id": "n43",
+   "phrase": "collaborative robots",
+   "n_pat": 877,
+   "fetched_at": "2026-09-24T21:53:07"
+  },
+  {
+   "tech_id": "n44",
+   "phrase": "robotic surgery system",
+   "n_pat": 1068,
+   "fetched_at": "2026-09-24T21:59:09"
+  },
+  {
+   "tech_id": "n45",
+   "phrase": "remotely operated underwater vehicle",
+   "n_pat": 238,
+   "fetched_at": "2026-09-24T21:58:50"
+  },
+  {
+   "tech_id": "n46",
+   "phrase": "automated guided vehicle",
+   "n_pat": 4590,
+   "fetched_at": "2026-09-24T21:51:59"
+  },
+  {
+   "tech_id": "n47",
+   "phrase": "wearable industrial exoskeleton",
+   "n_pat": 9,
+   "fetched_at": "2026-09-24T22:01:44"
+  },
+  {
+   "tech_id": "n48",
+   "phrase": "automated storage and retrieval system",
+   "n_pat": 1025,
+   "fetched_at": "2026-09-24T21:52:11"
+  },
+  {
+   "tech_id": "n49",
+   "phrase": "humanoid robot",
+   "n_pat": 1735,
+   "fetched_at": "2026-09-24T21:55:04"
+  },
+  {
+   "tech_id": "n50",
+   "phrase": "autonomous heavy-duty trucks",
+   "n_pat": 1,
+   "fetched_at": "2026-09-24T21:52:24"
+  },
+  {
+   "tech_id": "n51",
+   "phrase": "swift message format",
+   "n_pat": 0,
+   "fetched_at": "2026-09-24T22:00:23"
+  },
+  {
+   "tech_id": "n52",
+   "phrase": "rsa public key cryptography",
+   "n_pat": 60,
+   "fetched_at": "2026-09-24T21:59:23"
+  },
+  {
+   "tech_id": "n53",
+   "phrase": "identity verification",
+   "n_pat": 25402,
+   "fetched_at": "2026-09-24T21:55:16"
+  },
+  {
+   "tech_id": "n54",
+   "phrase": "aml transaction monitoring system",
+   "n_pat": 2,
+   "fetched_at": "2026-09-24T21:51:25"
+  },
+  {
+   "tech_id": "n55",
+   "phrase": "central bank digital currency",
+   "n_pat": 139,
+   "fetched_at": "2026-09-24T21:52:59"
+  },
+  {
+   "tech_id": "n56",
+   "phrase": "banking as a service",
+   "n_pat": 553,
+   "fetched_at": "2026-09-24T21:52:35"
+  },
+  {
+   "tech_id": "n57",
+   "phrase": "self-sovereign identity",
+   "n_pat": 423,
+   "fetched_at": "2026-09-24T21:59:41"
+  },
+  {
+   "tech_id": "n58",
+   "phrase": "quantum key distribution",
+   "n_pat": 2326,
+   "fetched_at": "2026-09-24T21:58:38"
+  },
+  {
+   "tech_id": "n59",
+   "phrase": "open banking api",
+   "n_pat": 20,
+   "fetched_at": "2026-09-24T21:57:36"
+  },
+  {
+   "tech_id": "n60",
+   "phrase": "remote password authentication",
+   "n_pat": 6,
+   "fetched_at": "2026-09-24T21:58:46"
+  }
+ ]
+}

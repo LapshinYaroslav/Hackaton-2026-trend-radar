@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from pathlib import Path
@@ -19,6 +20,7 @@ import pandas as pd
 from collector.adapters.arxiv import ARXIV_ONE_CALL_COUNTS
 from collector.adapters.techcrunch import TECHCRUNCH_ONE_CALL_COUNTS
 from collector.adapters.base import SourceAdapter
+from collector import rospatent as rospatent_source
 from collector.api import DocumentCollector, tech_key
 from collector.constants import COUNTER_WINDOWS
 from collector.db import build_cache
@@ -93,10 +95,23 @@ def cached_count_source(collector: DocumentCollector, candidate: Candidate, use_
     return result
 
 
+def complete(result) -> bool:
+    """Пришли ли счётчики по всем окнам: ошибка или неполный ответ — сбой очереди."""
+    return not isinstance(result, Exception) and         {row.window for row in result.counters} >= set(COUNTER_WINDOWS)
+
+
+def relative(stats: dict, origin: float) -> dict:
+    """Начало и конец очереди в секундах от старта этапа счётчиков."""
+    started, finished = stats.pop("started"), stats.pop("finished")
+    return {**stats, "started_s": round(started - origin, 2), "finished_s": round(finished - origin, 2),
+            "duration_s": round(finished - started, 2)}
+
+
 def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None = None,
                    warnings: list[str] | None = None,
                    on_done: Callable[[], None] | None = None,
-                   use_cache: bool = True) -> Callable[[SearchTerms], pd.DataFrame]:
+                   use_cache: bool = True,
+                   rospatent: dict | None = None) -> Callable[[SearchTerms], pd.DataFrame]:
     """Fetch для candidate_features. Неполное покрытие -> пустая таблица и запись в warnings.
 
     Пустая таблица значит «кандидат не оценён» (model.ranking.NO_COUNTERS), а не падение
@@ -106,12 +121,20 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
     потоке проходит всех кандидатов подряд, не дожидаясь остальных источников; fetch потом
     отдаёт собранное. Без prefetch — прежний путь: три источника параллельно на одного
     кандидата. Числа в обоих режимах одни и те же: меняется только расписание вызовов.
+
+    rospatent — параметры collector.rospatent.count_all (datasets, token, parallel) или None.
+    Если задан, prefetch запускает ещё одну очередь — n_pat по фразам — параллельно остальным;
+    результаты в fetch.patents. Сводка каждой очереди (начало и конец от старта этапа, запросы,
+    кэш, повторы, сбои) — в fetch.queues. Повторы внутри сборщика снаружи не видны: у трёх
+    основных источников retries и n429 — None.
     """
     settings = settings or Settings()
     collectors = [DocumentCollector(adapters=[adapter], cache=build_cache(settings.database_url),
                                     settings=settings) for adapter in adapters]
     sources = {adapter.source for adapter in adapters}
     ready: dict[tuple[str, str], object] = {}
+    queues: list[dict] = []
+    patents: dict[str, dict] = {}
 
     def one(collector: DocumentCollector, phrase: str, terms: list[str], context: list[str]):
         candidate = Candidate(candidate_id=phrase, name_en=phrase, terms=terms, context_terms=context)
@@ -123,18 +146,34 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
     def prefetch(phrases: Sequence[str]) -> None:
         """Очередь на источник: кандидат готов, когда пришли все источники."""
         left, lock = {phrase: len(collectors) for phrase in phrases}, threading.Lock()
+        origin = time.time()
 
-        def run(collector: DocumentCollector) -> None:
+        def run(collector: DocumentCollector) -> dict:
+            source = collector.adapters[0].source
+            stats = {"source": source, "started": time.time(), "candidates": len(phrases),
+                     "requests": 0, "cache_hits": 0, "retries": None, "n429": None, "failures": 0}
             for phrase in phrases:
+                hit = use_cache and counters_cache_path(tech_key(phrase), source).exists()
                 result = one(collector, phrase, [phrase], [])
+                stats["cache_hits" if hit else "requests"] += 1
+                stats["failures"] += not complete(result)
                 with lock:
-                    ready[(phrase, collector.adapters[0].source)] = result
+                    ready[(phrase, source)] = result
                     left[phrase] -= 1
                     if left[phrase] == 0 and on_done:
                         on_done()
+            return {**stats, "finished": time.time()}
 
-        with ThreadPoolExecutor(max_workers=len(collectors)) as pool:
-            list(pool.map(run, collectors))
+        def run_patents() -> dict:
+            results, stats = rospatent_source.count_all(phrases, use_cache=use_cache, **rospatent)
+            patents.update(results)
+            return stats
+
+        with ThreadPoolExecutor(max_workers=len(collectors) + 1) as pool:
+            futures = [pool.submit(run, collector) for collector in collectors]
+            if rospatent is not None:
+                futures.append(pool.submit(run_patents))
+            queues[:] = [relative(future.result(), origin) for future in futures]
 
     def fetch(search: SearchTerms) -> pd.DataFrame:
         phrase = search.terms[0]
@@ -162,4 +201,6 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
         return frame
 
     fetch.prefetch = prefetch
+    fetch.queues = queues
+    fetch.patents = patents
     return fetch

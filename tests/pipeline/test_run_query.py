@@ -109,8 +109,12 @@ def fake_ask_name(name_ru, area, repeat=0, note=""):
     return "\n".join(f"VARIANT: {name}" for name in VARIANTS[name_ru]), True
 
 
-def run(tmp_path, extract=fake_extract, **options):
-    """run_query на заглушках; по умолчанию с нормализатором, как в Д5 и И2."""
+def run(tmp_path, extract=fake_extract, patents=None, **options):
+    """run_query на заглушках; по умолчанию с нормализатором, как в Д5 и И2.
+
+    Роспатент всегда заглушка (patents — ответы по фразам; по умолчанию все сбои): сеть не нужна.
+    """
+    from collector import rospatent as rp
     options = {"naming_mode": "normalizer", **options}
     stages, extract_prompts = [], []
 
@@ -128,6 +132,7 @@ def run(tmp_path, extract=fake_extract, **options):
          patch.object(ec, "CACHE_DIR", tmp_path / "extract"), \
          patch.object(search_cache, "CACHE_DIR", tmp_path / "search"), \
          patch.object(fetch_module, "COUNTERS_CACHE_DIR", tmp_path / "counters"), \
+         patch.object(rp, "count_all", patents or fake_patents({})), \
          patch.object(naming.T, "ask_name", side_effect=fake_ask_name), \
          patch.object(et, "dedupe_candidates", lambda items, threshold=None: [
              {**item, "doc_ids": [item["doc"]], "doc_count": 1} for item in items]):
@@ -170,16 +175,22 @@ def test_output_matches_schema(result) -> None:
     assert out["normalizer_deviations"] == ["company_stoplist_off"]
     assert set(out["stats"]) == {"documents_by_source", "documents_total", "documents_for_candidates",
                                  "candidates_found", "candidates_named",
-                                 "candidates_scored", "above_threshold", "above_075"}
-    assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "total"}
+                                 "candidates_scored", "above_threshold", "above_075",
+                                 "rospatent_enabled", "rospatent_failures"}
+    assert out["model_version"] == "s2a2-v1"
+    assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "total",
+                                   "queues"}
     assert {"subqueries", "search", "candidates", "naming", "counters", "ranking"} <= set(stages)
+    patent_keys = {"n_pat", "share_patent", "rospatent_failed", "note_ru"}
     for item in out["top"]:
         assert set(item) == {"rank", "name_ru", "name_en", "score", "explanation_ru", "contributions",
-                             "counters", "sources"} | DETAIL_KEYS
+                             "counters", "sources", "model_version"} | DETAIL_KEYS | patent_keys
         assert item["name_choice_rule"] == "max_trace" and len(item["name_variants"]) == 3
         assert len(item["sources"]) <= 5
     for item in out["excluded"]:
-        assert set(item) == {"name_ru", "name_en", "score", "skipped_reason", "reason_ru"} | DETAIL_KEYS
+        base = {"name_ru", "name_en", "score", "skipped_reason", "reason_ru", "model_version"} | DETAIL_KEYS
+        assert set(item) == (base | patent_keys if item["score"] is not None else base)
+        assert item["model_version"] == "s2a2-v1"
 
 
 def test_each_reason_in_its_case(result) -> None:
@@ -413,3 +424,71 @@ def test_source_queues_match_per_candidate_mode(tmp_path) -> None:
         results[mode] = ([f.sort_values(["source", "window"]).to_dict("records") for f in frames], warnings)
         assert max(peak.values()) <= 1
     assert results["queues"] == results["per_candidate"]
+
+
+def fake_patents(results: dict):
+    """Заглушка очереди Роспатента: фиксированные ответы по фразам, вызовы записываются."""
+    calls = []
+
+    def count_all(phrases, datasets, token, *, parallel=1, use_cache=True, **kwargs):
+        calls.append(list(phrases))
+        found = {phrase: {"phrase": phrase, "failed": True, "n_pat": None, **results.get(phrase, {})}
+                 for phrase in dict.fromkeys(phrases)}
+        return found, {"source": "rospatent", "started": 0.0, "finished": 0.0,
+                       "candidates": len(found), "parallel": parallel, "requests": 0,
+                       "cache_hits": 0, "retries": 0, "n429": 0,
+                       "failures": sum(item["failed"] for item in found.values())}
+
+    count_all.calls = calls
+    return count_all
+
+
+def test_rospatent_disabled_makes_no_request_and_warns(tmp_path) -> None:
+    """--no-rospatent: очередь не запускается, у кандидатов нет патентных полей, прогон помечен."""
+    fake = fake_patents({})
+    out, _, _ = run(tmp_path, patents=fake, rospatent=False)
+    assert fake.calls == []
+    assert {queue["source"] for queue in out["timings"]["queues"]} == {"openalex", "arxiv", "techcrunch"}
+    assert all("n_pat" not in item for item in out["top"] + out["excluded"])
+    assert out["stats"]["rospatent_enabled"] is False and rq.ROSPATENT_OFF_WARNING in out["warnings"]
+
+
+def test_missing_rospatent_key_is_a_run_warning(tmp_path, monkeypatch) -> None:
+    """Роспатент включён, ключа нет: прогон не падает, в warnings — запись об этом."""
+    monkeypatch.delenv("ROSPATENT", raising=False)
+    out, _, _ = run(tmp_path)
+    assert rq.ROSPATENT_NO_KEY_WARNING in out["warnings"]
+
+
+def test_rospatent_enabled_by_default_feeds_the_model(tmp_path) -> None:
+    """По умолчанию Роспатент включён: n_pat идёт в share_patent и меняет score; сбой — NaN и пометка."""
+    fake = fake_patents({SIGNAL: {"n_pat": 0, "failed": False}})
+    plain, _, _ = run(tmp_path / "plain", patents=fake_patents({}), rospatent=False)
+    out, _, _ = run(tmp_path / "patents", patents=fake)
+    assert len(fake.calls) == 1 and len(fake.calls[0]) == len(set(fake.calls[0]))
+    signal = out["top"][0]
+    assert (signal["n_pat"], signal["share_patent"], signal["rospatent_failed"]) == (0, 0.0, False)
+    assert "note_ru" not in signal
+    mainstream = next(item for item in out["excluded"] if item["name_en"] == MAINSTREAM)
+    assert (mainstream["n_pat"], mainstream["share_patent"], mainstream["rospatent_failed"]) == (None, None, True)
+    assert mainstream["note_ru"] == rq.PATENT_FAILED_NOTE
+    assert out["stats"]["rospatent_failures"] >= 1
+    assert "rospatent" in {queue["source"] for queue in out["timings"]["queues"]}
+    scores = lambda result: {item["name_en"]: item["score"] for item in result["top"] + result["excluded"]}
+    # Сбой = NaN = медиана обучения, как при выключенном Роспатенте; ноль патентов — другое значение.
+    assert scores(out)[MAINSTREAM] == scores(plain)[MAINSTREAM]
+    assert scores(out)[signal["name_en"]] != scores(plain)[signal["name_en"]]
+    json.dumps(out, allow_nan=False)
+
+
+def test_patent_fields_zero_documents_is_null_not_failure() -> None:
+    """Успешный ответ total = 0 и ноль научных работ: доля не определена (null), это не сбой."""
+    fields = rq.patent_fields({"2024": {"openalex": 0, "arxiv": 0}}, {"n_pat": 0, "failed": False})
+    assert fields == {"n_pat": 0, "share_patent": None, "rospatent_failed": False}
+
+
+def test_patent_fields_use_six_windows_without_prev6() -> None:
+    counters = {"prev6": {"openalex": 1000, "arxiv": 1000}, "2020": {"openalex": 6, "arxiv": 2,
+                                                                      "techcrunch": 50}}
+    fields = rq.patent_fields(counters, {"n_pat": 2, "failed": False})
+    assert fields["share_patent"] == 0.2

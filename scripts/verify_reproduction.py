@@ -1,6 +1,10 @@
-"""Гейт воспроизводимости: числа модели пересчитываются с нуля и сверяются с эталоном.
+"""Гейт воспроизводимости: числа обеих версий модели пересчитываются с нуля и сверяются с эталоном.
 
-Две проверки:
+s2a1-v1 — по эталонам evidence/model_release_20260922.md; s2a2-v1 (боевая, задача П3) —
+по листам «П1 веса» и «П1 сводка», на 160 и на 149 строках, плюс сверка патентного признака
+со снимком evidence/rospatent_training_counts.json.
+
+Проверки s2a1-v1:
   1. Признаки. Пересчитываются из кэша счётчиков теми же функциями, что работают в
      режиме запроса, и сверяются с таблицей, на которой обучалась модель. Допуск 1e-9:
      это арифметика над одними и теми же числами, расходиться ей не на чем.
@@ -28,8 +32,10 @@ from collector.api import terms_hash
 from collector.models import SearchTerms
 from model.corpus import load_training_totals
 from model.counters import aggregate_windows
-from model.config import FEATURES, N_REPEATS, N_SPLITS, SEED, canonical
-from model.features import RESEARCH_SOURCES, growth_by_sources
+from model.config import (FEATURES, FEATURES_S2A2, MODEL_VERSION, N_REPEATS, N_SPLITS,
+                          ROSPATENT_DATASETS, SEED, canonical)
+from model.corpus import load_training_patents
+from model.features import RESEARCH_SOURCES, growth_by_sources, share_patent
 from model.first_mention import build as build_first_mention
 from model.train import build_pipeline
 from model.training_table import training_table
@@ -64,6 +70,31 @@ REFERENCE = {
                      "age_first_arxiv": -0.517362891011743},
     "intercept": 0.408409261011003,
     "threshold": 0.325,
+}
+
+
+S2A2 = "s2a2-v1"
+# Эталон s2a2-v1: прогон П3 от 24.09.2026, совпал с листами «П1 веса» и «П1 сводка»
+# (набор PB задачи П) до округления листа.
+REFERENCE_S2A2 = {
+    "coefficients": {"share_patent": -0.6614673800834331,
+                     "growth_research": 0.0027032769355555875,
+                     "recency": 1.0494593322685128,
+                     "share_news_wordmatch": 1.3346690281497156,
+                     "share_prev6": -0.09976107431855738,
+                     "age_first_arxiv": -0.41752806697862366},
+    "intercept": 0.3812488866445876,
+    "threshold": 0.4,
+    160: {"auc_cv": 0.8275, "auc_loao": 0.8369485294117648,
+          "cv": {"precision": 0.7761846222910098, "recall": 0.843,
+                 "f1": 0.8076801844293244, "accuracy": 0.749375},
+          "loao": {"precision": 0.8322896745497365, "recall": 0.7830882352941176,
+                   "f1": 0.7971849284349285, "accuracy": 0.7573599240265908}},
+    149: {"auc_cv": 0.8124689881268828, "auc_loao": 0.8118487993487994,
+          "cv": {"precision": 0.7625712281281418, "recall": 0.8195652173913043,
+                 "f1": 0.7897090517602465, "accuracy": 0.7308724832214766},
+          "loao": {"precision": 0.7961182336182336, "recall": 0.7975853803059686,
+                   "f1": 0.7861261946057784, "accuracy": 0.7400351808685143}},
 }
 
 
@@ -145,41 +176,86 @@ def check_shape(frame: pd.DataFrame) -> list[str]:
     return problems
 
 
-def check_metrics(frame: pd.DataFrame) -> list[str]:
-    """Пересчёт метрик и сверка с эталоном. Допуск 0.001."""
+def check_metrics(frame: pd.DataFrame, reference: dict = REFERENCE,
+                  columns: list[str] = FEATURES) -> list[str]:
+    """Пересчёт метрик набора признаков и сверка с эталоном. Допуск 0.001."""
     problems = []
-    problems.append(compare("AUC, кросс-валидация", auc_by_cross_validation(frame),
-                            REFERENCE["auc_cv"], TOLERANCE_METRICS))
-    problems.append(compare("AUC, leave-one-area-out", auc_by_area(frame),
-                            REFERENCE["auc_loao"], TOLERANCE_METRICS))
-    cv_table, _ = nested_cv(frame, "accuracy", combos=[CURRENT])
-    for key, expected in REFERENCE["cv"].items():
+    problems.append(compare("AUC, кросс-валидация", auc_by_cross_validation(frame, columns=columns),
+                            reference["auc_cv"], TOLERANCE_METRICS))
+    problems.append(compare("AUC, leave-one-area-out", auc_by_area(frame, columns=columns),
+                            reference["auc_loao"], TOLERANCE_METRICS))
+    cv_table, _ = nested_cv(frame, "accuracy", combos=[CURRENT], columns=columns)
+    for key, expected in reference["cv"].items():
         problems.append(compare(f"CV {key}", float(cv_table[key].mean()), expected,
                                 TOLERANCE_METRICS))
-    loao_table = nested_loao(frame, "accuracy", combos=[CURRENT])
-    for key, expected in REFERENCE["loao"].items():
+    loao_table = nested_loao(frame, "accuracy", combos=[CURRENT], columns=columns)
+    for key, expected in reference["loao"].items():
         problems.append(compare(f"LOAO {key}", float(loao_table[key].mean()), expected,
                                 TOLERANCE_METRICS))
     return [item for item in problems if item]
 
 
-def check_coefficients(frame: pd.DataFrame) -> list[str]:
-    """Обучение на всех строках должно давать те же веса, что в артефакте."""
+def check_coefficients(frame: pd.DataFrame, reference: dict = REFERENCE,
+                       version: str = MODEL_VERSION) -> list[str]:
+    """Обучение версии на всех строках должно давать те же веса, что в эталоне."""
     from model.train import train
-    _, meta = train(frame)
+    _, meta = train(frame, version)
     problems = []
-    for name, expected in REFERENCE["coefficients"].items():
+    for name, expected in reference["coefficients"].items():
         problems.append(compare(f"вес {name}", meta["coefficients"][name], expected, 1e-12))
-    problems.append(compare("intercept", meta["intercept"], REFERENCE["intercept"], 1e-12))
-    problems.append(compare("порог", meta["threshold"], REFERENCE["threshold"], 1e-12))
+    problems.append(compare("intercept", meta["intercept"], reference["intercept"], 1e-12))
+    problems.append(compare("порог", meta["threshold"], reference["threshold"], 1e-12))
     return [item for item in problems if item]
 
 
+def check_patents(frame: pd.DataFrame) -> list[str]:
+    """share_patent таблицы = n_pat снимка / (n_pat + n_research из кэша по шести окнам)."""
+    snapshot = load_training_patents(ROSPATENT_DATASETS).set_index("tech_id")["n_pat"]
+    cache = load_counter_cache()
+    table = pd.read_csv(TECHNOLOGIES, encoding="utf-8-sig").set_index("tech_id")
+    stored = frame.set_index("tech_id")["share_patent"]
+    problems, checked = [], 0
+    for tech_id, value in stored.items():
+        row = table.loc[tech_id]
+        search = SearchTerms(terms=json.loads(row["terms"]),
+                             context_terms=json.loads(row["context_terms"]), query="")
+        counters = cache.get((row["tech_key"], terms_hash(search)))
+        if counters is None:
+            continue
+        windows = aggregate_windows(counters)
+        research = int(windows.loc[(windows["window"] == "all")
+                                   & windows["source"].isin(RESEARCH_SOURCES), "n"].sum())
+        fresh = share_patent(int(snapshot.loc[tech_id]), research)
+        checked += 1
+        if np.isnan(fresh) != np.isnan(value) or (not np.isnan(fresh) and abs(fresh - value) > 1e-12):
+            problems.append(f"share_patent {tech_id}: {fresh} против {value}")
+    print(f"  share_patent сверен на {checked} строках из {len(stored)}, расхождений {len(problems)}")
+    if checked < REFERENCE["recomputable_rows"]:
+        problems.append(f"share_patent сверен только на {checked} строках")
+    return problems
+
+
+def check_s2a2(frame: pd.DataFrame) -> list[str]:
+    """s2a2-v1: патентный признак, веса и метрики на 160 и на 149 строках."""
+    problems = []
+    print(f"\n=== {S2A2} ===\nПАТЕНТНЫЙ ПРИЗНАК: снимок и пересчёт, допуск 1e-12")
+    problems += check_patents(frame)
+    print("\nКОЭФФИЦИЕНТЫ: обучение на всех строках, допуск 1e-12")
+    problems += check_coefficients(frame, REFERENCE_S2A2, S2A2)
+    blind = frame.loc[frame["blind_choice"].astype(bool)].reset_index(drop=True)
+    for rows, block in ((160, frame), (149, blind)):
+        print(f"\nМЕТРИКИ на {len(block)} строках: пересчёт, допуск 0.001")
+        if len(block) != rows:
+            problems.append(f"выборка {rows} строк: получено {len(block)}")
+        problems += check_metrics(block, REFERENCE_S2A2[rows], FEATURES_S2A2)
+    return problems
+
+
 def main() -> int:
-    """Прогоняет все проверки и возвращает код: 0 — сошлось, 1 — нет."""
+    """Прогоняет все проверки обеих версий и возвращает код: 0 — сошлось, 1 — нет."""
     frame, source = training_table()
     frame = frame.reset_index(drop=True)
-    print(f"Таблица обучения: {source.name}\n")
+    print(f"Таблица обучения: {source.name}\n\n=== {MODEL_VERSION} ===")
     problems: list[str] = []
     print("СОСТАВ ВЫБОРКИ")
     problems += check_shape(frame)
@@ -189,6 +265,7 @@ def main() -> int:
     problems += check_coefficients(frame)
     print("\nМЕТРИКИ: пересчёт, допуск 0.001")
     problems += check_metrics(frame)
+    problems += check_s2a2(frame)
     print()
     if problems:
         print(f"ГЕЙТ КРАСНЫЙ: расхождений {len(problems)}")

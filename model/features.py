@@ -231,6 +231,16 @@ def _shares(counters: pd.DataFrame) -> tuple[float, float]:
     return share_research, 1.0 - share_research
 
 
+def share_patent(n_pat: int, n_research: int) -> float:
+    """Доля патентов в сумме патентов и научных работ (задача П). NaN, если сумма = 0.
+
+    n_pat — total Роспатента по фразе за 2020-09-01…2026-08-31, n_research — OpenAlex +
+    arXiv за те же шесть годовых окон, без prev6.
+    """
+    total = n_pat + n_research
+    return n_pat / total if total else math.nan
+
+
 def compute_features(counters: pd.DataFrame, source_totals: pd.DataFrame,
                      *, expected_sources: set[str] | None) -> dict[str, float]:
     """Шесть признаков по счётчикам технологии, в порядке FEATURE_NAMES.

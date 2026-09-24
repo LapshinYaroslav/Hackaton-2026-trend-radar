@@ -11,6 +11,8 @@
 from __future__ import annotations
 
 import json
+import math
+import os
 import re
 import time
 from datetime import datetime
@@ -19,10 +21,14 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Callable, Sequence
 
+from collector import rospatent as rospatent_source
 from collector.adapters.base import SourceAdapter
 from collector.api import DocumentCollector, default_adapters, tech_key
+from collector.constants import AGGREGATE_WINDOWS
 from collector.db import MemoryCache
 from collector.settings import Settings
+from model.config import ROSPATENT_DATASETS
+from model.features import RESEARCH_SOURCES, share_patent
 from model.predict import load
 from model.ranking import rank_candidates
 from pipeline import naming
@@ -44,6 +50,11 @@ BAD_NAME_CHARS = '"(),:;/'
 LATIN_RE = re.compile(r"[a-zA-Z]")
 CYRILLIC_RE = re.compile(r"[а-яёА-ЯЁ]")
 EMPTY_AREA_WARNING = "область не выбрана: нормализатор получил пустую область, такое поведение не проверялось"
+ROSPATENT_OFF_WARNING = ("Роспатент выключен: патентный признак share_patent недоступен у всех кандидатов, "
+                         "модель подставила медиану обучения")
+PATENT_FAILED_NOTE = "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения"
+ROSPATENT_NO_KEY_WARNING = ("Нет ключа ROSPATENT в .env: патентный признак share_patent недоступен у всех кандидатов, "
+                            "модель подставила медиану обучения")
 OUTCOME_REASON = {"no_trace": "no_trace", "bad_format": "bad_name", "trace_unknown": "trace_unknown"}
 Progress = Callable[[str, int, int], None]
 
@@ -203,37 +214,72 @@ def document_stats(documents: Sequence[dict], subqueries: Sequence[dict]) -> dic
 
 
 def split_ranked(ranked: list[dict], by_key: dict[str, dict], documents: Sequence[dict],
-                 threshold: float) -> tuple[list[dict], list[dict]]:
-    """ТОП-15 выше порога без добивания; остальные — в исключённые с причиной."""
+                 threshold: float, n_pats: dict[str, int | None] | None = None) -> tuple[list[dict], list[dict]]:
+    """ТОП-15 выше порога без добивания; остальные — в исключённые с причиной.
+
+    n_pats — число патентов по фразе для текста патентного признака (нет — признак в текст не идёт).
+    """
     top, dropped = [], []
     for item in ranked:
         candidate = by_key[item["name"]]
+        n_pat = (n_pats or {}).get(item["name"])
         if item["score"] is None:
             dropped.append(excluded(candidate, "no_counters", documents))
         elif item["score"] < threshold:
             dropped.append(excluded(candidate, "below_threshold", documents, item["score"],
-                                    reason_below(item["features"], item["contributions"], item["counters"])))
+                                    reason_below(item["features"], item["contributions"], item["counters"],
+                                                 n_pat)))
         elif len(top) >= TOP_N:
             dropped.append(excluded(candidate, "beyond_top", documents, item["score"]))
         else:
             top.append({"rank": len(top) + 1, "name_ru": candidate["name_ru"], "name_en": candidate["name_en"],
                         "score": item["score"],
-                        "explanation_ru": explanation_top(item["features"], item["contributions"], item["counters"]),
+                        "explanation_ru": explanation_top(item["features"], item["contributions"], item["counters"],
+                                                          n_pat=n_pat),
                         "contributions": item["contributions"], "counters": item["counters"],
                         **details(candidate, documents), "sources": sources_of(candidate["doc_ids"], documents)})
     return top, dropped
 
 
+def patent_fields(counters: dict, result: dict | None) -> dict:
+    """n_pat, share_patent и флаг сбоя для выхода кандидата. Оценку модели не меняют.
+
+    n_research — OpenAlex + arXiv по шести годовым окнам 2020–2025, без prev6. Сбой
+    Роспатента — n_pat и share_patent null, rospatent_failed true; ноль — только при total = 0.
+    NaN доли (нет ни патентов, ни науки) в JSON — null.
+    """
+    if result is None or result["failed"]:
+        return {"n_pat": None, "share_patent": None, "rospatent_failed": True, "note_ru": PATENT_FAILED_NOTE}
+    n_research = sum(counters.get(window, {}).get(source, 0)
+                     for window in AGGREGATE_WINDOWS["all"] for source in RESEARCH_SOURCES)
+    value = share_patent(result["n_pat"], n_research)
+    return {"n_pat": result["n_pat"], "share_patent": None if math.isnan(value) else value,
+            "rospatent_failed": False}
+
+
+def rospatent_options(enabled: bool | None) -> dict | None:
+    """Параметры очереди Роспатента или None, если источник выключен."""
+    if not (rospatent_source.ROSPATENT_ENABLED if enabled is None else enabled):
+        return None
+    return {"datasets": ROSPATENT_DATASETS, "token": os.environ.get("ROSPATENT"),
+            "parallel": rospatent_source.ROSPATENT_PARALLEL}
+
+
 def score_pool(pool: list[dict], area: str | None, adapters: Sequence[SourceAdapter], settings: Settings,
-               warnings: list[str], progress: Progress, timings: dict, use_cache: bool = True) -> list[dict]:
-    """Счётчики (источники параллельно) и ранжирование; время счётчиков отдельно от ранжирования."""
+               warnings: list[str], progress: Progress, timings: dict, use_cache: bool = True,
+               rospatent: dict | None = None) -> tuple[list[dict], dict[str, dict]]:
+    """Счётчики (источники параллельно) и ранжирование; время счётчиков отдельно от ранжирования.
+
+    Возвращает ранжирование и n_pat по фразам (пусто, если Роспатент выключен).
+    """
     mark, fetch_time, done = time.monotonic(), [0.0], [0]
 
     def tick():
         done[0] += 1
         progress("counters", done[0], len(pool))
 
-    fetch = parallel_fetch(adapters, settings, warnings, on_done=tick, use_cache=use_cache)
+    fetch = parallel_fetch(adapters, settings, warnings, on_done=tick, use_cache=use_cache,
+                           rospatent=rospatent)
 
     def timed_fetch(search):
         begin = time.monotonic()
@@ -247,11 +293,15 @@ def score_pool(pool: list[dict], area: str | None, adapters: Sequence[SourceAdap
     begin = time.monotonic()
     fetch.prefetch([item["name"] for item in items])  # очереди по источникам, задача Л5.2
     fetch_time[0] += time.monotonic() - begin
+    for item in items:  # n_pat — в признак share_patent; сбой -> None -> медиана обучения
+        found = fetch.patents.get(item["name"])
+        item["n_pat"] = found["n_pat"] if found and not found["failed"] else None
     ranked = rank_candidates(items, area=area or "", fetch=timed_fetch)
     timings["counters"] = round(fetch_time[0], 2)
     timings["ranking"] = round(time.monotonic() - mark - fetch_time[0], 2)
+    timings["queues"] = list(fetch.queues)
     progress("ranking", 1, 1)
-    return ranked
+    return ranked, dict(fetch.patents)
 
 
 def staged(name: str, timings: dict, progress: Progress, action: Callable):
@@ -268,7 +318,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
               progress: Progress | None = None, adapters: Sequence[SourceAdapter] | None = None,
               settings: Settings | None = None, candidate_sources: set[str] | None = None,
               extract_model: str | None = "yandexgpt-5-pro", naming_mode: str = "direct",
-              counters_cache: bool | None = None, extract_version: str = "v2") -> dict:
+              counters_cache: bool | None = None, extract_version: str = "v2",
+              rospatent: bool | None = None) -> dict:
     """Тема -> JSON с ТОП-15, исключёнными, статистикой и временем по шагам.
 
     candidate_sources — из документов каких источников извлекать кандидатов (openalex,
@@ -280,6 +331,9 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     extract_version — v2 (search/extract_terms.py) или v1 (прежний шаг 4, search/extract_candidates.py;
     модель берётся из .env, extract_model не используется; в паре с naming_mode="normalizer").
     По умолчанию — рука R1 задачи К: extract-v2 на yandexgpt-5-pro, без нормализатора.
+    rospatent — очередь Роспатента в этапе счётчиков; None — как collector.rospatent.ROSPATENT_ENABLED.
+    n_pat идёт в признак share_patent модели s2a2-v1; у кандидатов с оценкой — n_pat, share_patent,
+    rospatent_failed (при сбое ещё note_ru). Выключенный при s2a2-v1 — предупреждение в warnings.
     """
     if extract_version not in ("v1", "v2"):
         raise ValueError(f"extract_version {extract_version!r}: ожидалось v1 или v2")
@@ -316,9 +370,24 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     dropped = [excluded(item, item["skipped_reason"], documents) for item in unnamed]
     dropped += [excluded(item, "bad_name", documents) for item in merged if not good_name(item["name_en"])]
     pool, capped = apply_cap([item for item in merged if good_name(item["name_en"])], documents)
-    ranked = score_pool(pool, area, adapters, settings, warnings, progress, timings,
-                        use_cache if counters_cache is None else counters_cache)
-    top, below = split_ranked(ranked, {tech_key(c["name_en"]): c for c in pool}, documents, meta["threshold"])
+    options = rospatent_options(rospatent)
+    if options is not None and not options["token"]:
+        warnings.append(ROSPATENT_NO_KEY_WARNING)
+    ranked, patents = score_pool(pool, area, adapters, settings, warnings, progress, timings,
+                                 use_cache if counters_cache is None else counters_cache, options)
+    n_pats = {name: result["n_pat"] for name, result in patents.items() if not result["failed"]}
+    top, below = split_ranked(ranked, {tech_key(c["name_en"]): c for c in pool}, documents, meta["threshold"],
+                              n_pats)
+    if options is not None:
+        by_name = {item["name"]: item for item in ranked}
+        for entry in top + below:
+            if entry["score"] is not None:
+                key = tech_key(entry["name_en"])
+                entry.update(patent_fields(by_name[key]["counters"], patents.get(key)))
+    elif "share_patent" in meta["features"]:
+        warnings.append(ROSPATENT_OFF_WARNING)
+    for entry in top + dropped + capped + below:
+        entry["model_version"] = meta["model_version"]
     scores = [item["score"] for item in ranked if item["score"] is not None]
     timings["total"] = round(time.monotonic() - started, 2)
     return {
@@ -334,7 +403,9 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
                   "candidates_named": len(merged),
                   "candidates_scored": len(scores),
                   "above_threshold": sum(score >= meta["threshold"] for score in scores),
-                  "above_075": sum(score >= HIGH_SCORE for score in scores)},
+                  "above_075": sum(score >= HIGH_SCORE for score in scores),
+                  "rospatent_enabled": options is not None,
+                  "rospatent_failures": sum(result["failed"] for result in patents.values())},
         "normalizer_deviations": list(naming.DEVIATIONS),
         "top": top, "excluded": dropped + capped + below,
         "timings": timings, "warnings": warnings,

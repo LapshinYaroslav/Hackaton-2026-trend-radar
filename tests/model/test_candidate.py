@@ -13,7 +13,9 @@ import pytest
 
 from model.candidate import (candidate_features, counters_by_window,
                              features_from_counters)
-from model.config import FEATURES, NEWS_SHARE
+from model.config import (FEATURES, FEATURES_S2A2, MODEL_VERSION, NEWS_SHARE,
+                          ROSPATENT_DATASETS)
+from model.corpus import load_training_patents
 from model.first_mention import TECHNOLOGIES
 from model.training_table import training_table
 
@@ -31,27 +33,35 @@ def stored() -> pd.DataFrame:
     return frame.set_index("tech_id")
 
 
-def _call(row: pd.Series) -> dict:
+def _call(row: pd.Series, **options) -> dict:
     """Вызов как в режиме запроса: термины те же, что уходили в источники."""
     return candidate_features(str(row["name_en"]),
                               terms=json.loads(row["terms"]),
                               context_terms=json.loads(row["context_terms"]),
-                              area=str(row["area"]))
+                              area=str(row["area"]), **options)
 
 
-def test_matches_training_table_on_every_technology(technologies, stored) -> None:
-    """Для каждой технологии выборки функция даёт ровно те же шесть чисел."""
+@pytest.mark.parametrize("version,columns", [(MODEL_VERSION, FEATURES),
+                                             ("s2a2-v1", FEATURES_S2A2)])
+def test_matches_training_table_on_every_technology(technologies, stored, version,
+                                                    columns) -> None:
+    """Для каждой технологии выборки функция даёт ровно те же шесть чисел своей версии.
+
+    n_pat у s2a2-v1 — из снимка обучения, как при сборке обучающей таблицы.
+    """
+    patents = load_training_patents(ROSPATENT_DATASETS).set_index("tech_id")["n_pat"]
     checked, problems = 0, []
     for _, row in technologies.iterrows():
         tech_id = str(row["tech_id"])
         if tech_id not in stored.index:
             continue
-        answer = _call(row)
+        answer = _call(row, version=version, n_pat=int(patents.loc[tech_id]))
         if not answer["complete"]:
             problems.append(f"{tech_id}: счётчиков не нашлось")
             continue
         checked += 1
-        for name in FEATURES:
+        assert list(answer["features"]) == list(columns)
+        for name in columns:
             got, want = answer["features"][name], float(stored.loc[tech_id, name])
             if math.isnan(want) and math.isnan(got):
                 continue
@@ -62,9 +72,21 @@ def test_matches_training_table_on_every_technology(technologies, stored) -> Non
 
 
 def test_feature_order_matches_the_model(technologies) -> None:
-    """Порядок ключей совпадает с порядком коэффициентов модели."""
+    """По умолчанию — боевая s2a2-v1: порядок ключей совпадает с её коэффициентами."""
     answer = _call(technologies.iloc[0])
-    assert list(answer["features"]) == list(FEATURES)
+    assert list(answer["features"]) == list(FEATURES_S2A2)
+
+
+def test_share_patent_without_n_pat_is_a_gap(technologies) -> None:
+    """Нет n_pat (сбой Роспатента или он выключен) — share_patent NaN, а не ноль."""
+    answer = _call(technologies.iloc[0])
+    assert math.isnan(answer["features"]["share_patent"])
+
+
+def test_share_patent_zero_patents_is_zero(technologies) -> None:
+    """Ответ total = 0 при ненулевой науке — ровно ноль."""
+    answer = _call(technologies.iloc[0], n_pat=0)
+    assert answer["features"]["share_patent"] == 0.0
 
 
 def test_counters_and_sources_come_back(technologies) -> None:
@@ -97,7 +119,7 @@ def test_missing_arxiv_gives_a_gap_not_zero() -> None:
         [{"source": source, "window": window, "n": 0 if source == "arxiv" else 5}
          for source in ("openalex", "arxiv", "techcrunch")
          for window in ("prev6", "2020", "2021", "2022", "2023", "2024", "2025")])
-    got = features_from_counters(counters)
+    got = features_from_counters(counters, version=MODEL_VERSION)
     assert math.isnan(got["age_first_arxiv"])
     assert not math.isnan(got["volume"])
 
