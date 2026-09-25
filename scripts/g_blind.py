@@ -26,6 +26,7 @@ RUNS = ROOT / "data" / "interim" / "pipeline_runs"
 REGISTRY = ROOT / "data" / "interim" / "g_runs.json"
 G_TOPS = ROOT / "data" / "interim" / "g_tops.csv"
 G_BLIND_KEY = ROOT / "data" / "interim" / "g_blind_key.csv"
+REPORT = ROOT / "report_tables.xlsx"
 SOURCES = ("arxiv", "techcrunch", "openalex", "openalex_ru")
 REJECTED_RE = re.compile(r"^отброшен \((ru|en)\): «.*» — (.+)$")
 
@@ -109,6 +110,13 @@ def blind(rows: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     return sheet, pd.DataFrame(key_rows)
 
 
+def write_report(sheets: dict[str, pd.DataFrame]) -> None:
+    """Перезаписывает report_tables.xlsx целиком: в книге только листы этого отчёта."""
+    with pd.ExcelWriter(REPORT, engine="openpyxl", mode="w") as writer:
+        for title, table in sheets.items():
+            table.to_excel(writer, sheet_name=title[:31], index=False)
+
+
 def main() -> None:
     """Г3: слепой лист, ключ, g_tops.csv; числа — в печать и в листы «Г»."""
     registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
@@ -133,8 +141,9 @@ def main() -> None:
                                             "tech_key", "score"]].sort_values(["тема", "вариант", "место"])
     tops.to_csv(G_TOPS, index=False, encoding="utf-8-sig")
     key.to_csv(G_BLIND_KEY, index=False, encoding="utf-8-sig")
-    after = append_t({**sheets, "Г слепо": sheet}, prefix="Г")
-    print(f"\n«Г слепо»: {len(sheet)} строк; g_tops.csv: {len(tops)} строк; ключ: {len(key)} строк; листов: {len(after)}")
+    write_report({**sheets, "Г слепо": sheet})
+    print(f"\n«Г слепо»: {len(sheet)} строк; g_tops.csv: {len(tops)} строк; ключ: {len(key)} строк; "
+          f"{REPORT.name} перезаписан: {len(sheets) + 1} листов")
 
 
 if __name__ == "__main__":
