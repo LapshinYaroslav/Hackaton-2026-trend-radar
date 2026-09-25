@@ -1,4 +1,5 @@
-"""CLI: python -m pipeline "тема" [--area Финтех] [--out result.json] [--no-cache] [--no-rospatent]."""
+"""CLI: python -m pipeline "тема" [--area Финтех] [--out result.json] [--no-cache] [--no-rospatent]
+[--candidates-version v2|v3]."""
 from __future__ import annotations
 
 import argparse
@@ -26,12 +27,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-cache", action="store_true", help="не брать подзапросы и кандидатов из кэша")
     parser.add_argument("--no-rospatent", action="store_true",
                         help="без Роспатента (отладка): share_patent у всех кандидатов недоступен")
+    parser.add_argument("--candidates-version", default="v3", choices=["v2", "v3"],
+                        help="генерация кандидатов: v3 (по умолчанию) или прежний v2")
     args = parser.parse_args(argv)
     load_dotenv(ROOT / ".env")
     from pipeline.run_query import run_query  # после .env: модули читают настройки при вызове
 
     result = run_query(args.topic, args.area, use_cache=not args.no_cache, progress=print_progress,
-                       rospatent=False if args.no_rospatent else None)
+                       rospatent=False if args.no_rospatent else None,
+                       candidates_version=args.candidates_version)
     out = Path(args.out) if args.out else RUNS_DIR / f"{result['query_id']}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
