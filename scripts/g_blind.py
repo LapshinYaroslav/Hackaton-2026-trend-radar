@@ -19,6 +19,7 @@ import pandas as pd
 
 from collector.api import tech_key
 from pipeline.run_query import document_stats
+from scripts.t_report import append_t
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNS = ROOT / "data" / "interim" / "pipeline_runs"
