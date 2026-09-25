@@ -37,7 +37,7 @@ from pipeline.search_cache import CachedSearch
 from pipeline.reasons import SPECIAL, explanation_top, reason_below
 from search.extract_candidates import extract_candidates
 from search.extract_terms import extract_terms
-from search.subqueries import generate_subqueries
+from search.subqueries import PROMPT_VERSION, PROMPT_VERSION_V3, generate_subqueries
 
 ROOT = Path(__file__).resolve().parents[1]
 TECHNOLOGIES = ROOT / "data" / "interim" / "technologies.csv"
@@ -55,6 +55,8 @@ ROSPATENT_OFF_WARNING = ("Роспатент выключен: патентны�
 PATENT_FAILED_NOTE = "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения"
 ROSPATENT_NO_KEY_WARNING = ("Нет ключа ROSPATENT в .env: патентный признак share_patent недоступен у всех кандидатов, "
                             "модель подставила медиану обучения")
+# Вариант генерации кандидатов (задача Г): версия промпта подзапросов; v3 ещё и меняет состав шага 4.
+CANDIDATES_VERSIONS = {"v2": PROMPT_VERSION, "v3": PROMPT_VERSION_V3}
 OUTCOME_REASON = {"no_trace": "no_trace", "bad_format": "bad_name", "trace_unknown": "trace_unknown"}
 Progress = Callable[[str, int, int], None]
 
@@ -204,6 +206,22 @@ def origin(doc: dict, subqueries: Sequence[dict]) -> str:
     return "openalex_ru" if doc["source"] == "openalex" and only_ru else doc["source"]
 
 
+def is_russian(doc: dict, subqueries: Sequence[dict]) -> bool:
+    """Русский документ OpenAlex: найден только русскими подзапросами или помечен языком ru."""
+    return doc["source"] == "openalex" and (origin(doc, subqueries) == "openalex_ru" or doc.get("language") == "ru")
+
+
+def step4_documents(documents: Sequence[dict], subqueries: Sequence[dict], version: str = "v2") -> list[dict]:
+    """Документы для шага 4. v2 — все как есть. v3 — все arXiv, затем TechCrunch, затем
+    английские OpenAlex в прежнем порядке, не больше половины переданных; русские OpenAlex не идут."""
+    if version == "v2":
+        return list(documents)
+    head = ([doc for doc in documents if doc["source"] == "arxiv"]
+            + [doc for doc in documents if doc["source"] == "techcrunch"])
+    english = [doc for doc in documents if doc["source"] == "openalex" and not is_russian(doc, subqueries)]
+    return head + english[:len(head)]
+
+
 def document_stats(documents: Sequence[dict], subqueries: Sequence[dict]) -> dict[str, int]:
     """Документы по источникам происхождения (openalex, openalex_ru, arxiv, techcrunch)."""
     counts = {"openalex": 0, "arxiv": 0, "techcrunch": 0, "openalex_ru": 0}
@@ -319,7 +337,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
               settings: Settings | None = None, candidate_sources: set[str] | None = None,
               extract_model: str | None = "yandexgpt-5-pro", naming_mode: str = "direct",
               counters_cache: bool | None = None, extract_version: str = "v2",
-              rospatent: bool | None = None) -> dict:
+              rospatent: bool | None = None, candidates_version: str = "v3") -> dict:
     """Тема -> JSON с ТОП-15, исключёнными, статистикой и временем по шагам.
 
     candidate_sources — из документов каких источников извлекать кандидатов (openalex,
@@ -334,16 +352,21 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     rospatent — очередь Роспатента в этапе счётчиков; None — как collector.rospatent.ROSPATENT_ENABLED.
     n_pat идёт в признак share_patent модели s2a2-v1; у кандидатов с оценкой — n_pat, share_patent,
     rospatent_failed (при сбое ещё note_ru). Выключенный при s2a2-v1 — предупреждение в warnings.
+    candidates_version — v3 (по умолчанию, принят в задаче Г): промпт subq-v3 и состав шага 4 из
+    step4_documents; v2 — прежний вариант, для воспроизведения старых прогонов.
     """
     if extract_version not in ("v1", "v2"):
         raise ValueError(f"extract_version {extract_version!r}: ожидалось v1 или v2")
+    if candidates_version not in CANDIDATES_VERSIONS:
+        raise ValueError(f"candidates_version {candidates_version!r}: ожидалось v2 или v3")
     progress = progress or (lambda stage, done, total: None)
     settings = settings or Settings.from_env()
     adapters = list(adapters) if adapters is not None else default_adapters(settings)
     meta, started, timings = load()["meta"], time.monotonic(), {}
     query_id = f"q{datetime.now():%Y%m%d%H%M%S}"
 
-    subq = staged("subqueries", timings, progress, lambda: generate_subqueries(topic, query_id, use_cache=use_cache))
+    subq = staged("subqueries", timings, progress, lambda: generate_subqueries(topic, query_id, use_cache=use_cache,
+                                                   prompt_version=CANDIDATES_VERSIONS[candidates_version]))
     warnings = list(subq["warnings"])
     searchers = [CachedSearch(adapter, use_cache=use_cache) for adapter in adapters]
     collector = DocumentCollector(adapters=searchers, cache=MemoryCache(), settings=settings)
@@ -352,6 +375,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     all_documents = documents
     if candidate_sources is not None:
         documents = [doc for doc in documents if origin(doc, subq["subqueries"]) in candidate_sources]
+    documents = step4_documents(documents, subq["subqueries"], candidates_version)
     if extract_version == "v1":
         extract = lambda: extract_candidates(documents, topic, query_id, use_cache=use_cache)
     else:
@@ -396,8 +420,9 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
         "subqueries": subq["subqueries"],
         "candidate_sources": sorted(candidate_sources) if candidate_sources is not None else None,
         "extract_version": extract_version, "extract_model": extract_model if extract_version == "v2" else None,
-        "naming_mode": naming_mode,
+        "naming_mode": naming_mode, "candidates_version": candidates_version,
         "stats": {"documents_by_source": document_stats(all_documents, subq["subqueries"]),
+                  "documents_for_candidates_by_source": document_stats(documents, subq["subqueries"]),
                   "documents_total": len(all_documents), "documents_for_candidates": len(documents),
                   "candidates_found": len(found["candidates"]),
                   "candidates_named": len(merged),
