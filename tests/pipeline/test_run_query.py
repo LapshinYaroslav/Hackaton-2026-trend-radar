@@ -170,12 +170,10 @@ DETAIL_KEYS = {"name_raw", "name_variants", "name_choice_rule", "n_works", "n_in
 def test_output_matches_schema(result) -> None:
     out, stages = result
     assert set(out) == {"query_id", "topic", "area", "model_version", "threshold", "cutoff_date", "subqueries",
-                        "candidate_sources", "extract_version", "extract_model", "naming_mode", "candidates_version",
-                        "stats", "normalizer_deviations", "top", "excluded",
+                        "candidate_sources", "extract_version", "extract_model", "naming_mode", "stats", "normalizer_deviations", "top", "excluded",
                         "timings", "warnings"}
     assert out["normalizer_deviations"] == ["company_stoplist_off"]
     assert set(out["stats"]) == {"documents_by_source", "documents_total", "documents_for_candidates",
-                                 "documents_for_candidates_by_source",
                                  "candidates_found", "candidates_named",
                                  "candidates_scored", "above_threshold", "above_075",
                                  "rospatent_enabled", "rospatent_failures"}
@@ -216,8 +214,7 @@ def test_normalized_names_merged_with_doc_ids(result) -> None:
     assert tech_key(top["name_en"]) == SIGNAL and top["n_works"] == 5
     assert max(v["n_works"] for v in top["name_variants"]) == 5
     assert top["n_docs"] == 2 and top["n_sources"] == 1
-    # v3 (по умолчанию) ставит arXiv первым на шаге 4: документы 1 и 2 — arXiv
-    assert {s["url"] for s in top["sources"]} == {"https://arxiv/3", "https://arxiv/4"}
+    assert {s["url"] for s in top["sources"]} == {"https://openalex/3", "https://openalex/4"}
 
 
 def test_humanoid_robot_is_known_training_mainstream(result) -> None:

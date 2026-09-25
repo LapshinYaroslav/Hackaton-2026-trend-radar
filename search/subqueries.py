@@ -14,17 +14,6 @@ from search.llm_yandex_gpt import ask_llm, build_model_uri
 ROOT = Path(__file__).resolve().parents[1]
 CACHE_DIR = ROOT / "data" / "interim" / "cache" / "subqueries"
 PROMPT_VERSION = "subq-v2"
-# subq-v3 (задача Г): смысловая часть — «направления, оформившиеся за 2–3 года»; форма, язык,
-# число и проверка подзапросов — как у subq-v2.
-PROMPT_VERSION_V3 = "subq-v3"
-PROMPT_VERSIONS = (PROMPT_VERSION, PROMPT_VERSION_V3)
-DIRECTIONS_V3 = (
-    "Назови направления внутри темы, которые оформились за последние 2–3 года (2023–2026): конкретные "
-    "классы технологий, о которых уже есть научные публикации или раунды финансирования стартапов, но "
-    "которые ещё не получили массового внедрения. Не называй устоявшиеся разделы области и общие "
-    "категории методов (например: „алгоритмы машинного обучения“, „методы аутентификации“, "
-    "„компьютерное зрение“, „блокчейн-технологии“). Каждое направление — короткое название класса "
-    "технологий, 2–5 слов.")
 
 N_SUBQUERIES_RU = 5
 N_SUBQUERIES_EN = 8
@@ -66,10 +55,8 @@ LANGUAGE_RULES = {
 }
 
 
-def build_system_prompt(language: str, version: str = PROMPT_VERSION) -> str:
+def build_system_prompt(language: str) -> str:
     """Системный промпт на один язык: ответ короче, поэтому приходит быстрее."""
-    if version == PROMPT_VERSION_V3:
-        return build_system_prompt_v3(language)
     return f"""Ты помогаешь искать научные публикации и технические документы.
 По теме пользователя составь {LIMITS[language]} поисковых подзапросов.
 
@@ -88,24 +75,6 @@ def build_system_prompt(language: str, version: str = PROMPT_VERSION) -> str:
 Хорошо, это углубление: твердооксидные топливные элементы, электролиз протонообменной мембраны, металлогидридное хранение водорода, solid oxide electrolysis cells, ammonia cracking catalysts.
 
 9. Каждый подзапрос — класс технических подходов или решений внутри темы, по которому сейчас идут исследования и разработки. Не учебная дисциплина и не раздел учебника, не метрика качества, не стандарт, не нормативное регулирование.
-
-Ответ строго один JSON-объект без пояснений и без markdown:
-{{"{language}": ["...", "..."]}}"""
-
-
-def build_system_prompt_v3(language: str) -> str:
-    """subq-v3: смысловая часть заменена на DIRECTIONS_V3; форма, язык, число и JSON — из subq-v2."""
-    return f"""Ты помогаешь искать научные публикации и технические документы.
-По теме пользователя составь {LIMITS[language]} поисковых подзапросов.
-
-{DIRECTIONS_V3}
-
-Требования к каждому подзапросу:
-1. Никаких имён собственных: ни компаний, ни продуктов, ни учёных, ни организаций, ни стран.
-2. Не предложение. Без кавычек, без поисковых операторов, без годов и чисел.
-3. Без оценочных и мета-слов: тренды, слабые сигналы, перспективные, прорывные, будущее, emerging, future, breakthrough.
-4. Подзапросы покрывают разные поднаправления темы и не перефразируют друг друга.
-5. {LANGUAGE_RULES[language]}
 
 Ответ строго один JSON-объект без пояснений и без markdown:
 {{"{language}": ["...", "..."]}}"""
@@ -215,9 +184,9 @@ def retry_note(rejected: list[tuple[str, str]]) -> str:
 
 
 def _request_language(topic: str, language: str, temperature: float = SUBQUERY_TEMPERATURE,
-                      note: str = "", version: str = PROMPT_VERSION) -> tuple[dict, list, list[str]]:
+                      note: str = "") -> tuple[dict, list, list[str]]:
     """Один вызов LLM за подзапросами одного языка. Возвращает ответ, сырой список, предупреждения."""
-    answer = ask_llm(build_system_prompt(language, version) + note, build_user_prompt(topic),
+    answer = ask_llm(build_system_prompt(language) + note, build_user_prompt(topic),
                      purpose="subqueries", temperature=temperature, max_tokens=MAX_TOKENS)
     if answer["error"]:
         return answer, [], [f"вызов LLM ({language}) не удался: {answer['error']}"]
@@ -227,10 +196,10 @@ def _request_language(topic: str, language: str, temperature: float = SUBQUERY_T
         return answer, [], [f"разбор ответа ({language}) не удался: {exc}"]
 
 
-def _request_round(topic: str, requests: dict, version: str = PROMPT_VERSION) -> dict:
+def _request_round(topic: str, requests: dict) -> dict:
     """Языки запрашиваются параллельно. requests: язык -> (температура, дописка к промпту)."""
     with ThreadPoolExecutor(max_workers=len(requests)) as pool:
-        futures = {lang: pool.submit(_request_language, topic, lang, temp, note, version)
+        futures = {lang: pool.submit(_request_language, topic, lang, temp, note)
                    for lang, (temp, note) in requests.items()}
         return {lang: future.result() for lang, future in futures.items()}
 
@@ -246,27 +215,24 @@ def _collect(topic: str, found: dict, rejected: dict, answers: list, warnings: l
         warnings += [f"отброшен ({lang}): «{text}» — {reason}" for text, reason in bad]
 
 
-def generate_subqueries(topic: str, query_id: str, use_cache: bool = True,
-                        prompt_version: str = PROMPT_VERSION) -> dict:
+def generate_subqueries(topic: str, query_id: str, use_cache: bool = True) -> dict:
     """Тема -> до 8 английских и 5 русских подзапросов. Меньше минимума — один повтор с T=0.8."""
     if not topic or not topic.strip():
         raise ValueError("тема пустая")
-    if prompt_version not in PROMPT_VERSIONS:
-        raise ValueError(f"prompt_version {prompt_version!r}: ожидалось одно из {PROMPT_VERSIONS}")
     model_uri = build_model_uri()
-    key = cache_key(topic, model_uri, prompt_version)
+    key = cache_key(topic, model_uri)
     cached = _cache_get(key) if use_cache else None
     if cached is not None:
         return _with_ids(cached, query_id)
     found, rejected = {"ru": [], "en": []}, {"ru": [], "en": []}
     answers, warnings = [], []
     first = {lang: (SUBQUERY_TEMPERATURE, "") for lang in ("ru", "en")}
-    _collect(topic, found, rejected, answers, warnings, _request_round(topic, first, prompt_version))
+    _collect(topic, found, rejected, answers, warnings, _request_round(topic, first))
     short = [lang for lang in ("ru", "en") if len(found[lang]) < MIN_SUBQUERIES[lang]]
     if short:
         warnings.append(f"подзапросов меньше нужного ({', '.join(short)}), выполнен повтор")
         retry = {lang: (RETRY_TEMPERATURE, retry_note(rejected[lang])) for lang in short}
-        _collect(topic, found, rejected, answers, warnings, _request_round(topic, retry, prompt_version))
+        _collect(topic, found, rejected, answers, warnings, _request_round(topic, retry))
     # Без английских подзапросов поиск №1 пуст: arXiv и TechCrunch получают только en.
     # Без русских — только нет русских документов OpenAlex, запрос продолжается.
     if not found["en"]:
@@ -284,7 +250,7 @@ def generate_subqueries(topic: str, query_id: str, use_cache: bool = True,
               "subqueries": [{"language": lang, "text": text} for lang in ("ru", "en")
                              for text in found[lang][:LIMITS[lang]]],
               "model_uri": model_uri, "model_version": version,
-              "prompt_version": prompt_version, "warnings": warnings}
+              "prompt_version": PROMPT_VERSION, "warnings": warnings}
     _cache_put(key, result)
     return _with_ids(result, query_id)
 
@@ -305,9 +271,9 @@ def normalize_topic(topic: str) -> str:
     return " ".join(topic.casefold().split())
 
 
-def cache_key(topic: str, model_uri: str, version: str = PROMPT_VERSION) -> str:
+def cache_key(topic: str, model_uri: str) -> str:
     """sha256 от (нормализованная тема, версия промпта, URI модели)."""
-    raw = json.dumps([normalize_topic(topic), version, model_uri], ensure_ascii=False)
+    raw = json.dumps([normalize_topic(topic), PROMPT_VERSION, model_uri], ensure_ascii=False)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
