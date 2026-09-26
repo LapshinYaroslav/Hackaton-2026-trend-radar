@@ -33,6 +33,8 @@ ROOT = Path(__file__).resolve().parents[1]
 # Ключ — фраза, источник и способ опроса arXiv (одним вызовом или семью): числа разных способов
 # могут не совпадать (сверка В: 6 пар из 1029).
 COUNTERS_CACHE_DIR = ROOT / "data" / "interim" / "cache" / "counters_pipeline"
+# Источники с повторами транспорта (collector/http.py, RETRY_HOSTS) и их хосты.
+RETRY_SOURCE_HOSTS = {"arxiv": "export.arxiv.org", "techcrunch": "techcrunch.com"}
 
 
 def missing_pairs(frame: pd.DataFrame, sources: set[str]) -> list[tuple[str, str]]:
@@ -100,6 +102,18 @@ def complete(result) -> bool:
     return not isinstance(result, Exception) and         {row.window for row in result.counters} >= set(COUNTER_WINDOWS)
 
 
+def transport_of(collector: DocumentCollector):
+    """HTTP-транспорт адаптера (collector/http.py); у заглушек его нет."""
+    return getattr(collector.adapters[0], "_transport", None)
+
+
+def retry_counts(collector: DocumentCollector) -> dict:
+    """Повторы источника из транспорта (задача И3, только arXiv и TechCrunch); у остальных — None, как раньше."""
+    host = RETRY_SOURCE_HOSTS.get(collector.adapters[0].source)
+    stats = getattr(transport_of(collector), "retry_stats", {}).get(host) if host else None
+    return {"retries": stats["retries"], "n429": stats["n429"]} if stats else {}
+
+
 def relative(stats: dict, origin: float) -> dict:
     """Начало и конец очереди в секундах от старта этапа счётчиков."""
     started, finished = stats.pop("started"), stats.pop("finished")
@@ -111,7 +125,8 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
                    warnings: list[str] | None = None,
                    on_done: Callable[[], None] | None = None,
                    use_cache: bool = True,
-                   rospatent: dict | None = None) -> Callable[[SearchTerms], pd.DataFrame]:
+                   rospatent: dict | None = None,
+                   on_request: Callable[[int], None] | None = None) -> Callable[[SearchTerms], pd.DataFrame]:
     """Fetch для candidate_features. Неполное покрытие -> пустая таблица и запись в warnings.
 
     Пустая таблица значит «кандидат не оценён» (model.ranking.NO_COUNTERS), а не падение
@@ -127,6 +142,9 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
     результаты в fetch.patents. Сводка каждой очереди (начало и конец от старта этапа, запросы,
     кэш, повторы, сбои) — в fetch.queues. Повторы внутри сборщика снаружи не видны: у трёх
     основных источников retries и n429 — None.
+
+    on_request(n) — для прогресса (задача И1): после каждой пары «кандидат × источник» (n = 1, попадание
+    в кэш тоже) и пачкой n = число фраз по завершении очереди Роспатента.
     """
     settings = settings or Settings()
     collectors = [DocumentCollector(adapters=[adapter], cache=build_cache(settings.database_url),
@@ -160,13 +178,18 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
                 with lock:
                     ready[(phrase, source)] = result
                     left[phrase] -= 1
+                    if on_request:
+                        on_request(1)
                     if left[phrase] == 0 and on_done:
                         on_done()
-            return {**stats, "finished": time.time()}
+            return {**stats, **retry_counts(collector), "finished": time.time()}
 
         def run_patents() -> dict:
             results, stats = rospatent_source.count_all(phrases, use_cache=use_cache, **rospatent)
             patents.update(results)
+            if on_request:
+                with lock:
+                    on_request(len(phrases))
             return stats
 
         with ThreadPoolExecutor(max_workers=len(collectors) + 1) as pool:
@@ -174,6 +197,9 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
             if rospatent is not None:
                 futures.append(pool.submit(run_patents))
             queues[:] = [relative(future.result(), origin) for future in futures]
+        if warnings is not None:
+            notes = {note for collector in collectors for note in getattr(transport_of(collector), "notes", [])}
+            warnings.extend(note for note in sorted(notes) if note not in warnings)
 
     def fetch(search: SearchTerms) -> pd.DataFrame:
         phrase = search.terms[0]

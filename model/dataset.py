@@ -74,27 +74,6 @@ def load_negatives() -> pd.DataFrame:
     return table
 
 
-def load_all() -> pd.DataFrame:
-    """Сигналы и негативы в одной таблице, с отделёнными хвостовыми скобками.
-
-    name_en_manual — рукописное английское название негатива; в пайплайн не идёт,
-    служит эталоном для проверки нормализатора. name_gloss — то же место у сигнала,
-    но там лежит пояснение, а не название. name_inline_gloss — содержимое скобок из
-    середины строки, тоже только для разбора.
-    """
-    table = pd.concat([load_signals(), load_negatives()], ignore_index=True)
-    split = [split_tail_parens(name) for name in table["name"]]
-    tails = [item[1] for item in split]
-    inline = [strip_inline_parens(item[0]) for item in split]
-    table["name_ru"] = [item[0] for item in inline]
-    table["name_inline_gloss"] = [item[1] for item in inline]
-    table["name_en_manual"] = [tail if label == 0 else ""
-                               for tail, label in zip(tails, table["label"])]
-    table["name_gloss"] = [tail if label == 1 else ""
-                           for tail, label in zip(tails, table["label"])]
-    return table
-
-
 def company_stoplist() -> list[str]:
     """Стоп-лист компаний из labels/company_stoplist.txt: по фразе на строку.
 

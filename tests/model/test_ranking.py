@@ -5,6 +5,8 @@ import math
 import pandas as pd
 import pytest
 
+from tests.data_required import needs_model
+
 from model.config import FEATURES_S2A2, OTHER_AREA
 from model.predict import load, predict
 from model.ranking import (NO_COUNTERS, known_areas, rank_candidates,
@@ -12,6 +14,8 @@ from model.ranking import (NO_COUNTERS, known_areas, rank_candidates,
 
 KNOWN = "edge model compression"
 MAINSTREAM = "humanoid robot"
+
+pytestmark = needs_model  # все тесты модуля оценивают кандидатов боевой моделью
 
 
 def test_known_technology_is_scored_with_all_fields() -> None:

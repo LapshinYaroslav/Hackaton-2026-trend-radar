@@ -18,6 +18,7 @@ from model.config import (FEATURES, FEATURES_S2A2, MODEL_VERSION, NEWS_SHARE,
 from model.corpus import load_training_patents
 from model.first_mention import TECHNOLOGIES
 from model.training_table import training_table
+from tests.data_required import needs_counters, needs_training
 
 TOLERANCE = 1e-9
 
@@ -41,6 +42,8 @@ def _call(row: pd.Series, **options) -> dict:
                               area=str(row["area"]), **options)
 
 
+@needs_training
+@needs_counters
 @pytest.mark.parametrize("version,columns", [(MODEL_VERSION, FEATURES),
                                              ("s2a2-v1", FEATURES_S2A2)])
 def test_matches_training_table_on_every_technology(technologies, stored, version,
@@ -83,12 +86,14 @@ def test_share_patent_without_n_pat_is_a_gap(technologies) -> None:
     assert math.isnan(answer["features"]["share_patent"])
 
 
+@needs_counters
 def test_share_patent_zero_patents_is_zero(technologies) -> None:
     """Ответ total = 0 при ненулевой науке — ровно ноль."""
     answer = _call(technologies.iloc[0], n_pat=0)
     assert answer["features"]["share_patent"] == 0.0
 
 
+@needs_counters
 def test_counters_and_sources_come_back(technologies) -> None:
     """Вместе с числами возвращаются счётчики по окнам и список источников."""
     answer = _call(technologies.iloc[0])

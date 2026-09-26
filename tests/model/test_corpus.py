@@ -1,5 +1,8 @@
 """Корпусные итоги: отсутствие или неполнота — отказ, а не тихий переход на кэш."""
 import json
+from pathlib import Path
+
+from tests.data_required import needs_training
 
 import pandas as pd
 import pytest
@@ -132,14 +135,26 @@ def test_snapshot_of_other_datasets_is_a_refusal(tmp_path) -> None:
         load_training_patents(ROSPATENT_DATASETS, _snapshot(tmp_path, _items(), ["us"]))
 
 
+P0_FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "p0_rospatent_counts.json"
+
+
+@needs_training
 def test_training_share_patent_equals_p0_on_every_row() -> None:
-    """share_patent обучающей таблицы (снимок) совпадает с П0 (кэш сбора) на всех 160 строках."""
+    """Снимок и share_patent обучающей таблицы совпадают с эталоном П0 на всех 160 строках.
+
+    Эталон — tests/fixtures, а не живой кэш Роспатента: кэш законно обновляется прогонами.
+    """
     import numpy as np
 
+    from model.features import share_patent
     from model.train import training_table
-    from scripts.ru_patents_p0 import feature_table
-    stored = training_table().set_index("tech_id")["share_patent"]
-    p0 = feature_table().set_index("tech_id")["share_patent"].loc[stored.index]
-    assert len(stored) == 160
-    assert (stored.isna() == p0.isna()).all()
-    assert np.nanmax((stored - p0).abs().to_numpy()) <= 1e-12
+    p0 = pd.DataFrame(json.loads(P0_FIXTURE.read_text(encoding="utf-8"))["items"]).set_index("tech_id")
+    snapshot = pd.DataFrame(json.loads(TRAINING_PATENTS.read_text(encoding="utf-8"))["items"]).set_index("tech_id")
+    table = training_table().set_index("tech_id")
+    assert len(p0) == len(table) == 160 and set(snapshot.index) == set(p0.index)
+    assert (snapshot.loc[p0.index, ["phrase", "n_pat"]] == p0[["phrase", "n_pat"]]).all().all()
+    expected = pd.Series([share_patent(a, b) for a, b in zip(p0["n_pat"], table.loc[p0.index, "n_research"])],
+                         index=p0.index)
+    stored = table.loc[p0.index, "share_patent"]
+    assert (stored.isna() == expected.isna()).all()
+    assert np.nanmax((stored - expected).abs().to_numpy()) <= 1e-12

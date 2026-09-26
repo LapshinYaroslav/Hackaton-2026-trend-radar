@@ -74,7 +74,7 @@ class GenerateSubqueriesTest(IsolatedTest):
         self.assertEqual(result["warnings"], [])
         self.assertEqual(result["model_uri"], MODEL_URI)
         self.assertEqual(result["model_version"], "test")
-        self.assertEqual(result["prompt_version"], "subq-v2")
+        self.assertEqual(result["prompt_version"], "subq-v3")
         self.assertEqual(result["subqueries"][0]["subquery_id"], "q7-ru-1")
         self.assertEqual(result["subqueries"][5]["subquery_id"], "q7-en-1")
         self.assertEqual(texts(result, "ru"), RU)

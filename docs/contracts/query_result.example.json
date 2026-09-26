@@ -1,5 +1,5 @@
 {
-  "_note": "ПРИМЕР контракта для разработки БД и UI. Числа и названия условные, не результат модели.",
+  "_note": "ПРИМЕР контракта для разработки БД и UI. Числа и названия условные, не результат модели. Задача З: name_ru — название на русском, переведённое автоматически (name_ru_auto: true); name_ru_source — translate (перевод YandexGPT), extract (название шага 4) или null; name_en — оригинальное название, по нему идут источники и признаки.",
   "query_id": "q-example-001",
   "topic": "роботы для промышленности",
   "area": "Роботы",
@@ -7,24 +7,51 @@
   "threshold": 0.4,
   "cutoff_date": "2026-09-01",
   "subqueries": [
-    {"subquery_id": "q-example-001-en-1", "language": "en", "text": "robotic teleoperation data"},
-    {"subquery_id": "q-example-001-en-2", "language": "en", "text": "dexterous robotic manipulation"},
-    {"subquery_id": "q-example-001-ru-1", "language": "ru", "text": "коллаборативные промышленные роботы"}
+    {
+      "subquery_id": "q-example-001-en-1",
+      "language": "en",
+      "text": "robotic teleoperation data"
+    },
+    {
+      "subquery_id": "q-example-001-en-2",
+      "language": "en",
+      "text": "dexterous robotic manipulation"
+    },
+    {
+      "subquery_id": "q-example-001-ru-1",
+      "language": "ru",
+      "text": "коллаборативные промышленные роботы"
+    }
   ],
   "stats": {
-    "documents_by_source": {"openalex": 175, "arxiv": 105, "techcrunch": 70, "openalex_ru": 1},
+    "documents_by_source": {
+      "openalex": 175,
+      "arxiv": 105,
+      "techcrunch": 70,
+      "openalex_ru": 1
+    },
     "documents_total": 287,
     "candidates_found": 64,
     "candidates_scored": 52,
     "above_threshold": 21,
     "above_075": 9,
     "rospatent_enabled": true,
-    "rospatent_failures": 1
+    "rospatent_failures": 1,
+    "translation": {
+      "переведено": 4,
+      "из кэша": 0,
+      "с первого раза": 4,
+      "с повтором": 0,
+      "откат на term_ru": 0,
+      "без названия": 0
+    }
   },
   "top": [
     {
       "rank": 1,
       "name_ru": "Данные телеуправления роботами как отдельная индустрия",
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
       "name_en": "robotic teleoperation data",
       "score": 0.9525,
       "model_version": "s2a2-v1",
@@ -74,11 +101,13 @@
     {
       "rank": 2,
       "name_ru": "Кисти с высокой ловкостью для роботов",
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
       "name_en": "dexterous robotic hand",
       "score": 0.7812,
       "model_version": "s2a2-v1",
       "n_pat": 5,
-      "share_patent": 0.0230,
+      "share_patent": 0.023,
       "rospatent_failed": false,
       "explanation_ru": [
         "Молодой термин: первый препринт 3 года назад",
@@ -115,6 +144,8 @@
   "excluded": [
     {
       "name_ru": "Гуманоидные роботы",
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
       "name_en": "humanoid robot",
       "score": 0.1562,
       "skipped_reason": "below_threshold",
@@ -126,6 +157,8 @@
     },
     {
       "name_ru": "Промышленные роботы-манипуляторы",
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
       "name_en": "industrial robotic manipulator",
       "score": 0.0931,
       "skipped_reason": "below_threshold",
@@ -138,6 +171,8 @@
     },
     {
       "name_ru": "Роботизированный цех будущего",
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
       "name_en": "future robotic workshop",
       "score": null,
       "skipped_reason": "no_trace",
@@ -146,6 +181,8 @@
     },
     {
       "name_ru": "Модульные захваты",
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
       "name_en": "modular gripper",
       "score": null,
       "skipped_reason": "cap",
@@ -160,16 +197,57 @@
     "trace_check": 8.2,
     "counters": 402.5,
     "ranking": 0.4,
-    "total": 501.9,
+    "translate": 3.6,
+    "total": 505.5,
     "queues": [
-      {"source": "openalex", "candidates": 58, "requests": 58, "cache_hits": 0, "retries": null,
-       "n429": null, "failures": 0, "started_s": 0.0, "finished_s": 395.1, "duration_s": 395.1},
-      {"source": "arxiv", "candidates": 58, "requests": 58, "cache_hits": 0, "retries": null,
-       "n429": null, "failures": 0, "started_s": 0.0, "finished_s": 402.3, "duration_s": 402.3},
-      {"source": "techcrunch", "candidates": 58, "requests": 58, "cache_hits": 0, "retries": null,
-       "n429": null, "failures": 0, "started_s": 0.0, "finished_s": 120.4, "duration_s": 120.4},
-      {"source": "rospatent", "candidates": 58, "requests": 55, "cache_hits": 3, "retries": 1,
-       "n429": 0, "failures": 1, "started_s": 0.0, "finished_s": 16.5, "duration_s": 16.5}
+      {
+        "source": "openalex",
+        "candidates": 58,
+        "requests": 58,
+        "cache_hits": 0,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 395.1,
+        "duration_s": 395.1
+      },
+      {
+        "source": "arxiv",
+        "candidates": 58,
+        "requests": 58,
+        "cache_hits": 0,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 402.3,
+        "duration_s": 402.3
+      },
+      {
+        "source": "techcrunch",
+        "candidates": 58,
+        "requests": 58,
+        "cache_hits": 0,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 120.4,
+        "duration_s": 120.4
+      },
+      {
+        "source": "rospatent",
+        "candidates": 58,
+        "requests": 55,
+        "cache_hits": 3,
+        "retries": 1,
+        "n429": 0,
+        "failures": 1,
+        "started_s": 0.0,
+        "finished_s": 16.5,
+        "duration_s": 16.5
+      }
     ]
   },
   "warnings": []
