@@ -54,13 +54,3 @@ def test_list_queries_remembers_created() -> None:
     match = next(item for item in listed if item["query_id"] == query_id)
     assert match["topic"] == "история теста"
     assert match["area"] == "Edge"
-
-
-def test_insight_is_pending() -> None:
-    created = client.post("/queries", json={"topic": "тема", "area": "Финтех"})
-    query_id = created.json()["query_id"]
-    for _ in range(20):
-        if client.get(f"/queries/{query_id}").json()["status"] == "done":
-            break
-    insight = client.get(f"/queries/{query_id}/insights/1").json()
-    assert insight["status"] == "pending"

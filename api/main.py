@@ -192,26 +192,6 @@ def get_query(query_id: str) -> dict:
         return _public(copy.deepcopy(job))
 
 
-@app.get("/queries/{query_id}/insights/{rank}")
-def get_insight(query_id: str, rank: int) -> dict:
-    """Пока без LLM: инсайт не на критическом пути (задача 2.9)."""
-    with _lock:
-        job = store.get_query(query_id)
-        if job is None:
-            raise HTTPException(status_code=404, detail="запрос не найден")
-        status = job["status"]
-    if status != "done":
-        return {"query_id": query_id, "rank": rank, "status": "pending"}
-    return store.insight_status(query_id, rank)
-
-
 @app.get("/catalog/balance")
 def catalog_balance() -> dict:
     return {"areas": store.training_balance()}
-
-
-@app.get("/catalog/technologies")
-def catalog_technologies(label: Optional[int] = None) -> dict:
-    if label not in (None, 0, 1):
-        raise HTTPException(status_code=422, detail="label: 0, 1 или пусто")
-    return {"items": store.list_technologies(label)}

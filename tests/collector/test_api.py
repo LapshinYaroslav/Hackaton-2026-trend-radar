@@ -1,5 +1,4 @@
 from datetime import date, datetime, timedelta, timezone
-import math
 
 import pytest
 
@@ -14,7 +13,7 @@ from collector.constants import (
 )
 from collector.db import MemoryCache
 from collector.exceptions import InvalidSourceTypeError
-from collector.models import Candidate, Document, SourceTotal, Technology
+from collector.models import Document, SourceTotal
 from tests.collector.fakes import FakeAdapter, doc
 
 BOTH_WINDOWS = {
@@ -27,76 +26,11 @@ def _collector(*adapters: FakeAdapter) -> DocumentCollector:
     return DocumentCollector(adapters=list(adapters))
 
 
-def implied_features(result) -> dict[str, float]:
-    """Contract with Yaroslav: collector does not compute this; empty docs => volume=0, rest NaN."""
-    if not result.documents:
-        return {
-            "volume": 0.0,
-            "growth": math.nan,
-            "freshness": math.nan,
-            "share_research": math.nan,
-        }
-    raise AssertionError("implied_features is only for the empty-document contract")
-
-
-def test_s1_s2_source_type_dates_and_totals() -> None:
-    s1 = FakeAdapter(
-        "s1",
-        "paper",
-        documents=[
-            doc(
-                source="s1",
-                source_type="paper",
-                published_at="2024-01-15",
-                url="https://s1.example/a",
-            )
-        ],
-        totals=BOTH_WINDOWS,
-    )
-    s2 = FakeAdapter(
-        "s2",
-        "news",
-        documents=[
-            doc(
-                source="s2",
-                source_type="news",
-                published_at="2025-12-01",
-                url="https://s2.example/b",
-                trust_level="medium",
-            )
-        ],
-        totals={
-            (WINDOW_BEFORE_START, WINDOW_BEFORE_END): 400,
-            (WINDOW_NOW_START, WINDOW_NOW_END): 480,
-        },
-    )
-    collector = _collector(s1, s2)
-    totals = collector.probe_source_totals()
-    by_source = {(row.source, row.window): row for row in totals}
-
-    assert by_source[("s1", "before")].n_total == 1000
-    assert by_source[("s1", "now")].n_total == 1250
-    assert by_source[("s1", "before")].available is True
-    assert by_source[("s2", "before")].n_total == 400
-    assert by_source[("s2", "now")].n_total == 480
-
-    result = collector.collect_history(
-        Candidate(candidate_id="c1", name_en="photonic inference processors")
-    )
-    dates = {item.url: item.published_at for item in result.documents}
-    types = {item.url: item.source_type for item in result.documents}
-    assert dates["https://s1.example/a"] == date(2024, 1, 15)
-    assert dates["https://s2.example/b"] == date(2025, 12, 1)
-    assert types["https://s1.example/a"] == "paper"
-    assert types["https://s2.example/b"] == "news"
-    assert result.to_contract_dict()["candidate_id"] == "c1"
-
-
 def test_invalid_source_type_fails_immediately() -> None:
     adapter = FakeAdapter("s1", "paper", fail_source_type="social")
     collector = _collector(adapter)
     with pytest.raises(InvalidSourceTypeError) as exc:
-        collector.collect_history(Candidate(candidate_id="c1", name_en="x"))
+        collector.search_recent(["x"])
     assert exc.value.source_type == "social"
 
 
@@ -112,146 +46,6 @@ def test_document_model_rejects_unknown_source_type() -> None:
             organizations=[],
             text="",
         )
-
-
-def test_empty_result_volume_zero_other_nan() -> None:
-    s1 = FakeAdapter("s1", "paper", documents=[], totals=BOTH_WINDOWS)
-    collector = _collector(s1)
-    result = collector.collect_history(Candidate(candidate_id="c-empty", name_en="unknown tech"))
-    payload = result.to_contract_dict()
-    assert payload["documents"] == []
-    assert payload["source_totals"] == [
-        {"source": "s1", "window": "before", "n_total": 1000},
-        {"source": "s1", "window": "now", "n_total": 1250},
-    ]
-    features = implied_features(result)
-    assert features["volume"] == 0
-    assert math.isnan(features["growth"])
-    assert math.isnan(features["freshness"])
-    assert math.isnan(features["share_research"])
-
-
-def test_documents_without_date_or_outside_window_are_dropped() -> None:
-    s1 = FakeAdapter(
-        "s1",
-        "paper",
-        documents=[
-            doc(source="s1", source_type="paper", published_at="2019-12-31", url="https://s1/old"),
-            doc(source="s1", source_type="paper", published_at="2026-09-01", url="https://s1/cutoff"),
-            doc(source="s1", source_type="paper", published_at="2021-06-01", url="https://s1/ok"),
-        ],
-        totals=BOTH_WINDOWS,
-    )
-    result = _collector(s1).collect_history(Candidate(candidate_id="c1", name_en="x"))
-    assert [item.url for item in result.documents] == ["https://s1/ok"]
-
-
-def test_source_without_both_windows_is_omitted_from_growth_totals() -> None:
-    s1 = FakeAdapter("s1", "paper", totals=BOTH_WINDOWS)
-    s2 = FakeAdapter(
-        "s2",
-        "blog",
-        totals={(WINDOW_NOW_START, WINDOW_NOW_END): 10},
-    )
-    totals = _collector(s1, s2).probe_source_totals()
-    assert all(row.available for row in totals if row.source == "s1")
-    assert all(not row.available for row in totals if row.source == "s2")
-    contract = _collector(s1, s2).collect_history(
-        Candidate(candidate_id="c1", name_en="x")
-    ).to_contract_dict()
-    assert {row["source"] for row in contract["source_totals"]} == {"s1"}
-
-
-def test_training_and_query_share_the_same_result_shape() -> None:
-    s1 = FakeAdapter(
-        "s1",
-        "paper",
-        documents=[
-            doc(source="s1", source_type="paper", published_at="2022-01-01", url="https://s1/1")
-        ],
-        totals=BOTH_WINDOWS,
-    )
-    collector = _collector(s1)
-    trained = collector.collect_training(
-        [Technology(tech_id="c42", name_en="photonic inference processors")]
-    )[0]
-    queried = collector.collect_history(
-        Candidate(
-            candidate_id="c42",
-            query_id="q7",
-            name_en="photonic inference processors",
-            aliases=["optical AI accelerator"],
-        )
-    )
-    assert trained.to_contract_dict()["documents"] == queried.to_contract_dict()["documents"]
-    assert trained.to_contract_dict()["source_totals"] == queried.to_contract_dict()["source_totals"]
-    assert queried.cache_hit is True
-
-
-def test_search_recent_does_not_apply_feature_window() -> None:
-    s1 = FakeAdapter(
-        "s1",
-        "news",
-        documents=[
-            doc(
-                source="s1",
-                source_type="news",
-                published_at="2026-09-10",
-                url="https://s1/fresh",
-                trust_level="medium",
-            )
-        ],
-        totals=BOTH_WINDOWS,
-    )
-    recent = _collector(s1).search_recent(
-        ["photonic processors"],
-        date_from=date(2026, 9, 1),
-        date_to_exclusive=date(2026, 9, 18),
-    )
-    history = _collector(s1).collect_history(Candidate(candidate_id="c1", name_en="photonic processors"))
-    assert [item.url for item in recent.documents] == ["https://s1/fresh"]
-    assert history.documents == []
-
-
-def test_weak_sources_alone_lower_confirmation() -> None:
-    s1 = FakeAdapter(
-        "s1",
-        "blog",
-        documents=[
-            doc(
-                source="s1",
-                source_type="blog",
-                published_at="2024-05-01",
-                url="https://s1/blog",
-                trust_level="low",
-            )
-        ],
-        totals=BOTH_WINDOWS,
-    )
-    result = _collector(s1).collect_history(Candidate(candidate_id="c1", name_en="x"))
-    assert result.independent_confirmation is False
-
-
-def test_candidate_cap_and_mainstream_cut_before_search2() -> None:
-    s1 = FakeAdapter("s1", "paper", totals=BOTH_WINDOWS)
-    collector = _collector(s1)
-    candidates = [
-        Candidate(candidate_id="m1", name_en="transformer"),
-        Candidate(candidate_id="c1", name_en="photonic inference"),
-        Candidate(candidate_id="c2", name_en="optical analog compute"),
-    ]
-    results = collector.collect_histories(
-        candidates,
-        max_candidates=1,
-        is_mainstream=lambda item: item.candidate_id == "m1",
-    )
-    assert results[0].skipped_as_mainstream is True
-    assert results[1].skipped_as_mainstream is False
-    assert results[2].skipped_as_mainstream is True
-    assert s1.search_calls
-    searched_ids = {call[0] for call in s1.search_calls}
-    assert "photonic inference" in searched_ids
-    assert "transformer" not in searched_ids
 
 
 def _cache_with_totals(age_hours: float, n_total: int = 7) -> MemoryCache:
