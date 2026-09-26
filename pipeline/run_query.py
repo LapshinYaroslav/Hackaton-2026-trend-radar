@@ -32,7 +32,7 @@ from model.config import ROSPATENT_DATASETS
 from model.features import RESEARCH_SOURCES, share_patent
 from model.predict import load
 from model.ranking import rank_candidates
-from pipeline import naming, translate
+from pipeline import dedup as dedup_module, naming, translate
 from pipeline.progress import Report, tracker
 from pipeline.fetch import parallel_fetch
 from pipeline.search_cache import CachedSearch
@@ -44,6 +44,7 @@ from search.subqueries import generate_subqueries
 ROOT = Path(__file__).resolve().parents[1]
 TECHNOLOGIES = ROOT / "data" / "interim" / "technologies.csv"
 TOP_N = 15
+DUPLICATE_TEXT = "Дубль: тот же класс технологий, что «{}», — показан вариантом названия"
 MAX_SCORED = 60
 HIGH_SCORE = 0.75
 MAX_SOURCES = 5
@@ -239,31 +240,53 @@ def document_stats(documents: Sequence[dict], subqueries: Sequence[dict]) -> dic
 
 
 def split_ranked(ranked: list[dict], by_key: dict[str, dict], documents: Sequence[dict],
-                 threshold: float, n_pats: dict[str, int | None] | None = None) -> tuple[list[dict], list[dict]]:
+                 threshold: float, n_pats: dict[str, int | None] | None = None,
+                 duplicate_of: dict[int, int] | None = None) -> tuple[list[dict], list[dict]]:
     """ТОП-15 выше порога без добивания; остальные — в исключённые с причиной.
 
     n_pats — число патентов по фразе для текста патентного признака (нет — признак в текст не идёт).
+    duplicate_of — {индекс дубля: индекс принятого} (pipeline/dedup.py): дубль не занимает место, уходит
+    в исключённые с причиной duplicate_of и в variants принятого; ТОП добирается следующими.
     """
+    duplicate_of = duplicate_of or {}
+    variants: dict[int, list[dict]] = {}
+    for index, home in duplicate_of.items():
+        variants.setdefault(home, []).append({"term_en": by_key[ranked[index]["name"]]["name_en"],
+                                              "score": ranked[index]["score"]})
     top, dropped = [], []
-    for item in ranked:
+    for index, item in enumerate(ranked):
         candidate = by_key[item["name"]]
         n_pat = (n_pats or {}).get(item["name"])
-        if item["score"] is None:
+        extra = {"variants": variants.get(index, [])} if item["score"] is not None else {}
+        if index in duplicate_of:
+            accepted = by_key[ranked[duplicate_of[index]]["name"]]["name_en"]
+            dropped.append({**excluded(candidate, "duplicate_of", documents, item["score"],
+                                       DUPLICATE_TEXT.format(accepted)), "duplicate_of": accepted, **extra})
+        elif item["score"] is None:
             dropped.append(excluded(candidate, "no_counters", documents))
         elif item["score"] < threshold:
-            dropped.append(excluded(candidate, "below_threshold", documents, item["score"],
-                                    reason_below(item["features"], item["contributions"], item["counters"],
-                                                 n_pat)))
+            dropped.append({**excluded(candidate, "below_threshold", documents, item["score"],
+                                       reason_below(item["features"], item["contributions"], item["counters"],
+                                                    n_pat)), **extra})
         elif len(top) >= TOP_N:
-            dropped.append(excluded(candidate, "beyond_top", documents, item["score"]))
+            dropped.append({**excluded(candidate, "beyond_top", documents, item["score"]), **extra})
         else:
             top.append({"rank": len(top) + 1, "name_ru": candidate["name_ru"], "name_en": candidate["name_en"],
                         "score": item["score"],
                         "explanation_ru": explanation_top(item["features"], item["contributions"], item["counters"],
                                                           n_pat=n_pat),
                         "contributions": item["contributions"], "counters": item["counters"],
-                        **details(candidate, documents), "sources": sources_of(candidate["doc_ids"], documents)})
+                        **details(candidate, documents), "sources": sources_of(candidate["doc_ids"], documents),
+                        **extra})
     return top, dropped
+
+
+def find_duplicates(ranked: list[dict], by_key: dict[str, dict], warnings: list[str]) -> dict[int, int]:
+    """Склейка дублей по term_en оценённых кандидатов (pipeline/dedup.py); предупреждения — в warnings."""
+    rows = [{"name_en": by_key[item["name"]]["name_en"], "score": item["score"]} for item in ranked]
+    decide, notes = dedup_module.decider([r["name_en"] for r in rows if r["score"] is not None])
+    warnings.extend(notes)
+    return dedup_module.dedup(rows, decide)
 
 
 def patent_fields(counters: dict, result: dict | None) -> dict:
@@ -378,7 +401,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
               settings: Settings | None = None, candidate_sources: set[str] | None = None,
               extract_model: str | None = "yandexgpt-5-pro", naming_mode: str = "direct",
               counters_cache: bool | None = None, extract_version: str = "v2",
-              rospatent: bool | None = None, on_progress: Callable[[dict], None] | None = None) -> dict:
+              rospatent: bool | None = None, on_progress: Callable[[dict], None] | None = None,
+              dedup: bool = True) -> dict:
     """Тема -> JSON с ТОП-15, исключёнными, статистикой и временем по шагам.
 
     candidate_sources — из документов каких источников извлекать кандидатов (openalex,
@@ -395,6 +419,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     rospatent_failed (при сбое ещё note_ru). Выключенный при s2a2-v1 — предупреждение в warnings.
     Генерация кандидатов — v3 (задача Г): промпт subq-v3 и состав шага 4 из step4_documents.
     on_progress(event) — прогресс в процентах (pipeline/progress.py, задача И1); None — выход не меняется.
+    dedup — склейка дублей перед отбором ТОП-15 (pipeline/dedup.py; решение команды — evidence/dedup_check.md).
     """
     if extract_version not in ("v1", "v2"):
         raise ValueError(f"extract_version {extract_version!r}: ожидалось v1 или v2")
@@ -441,8 +466,9 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     ranked, patents = score_pool(pool, area, adapters, settings, warnings, progress, timings,
                                  use_cache if counters_cache is None else counters_cache, options, report)
     n_pats = {name: result["n_pat"] for name, result in patents.items() if not result["failed"]}
-    top, below = split_ranked(ranked, {tech_key(c["name_en"]): c for c in pool}, documents, meta["threshold"],
-                              n_pats)
+    by_key = {tech_key(c["name_en"]): c for c in pool}
+    duplicate_of = staged("dedup", timings, progress, lambda: find_duplicates(ranked, by_key, warnings)) if dedup else {}
+    top, below = split_ranked(ranked, by_key, documents, meta["threshold"], n_pats, duplicate_of)
     if options is not None:
         by_name = {item["name"]: item for item in ranked}
         for entry in top + below:

@@ -5,7 +5,8 @@
 промпт дословно — системное сообщение, термин — пользовательское), кэш по term_en.
 Проверки: есть кириллица; не больше 8 слов (слово латиницей — одно слово; 8 вместо 6 — решение Ярослава);
 не совпадает с term_en; нет признаков отказа (REFUSAL_RE); каждое латинское слово — из term_en или аббревиатура
-из первых букв его слов (latin_ok). Первая буква — заглавная.
+из первых букв его слов (latin_ok); нет кириллических аббревиатур кроме ИИ, ИТ, ЦОД, БПЛА, ДНК, РНК и смешения алфавитов
+в части слова (alphabet_ok, задача К3). Первая буква — заглавная.
 Не прошло — один повтор при 0.3; снова нет — name_ru = term_ru шага 4, если он проходит проверки, иначе None.
 term_en (name_en кандидата) не меняется: по нему идут источники и признаки.
 """
@@ -28,6 +29,12 @@ CYRILLIC_RE = re.compile(r"[а-яё]", re.IGNORECASE)
 LATIN_RE = re.compile(r"[A-Za-z0-9]*[A-Za-z][A-Za-z0-9]*")  # слова через дефис — отдельно
 MAX_ABBREVIATION = 5
 # Признаки отказа или обёртки вместо названия (без учёта регистра): такой ответ отклоняется.
+# Задача К3: части слов (через пробел, дефис или тире) — без кириллических аббревиатур кроме белого списка
+# и без смешения кириллицы с латиницей или цифрами внутри одной части («А2А», «ДНТ»; «6G-сети» — можно).
+PART_SPLIT_RE = re.compile(r"[\s\-‐‑–—]+")
+PART_STRIP = "«»\"'“”„()[],.;!"
+CYR_ABBR_RE = re.compile(r"^(?=(?:.*[А-ЯЁ]){2})[А-ЯЁ0-9]+$")
+ABBR_WHITELIST = {"ИИ", "ИТ", "ЦОД", "БПЛА", "ДНК", "РНК"}  # ДНК, РНК — решение Ярослава (задача К)
 REFUSAL_RE = re.compile(r"не могу|извините|к сожалению|не удалось|языковая модель|перевод:|название:|\?|:", re.IGNORECASE)
 WRAPS = {"«": "»", '"': '"', "“": "”", "„": "“", "'": "'"}
 PROMPT = ("Переведи на русский название класса технологий для аналитического отчёта: «{term_en}» (контекст: "
@@ -66,7 +73,18 @@ def passes(name_ru: str | None, term_en: str) -> bool:
     if not name_ru or not CYRILLIC_RE.search(name_ru) or REFUSAL_RE.search(name_ru):
         return False
     return (len(name_ru.split()) <= MAX_WORDS and name_ru.strip().lower() != term_en.strip().lower()
-            and all(latin_ok(word, term_en) for word in LATIN_RE.findall(name_ru)))
+            and all(latin_ok(word, term_en) for word in LATIN_RE.findall(name_ru)) and alphabet_ok(name_ru))
+
+
+def alphabet_ok(name_ru: str) -> bool:
+    """Нет кириллических аббревиатур вне ABBR_WHITELIST и нет смешения кириллицы с латиницей или цифрами в части."""
+    for part in (p.strip(PART_STRIP) for p in PART_SPLIT_RE.split(name_ru)):
+        cyrillic = bool(CYRILLIC_RE.search(part))
+        if cyrillic and re.search(r"[A-Za-z0-9]", part):
+            return False
+        if CYR_ABBR_RE.match(part) and part not in ABBR_WHITELIST:
+            return False
+    return True
 
 
 def latin_ok(word: str, term_en: str) -> bool:
@@ -97,7 +115,8 @@ def translate_one(term_en: str, quote: str | None, term_ru: str | None, llm: Cal
     path = cache_path(term_en)
     if use_cache and path.exists():
         cached = json.loads(path.read_text(encoding="utf-8"))["answer"]
-        return {**cached, "name_ru": capitalized(cached["name_ru"]), "attempts": 0}
+        if passes(cached["name_ru"], term_en):  # кэш прежних проверок: не прошедшее новые переводится заново
+            return {**cached, "name_ru": capitalized(cached["name_ru"]), "attempts": 0}
     prompt = PROMPT.format(term_en=term_en, quote=(quote or "").strip())
     for attempt, temperature in enumerate(TEMPERATURES, start=1):
         answer = llm(prompt, term_en, purpose="translate-name", temperature=temperature, json_object=False,

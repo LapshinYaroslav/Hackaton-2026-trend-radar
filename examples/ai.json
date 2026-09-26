@@ -1,0 +1,4678 @@
+{
+  "query_id": "q20260927000749",
+  "topic": "технологии в ИИ",
+  "area": "Инфраструктура ИИ",
+  "model_version": "s2a2-v1",
+  "threshold": 0.4,
+  "cutoff_date": "2026-09-01",
+  "subqueries": [
+    {
+      "subquery_id": "q20260927000749-ru-1",
+      "language": "ru",
+      "text": "генеративные модели ИИ"
+    },
+    {
+      "subquery_id": "q20260927000749-ru-2",
+      "language": "ru",
+      "text": "ИИ для научных исследований"
+    },
+    {
+      "subquery_id": "q20260927000749-ru-3",
+      "language": "ru",
+      "text": "ИИ в медицинских диагнозах"
+    },
+    {
+      "subquery_id": "q20260927000749-ru-4",
+      "language": "ru",
+      "text": "ИИ в автономных системах"
+    },
+    {
+      "subquery_id": "q20260927000749-en-1",
+      "language": "en",
+      "text": "multimodal ai systems"
+    },
+    {
+      "subquery_id": "q20260927000749-en-2",
+      "language": "en",
+      "text": "causal inference in ai"
+    },
+    {
+      "subquery_id": "q20260927000749-en-3",
+      "language": "en",
+      "text": "bioinformatics ai applications"
+    },
+    {
+      "subquery_id": "q20260927000749-en-4",
+      "language": "en",
+      "text": "ai explainability techniques"
+    },
+    {
+      "subquery_id": "q20260927000749-en-5",
+      "language": "en",
+      "text": "ai-driven drug discovery"
+    },
+    {
+      "subquery_id": "q20260927000749-en-6",
+      "language": "en",
+      "text": "ai in autonomous vehicles"
+    },
+    {
+      "subquery_id": "q20260927000749-en-7",
+      "language": "en",
+      "text": "ai for climate modeling"
+    },
+    {
+      "subquery_id": "q20260927000749-en-8",
+      "language": "en",
+      "text": "ai-powered cybersecurity"
+    }
+  ],
+  "candidate_sources": null,
+  "extract_version": "v2",
+  "extract_model": "yandexgpt-5-pro",
+  "naming_mode": "direct",
+  "candidates_version": "v3",
+  "stats": {
+    "documents_by_source": {
+      "openalex": 183,
+      "arxiv": 89,
+      "techcrunch": 82,
+      "openalex_ru": 69
+    },
+    "documents_for_candidates_by_source": {
+      "openalex": 171,
+      "arxiv": 89,
+      "techcrunch": 82,
+      "openalex_ru": 0
+    },
+    "documents_total": 423,
+    "documents_for_candidates": 342,
+    "candidates_found": 122,
+    "candidates_named": 108,
+    "candidates_scored": 60,
+    "above_threshold": 52,
+    "above_075": 30,
+    "rospatent_enabled": true,
+    "rospatent_failures": 0,
+    "translation": {
+      "переведено": 54,
+      "из кэша": 52,
+      "с первого раза": 0,
+      "с повтором": 0,
+      "откат на term_ru": 2,
+      "без названия": 0
+    }
+  },
+  "normalizer_deviations": [
+    "company_stoplist_off"
+  ],
+  "top": [
+    {
+      "rank": 1,
+      "name_ru": "RAG-система («система генерации, дополненная извлечением»)",
+      "name_en": "retrieval-augmented generation system",
+      "score": 0.9592502916511704,
+      "explanation_ru": [
+        "Упоминания свежие: 95% за последние два года",
+        "Молодой термин: первый препринт 3 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.4815536775865479,
+        "growth_research": 0.011947432049850245,
+        "recency": 2.4139851316616943,
+        "share_news_wordmatch": -0.9956486129707511,
+        "share_prev6": 0.13958460657799918,
+        "age_first_arxiv": 0.7260322290405986
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 15,
+          "openalex": 11,
+          "techcrunch": 17
+        },
+        "2024": {
+          "arxiv": 48,
+          "openalex": 161,
+          "techcrunch": 9
+        },
+        "2025": {
+          "arxiv": 76,
+          "openalex": 516,
+          "techcrunch": 4
+        }
+      },
+      "name_raw": "retrieval-augmented generation system",
+      "name_variants": [
+        {
+          "name": "retrieval-augmented generation system",
+          "n_works": 692,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 692,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "synthesizing a structured Retrieval-Augmented Generation (RAG) system",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Integrated Multimodal AI System for Retrieval-Augmented Reasoning, Object Sensing, and Damage Analysis",
+          "url": "http://arxiv.org/abs/2608.08935v1",
+          "published_at": "2026-08-09",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Synthesizing the Expert: A Validated Multimodal Dataset for Trustworthy AI-Assisted Swimming Coaching",
+          "url": "http://arxiv.org/abs/2605.12799v1",
+          "published_at": "2026-05-12",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 2,
+      "name_ru": "Гибридные AI-климатические модели",
+      "name_en": "hybrid AI-climate model",
+      "score": 0.9530934779837977,
+      "explanation_ru": [
+        "Упоминания свежие: 91% за последние два года",
+        "Молодой термин: первый препринт 2 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.4815536775865479,
+        "growth_research": 0.0025315188161848445,
+        "recency": 2.2388096634451924,
+        "share_news_wordmatch": -1.1186067923113083,
+        "share_prev6": 0.13958460657799918,
+        "age_first_arxiv": 0.8864346982472425
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 1,
+          "openalex": 2,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 6,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "hybrid AI-climate model",
+      "name_variants": [
+        {
+          "name": "hybrid ai-climate model",
+          "n_works": 9,
+          "n_institutions": 33,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 9,
+      "n_institutions": 33,
+      "n_institutions_capped": false,
+      "quote": "hybrid (physics + ML) ESMs",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Beyond the Training Data: Confidence‐Guided Mixing of Parameterizations in a Hybrid AI‐Climate Model",
+          "url": "https://doi.org/10.1029/2025ms005544",
+          "published_at": "2026-05-01",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 3,
+      "name_ru": "ИИ для моделирования климата",
+      "name_en": "AI for climate modeling",
+      "score": 0.9472804049616019,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 224",
+        "Молодой термин: первый препринт 3 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.4815536775865479,
+        "growth_research": 0.0041403158105219095,
+        "recency": -0.105200271783195,
+        "share_news_wordmatch": 1.3244776479706821,
+        "share_prev6": 0.0763554534532287,
+        "age_first_arxiv": 0.7260322290405986
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 87
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 76
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 81
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 8,
+          "techcrunch": 127
+        },
+        "2023": {
+          "arxiv": 2,
+          "openalex": 20,
+          "techcrunch": 100
+        },
+        "2024": {
+          "arxiv": 2,
+          "openalex": 82,
+          "techcrunch": 82
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 104,
+          "techcrunch": 38
+        }
+      },
+      "name_raw": "AI for climate modeling",
+      "name_variants": [
+        {
+          "name": "ai for climate modeling",
+          "n_works": 220,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 220,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI for Climate Modeling",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "New Insights into AI for Climate Modeling and Historical Context: A State-of-the-Art Review",
+          "url": "https://doi.org/10.5281/zenodo.22173079",
+          "published_at": "2026-08-30",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [
+        {
+          "term_en": "AI-driven climate modelling",
+          "score": 0.9451334169508769
+        },
+        {
+          "term_en": "AI-enhanced climate modelling",
+          "score": 0.8923860474748073
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 4,
+      "name_ru": "Мультимодальная ИИ-система",
+      "name_en": "multimodal AI system",
+      "score": 0.9392417515834337,
+      "explanation_ru": [
+        "Упоминания свежие: 84% за последние два года",
+        "Молодой термин: первый препринт 4 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.4815536775865479,
+        "growth_research": 0.007686824001186231,
+        "recency": 1.9058529863256086,
+        "share_news_wordmatch": -0.739907366275344,
+        "share_prev6": 0.13610528497262797,
+        "age_first_arxiv": 0.5656297598339547
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 6
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 6,
+          "techcrunch": 7
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 27,
+          "techcrunch": 13
+        },
+        "2022": {
+          "arxiv": 2,
+          "openalex": 41,
+          "techcrunch": 18
+        },
+        "2023": {
+          "arxiv": 14,
+          "openalex": 63,
+          "techcrunch": 43
+        },
+        "2024": {
+          "arxiv": 38,
+          "openalex": 301,
+          "techcrunch": 41
+        },
+        "2025": {
+          "arxiv": 31,
+          "openalex": 783,
+          "techcrunch": 35
+        }
+      },
+      "name_raw": "multimodal AI system",
+      "name_variants": [
+        {
+          "name": "multimodal ai system",
+          "n_works": 1221,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1221,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "a Clinically Integrated Multimodal AI System",
+      "n_docs": 4,
+      "n_sources": 2,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "The Multimodal Anonymizer: a fully local multi-agent AI system for medical data deidentification",
+          "url": "https://doi.org/10.64898/2026.05.28.26353952",
+          "published_at": "2026-06-05",
+          "source": "openalex",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Multimodal AI System for Early Detection of Neuro-Respiratory Irregularities",
+          "url": "https://doi.org/10.25258/ijddt.16.34s.4",
+          "published_at": "2026-05-29",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        },
+        {
+          "title": "Digital Harf: A Clinically Integrated Multimodal AI System for Pervasive Arabic Speech and Language Therapy",
+          "url": "http://arxiv.org/abs/2607.27212v1",
+          "published_at": "2026-05-18",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Ethical issues in multi-agent AI systems for healthcare: a narrative review",
+          "url": "https://doi.org/10.3389/fpubh.2026.1792627",
+          "published_at": "2026-04-28",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 5,
+      "name_ru": "Многомодальные большие языковые модели",
+      "name_en": "multimodal large language models",
+      "score": 0.9381844634552247,
+      "explanation_ru": [
+        "Упоминания свежие: 91% за последние два года",
+        "Молодой термин: первый препринт 4 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.48068420978327286,
+        "growth_research": 0.006370857808900384,
+        "recency": 2.2301912004032807,
+        "share_news_wordmatch": -1.0837473755321898,
+        "share_prev6": 0.13941431359701476,
+        "age_first_arxiv": 0.5656297598339547
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 1
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 2
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 4
+        },
+        "2022": {
+          "arxiv": 32,
+          "openalex": 15,
+          "techcrunch": 17
+        },
+        "2023": {
+          "arxiv": 565,
+          "openalex": 253,
+          "techcrunch": 39
+        },
+        "2024": {
+          "arxiv": 1673,
+          "openalex": 1255,
+          "techcrunch": 20
+        },
+        "2025": {
+          "arxiv": 2733,
+          "openalex": 3395,
+          "techcrunch": 17
+        }
+      },
+      "name_raw": "multimodal large language models",
+      "name_variants": [
+        {
+          "name": "multimodal large language models",
+          "n_works": 4920,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4920,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Multimodal Large Language Models (MLLMs)",
+      "n_docs": 7,
+      "n_sources": 2,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Deploying DeepSeek 175B Locally on a Single Consumer-Grade RTX 4060 Laptop with 32GB RAM for 200k-Scale Protein-Ligand Virtual Screening",
+          "url": "http://arxiv.org/abs/2608.30877v1",
+          "published_at": "2026-08-31",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "The Emergence of Autonomous Penetration Capabilities in Large Language Model-Powered AI Systems",
+          "url": "http://arxiv.org/abs/2606.13079v2",
+          "published_at": "2026-06-11",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "The Multimodal Anonymizer: a fully local multi-agent AI system for medical data deidentification",
+          "url": "https://doi.org/10.64898/2026.05.28.26353952",
+          "published_at": "2026-06-05",
+          "source": "openalex",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Usable XAI: 10 Strategies Towards Exploiting Explainability in the LLM Era",
+          "url": "https://doi.org/10.1145/3816150",
+          "published_at": "2026-05-26",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        },
+        {
+          "title": "Understanding Secret Leakage Risks in Code LLMs: A Tokenization Perspective",
+          "url": "http://arxiv.org/abs/2604.17814v1",
+          "published_at": "2026-04-20",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 4,
+      "share_patent": 0.0004029414727510829,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 6,
+      "name_ru": "Кибербезопасность на основе ИИ",
+      "name_en": "AI-powered cybersecurity",
+      "score": 0.9272207551916497,
+      "explanation_ru": [
+        "Упоминания свежие: 70% за последние два года",
+        "Молодой термин: первый препринт 2 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.4815536775865479,
+        "growth_research": 0.0021855137788143204,
+        "recency": 1.2253729913422668,
+        "share_news_wordmatch": -0.5569134069638919,
+        "share_prev6": 0.1248785001770694,
+        "age_first_arxiv": 0.8864346982472425
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 5,
+          "techcrunch": 18
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 9,
+          "techcrunch": 14
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 18,
+          "techcrunch": 15
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 39,
+          "techcrunch": 27
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 100,
+          "techcrunch": 39
+        },
+        "2024": {
+          "arxiv": 1,
+          "openalex": 259,
+          "techcrunch": 21
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 302,
+          "techcrunch": 22
+        }
+      },
+      "name_raw": "AI-powered cybersecurity",
+      "name_variants": [
+        {
+          "name": "ai-powered cybersecurity",
+          "n_works": 727,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 727,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "The rapid advancements in Artificial Intelligence (AI) have revolutionized cybersecurity operations",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "AI-Powered Cybersecurity",
+          "url": "https://doi.org/10.4018/979-8-3373-2922-2.ch003",
+          "published_at": "2026-04-10",
+          "source": "openalex",
+          "source_type": "report",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [
+        {
+          "term_en": "AI in cybersecurity",
+          "score": 0.7886953000020543
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 7,
+      "name_ru": "Агентивное кодирование",
+      "name_en": "agentic coding",
+      "score": 0.9270204031760256,
+      "explanation_ru": [
+        "Упоминания свежие: 72% за последние два года",
+        "Про технологию пока мало научных публикаций: 961"
+      ],
+      "contributions": {
+        "share_patent": 0.4815536775865479,
+        "growth_research": 0.007447561215983142,
+        "recency": 1.336818328273467,
+        "share_news_wordmatch": 0.5438798249123199,
+        "share_prev6": 0.027229976268391548,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 4,
+          "openalex": 237,
+          "techcrunch": 206
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 55,
+          "techcrunch": 56
+        },
+        "2021": {
+          "arxiv": 2,
+          "openalex": 55,
+          "techcrunch": 56
+        },
+        "2022": {
+          "arxiv": 2,
+          "openalex": 53,
+          "techcrunch": 74
+        },
+        "2023": {
+          "arxiv": 10,
+          "openalex": 53,
+          "techcrunch": 89
+        },
+        "2024": {
+          "arxiv": 38,
+          "openalex": 80,
+          "techcrunch": 209
+        },
+        "2025": {
+          "arxiv": 243,
+          "openalex": 370,
+          "techcrunch": 372
+        }
+      },
+      "name_raw": "agentic coding",
+      "name_variants": [
+        {
+          "name": "agentic coding",
+          "n_works": 666,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 666,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "multimodal AI model designed for agentic coding",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Meta enters the crowded AI coding battle with Muse Spark 1.1",
+          "url": "https://techcrunch.com/2026/07/09/meta-enters-the-crowded-ai-coding-battle-with-muse-spark-1-1/",
+          "published_at": "2026-07-09",
+          "source": "techcrunch",
+          "source_type": "news",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 8,
+      "name_ru": "Атака джейлбрейк",
+      "name_en": "jailbreak attack",
+      "score": 0.9192933884813953,
+      "explanation_ru": [
+        "Упоминания свежие: 84% за последние два года",
+        "Молодой термин: первый препринт 4 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.4694892909687808,
+        "growth_research": 0.0037801141082232457,
+        "recency": 1.920126180840364,
+        "share_news_wordmatch": -1.0382786191047577,
+        "share_prev6": 0.13078920660701102,
+        "age_first_arxiv": 0.5656297598339547
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 19
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2022": {
+          "arxiv": 3,
+          "openalex": 5,
+          "techcrunch": 6
+        },
+        "2023": {
+          "arxiv": 154,
+          "openalex": 19,
+          "techcrunch": 7
+        },
+        "2024": {
+          "arxiv": 321,
+          "openalex": 119,
+          "techcrunch": 5
+        },
+        "2025": {
+          "arxiv": 344,
+          "openalex": 280,
+          "techcrunch": 5
+        }
+      },
+      "name_raw": "jailbreak attack",
+      "name_variants": [
+        {
+          "name": "jailbreak attack",
+          "n_works": 423,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 423,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "PAST2HARM: A Simple Adaptive Past Tense Attack for Jailbreaking Multimodal AI",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "PAST2HARM: A Simple Adaptive Past Tense Attack for Jailbreaking Multimodal AI",
+          "url": "http://arxiv.org/abs/2605.27545v1",
+          "published_at": "2026-05-26",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 7,
+      "share_patent": 0.005591054313099041,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 9,
+      "name_ru": "Глубокий нейронный трансформер",
+      "name_en": "deep neural transformer",
+      "score": 0.916598485548629,
+      "explanation_ru": [
+        "Молодой термин: первый препринт 2 лет назад",
+        "Про технологию пока мало научных публикаций: 38"
+      ],
+      "contributions": {
+        "share_patent": 0.37366359154765927,
+        "growth_research": 0.004793613149463493,
+        "recency": 0.23276036044693504,
+        "share_news_wordmatch": 0.5733314425871783,
+        "share_prev6": -0.055229540887509906,
+        "age_first_arxiv": 0.8864346982472425
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 38
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 7
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 6
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 10
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 7
+        },
+        "2024": {
+          "arxiv": 1,
+          "openalex": 3,
+          "techcrunch": 2
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 27,
+          "techcrunch": 3
+        }
+      },
+      "name_raw": "deep neural transformer",
+      "name_variants": [
+        {
+          "name": "deep neural transformer",
+          "n_works": 37,
+          "n_institutions": 103,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 37,
+      "n_institutions": 103,
+      "n_institutions_capped": false,
+      "quote": "hybrid deep neural transformer system",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Multi-class classification of plant leaf diseases using a hybrid deep neural transformer system and explainable AI techniques",
+          "url": "https://doi.org/10.1038/s41598-026-48103-3",
+          "published_at": "2026-04-19",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 2,
+      "share_patent": 0.05,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 10,
+      "name_ru": "Дрейфо-адаптивное обнаружение",
+      "name_en": "drift-adaptive detection",
+      "score": 0.9110760820692062,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 3 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.4815536775865479,
+        "growth_research": 0.0021899019450649687,
+        "recency": 2.677257564998704,
+        "share_news_wordmatch": -1.1186067923113083,
+        "share_prev6": 0.13958460657799918,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "drift-adaptive detection",
+      "name_variants": [
+        {
+          "name": "drift-adaptive detection",
+          "n_works": 3,
+          "n_institutions": 4,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3,
+      "n_institutions": 4,
+      "n_institutions_capped": false,
+      "quote": "a novel NIDS for drift-adaptive detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Navigating the Latent Manifold: Proactive Concept Drift Adaptation for Resilient NIDS",
+          "url": "http://arxiv.org/abs/2609.08623v1",
+          "published_at": "2026-09-08",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 11,
+      "name_ru": "Бисимметрическое взвешенное расстояние",
+      "name_en": "bi-symmetrical weighted distance",
+      "score": 0.9109389529993387,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 1 публикацию"
+      ],
+      "contributions": {
+        "share_patent": 0.4815536775865479,
+        "growth_research": 0.0004984707883341054,
+        "recency": 2.677257564998704,
+        "share_news_wordmatch": -1.1186067923113083,
+        "share_prev6": 0.13958460657799918,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "bi-symmetrical weighted distance",
+      "name_variants": [
+        {
+          "name": "bi-symmetrical weighted distance",
+          "n_works": 1,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "Bi-symmetrical Weighted Distance (BWD) optimization framework",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Building multi-objective multimodal AI system by bi-symmetrical weighted distance project management",
+          "url": "https://doi.org/10.1080/17517575.2026.2664465",
+          "published_at": "2026-05-06",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 12,
+      "name_ru": "Авторегрессионное 3D-моделирование молекул",
+      "name_en": "autoregressive 3D molecular generation",
+      "score": 0.9107009564494274,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 1 публикацию"
+      ],
+      "contributions": {
+        "share_patent": 0.4815536775865479,
+        "growth_research": -0.0024315497937811596,
+        "recency": 2.677257564998704,
+        "share_news_wordmatch": -1.1186067923113083,
+        "share_prev6": 0.13958460657799918,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "autoregressive 3D molecular generation",
+      "name_variants": [
+        {
+          "name": "autoregressive 3d molecular generation",
+          "n_works": 1,
+          "n_institutions": 2,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 2,
+      "n_institutions_capped": false,
+      "quote": "autoregressive NEAT model for 3D molecular generation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "NEAT-POCKET: Pocket-Conditioned Autoregressive 3D Molecular Generation with a Neighborhood-Guided Set Transformer",
+          "url": "http://arxiv.org/abs/2609.05097v1",
+          "published_at": "2026-09-04",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 13,
+      "name_ru": "Физический искусственный интеллект",
+      "name_en": "physical AI",
+      "score": 0.8993841012772328,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 840",
+        "Упоминания свежие: 59% за последние два года"
+      ],
+      "contributions": {
+        "share_patent": -0.4915725886465651,
+        "growth_research": 0.009974399571676604,
+        "recency": 0.7174912909309732,
+        "share_news_wordmatch": 1.1397075336130214,
+        "share_prev6": 0.028323100234653033,
+        "age_first_arxiv": 0.40522729062731083
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 12,
+          "techcrunch": 555
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 14,
+          "techcrunch": 184
+        },
+        "2021": {
+          "arxiv": 2,
+          "openalex": 6,
+          "techcrunch": 187
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 17,
+          "techcrunch": 225
+        },
+        "2023": {
+          "arxiv": 3,
+          "openalex": 30,
+          "techcrunch": 280
+        },
+        "2024": {
+          "arxiv": 23,
+          "openalex": 84,
+          "techcrunch": 270
+        },
+        "2025": {
+          "arxiv": 132,
+          "openalex": 529,
+          "techcrunch": 347
+        }
+      },
+      "name_raw": "physical AI",
+      "name_variants": [
+        {
+          "name": "physical ai",
+          "n_works": 680,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 680,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Clinical Pathways as Safety Specifications for Physical AI",
+      "n_docs": 3,
+      "n_sources": 3,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Robot brain builders are pushing out of their GPT-2 era",
+          "url": "https://techcrunch.com/2026/08/26/robot-brain-builders-are-pushing-out-of-their-gpt-2-era/",
+          "published_at": "2026-08-26",
+          "source": "techcrunch",
+          "source_type": "news",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Clinical Pathways as Safety Specifications for Physical AI in Hospital Wards",
+          "url": "http://arxiv.org/abs/2607.19827v1",
+          "published_at": "2026-07-22",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Aligning Perception, Reasoning, Modeling and Interaction: A Survey on Physical AI",
+          "url": "https://doi.org/10.1109/tpami.2026.3703038",
+          "published_at": "2026-06-12",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 690,
+      "share_patent": 0.45098039215686275,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 14,
+      "name_ru": "Персональный ассистент на основе ИИ",
+      "name_en": "AI personal assistant",
+      "score": 0.8915190820380497,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 160",
+        "Патентов мало относительно научных работ: 41 патент на 160 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.04140506787565904,
+        "growth_research": -0.0007961404507783873,
+        "recency": -0.057500994581219496,
+        "share_news_wordmatch": 1.9966490283657272,
+        "share_prev6": -0.018270706358166865,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 1,
+          "openalex": 29,
+          "techcrunch": 494
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 114
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 5,
+          "techcrunch": 125
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 21,
+          "techcrunch": 206
+        },
+        "2023": {
+          "arxiv": 2,
+          "openalex": 28,
+          "techcrunch": 270
+        },
+        "2024": {
+          "arxiv": 3,
+          "openalex": 54,
+          "techcrunch": 241
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 43,
+          "techcrunch": 249
+        }
+      },
+      "name_raw": "AI personal assistant",
+      "name_variants": [
+        {
+          "name": "ai personal assistant",
+          "n_works": 154,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 154,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "an AI personal assistant",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Hark raises $700M Series A for its secretive &#8216;universal&#8217; AI interface",
+          "url": "https://techcrunch.com/2026/05/21/hark-raises-700m-series-a-for-its-secretive-universal-ai-interface/",
+          "published_at": "2026-05-21",
+          "source": "techcrunch",
+          "source_type": "news",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [
+        {
+          "term_en": "AI assistant",
+          "score": 0.8175503415769028
+        }
+      ],
+      "n_pat": 41,
+      "share_patent": 0.20398009950248755,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 15,
+      "name_ru": "Генеративный искусственный интеллект",
+      "name_en": "generative AI",
+      "score": 0.8802308635982995,
+      "explanation_ru": [
+        "Упоминания свежие: 91% за последние два года",
+        "Патентов мало относительно научных работ: 574 патента на 286 935 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.47724571440026,
+        "growth_research": 0.007502917569335814,
+        "recency": 2.2490195649440143,
+        "share_news_wordmatch": -1.0203858489868536,
+        "share_prev6": 0.13636954323095812,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 27,
+          "openalex": 149,
+          "techcrunch": 1501
+        },
+        "2020": {
+          "arxiv": 26,
+          "openalex": 122,
+          "techcrunch": 540
+        },
+        "2021": {
+          "arxiv": 35,
+          "openalex": 334,
+          "techcrunch": 612
+        },
+        "2022": {
+          "arxiv": 348,
+          "openalex": 2517,
+          "techcrunch": 1619
+        },
+        "2023": {
+          "arxiv": 1328,
+          "openalex": 16591,
+          "techcrunch": 2135
+        },
+        "2024": {
+          "arxiv": 2080,
+          "openalex": 77297,
+          "techcrunch": 1792
+        },
+        "2025": {
+          "arxiv": 2334,
+          "openalex": 183923,
+          "techcrunch": 1517
+        }
+      },
+      "name_raw": "generative AI",
+      "name_variants": [
+        {
+          "name": "generative ai",
+          "n_works": 280784,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 280784,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Generative AI",
+      "n_docs": 3,
+      "n_sources": 2,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "The Holomorphic Architecture: Rotation as Computation --- A Generative AI Foundational Framework",
+          "url": "https://doi.org/10.5281/zenodo.20716188",
+          "published_at": "2026-06-16",
+          "source": "openalex",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Integration of AI in Cybersecurity: Current Trends with a Focused Look at Intrusion Detection Applications",
+          "url": "http://arxiv.org/abs/2605.17219v1",
+          "published_at": "2026-05-17",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Evaluating General-Purpose AI with Psychometrics",
+          "url": "https://doi.org/10.1145/3769688",
+          "published_at": "2026-04-14",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 574,
+      "share_patent": 0.0019964592412759254,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    }
+  ],
+  "excluded": [
+    {
+      "name_ru": "многомодальный интеллект с ограничением предвзятости",
+      "name_en": "bias-constrained multimodal intelligence",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "bias-constrained multimodal intelligence",
+      "name_variants": [
+        {
+          "name": "bias-constrained multimodal intelligence",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Bias-constrained multimodal intelligence for equitable and reliable clinical AI",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "исследовательский структурный дизайн",
+      "name_en": "exploratory structural design",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "exploratory structural design",
+      "name_variants": [
+        {
+          "name": "exploratory structural design",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Exploratory Structural Design",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "управляемая сквозная исследовательская система",
+      "name_en": "governed end-to-end research system",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "governed end-to-end research system",
+      "name_variants": [
+        {
+          "name": "governed end-to-end research system",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "governed end-to-end research system",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "разговорный агент с расширенной памятью",
+      "name_en": "memory-augmented conversational agent",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "memory-augmented conversational agent",
+      "name_variants": [
+        {
+          "name": "memory-augmented conversational agent",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "memory-augmented conversational agent",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "многомодальная рабочая среда",
+      "name_en": "multimodal workbench",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "multimodal workbench",
+      "name_variants": [
+        {
+          "name": "multimodal workbench",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "SciForge: An AI-Native, Multimodal Workbench for Scientific Discovery",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "нейронные функции множеств",
+      "name_en": "neural set functions",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "neural set functions",
+      "name_variants": [
+        {
+          "name": "neural set functions",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "neural set functions",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "собственно квантовая функция оценки",
+      "name_en": "quantum-native scoring function",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "quantum-native scoring function",
+      "name_variants": [
+        {
+          "name": "quantum-native scoring function",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Quantum-Native Scoring Function",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "стеганографическое присвоение авторства",
+      "name_en": "steganographic attribution",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "steganographic attribution",
+      "name_variants": [
+        {
+          "name": "steganographic attribution",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Steganographic Attribution and Multimodal Harm Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "унифицированное рассуждение по видеопотоку",
+      "name_en": "unified traffic video reasoning",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "unified traffic video reasoning",
+      "name_variants": [
+        {
+          "name": "unified traffic video reasoning",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "UniTraffic-Agent: Unified Traffic Video Reasoning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "объемная радиология с ИИ",
+      "name_en": "volumetric radiology AI",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "volumetric radiology AI",
+      "name_variants": [
+        {
+          "name": "volumetric radiology ai",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Volumetric Radiology AI in the Era of Multimodal Large Language Models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "ответы на вопросы по графам знаний",
+      "name_en": "knowledge graph question answering",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "knowledge graph question answering",
+      "name_variants": [
+        {
+          "name": "knowledge graph question answering",
+          "n_works": 396,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 396,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Multimodal Knowledge Graph Question Answering",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "RAG с расширенным знанием графа",
+      "name_en": "knowledge graph-enhanced RAG",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "knowledge graph-enhanced RAG",
+      "name_variants": [
+        {
+          "name": "knowledge graph-enhanced rag",
+          "n_works": 74,
+          "n_institutions": 140,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 74,
+      "n_institutions": 140,
+      "n_institutions_capped": false,
+      "quote": "Knowledge Graph-enhanced Retrieval-Augmented Generation (KG-RAG)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "лазерная искровая спектроскопия",
+      "name_en": "laser-induced breakdown spectroscopy",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "laser-induced breakdown spectroscopy",
+      "name_variants": [
+        {
+          "name": "laser-induced breakdown spectroscopy",
+          "n_works": 8266,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8266,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Laser-Induced Breakdown Spectroscopy (LIBS)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обнаружение аномалий с помощью машинного обучения",
+      "name_en": "machine learning anomaly detection",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "machine learning anomaly detection",
+      "name_variants": [
+        {
+          "name": "machine learning anomaly detection",
+          "n_works": 698,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 698,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Machine learning (ML) methods for network anomaly detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "медицинские ИИ-агенты",
+      "name_en": "medical AI agents",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "medical AI agents",
+      "name_variants": [
+        {
+          "name": "medical ai agents",
+          "n_works": 35,
+          "n_institutions": 102,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 35,
+      "n_institutions": 102,
+      "n_institutions_capped": false,
+      "quote": "Medical AI Agents",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "модели микроклимата",
+      "name_en": "microclimate models",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "microclimate models",
+      "name_variants": [
+        {
+          "name": "microclimate models",
+          "n_works": 1613,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1613,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "microclimate models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "система смешанной реальности",
+      "name_en": "mixed-reality system",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "mixed-reality system",
+      "name_variants": [
+        {
+          "name": "mixed-reality system",
+          "n_works": 1079,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1079,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "a mixed-reality system where users author stories",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "молекулярный биосенсор",
+      "name_en": "molecular biosensor",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "molecular biosensor",
+      "name_variants": [
+        {
+          "name": "molecular biosensor",
+          "n_works": 318,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 318,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-Assisted Molecular Biosensors",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "молекулярная стыковка",
+      "name_en": "molecular docking",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "molecular docking",
+      "name_variants": [
+        {
+          "name": "molecular docking",
+          "n_works": 171654,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 171654,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Open-Source Molecular Docking",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "молекулярная базовая модель",
+      "name_en": "molecular foundation model",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "molecular foundation model",
+      "name_variants": [
+        {
+          "name": "molecular foundation model",
+          "n_works": 89,
+          "n_institutions": 184,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 89,
+      "n_institutions": 184,
+      "n_institutions_capped": false,
+      "quote": "molecular foundation models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "многоагентные дебаты",
+      "name_en": "multi-agent debate",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multi-agent debate",
+      "name_variants": [
+        {
+          "name": "multi-agent debate",
+          "n_works": 382,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 382,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "multi-agent debate",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "мультимодальный ИИ-агент",
+      "name_en": "multimodal AI agent",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multimodal AI agent",
+      "name_variants": [
+        {
+          "name": "multimodal ai agent",
+          "n_works": 81,
+          "n_institutions": 176,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 81,
+      "n_institutions": 176,
+      "n_institutions_capped": false,
+      "quote": "development and validation of a multimodal AI-agent system",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "мультимодальная модель ИИ",
+      "name_en": "multimodal AI model",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multimodal AI model",
+      "name_variants": [
+        {
+          "name": "multimodal ai model",
+          "n_works": 941,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 941,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "a multimodal AI model designed for agentic coding",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "многомодальное понимание",
+      "name_en": "multimodal comprehension",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multimodal comprehension",
+      "name_variants": [
+        {
+          "name": "multimodal comprehension",
+          "n_works": 191,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 191,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "A Pathway to General-Purpose Scientific AI: Multimodal Comprehension of Scientific Images",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "мультимодальный генеративный ИИ",
+      "name_en": "multimodal generative AI",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multimodal generative AI",
+      "name_variants": [
+        {
+          "name": "multimodal generative ai",
+          "n_works": 728,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 728,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "GUEST EDITORIAL SPECIAL ISSUE ON MULTIMODAL GENERATIVE AI",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "мультимодальная система восприятия",
+      "name_en": "multimodal perception system",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multimodal perception system",
+      "name_variants": [
+        {
+          "name": "multimodal perception system",
+          "n_works": 142,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 142,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "helping build multimodal perception systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "мультимодальные рекомендательные системы",
+      "name_en": "multimodal recommender systems",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multimodal recommender systems",
+      "name_variants": [
+        {
+          "name": "multimodal recommender systems",
+          "n_works": 176,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 176,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Comprehensive Survey on Multimodal Recommender Systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "мультимодальная идентификация говорящего",
+      "name_en": "multimodal speaker identification",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multimodal speaker identification",
+      "name_variants": [
+        {
+          "name": "multimodal speaker identification",
+          "n_works": 4,
+          "n_institutions": 6,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4,
+      "n_institutions": 6,
+      "n_institutions_capped": false,
+      "quote": "Multimodal Speaker Identification in Classroom Environments",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "мультифизическое моделирование",
+      "name_en": "multiphysical simulation",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multiphysical simulation",
+      "name_variants": [
+        {
+          "name": "multiphysical simulation",
+          "n_works": 7082,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7082,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "combining explainable AI and multiphysical simulation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "модель генерации музыки",
+      "name_en": "music-generation model",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "music-generation model",
+      "name_variants": [
+        {
+          "name": "music-generation model",
+          "n_works": 292,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 292,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "the music-generation model Lyria 3",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обработка естественного языка",
+      "name_en": "natural language processing",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "natural language processing",
+      "name_variants": [
+        {
+          "name": "natural language processing",
+          "n_works": 227187,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 227187,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Natural Language Processing",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "система обнаружения сетевых вторжений",
+      "name_en": "network intrusion detection system",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "network intrusion detection system",
+      "name_variants": [
+        {
+          "name": "network intrusion detection system",
+          "n_works": 10133,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10133,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Network intrusion detection systems (NIDS)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "методология нового подхода",
+      "name_en": "new approach methodology",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "new approach methodology",
+      "name_variants": [
+        {
+          "name": "new approach methodology",
+          "n_works": 3723,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3723,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "new approach methodologies (NAMs)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "автономная мультимодальная система ИИ",
+      "name_en": "offline multimodal AI system",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "offline multimodal AI system",
+      "name_variants": [
+        {
+          "name": "offline multimodal ai system",
+          "n_works": 1,
+          "n_institutions": 4,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 4,
+      "n_institutions_capped": false,
+      "quote": "fully offline multimodal AI system for privacy-preserving clinical anamnesis",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "оптическая когерентная томография",
+      "name_en": "optical coherence tomography",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "optical coherence tomography",
+      "name_variants": [
+        {
+          "name": "optical coherence tomography",
+          "n_works": 85696,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 85696,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "optical coherence tomography (OCT)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "планирование маршрута",
+      "name_en": "path planning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "path planning",
+      "name_variants": [
+        {
+          "name": "path planning",
+          "n_works": 51395,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 51395,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-driven path planning for autonomous vehicles",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "алгоритмы планирования пути",
+      "name_en": "path planning algorithms",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "path planning algorithms",
+      "name_variants": [
+        {
+          "name": "path planning algorithms",
+          "n_works": 10052,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10052,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-driven path planning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "дизайн белков",
+      "name_en": "protein design",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "protein design",
+      "name_variants": [
+        {
+          "name": "protein design",
+          "n_works": 8730,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8730,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Artificial intelligence-driven protein design",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "предсказание структуры белка",
+      "name_en": "protein structure prediction",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "protein structure prediction",
+      "name_variants": [
+        {
+          "name": "protein structure prediction",
+          "n_works": 28121,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 28121,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-enabled AlphaFold 3",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "квантовые вычисления",
+      "name_en": "quantum computing",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "quantum computing",
+      "name_variants": [
+        {
+          "name": "quantum computing",
+          "n_works": 59143,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 59143,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "The emergence of quantum computing presents a double-edged sword for cybersecurity",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "генерация с дополненным поиском",
+      "name_en": "retrieval augmented generation",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "retrieval augmented generation",
+      "name_variants": [
+        {
+          "name": "retrieval augmented generation",
+          "n_works": 15287,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 15287,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Retrieval Augmented Generation (RAG)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "рабочие процессы научного вычисления",
+      "name_en": "scientific computing workflows",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "scientific computing workflows",
+      "name_variants": [
+        {
+          "name": "scientific computing workflows",
+          "n_works": 32,
+          "n_institutions": 52,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 32,
+      "n_institutions": 52,
+      "n_institutions_capped": false,
+      "quote": "scientific computing workflows",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "система автономного вождения",
+      "name_en": "self-driving system",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "self-driving system",
+      "name_variants": [
+        {
+          "name": "self-driving system",
+          "n_works": 753,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 753,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Waymo’s sixth-generation self-driving system",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "автономный грузовик",
+      "name_en": "self-driving truck",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "self-driving truck",
+      "name_variants": [
+        {
+          "name": "self-driving truck",
+          "n_works": 303,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 303,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "companies developing self-driving trucks",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "семантический поиск",
+      "name_en": "semantic retrieval",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "semantic retrieval",
+      "name_variants": [
+        {
+          "name": "semantic retrieval",
+          "n_works": 3630,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3630,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Developing an Intelligent Job Recommendation System Using Semantic Retrieval",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "семантически аннотированный многомодальный набор данных",
+      "name_en": "semantically annotated multimodal dataset",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "semantically annotated multimodal dataset",
+      "name_variants": [
+        {
+          "name": "semantically annotated multimodal dataset",
+          "n_works": 1,
+          "n_institutions": 2,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 2,
+      "n_institutions_capped": false,
+      "quote": "Semantically Annotated Multimodal Dataset for RF Interpretation and Prediction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "сенсорные технологии",
+      "name_en": "sensor technologies",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "sensor technologies",
+      "name_variants": [
+        {
+          "name": "sensor technologies",
+          "n_works": 51663,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 51663,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "sensing systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "сервис-ориентированные вычисления",
+      "name_en": "service-oriented computing",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "service-oriented computing",
+      "name_variants": [
+        {
+          "name": "service-oriented computing",
+          "n_works": 2998,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2998,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "LLM-powered autonomous and semi-autonomous agents",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "одноклеточные омики",
+      "name_en": "single-cell omics",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "single-cell omics",
+      "name_variants": [
+        {
+          "name": "single-cell omics",
+          "n_works": 6366,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6366,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Single-cell and spatial omics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "пространственное омиксное исследование",
+      "name_en": "spatial omics",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "spatial omics",
+      "name_variants": [
+        {
+          "name": "spatial omics",
+          "n_works": 4746,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4746,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Single-cell and spatial omics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "инструменты перевода речи",
+      "name_en": "speech-to-translation tools",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "speech-to-translation tools",
+      "name_variants": [
+        {
+          "name": "speech-to-translation tools",
+          "n_works": 11,
+          "n_institutions": 20,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 11,
+      "n_institutions": 20,
+      "n_institutions_capped": false,
+      "quote": "speech-to-translation tools for the Pixel 10a",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "поверхностный плазмонный резонанс",
+      "name_en": "surface plasmon resonance",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "surface plasmon resonance",
+      "name_variants": [
+        {
+          "name": "surface plasmon resonance",
+          "n_works": 66113,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 66113,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Surface plasmon resonance (SPR)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "суррогатное моделирование",
+      "name_en": "surrogate modeling",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "surrogate modeling",
+      "name_variants": [
+        {
+          "name": "surrogate modeling",
+          "n_works": 46463,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 46463,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "surrogate modeling",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "трансформерные модели",
+      "name_en": "transformer models",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "transformer models",
+      "name_variants": [
+        {
+          "name": "transformer models",
+          "n_works": 52423,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 52423,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "transformer model",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "виртуальные клеточные модели",
+      "name_en": "virtual cell models",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "virtual cell models",
+      "name_variants": [
+        {
+          "name": "virtual cell models",
+          "n_works": 148,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 148,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "virtual cell models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "модели «зрение–язык–действие»",
+      "name_en": "vision language action model",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "vision language action model",
+      "name_variants": [
+        {
+          "name": "vision language action model",
+          "n_works": 534,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 534,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "vision-language-action (VLA) models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "модель «зрение–язык–действие»",
+      "name_en": "vision-language-action model",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "vision-language-action model",
+      "name_variants": [
+        {
+          "name": "vision-language-action model",
+          "n_works": 534,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 534,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Vision--Language--Action Models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "визуальный вопрос-ответ",
+      "name_en": "visual QA",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "visual QA",
+      "name_variants": [
+        {
+          "name": "visual qa",
+          "n_works": 116,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 116,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "interactive question-answering (QA)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "моделирование климата на основе ИИ",
+      "name_en": "AI-driven climate modelling",
+      "score": 0.9451334169508769,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «AI for climate modeling», — показан вариантом названия",
+      "name_raw": "AI-driven climate modelling",
+      "name_variants": [
+        {
+          "name": "ai-driven climate modelling",
+          "n_works": 85,
+          "n_institutions": 123,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 85,
+      "n_institutions": 123,
+      "n_institutions_capped": false,
+      "quote": "AI-Driven Climate Modelling for Extreme Weather Prediction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "AI for climate modeling",
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "улучшенное моделирование климата на основе ИИ",
+      "name_en": "AI-enhanced climate modelling",
+      "score": 0.8923860474748073,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «AI for climate modeling», — показан вариантом названия",
+      "name_raw": "AI-enhanced climate modelling",
+      "name_variants": [
+        {
+          "name": "ai-enhanced climate modelling",
+          "n_works": 15,
+          "n_institutions": 18,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 15,
+      "n_institutions": 18,
+      "n_institutions_capped": false,
+      "quote": "AI-Enhanced Climate Modeling: Improving Sustainability Forecasting and Economic Decision-Making Under Climate Uncertainty",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "AI for climate modeling",
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Генеративное восстановление",
+      "name_en": "generative restoration",
+      "score": 0.8753354575237594,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "generative restoration",
+      "name_variants": [
+        {
+          "name": "generative restoration",
+          "n_works": 71,
+          "n_institutions": 130,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 71,
+      "n_institutions": 130,
+      "n_institutions_capped": false,
+      "quote": "Generative Restoration for Multimodal De-Identification",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Объяснимые LSTM на основе внимания",
+      "name_en": "explainable attention-based LSTM",
+      "score": 0.8722940188187301,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "explainable attention-based LSTM",
+      "name_variants": [
+        {
+          "name": "explainable attention-based lstm",
+          "n_works": 2,
+          "n_institutions": 4,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 4,
+      "n_institutions_capped": false,
+      "quote": "Explainable Attention-Based LSTM Framework",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Мультимодальное рассуждение",
+      "name_en": "multimodal reasoning",
+      "score": 0.8708157430931514,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "multimodal reasoning",
+      "name_variants": [
+        {
+          "name": "multimodal reasoning",
+          "n_works": 1638,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1638,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "multimodal reasoning",
+      "n_docs": 3,
+      "n_sources": 2,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 15,
+      "share_patent": 0.005357142857142857,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "AI-платформа для разработки и анализа",
+      "name_en": "AI workbench",
+      "score": 0.818249445815254,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "AI workbench",
+      "name_variants": [
+        {
+          "name": "ai workbench",
+          "n_works": 62,
+          "n_institutions": 119,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 62,
+      "n_institutions": 119,
+      "n_institutions_capped": false,
+      "quote": "SciForge, a multimodal research-native AI workbench",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 17,
+      "share_patent": 0.2125,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "ассистент на основе ИИ",
+      "name_en": "AI assistant",
+      "score": 0.8175503415769028,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «AI personal assistant», — показан вариантом названия",
+      "name_raw": "AI assistant",
+      "name_variants": [
+        {
+          "name": "ai assistant",
+          "n_works": 10888,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10888,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "an AI assistant for homeowners",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "AI personal assistant",
+      "variants": [],
+      "n_pat": 1727,
+      "share_patent": 0.11154169088677905,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Взаимодействие человека и ИИ",
+      "name_en": "human-AI interaction",
+      "score": 0.8099881026522345,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "human-AI interaction",
+      "name_variants": [
+        {
+          "name": "human-ai interaction",
+          "n_works": 11573,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 11573,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Human-AI Interaction for Exploratory Structural Design",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 18,
+      "share_patent": 0.0014659174199853407,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Базовые модели",
+      "name_en": "foundation models",
+      "score": 0.8007942021336877,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "foundation models",
+      "name_variants": [
+        {
+          "name": "foundation models",
+          "n_works": 39052,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 39052,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Foundation models (FMs) are catalyzing a transformative shift",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 79,
+      "share_patent": 0.0015259508218887022,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Глубокие нейронные суррогатные модели",
+      "name_en": "deep neural surrogates",
+      "score": 0.8004184036111861,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "deep neural surrogates",
+      "name_variants": [
+        {
+          "name": "deep neural surrogates",
+          "n_works": 14,
+          "n_institutions": 38,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 14,
+      "n_institutions": 38,
+      "n_institutions_capped": false,
+      "quote": "Deep neural surrogates",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Диалоговый искусственный интеллект",
+      "name_en": "conversational AI",
+      "score": 0.7897109875390905,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "conversational AI",
+      "name_variants": [
+        {
+          "name": "conversational ai",
+          "n_works": 16184,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 16184,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Multi-turn Conversational AI from Text to Multimodal Interaction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 894,
+      "share_patent": 0.05023036296213058,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "ИИ в кибербезопасности",
+      "name_en": "AI in cybersecurity",
+      "score": 0.7886953000020543,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «AI-powered cybersecurity», — показан вариантом названия",
+      "name_raw": "AI in cybersecurity",
+      "name_variants": [
+        {
+          "name": "ai in cybersecurity",
+          "n_works": 8156,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8156,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "The rapid advancements in Artificial Intelligence (AI) have revolutionized cybersecurity operations",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "AI-powered cybersecurity",
+      "variants": [],
+      "n_pat": 21,
+      "share_patent": 0.0025396057564397146,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Объяснимость агентных систем",
+      "name_en": "agentic explainability",
+      "score": 0.7781044258029409,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "agentic explainability",
+      "name_variants": [
+        {
+          "name": "agentic explainability",
+          "n_works": 588,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 588,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Agentic Explainability at Scale",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Открытие лекарств с помощью ИИ",
+      "name_en": "AI-driven drug discovery",
+      "score": 0.773891944689586,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "AI-driven drug discovery",
+      "name_variants": [
+        {
+          "name": "ai-driven drug discovery",
+          "n_works": 1284,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1284,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-driven drug discovery platform",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [
+        {
+          "term_en": "drug discovery",
+          "score": 0.2749565671207501
+        }
+      ],
+      "n_pat": 3,
+      "share_patent": 0.0022935779816513763,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Объяснимый искусственный интеллект",
+      "name_en": "explainable AI",
+      "score": 0.764653471092223,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "explainable AI",
+      "name_variants": [
+        {
+          "name": "explainable ai",
+          "n_works": 75745,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 75745,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "A New Technique for AI Explainability using Feature Association Map",
+      "n_docs": 10,
+      "n_sources": 2,
+      "known_training_label": null,
+      "variants": [
+        {
+          "term_en": "explainable artificial intelligence",
+          "score": 0.6873422053777487
+        }
+      ],
+      "n_pat": 602,
+      "share_patent": 0.007644638593996038,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Edge AI — периферийный ИИ",
+      "name_en": "edge AI",
+      "score": 0.7486563962046611,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "edge AI",
+      "name_variants": [
+        {
+          "name": "edge ai",
+          "n_works": 16968,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 16968,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "self-evolving Edge-AI architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 683,
+      "share_patent": 0.03745133519767506,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Технология дипфейк",
+      "name_en": "deepfake technology",
+      "score": 0.7380594425581497,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "deepfake technology",
+      "name_variants": [
+        {
+          "name": "deepfake technology",
+          "n_works": 4153,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4153,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-powered scams and deepfake-based deception",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 55,
+      "share_patent": 0.012725590004627488,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Конформное предсказание",
+      "name_en": "conformal prediction",
+      "score": 0.7137605109824017,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "conformal prediction",
+      "name_variants": [
+        {
+          "name": "conformal prediction",
+          "n_works": 3164,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3164,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "conformal prediction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 46,
+      "share_patent": 0.009801832516513957,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "объяснимый искусственный интеллект",
+      "name_en": "explainable artificial intelligence",
+      "score": 0.6873422053777487,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «explainable AI», — показан вариантом названия",
+      "name_raw": "explainable artificial intelligence",
+      "name_variants": [
+        {
+          "name": "explainable artificial intelligence",
+          "n_works": 44623,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 44623,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Explainable Artificial Intelligence (XAI)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "explainable AI",
+      "variants": [],
+      "n_pat": 447,
+      "share_patent": 0.009634243593335775,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Автономное пентестирование",
+      "name_en": "autonomous penetration",
+      "score": 0.6864864758770183,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "autonomous penetration",
+      "name_variants": [
+        {
+          "name": "autonomous penetration",
+          "n_works": 188,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 188,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "autonomous penetration capabilities",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 8,
+      "share_patent": 0.03619909502262444,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Чипы для искусственного интеллекта",
+      "name_en": "AI chip",
+      "score": 0.6724400949899356,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "AI chip",
+      "name_variants": [
+        {
+          "name": "ai chip",
+          "n_works": 2058,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2058,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "chips for AI companies",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 2086,
+      "share_patent": 0.4977332378907182,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Федеративное обучение",
+      "name_en": "federated learning",
+      "score": 0.6265387075676596,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "federated learning",
+      "name_variants": [
+        {
+          "name": "federated learning",
+          "n_works": 68799,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 68799,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Federated Learning (FL)",
+      "n_docs": 2,
+      "n_sources": 2,
+      "known_training_label": {
+        "id": "s19",
+        "label": "signal"
+      },
+      "variants": [],
+      "n_pat": 4040,
+      "share_patent": 0.04945828487482402,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "AI-агенты (искусственные интеллектуальные агенты)",
+      "name_en": "AI agent",
+      "score": 0.6247138142110298,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "AI agent",
+      "name_variants": [
+        {
+          "name": "ai agent",
+          "n_works": 19088,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 19088,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Gemini 3.5 Flash, a new AI model that the company says is its strongest yet for coding and autonomous AI agents",
+      "n_docs": 4,
+      "n_sources": 3,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 34773,
+      "share_patent": 0.6046426708398539,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Распределённые графы знаний",
+      "name_en": "distributed knowledge graphs",
+      "score": 0.6083965217896538,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "distributed knowledge graphs",
+      "name_variants": [
+        {
+          "name": "distributed knowledge graphs",
+          "n_works": 97,
+          "n_institutions": 178,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 97,
+      "n_institutions": 178,
+      "n_institutions_capped": false,
+      "quote": "kgsteward: a tool for building, reproducing and maintaining distributed knowledge graphs",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 7,
+      "share_patent": 0.0625,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Выводы о причинно-следственных связях",
+      "name_en": "causal inference",
+      "score": 0.6081945172707496,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "causal inference",
+      "name_variants": [
+        {
+          "name": "causal inference",
+          "n_works": 126912,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 126912,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "causal inference",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 499,
+      "share_patent": 0.0038272154131705296,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Цифровой двойник",
+      "name_en": "digital twin",
+      "score": 0.5987728299946773,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "digital twin",
+      "name_variants": [
+        {
+          "name": "digital twin",
+          "n_works": 114978,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 114978,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "digital twins",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 8133,
+      "share_patent": 0.06439429928741093,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обучение на графах",
+      "name_en": "graph learning",
+      "score": 0.577388010738087,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "graph learning",
+      "name_variants": [
+        {
+          "name": "graph learning",
+          "n_works": 12278,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 12278,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "graph learning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 373,
+      "share_patent": 0.02542430645491105,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Система термоуправления батареей",
+      "name_en": "battery thermal management system",
+      "score": 0.5735550515289706,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "battery thermal management system",
+      "name_variants": [
+        {
+          "name": "battery thermal management system",
+          "n_works": 4960,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4960,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Battery Thermal Management Systems (BTMS)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 476,
+      "share_patent": 0.08732342689414786,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Прогнозирование молекулярных свойств",
+      "name_en": "molecular property prediction",
+      "score": 0.5614564755026855,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "molecular property prediction",
+      "name_variants": [
+        {
+          "name": "molecular property prediction",
+          "n_works": 3711,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3711,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "molecular property and activity prediction",
+      "n_docs": 2,
+      "n_sources": 2,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 50,
+      "share_patent": 0.011973180076628353,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Ансамблевое машинное обучение",
+      "name_en": "ensemble machine learning",
+      "score": 0.5235198226737655,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "ensemble machine learning",
+      "name_variants": [
+        {
+          "name": "ensemble machine learning",
+          "n_works": 25765,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 25765,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "an interpretable ensemble machine learning framework",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 837,
+      "share_patent": 0.03134479271991911,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Модель глубокого обучения",
+      "name_en": "deep learning model",
+      "score": 0.4951389726284825,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "deep learning model",
+      "name_variants": [
+        {
+          "name": "deep learning model",
+          "n_works": 290227,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 290227,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Deep learning models can now generate entirely novel sequences",
+      "n_docs": 2,
+      "n_sources": 2,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 17575,
+      "share_patent": 0.05509266225298425,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Потоки работ высокопроизводительных вычислений (HPC)",
+      "name_en": "HPC workflow",
+      "score": 0.47808915756063897,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "HPC workflow",
+      "name_variants": [
+        {
+          "name": "hpc workflow",
+          "n_works": 218,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 218,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-coupled HPC Workflow Applications",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 11,
+      "share_patent": 0.0421455938697318,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Автономный агент",
+      "name_en": "autonomous agent",
+      "score": 0.47755673313102304,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "autonomous agent",
+      "name_variants": [
+        {
+          "name": "autonomous agent",
+          "n_works": 20355,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 20355,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "an autonomous agent",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 1067,
+      "share_patent": 0.04553018988692127,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обнаружение аномалий",
+      "name_en": "anomaly detection",
+      "score": 0.47705046698614,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "anomaly detection",
+      "name_variants": [
+        {
+          "name": "anomaly detection",
+          "n_works": 118834,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 118834,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Machine learning (ML) methods for network anomaly detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 22011,
+      "share_patent": 0.14960137564483353,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Кодирование байтовых пар (BPE)",
+      "name_en": "byte-pair encoding",
+      "score": 0.44348261281443274,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "byte-pair encoding",
+      "name_variants": [
+        {
+          "name": "byte-pair encoding",
+          "n_works": 1851,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1851,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Byte-Pair Encoding (BPE) tokenization",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 443,
+      "share_patent": 0.17755511022044088,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обучение с подкреплением",
+      "name_en": "reinforcement learning",
+      "score": 0.4176654487558046,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "reinforcement learning",
+      "name_variants": [
+        {
+          "name": "reinforcement learning",
+          "n_works": 211488,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 211488,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "hybrid reinforcement learning (RL) models",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 47856,
+      "share_patent": 0.16172976772636793,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Прогнозирование взаимодействия «лекарство-мишень»",
+      "name_en": "drug-target interaction prediction",
+      "score": 0.40159532778826335,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "drug-target interaction prediction",
+      "name_variants": [
+        {
+          "name": "drug-target interaction prediction",
+          "n_works": 2612,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2612,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Drug-target interaction (DTI) prediction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 25,
+      "share_patent": 0.00935278713056491,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Генеративно-состязательная сеть",
+      "name_en": "generative adversarial network",
+      "score": 0.3480956822631722,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 102577 публикаций — технология уже хорошо изучена",
+      "name_raw": "generative adversarial network",
+      "name_variants": [
+        {
+          "name": "generative adversarial network",
+          "n_works": 97421,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 97421,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "A generative adversarial network (GAN) was trained",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 13877,
+      "share_patent": 0.11916293128617308,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "ДНК-кодируемая библиотека",
+      "name_en": "DNA-encoded library",
+      "score": 0.3309862315026625,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 1342 публикаций — технология уже хорошо изучена",
+      "name_raw": "DNA-encoded library",
+      "name_variants": [
+        {
+          "name": "dna-encoded library",
+          "n_works": 1332,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1332,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "DNA-encoded libraries (DEL)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 126,
+      "share_patent": 0.08583106267029973,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Классификация изображений",
+      "name_en": "image classification",
+      "score": 0.2779740379375304,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 144749 публикаций — технология уже хорошо изучена",
+      "name_raw": "image classification",
+      "name_variants": [
+        {
+          "name": "image classification",
+          "n_works": 137037,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 137037,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Transparent and Reliable Image Classification",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 16164,
+      "share_patent": 0.10045179693374681,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "открытие лекарств",
+      "name_en": "drug discovery",
+      "score": 0.2749565671207501,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «AI-driven drug discovery», — показан вариантом названия",
+      "name_raw": "drug discovery",
+      "name_variants": [
+        {
+          "name": "drug discovery",
+          "n_works": 236567,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 236567,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-driven Drug Discovery",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "AI-driven drug discovery",
+      "variants": [],
+      "n_pat": 22217,
+      "share_patent": 0.08529384664997927,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Когнитивная протезная система",
+      "name_en": "cognitive prosthetic system",
+      "score": 0.252351986931003,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Интерес не нарастает: за последние два года 20% всех упоминаний",
+      "name_raw": "cognitive prosthetic system",
+      "name_variants": [
+        {
+          "name": "cognitive prosthetic system",
+          "n_works": 4,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "Cognitive Prosthetic: An AI-Enabled Multimodal System for Episodic Recall",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Полностью автономные транспортные средства",
+      "name_en": "fully autonomous vehicle",
+      "score": 0.14611681915232927,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 3 219 патентов на 1 687 публикаций",
+      "name_raw": "fully autonomous vehicle",
+      "name_variants": [
+        {
+          "name": "fully autonomous vehicle",
+          "n_works": 1653,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1653,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "a fully autonomous vehicle that uses only cameras and AI to drive itself",
+      "n_docs": 3,
+      "n_sources": 2,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 3219,
+      "share_patent": 0.6561353444761516,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обработка изображений",
+      "name_en": "image processing",
+      "score": 0.14118370873937358,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 378756 публикаций — технология уже хорошо изучена",
+      "name_raw": "image processing",
+      "name_variants": [
+        {
+          "name": "image processing",
+          "n_works": 351295,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 351295,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "image processing",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 225894,
+      "share_patent": 0.3735946415281568,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обучение автоматов",
+      "name_en": "automata learning",
+      "score": 0.10082621854535793,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 304 публикаций — технология уже хорошо изучена",
+      "name_raw": "automata learning",
+      "name_variants": [
+        {
+          "name": "automata learning",
+          "n_works": 233,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 233,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "ATLAS (Automata Learning for Agent Trajectory Analysis and Strategy Discovery)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 475,
+      "share_patent": 0.6097560975609756,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    }
+  ],
+  "timings": {
+    "subqueries": 0.0,
+    "search": 0.02,
+    "candidates": 0.06,
+    "naming": 15.25,
+    "counters": 0.3,
+    "ranking": 1.36,
+    "queues": [
+      {
+        "source": "openalex",
+        "candidates": 60,
+        "requests": 0,
+        "cache_hits": 60,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.07,
+        "duration_s": 0.07
+      },
+      {
+        "source": "arxiv",
+        "candidates": 60,
+        "requests": 0,
+        "cache_hits": 60,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.07,
+        "duration_s": 0.07
+      },
+      {
+        "source": "techcrunch",
+        "candidates": 60,
+        "requests": 0,
+        "cache_hits": 60,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.07,
+        "duration_s": 0.07
+      },
+      {
+        "source": "rospatent",
+        "candidates": 60,
+        "parallel": 4,
+        "requests": 0,
+        "cache_hits": 60,
+        "retries": 0,
+        "n429": 0,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.26,
+        "duration_s": 0.26
+      }
+    ],
+    "dedup": 0.02,
+    "translate": 2.3,
+    "total": 19.31
+  },
+  "warnings": [
+    "отброшен (ru): «ИИ для обработки естественного языка» — слов 5, нужно 2-4",
+    "отброшен: term_en «multimodal agentic framework»: последнее слово framework",
+    "отброшен: term_en «explainable AI for the arts»: слов 5, нужно 2–4",
+    "отброшен: term_en «explainable AI in wireless PHY layers»: слов 6, нужно 2–4",
+    "отброшен: term_en «explainable AI-driven cyber risk analytics»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «multimodal agentic framework»: последнее слово framework",
+    "отброшен: term_en «large language model»: quote не найден в документе 84",
+    "отброшен: term_en «robotaxi»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «robotaxi»: слов 1, нужно 2–4",
+    "отброшен: term_en «robotaxi»: слов 1, нужно 2–4",
+    "отброшен: term_en «electric vertical takeoff and landing aircraft»: слов 6, нужно 2–4",
+    "отброшен после повтора: term_en «robotaxi»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «end-to-end AI system»: quote не найден в документе 131",
+    "отброшен после повтора: term_en «electric vertical takeoff and landing aircraft»: слов 6, нужно 2–4",
+    "отброшен: term_en «large language model»: quote не найден в документе 169",
+    "отброшен: term_en «bioinformatics»: слов 1, нужно 2–4",
+    "отброшен: term_en «multiomics»: слов 1, нужно 2–4",
+    "отброшен: term_en «AlphaFold»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «bioinformatics»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «artificial intelligence coupled high performance computing»: слов 6, нужно 2–4",
+    "отброшен после повтора: term_en «multiomics»: слов 1, нужно 2–4",
+    "отброшен: term_en «explainable AI»: quote не найден в документе 250",
+    "отброшен: term_en «explainable AI»: quote не найден в документе 253",
+    "отброшен: term_en «AI-driven drug discovery»: quote не найден в документе 262",
+    "отброшен после повтора: term_en «generative adversarial network»: quote не найден в документе 241",
+    "отброшен после повтора: term_en «explainable AI»: quote не найден в документе 250",
+    "отброшен: term_en «AI weather and climate models»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «deep learning»: quote не найден в документе 307",
+    "отброшен: term_en «AI-powered climate modelling»: quote не найден в документе 323",
+    "отброшен: term_en «AI+RES»: слов 1, нужно 2–4",
+    "отброшен: term_en «AI-powered cybersecurity»: quote не найден в документе 340",
+    "отброшен после повтора: term_en «AI-powered climate modelling»: quote не найден в документе 323",
+    "отброшен после повтора: term_en «AI+RES»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «IoT»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «blockchain»: слов 1, нужно 2–4"
+  ],
+  "meta": {
+    "query": "технологии в ИИ",
+    "area": "Инфраструктура ИИ",
+    "run_date": "2026-09-27T00:07:49",
+    "model_version": "s2a2-v1",
+    "candidates_version": "v3",
+    "seconds": 19.31,
+    "counters_cache_share": 1.0
+  }
+}
