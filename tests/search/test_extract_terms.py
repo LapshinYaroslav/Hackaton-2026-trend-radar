@@ -4,7 +4,6 @@ from unittest.mock import patch
 
 import pytest
 
-from search import extract_candidates as ec
 from search import extract_terms as et
 
 SNIPPETS = {1: "SPROUT: The Open-Source Soft Growing Robot for Search and Rescue\nWe present a robot",
@@ -20,7 +19,7 @@ def reply(items) -> dict:
 
 @pytest.fixture(autouse=True)
 def isolated(tmp_path):
-    with patch.object(ec, "CACHE_DIR", tmp_path), patch.object(et, "_cache_get", ec._cache_get), \
+    with patch.object(et, "CACHE_DIR", tmp_path), \
          patch.object(et, "build_model_uri", lambda model=None: f"gpt://t/{model or 'yandexgpt-5-pro'}"):
         yield
 
@@ -89,3 +88,43 @@ def test_parallel_and_sequential_give_same_candidates() -> None:
     strip = lambda out: [(c["name_en"], c["doc_ids"]) for c in out["candidates"]]
     assert strip(parallel) == strip(sequential) and len(parallel["candidates"]) > 0
     assert parallel["warnings"] == sequential["warnings"]
+
+
+def test_snippet_truncates_text() -> None:
+    """Перенесён из test_extract_candidates.py (задача Л) вместе с функцией."""
+    doc = {"title": "T", "text": "a" * 2000}
+    snip = et.snippet_from_doc(doc, limit=100)
+    assert snip.startswith("T\n")
+    assert len(snip) <= 102
+
+
+def test_dedupe_merges_near_duplicates() -> None:
+    """Перенесён из test_extract_candidates.py (задача Л) вместе с функцией."""
+    items = [
+        {
+            "doc": 1,
+            "name_ru": "фотонные процессоры инференса",
+            "name_en": "photonic inference processor",
+            "terms": ["photonic inference processor"],
+            "context_terms": [],
+        },
+        {
+            "doc": 2,
+            "name_ru": "фотонный процессор инференса",
+            "name_en": "photonic inference processors",
+            "terms": ["optical AI accelerator"],
+            "context_terms": ["silicon photonics"],
+        },
+        {
+            "doc": 3,
+            "name_ru": "графенные биосенсоры",
+            "name_en": "graphene biosensors",
+            "terms": ["graphene biosensor"],
+            "context_terms": [],
+        },
+    ]
+    merged = et.dedupe_candidates(items, threshold=0.55)
+    assert len(merged) <= 2
+    photonic = next(m for m in merged if "photonic" in m["name_en"].casefold())
+    assert photonic["doc_count"] >= 2
+    assert "optical AI accelerator" in photonic["terms"]

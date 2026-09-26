@@ -41,8 +41,6 @@ ALLOWED_SOURCE_TYPES: Final[frozenset[str]] = frozenset(
 )
 
 ALLOWED_TRUST_LEVELS: Final[frozenset[str]] = frozenset({"high", "medium", "low"})
-# Окна, по которым считается поправка growth на фон.
-GROWTH_WINDOWS: Final[frozenset[str]] = frozenset({"before", "now"})
 # Окна счётчиков поиска №2: шесть годовых отрезков с 2020-09-01 по 2026-09-01.
 # Границы полуоткрытые: [from, to). Ключ окна — год его начала.
 #
@@ -111,18 +109,9 @@ COUNTER_WINDOWS_VERSION: Final[str] = _windows_version(COUNTER_WINDOWS)
 # иначе числитель и знаменатель считаются по разным множествам (pipeline.md 0.2).
 OPENALEX_TYPE_FILTER: Final[str] = "article"
 
-# Weak-only types cannot be the sole basis for including a technology (pipeline.md).
-SOLE_SOURCE_WEAK_TYPES: Final[frozenset[str]] = frozenset({"blog", "press_release"})
-
 DEFAULT_RECENT_DAYS: Final[int] = 180
-DEFAULT_MAX_CANDIDATES: Final[int] = 30
 DEFAULT_MAX_WORKERS: Final[int] = 8
-# Потолок документов на один запрос к одному источнику. Одинаков для всех технологий
-# и всех источников: разный потолок сделал бы volume несравнимым между технологиями.
-# Значение пишется в метаданные прогона — по нему видно, где выдача была обрезана.
-DEFAULT_MAX_DOCS_PER_SOURCE: Final[int] = 200
 # Поиск №1 (search_recent): потолок документов на один подзапрос в одном источнике.
-# Отдельно от DEFAULT_MAX_DOCS_PER_SOURCE: тот потолок у выгрузки истории кандидата.
 DEFAULT_RECENT_DOCS_PER_SUBQUERY: Final[int] = 25
 
 # Корпусные итоги живут сутки: за день корпус источника меняется незначительно,

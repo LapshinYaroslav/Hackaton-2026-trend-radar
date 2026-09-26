@@ -1,17 +1,16 @@
-"""Оркестратор без сети: заглушки LLM, нормализатора и трёх источников, настоящий артефакт модели."""
+"""Оркестратор без сети: заглушки LLM и трёх источников, настоящий артефакт модели."""
 import json
 from datetime import date, timedelta
 from unittest.mock import patch
 
 import pytest
 
-import search.extract_candidates as ec
 import search.extract_terms as et
 import search.subqueries as sq
 from collector.api import tech_key
 from collector.constants import COLLECTION_START, COUNTER_WINDOWS, CUTOFF_DATE
 from collector.settings import Settings
-from pipeline import dedup as dedup_module, naming, translate
+from pipeline import dedup as dedup_module, translate
 from search import llm_yandex_gpt as llm_module
 from pipeline import run_query as rq
 from pipeline import fetch as fetch_module
@@ -20,25 +19,18 @@ from tests.collector.fakes import FakeAdapter, doc
 from tests.data_required import require_model
 
 SIGNAL, MAINSTREAM = "robotic teleoperation data", "humanoid robot"
-NO_TRACE, PARTIAL = "phantom gripper lattice", "partial counter device"
+PARTIAL = "partial counter device"
 RU = ["фотонные вычисления", "оптический интерконнект", "мемристорные матрицы",
       "нейроморфные ускорители", "квантовые сенсоры"]
 EN = ["photonic computing", "optical interconnect", "memristor crossbar arrays",
       "neuromorphic accelerators", "quantum sensing", "spiking neural networks",
       "silicon photonic modulators", "analog inference chips"]
 
-# Нормализатор: name_ru шага 4 -> три варианта. Выбирается вариант с наибольшим следом.
-VARIANTS = {
-    "данные телеуправления роботами": ["teleoperation data", SIGNAL, "robot teleoperation dataset"],
-    "данные телеуправления": [SIGNAL, "teleoperation logs", "teleoperation data"],
-    "гуманоидный робот": [MAINSTREAM, "humanoid robots", "bipedal humanoid"],
-    "фантомная решётка захвата": [NO_TRACE, "phantom lattice gripper", "lattice gripper phantom"],
-    "частичное устройство счёта": [PARTIAL, "partial counters", "counter device"],
-    "робот сварщик": ["welding", "welds", "welder"],
-}
-# След за 2020-09 … 2026-08: у сигнала и дубликата максимум — одна и та же фраза.
-TRACE = {SIGNAL: 5, "teleoperation data": 2, MAINSTREAM: 900, "humanoid robots": 40,
-         PARTIAL: 3, "welding": 50}
+# Русские термины шага 4 по порядку документов.
+TERMS_RU = ["данные телеуправления роботами", "данные телеуправления", "гуманоидный робот",
+            "фантомная решётка захвата", "частичное устройство счёта", "робот сварщик"]
+# След за 2020-09 … 2026-08 по термину шага 4 (он же name_en); нет в словаре — нулевой след.
+TRACE = {SIGNAL: 5, MAINSTREAM: 900, PARTIAL: 3}
 
 
 def window_counts(per_window: dict[str, int]) -> dict:
@@ -98,10 +90,10 @@ def fake_subqueries(system_prompt, user_prompt, **kwargs):
 
 def fake_extract(system_prompt, user_prompt, **kwargs):
     """Шаг 4 (extract-v2) без сети: термин, русское название, цитата из документа и его номер."""
-    raw = ["robotic teleoperation dataset", "Robotic  Teleoperation Data", "humanoid robot", "phantom thing",
+    raw = ["robotic teleoperation data", "Robotic  Teleoperation Data", "humanoid robot", "phantom thing",
            "partial counter device", "robotic welding"]
     items = [{"doc": d, "term_ru": ru, "term_en": en, "quote": "doc"}
-             for d, (ru, en) in enumerate(zip(VARIANTS, raw), start=1)]
+             for d, (ru, en) in enumerate(zip(TERMS_RU, raw), start=1)]
     return {"text": json.dumps(items, ensure_ascii=False), "model_uri": "m",
             "model_version": "t", "usage": {}, "elapsed_s": 0, "error": None}
 
@@ -111,20 +103,14 @@ def fake_translate(system, user, **kwargs):
     return {"text": f"русское {user}", "error": None}
 
 
-def fake_ask_name(name_ru, area, repeat=0, note=""):
-    """Нормализатор без сети: три строки VARIANT, как отвечает модель."""
-    return "\n".join(f"VARIANT: {name}" for name in VARIANTS[name_ru]), True
-
-
 def run(tmp_path, extract=fake_extract, patents=None, **options):
-    """run_query на заглушках; по умолчанию с нормализатором, как в Д5 и И2.
+    """run_query на заглушках в боевом режиме: extract-v2, name_en = термин шага 4.
 
     Роспатент всегда заглушка (patents — ответы по фразам; по умолчанию все сбои): сеть не нужна.
     Нужен настоящий артефакт модели: без data/model тест пропускается.
     """
     require_model()
     from collector import rospatent as rp
-    options = {"naming_mode": "normalizer", **options}
     stages, extract_prompts = [], []
 
     def ask(system_prompt, user_prompt, **kwargs):
@@ -136,13 +122,10 @@ def run(tmp_path, extract=fake_extract, patents=None, **options):
          patch.object(sq, "CACHE_DIR", tmp_path / "subq"), \
          patch.object(et, "ask_llm", side_effect=ask), \
          patch.object(et, "build_model_uri", lambda model=None: "gpt://t/yandexgpt-5-pro"), \
-         patch.object(ec, "ask_llm", side_effect=ask), \
-         patch.object(ec, "build_model_uri", lambda model=None: "gpt://t/yandexgpt-5-pro"), \
-         patch.object(ec, "CACHE_DIR", tmp_path / "extract"), \
+         patch.object(et, "CACHE_DIR", tmp_path / "extract"), \
          patch.object(search_cache, "CACHE_DIR", tmp_path / "search"), \
          patch.object(fetch_module, "COUNTERS_CACHE_DIR", tmp_path / "counters"), \
          patch.object(rp, "count_all", patents or fake_patents({})), \
-         patch.object(naming.T, "ask_name", side_effect=fake_ask_name), \
          patch.object(translate, "CACHE_DIR", tmp_path / "translate"), \
          patch.object(dedup_module, "CACHE_DIR", tmp_path / "dedup"), \
          patch.object(llm_module, "ask_llm", side_effect=fake_translate), \
@@ -201,7 +184,7 @@ def test_output_matches_schema(result) -> None:
                              "counters", "sources", "model_version", "name_ru_source", "name_ru_auto",
                              "variants"} | DETAIL_KEYS | patent_keys
         assert item["name_ru"] == f"Русское {item['name_en']}" and item["name_ru_source"] == "translate"
-        assert item["name_choice_rule"] == "max_trace" and len(item["name_variants"]) == 3
+        assert item["name_choice_rule"] == "direct" and len(item["name_variants"]) == 1
         assert len(item["sources"]) <= 5
     for item in out["excluded"]:
         base = {"name_ru", "name_en", "score", "skipped_reason", "reason_ru", "model_version",
@@ -217,19 +200,18 @@ def test_each_reason_in_its_case(result) -> None:
     reasons = {item["name_en"]: item["skipped_reason"] for item in out["excluded"]}
     no_trace = next(item for item in out["excluded"] if item["name_raw"] == "phantom thing")
     assert no_trace["skipped_reason"] == "no_trace" and no_trace["name_en"] == "phantom thing"
-    assert [v["n_works"] for v in no_trace["name_variants"]] == [0, 0, 0]
-    assert reasons[PARTIAL] == "no_counters"
-    assert reasons["welding"] == "bad_name"
+    assert [v["n_works"] for v in no_trace["name_variants"]] == [0]
+    assert reasons[PARTIAL] == "no_counters" and reasons["robotic welding"] == "no_trace"
     assert reasons[MAINSTREAM] == "below_threshold"
     assert [tech_key(item["name_en"]) for item in out["top"]] == [SIGNAL]
 
 
-def test_normalized_names_merged_with_doc_ids(result) -> None:
-    """Два кандидата шага 4 с разными формулировками дали одно название: одна запись, doc_ids вместе."""
+def test_same_term_merged_with_doc_ids(result) -> None:
+    """Два кандидата шага 4 с одним tech_key термина: одна запись, doc_ids вместе."""
     out, _ = result
-    assert out["stats"]["candidates_found"] == 6 and out["stats"]["candidates_named"] == 4
+    assert out["stats"]["candidates_found"] == 6 and out["stats"]["candidates_named"] == 3
     top = out["top"][0]
-    assert top["name_raw"] in {"robotic teleoperation dataset", "Robotic Teleoperation Data"}
+    assert tech_key(top["name_raw"]) == SIGNAL
     assert tech_key(top["name_en"]) == SIGNAL and top["n_works"] == 5
     assert max(v["n_works"] for v in top["name_variants"]) == 5
     assert top["n_docs"] == 2 and top["n_sources"] == 1
@@ -334,14 +316,12 @@ def test_subtopic_merge_only_equal_stems(a, b, merged) -> None:
 
 
 def test_direct_naming_with_extract_v2(tmp_path) -> None:
-    """extract-v2 + direct: нормализатор не вызывается, name_en = термин шага 4, quote в выходе."""
+    """extract-v2 + direct: name_en = термин шага 4, quote в выходе."""
     items = [{"term_en": SIGNAL, "term_ru": "данные телеуправления", "quote": "doc 3", "doc": 1},
              {"term_en": MAINSTREAM, "term_ru": "гуманоидный робот", "quote": "doc 4", "doc": 2}]
     answer = {"text": json.dumps(items, ensure_ascii=False), "model_uri": "m", "model_version": "t",
               "usage": {}, "elapsed_s": 0, "error": None}
-    with patch.object(naming, "normalize_all") as normalizer:
-        out, _, _ = run(tmp_path, extract=lambda *args, **kwargs: answer, naming_mode="direct")
-    assert normalizer.call_count == 0
+    out, _, _ = run(tmp_path, extract=lambda *args, **kwargs: answer)
     assert out["naming_mode"] == "direct" and out["extract_version"] == "v2"
     assert [item["name_en"] for item in out["top"]] == [SIGNAL]
     assert out["top"][0]["quote"] == "doc 3" and out["top"][0]["name_choice_rule"] == "direct"
@@ -363,40 +343,11 @@ def test_counters_file_cache_shared_between_runs(tmp_path) -> None:
 
 
 def test_default_mode_is_r1() -> None:
-    """По умолчанию — рука R1: extract-v2, yandexgpt-5-pro, без нормализатора."""
+    """Боевой режим — рука R1: extract-v2, yandexgpt-5-pro, без нормализатора."""
     import inspect
     defaults = {name: p.default for name, p in inspect.signature(rq.run_query).parameters.items()}
-    assert (defaults["extract_model"], defaults["naming_mode"]) == ("yandexgpt-5-pro", "direct")
-    assert defaults["extract_version"] == "v2"
-
-
-def fake_extract_v1(system_prompt, user_prompt, **kwargs):
-    """Прежний шаг 4 (v1) без сети: те же шесть кандидатов в формате {"candidates": [...]}."""
-    raw = ["robotic teleoperation dataset", "Robotic  Teleoperation Data", "humanoid robot", "phantom thing",
-           "partial counter device", "robotic welding"]
-    items = [{"doc": d, "name_ru": ru, "name_en": en, "terms": [en], "context_terms": []}
-             for d, (ru, en) in enumerate(zip(VARIANTS, raw), start=1)]
-    return {"text": json.dumps({"candidates": items}, ensure_ascii=False), "model_uri": "m",
-            "model_version": "t", "usage": {}, "elapsed_s": 0, "error": None}
-
-
-def test_extract_v1_with_normalizer_end_to_end(tmp_path) -> None:
-    """Старый путь: шаг 4 v1 + нормализатор даёт те же причины и ТОП, что v2 + нормализатор."""
-    with patch.object(ec, "dedupe_candidates", lambda items, threshold=None: [
-            {**item, "doc_ids": [item["doc"]], "doc_count": 1} for item in items]), \
-         patch.object(rq, "extract_terms", side_effect=AssertionError("v2 не должен вызываться")):
-        out, _, prompts = run(tmp_path, extract=fake_extract_v1, extract_version="v1")
-    assert (out["extract_version"], out["extract_model"], out["naming_mode"]) == ("v1", None, "normalizer")
-    assert prompts and out["stats"]["candidates_found"] == 6 and out["stats"]["candidates_named"] == 4
-    reasons = {item["name_en"]: item["skipped_reason"] for item in out["excluded"]}
-    assert reasons[PARTIAL] == "no_counters" and reasons["welding"] == "bad_name"
-    assert reasons[MAINSTREAM] == "below_threshold" and reasons["phantom thing"] == "no_trace"
-    assert [tech_key(item["name_en"]) for item in out["top"]] == [SIGNAL]
-
-
-def test_unknown_extract_version_rejected() -> None:
-    with pytest.raises(ValueError, match="extract_version"):
-        rq.run_query("тема", extract_version="v3", adapters=[], settings=Settings())
+    assert defaults["extract_model"] == "yandexgpt-5-pro"
+    assert (rq.EXTRACT_VERSION, rq.NAMING_MODE) == ("v2", "direct")
 
 
 def test_techcrunch_one_call_in_pipeline() -> None:

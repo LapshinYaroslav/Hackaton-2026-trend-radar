@@ -360,37 +360,6 @@ def list_queries(limit: int = 30) -> list[dict[str, Any]]:
     return out
 
 
-def list_technologies(label: int | None = None) -> list[dict[str, Any]]:
-    if not database_url():
-        return []
-    sql = """
-        SELECT tech_id, name_ru, name_en, area, label, negative_type, expert_score, tech_key
-        FROM technologies
-    """
-    params: tuple = ()
-    if label is not None:
-        sql += " WHERE label = %s"
-        params = (label,)
-    sql += " ORDER BY area, tech_id"
-    with _connect() as conn:
-        with conn.cursor() as cur:
-            cur.execute(sql, params)
-            rows = cur.fetchall()
-    return [
-        {
-            "tech_id": row[0],
-            "name_ru": row[1],
-            "name_en": row[2],
-            "area": row[3],
-            "label": row[4],
-            "negative_type": row[5],
-            "expert_score": row[6],
-            "tech_key": row[7],
-        }
-        for row in rows
-    ]
-
-
 def training_balance() -> list[dict[str, Any]]:
     if not database_url():
         return []
@@ -402,20 +371,6 @@ def training_balance() -> list[dict[str, Any]]:
         {"area": row[0], "signals": row[1], "negatives": row[2], "total": row[3]}
         for row in rows
     ]
-
-
-def insight_status(query_id: str, rank: int) -> dict[str, Any]:
-    if database_url():
-        with _connect() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    "SELECT status, description_ru FROM insights WHERE query_id = %s AND rank = %s",
-                    (query_id, rank),
-                )
-                row = cur.fetchone()
-        if row:
-            return {"query_id": query_id, "rank": rank, "status": row[0], "description_ru": row[1]}
-    return {"query_id": query_id, "rank": rank, "status": "pending"}
 
 
 def _as_int(value: Any) -> int | None:

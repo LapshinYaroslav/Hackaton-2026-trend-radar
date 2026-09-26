@@ -3,7 +3,6 @@
 
 Без Docker: если API_URL не задан, читаем файл примера локально.
 Если API_URL задан — POST /queries и опрос GET, пока status != done.
-Старый api_response.json больше не используем.
 """
 
 from __future__ import annotations

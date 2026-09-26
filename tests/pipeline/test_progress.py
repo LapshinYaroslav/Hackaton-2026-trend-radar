@@ -109,6 +109,7 @@ def test_without_callback_output_is_byte_identical_to_snapshot(tmp_path) -> None
     """Снимок снят до задачи И1 на тех же заглушках (без изменчивых query_id, времени и дат).
 
     Переснят в задаче К (решение Ярослава): склейка дублей включена, у оценённых кандидатов поле variants.
+    Переснят в задаче Л: нормализатор удалён, обвязка в боевом режиме direct (name_en = термин шага 4).
     """
     out, _, _ = base.run(tmp_path)
     text = json.dumps(_strip(out), ensure_ascii=False, sort_keys=True, indent=1) + "\n"

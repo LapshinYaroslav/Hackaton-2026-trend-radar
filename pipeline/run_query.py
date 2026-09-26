@@ -1,11 +1,11 @@
 """Оркестратор режима запроса: тема пользователя -> ТОП-15 и исключённые с причинами.
 
-Шаги: подзапросы -> поиск №1 -> кандидаты (шаг 4) -> названия через нормализатор обучения
-(pipeline/naming.py: три варианта, выбор по следу в OpenAlex, no_trace) -> слияние по tech_key
--> страховочная проверка названия -> лимит -> счётчики и признаки -> ранжирование.
+Шаги: подзапросы -> поиск №1 -> кандидаты (шаг 4, extract-v2: name_en = термин) -> след названия
+в OpenAlex (pipeline/naming.py, no_trace) -> слияние по tech_key -> страховочная проверка названия -> лимит
+-> счётчики и признаки -> ранжирование -> склейка дублей -> перевод названий.
 
 Запрос кандидата для счётчиков строится так же, как у 160 обучающих технологий: один
-термин — tech_key названия от нормализатора, без context_terms (CLAUDE.md, правила ML, п. 2).
+термин — tech_key названия, без context_terms (CLAUDE.md, правила ML, п. 2).
 Синонимы и контекст, которые предлагает шаг 4, в счётчики не идут.
 """
 from __future__ import annotations
@@ -37,7 +37,6 @@ from pipeline.progress import Report, tracker
 from pipeline.fetch import parallel_fetch
 from pipeline.search_cache import CachedSearch
 from pipeline.reasons import SPECIAL, explanation_top, reason_below
-from search.extract_candidates import extract_candidates
 from search.extract_terms import extract_terms
 from search.subqueries import generate_subqueries
 
@@ -60,7 +59,8 @@ ROSPATENT_NO_KEY_WARNING = ("Нет ключа ROSPATENT в .env: патентн
                             "модель подставила медиану обучения")
 # Генерация кандидатов v3 (задача Г): промпт подзапросов subq-v3 и состав документов шага 4 (step4_documents).
 CANDIDATES_VERSION = "v3"
-OUTCOME_REASON = {"no_trace": "no_trace", "bad_format": "bad_name", "trace_unknown": "trace_unknown"}
+# Поля выхода о режиме шага 4 и названий (контракт): в продукте один режим — extract-v2 и direct.
+EXTRACT_VERSION, NAMING_MODE = "v2", "direct"
 Progress = Callable[[str, int, int], None]
 
 
@@ -74,27 +74,6 @@ def training_labels() -> dict[str, dict]:
         known.setdefault(tech_key(row.name_en), {"id": row.tech_id,
                                                  "label": "signal" if row.label == 1 else "mainstream"})
     return known
-
-
-def named_candidates(raw: Sequence[dict], area: str, openalex, progress: Progress) -> tuple[list[dict], list[dict]]:
-    """Нормализатор по name_ru каждого кандидата шага 4; нет названия — сразу в исключённые."""
-    results = naming.normalize_all([item["name_ru"] for item in raw], area, openalex,
-                                   on_done=lambda done, total: progress("naming", done, total))
-    kept, dropped = [], []
-    for item, result in zip(raw, results):
-        chosen = result["chosen"] or {}
-        candidate = {"name_ru": item["name_ru"], "name_raw": item["name_en"],
-                     "name_en": chosen.get("name") or item["name_en"], "doc_ids": list(item.get("doc_ids") or []),
-                     "name_variants": [{k: v[k] for k in ("name", "n_works", "n_institutions", "n_institutions_capped")}
-                                       for v in result["variants"]],
-                     "name_choice_rule": naming.CHOICE_RULE, "n_works": chosen.get("n_works"),
-                     "n_institutions": chosen.get("n_institutions"),
-                     "n_institutions_capped": chosen.get("n_institutions_capped")}
-        if result["chosen"] is None:
-            dropped.append(candidate | {"skipped_reason": OUTCOME_REASON[result["outcome"]]})
-        else:
-            kept.append(candidate)
-    return kept, dropped
 
 
 def direct_candidates(raw: Sequence[dict], openalex, progress: Progress) -> tuple[list[dict], list[dict]]:
@@ -399,8 +378,7 @@ def staged(name: str, timings: dict, progress: Progress, action: Callable):
 def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
               progress: Progress | None = None, adapters: Sequence[SourceAdapter] | None = None,
               settings: Settings | None = None, candidate_sources: set[str] | None = None,
-              extract_model: str | None = "yandexgpt-5-pro", naming_mode: str = "direct",
-              counters_cache: bool | None = None, extract_version: str = "v2",
+              extract_model: str | None = "yandexgpt-5-pro", counters_cache: bool | None = None,
               rospatent: bool | None = None, on_progress: Callable[[dict], None] | None = None,
               dedup: bool = True) -> dict:
     """Тема -> JSON с ТОП-15, исключёнными, статистикой и временем по шагам.
@@ -408,12 +386,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     candidate_sources — из документов каких источников извлекать кандидатов (openalex,
     openalex_ru, arxiv, techcrunch). None — из всех, как раньше. Поиск №1 и его статистика
     при этом по всем источникам; doc_ids кандидатов нумеруют только отобранные документы.
-    extract_model — модель шага 4 (extract-v2);
-    naming_mode — normalizer (нормализатор обучения) или direct (name_en = термин шага 4).
+    extract_model — модель шага 4 (extract-v2, search/extract_terms.py); name_en кандидата — его термин.
     counters_cache — файловый кэш счётчиков отдельно от остальных кэшей; None — как use_cache.
-    extract_version — v2 (search/extract_terms.py) или v1 (прежний шаг 4, search/extract_candidates.py;
-    модель берётся из .env, extract_model не используется; в паре с naming_mode="normalizer").
-    По умолчанию — рука R1 задачи К: extract-v2 на yandexgpt-5-pro, без нормализатора.
     rospatent — очередь Роспатента в этапе счётчиков; None — как collector.rospatent.ROSPATENT_ENABLED.
     n_pat идёт в признак share_patent модели s2a2-v1; у кандидатов с оценкой — n_pat, share_patent,
     rospatent_failed (при сбое ещё note_ru). Выключенный при s2a2-v1 — предупреждение в warnings.
@@ -421,8 +395,6 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     on_progress(event) — прогресс в процентах (pipeline/progress.py, задача И1); None — выход не меняется.
     dedup — склейка дублей перед отбором ТОП-15 (pipeline/dedup.py; решение команды — evidence/dedup_check.md).
     """
-    if extract_version not in ("v1", "v2"):
-        raise ValueError(f"extract_version {extract_version!r}: ожидалось v1 или v2")
     progress_warnings: list[str] = []
     report, finish = tracker(on_progress, progress_warnings.append) if on_progress else (None, None)
     progress = both_progress(progress, report)
@@ -441,19 +413,13 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     if candidate_sources is not None:
         documents = [doc for doc in documents if origin(doc, subq["subqueries"]) in candidate_sources]
     documents = step4_documents(documents, subq["subqueries"])
-    if extract_version == "v1":
-        extract = lambda: extract_candidates(documents, topic, query_id, use_cache=use_cache)
-    else:
-        extract = lambda: extract_terms(documents, topic, query_id, model=extract_model, use_cache=use_cache)
-    found = staged("candidates", timings, progress, extract)
+    found = staged("candidates", timings, progress,
+                   lambda: extract_terms(documents, topic, query_id, model=extract_model, use_cache=use_cache))
     warnings += found["warnings"] + ([EMPTY_AREA_WARNING] if not area else [])
 
     mark = time.monotonic()
     openalex = next(a for a in adapters if a.source == "openalex")
-    if naming_mode == "direct":
-        named, unnamed = direct_candidates(found["candidates"], openalex, progress)
-    else:
-        named, unnamed = named_candidates(found["candidates"], area or "", openalex, progress)
+    named, unnamed = direct_candidates(found["candidates"], openalex, progress)
     timings["naming"] = round(time.monotonic() - mark, 2)
     merged = merge_subtopics(merge_candidates(named))
     dropped = [excluded(item, item["skipped_reason"], documents) for item in unnamed]
@@ -491,8 +457,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
         "model_version": meta["model_version"], "threshold": meta["threshold"], "cutoff_date": meta["cutoff_date"],
         "subqueries": subq["subqueries"],
         "candidate_sources": sorted(candidate_sources) if candidate_sources is not None else None,
-        "extract_version": extract_version, "extract_model": extract_model if extract_version == "v2" else None,
-        "naming_mode": naming_mode, "candidates_version": CANDIDATES_VERSION,
+        "extract_version": EXTRACT_VERSION, "extract_model": extract_model,
+        "naming_mode": NAMING_MODE, "candidates_version": CANDIDATES_VERSION,
         "stats": {"documents_by_source": document_stats(all_documents, subq["subqueries"]),
                   "documents_for_candidates_by_source": document_stats(documents, subq["subqueries"]),
                   "documents_total": len(all_documents), "documents_for_candidates": len(documents),

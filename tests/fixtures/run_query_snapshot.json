@@ -8,11 +8,11 @@
    "known_training_label": null,
    "model_version": "s2a2-v1",
    "n_docs": 1,
-   "n_institutions": null,
-   "n_institutions_capped": null,
+   "n_institutions": 0,
+   "n_institutions_capped": false,
    "n_sources": 1,
-   "n_works": null,
-   "name_choice_rule": "max_trace",
+   "n_works": 0,
+   "name_choice_rule": "direct",
    "name_en": "phantom thing",
    "name_raw": "phantom thing",
    "name_ru": "фантомная решётка захвата",
@@ -23,22 +23,10 @@
      "n_institutions": 0,
      "n_institutions_capped": false,
      "n_works": 0,
-     "name": "phantom gripper lattice"
-    },
-    {
-     "n_institutions": 0,
-     "n_institutions_capped": false,
-     "n_works": 0,
-     "name": "phantom lattice gripper"
-    },
-    {
-     "n_institutions": 0,
-     "n_institutions_capped": false,
-     "n_works": 0,
-     "name": "lattice gripper phantom"
+     "name": "phantom thing"
     }
    ],
-   "quote": null,
+   "quote": "doc",
    "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
    "score": null,
    "skipped_reason": "no_trace"
@@ -47,40 +35,28 @@
    "known_training_label": null,
    "model_version": "s2a2-v1",
    "n_docs": 1,
-   "n_institutions": 3,
+   "n_institutions": 0,
    "n_institutions_capped": false,
    "n_sources": 1,
-   "n_works": 50,
-   "name_choice_rule": "max_trace",
-   "name_en": "welding",
+   "n_works": 0,
+   "name_choice_rule": "direct",
+   "name_en": "robotic welding",
    "name_raw": "robotic welding",
    "name_ru": "робот сварщик",
    "name_ru_auto": true,
    "name_ru_source": "extract",
    "name_variants": [
     {
-     "n_institutions": 3,
-     "n_institutions_capped": false,
-     "n_works": 50,
-     "name": "welding"
-    },
-    {
      "n_institutions": 0,
      "n_institutions_capped": false,
      "n_works": 0,
-     "name": "welds"
-    },
-    {
-     "n_institutions": 0,
-     "n_institutions_capped": false,
-     "n_works": 0,
-     "name": "welder"
+     "name": "robotic welding"
     }
    ],
-   "quote": null,
-   "reason_ru": "Название не является устойчивым термином",
+   "quote": "doc",
+   "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
    "score": null,
-   "skipped_reason": "bad_name"
+   "skipped_reason": "no_trace"
   },
   {
    "known_training_label": {
@@ -94,7 +70,7 @@
    "n_pat": null,
    "n_sources": 1,
    "n_works": 900,
-   "name_choice_rule": "max_trace",
+   "name_choice_rule": "direct",
    "name_en": "humanoid robot",
    "name_raw": "humanoid robot",
    "name_ru": "Русское humanoid robot",
@@ -106,22 +82,10 @@
      "n_institutions_capped": false,
      "n_works": 900,
      "name": "humanoid robot"
-    },
-    {
-     "n_institutions": 3,
-     "n_institutions_capped": false,
-     "n_works": 40,
-     "name": "humanoid robots"
-    },
-    {
-     "n_institutions": 0,
-     "n_institutions_capped": false,
-     "n_works": 0,
-     "name": "bipedal humanoid"
     }
    ],
    "note_ru": "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения",
-   "quote": null,
+   "quote": "doc",
    "reason_ru": "Большой объём научной литературы: 33000 публикаций — технология уже хорошо изучена",
    "rospatent_failed": true,
    "score": 0.23120586681936858,
@@ -137,7 +101,7 @@
    "n_institutions_capped": false,
    "n_sources": 1,
    "n_works": 3,
-   "name_choice_rule": "max_trace",
+   "name_choice_rule": "direct",
    "name_en": "partial counter device",
    "name_raw": "partial counter device",
    "name_ru": "частичное устройство счёта",
@@ -149,21 +113,9 @@
      "n_institutions_capped": false,
      "n_works": 3,
      "name": "partial counter device"
-    },
-    {
-     "n_institutions": 0,
-     "n_institutions_capped": false,
-     "n_works": 0,
-     "name": "partial counters"
-    },
-    {
-     "n_institutions": 0,
-     "n_institutions_capped": false,
-     "n_works": 0,
-     "name": "counter device"
     }
    ],
-   "quote": null,
+   "quote": "doc",
    "reason_ru": "Не оценён: счётчики источников получены не полностью",
    "score": null,
    "skipped_reason": "no_counters"
@@ -172,7 +124,7 @@
  "extract_model": "yandexgpt-5-pro",
  "extract_version": "v2",
  "model_version": "s2a2-v1",
- "naming_mode": "normalizer",
+ "naming_mode": "direct",
  "normalizer_deviations": [
   "company_stoplist_off"
  ],
@@ -180,7 +132,7 @@
   "above_075": 1,
   "above_threshold": 1,
   "candidates_found": 6,
-  "candidates_named": 4,
+  "candidates_named": 3,
   "candidates_scored": 2,
   "documents_by_source": {
    "arxiv": 3,
@@ -337,10 +289,10 @@
    "n_pat": null,
    "n_sources": 1,
    "n_works": 5,
-   "name_choice_rule": "max_trace",
-   "name_en": "robotic teleoperation data",
+   "name_choice_rule": "direct",
+   "name_en": "Robotic Teleoperation Data",
    "name_raw": "Robotic Teleoperation Data",
-   "name_ru": "Русское robotic teleoperation data",
+   "name_ru": "Русское Robotic Teleoperation Data",
    "name_ru_auto": true,
    "name_ru_source": "translate",
    "name_variants": [
@@ -349,22 +301,10 @@
      "n_institutions_capped": false,
      "n_works": 5,
      "name": "robotic teleoperation data"
-    },
-    {
-     "n_institutions": 0,
-     "n_institutions_capped": false,
-     "n_works": 0,
-     "name": "teleoperation logs"
-    },
-    {
-     "n_institutions": 3,
-     "n_institutions_capped": false,
-     "n_works": 2,
-     "name": "teleoperation data"
     }
    ],
    "note_ru": "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения",
-   "quote": null,
+   "quote": "doc",
    "rank": 1,
    "rospatent_failed": true,
    "score": 0.9992973830897272,

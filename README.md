@@ -5,21 +5,20 @@
 
 ## Сборщик
 
-Модуль `collector/`: режим обучения (шаг 3) и запрос (поиск №1 и поиск №2). Источники: OpenAlex, arXiv, TechCrunch;
+Модуль `collector/`: поиск №1 (свежие документы по подзапросам) и счётчики поиска №2; вызывается из оркестратора `python -m pipeline`. Источники: OpenAlex, arXiv, TechCrunch;
 для счётчика патентов боевой модели `s2a2-v1` — поисковая платформа Роспатента (`collector/rospatent.py`, только число
 патентных документов по фразе за 2020-09-01…2026-08-31, мировой фонд — список датасетов в `model/config.py`).
 
 ```bash
 pip install -r requirements-dev.txt
 pytest tests/collector
-python -m collector history --candidate candidate.json --output search2.json
 ```
 
 Командный план пайплайна: [`docs/pipeline.md`](docs/pipeline.md). Методология модели: [`docs/methodology.md`](docs/methodology.md).
 
 ## Что уже можно поднять
 
-Актуальный пример ответа оркестратора: [`docs/contracts/query_result.example.json`](docs/contracts/query_result.example.json). Старый `api_response.json` не используем. Пока оркестратора нет, API через несколько секунд отдаёт этот пример. PostgreSQL для этого мока не нужен.
+Актуальный пример ответа оркестратора: [`docs/contracts/query_result.example.json`](docs/contracts/query_result.example.json). Пока оркестратора нет, API через несколько секунд отдаёт этот пример. PostgreSQL для этого мока не нужен.
 
 Сервисы Docker Compose:
 
