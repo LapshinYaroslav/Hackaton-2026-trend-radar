@@ -61,6 +61,54 @@ def api_base() -> str:
     return (os.getenv("API_URL") or "").strip().rstrip("/")
 
 
+def fetch_history(limit: int = 20) -> list[dict]:
+    base = api_base()
+    if not base:
+        return []
+    try:
+        response = requests.get(f"{base}/queries", params={"limit": limit}, timeout=10)
+        response.raise_for_status()
+        return list(response.json().get("items") or [])
+    except requests.RequestException:
+        return []
+
+
+def fetch_balance() -> list[dict]:
+    base = api_base()
+    if not base:
+        return []
+    try:
+        response = requests.get(f"{base}/catalog/balance", timeout=10)
+        response.raise_for_status()
+        return list(response.json().get("areas") or [])
+    except requests.RequestException:
+        return []
+
+
+def open_history_item(query_id: str) -> None:
+    response = requests.get(f"{api_base()}/queries/{query_id}", timeout=30)
+    response.raise_for_status()
+    data = response.json()
+    status = (data.get("status") or "").lower()
+    st.session_state.query_id = query_id
+    st.session_state.error = None
+    st.session_state.view = VIEW_TOP
+    st.session_state.rank = None
+    if status == "done":
+        st.session_state.result = data
+        st.session_state.polling = False
+    elif status == "error":
+        st.session_state.result = None
+        st.session_state.error = data.get("error") or "Ошибка расчёта"
+        st.session_state.polling = False
+    else:
+        st.session_state.result = None
+        st.session_state.polling = True
+        st.session_state.progress_stage = data.get("progress_stage") or ""
+        st.session_state.progress_done = int(data.get("progress_done") or 0)
+        st.session_state.progress_total = int(data.get("progress_total") or 6)
+
+
 def init_state() -> None:
     defaults = {
         "result": None,
@@ -275,6 +323,29 @@ if (
 st.title("Радар слабых сигналов")
 mode = f"API: {api_base()}" if api_base() else "локальный пример контракта (без Docker)"
 st.caption(mode)
+
+if api_base():
+    with st.sidebar:
+        st.subheader("История запросов")
+        history = fetch_history()
+        if not history:
+            st.caption("Пока пусто — выполните поиск.")
+        for item in history:
+            label = item.get("topic") or item.get("query_id")
+            area = item.get("area") or "без области"
+            status = item.get("status") or ""
+            caption = f"{area} · {status}"
+            if st.button(f"{label}", key=f"hist_{item['query_id']}", help=caption):
+                try:
+                    open_history_item(item["query_id"])
+                except requests.RequestException as exc:
+                    st.session_state.error = f"Не удалось открыть запрос. ({exc})"
+                st.rerun()
+        balance = fetch_balance()
+        if balance:
+            st.subheader("Обучающая выборка")
+            st.caption("100 сигналов + 60 негативов")
+            st.dataframe(balance, use_container_width=True, hide_index=True)
 
 st.subheader("Поисковый запрос")
 topic = st.text_input(

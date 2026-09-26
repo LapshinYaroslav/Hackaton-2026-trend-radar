@@ -45,6 +45,17 @@ def test_other_area_is_null() -> None:
     assert body["area"] is None
 
 
+def test_list_queries_remembers_created() -> None:
+    created = client.post("/queries", json={"topic": "история теста", "area": "Edge"})
+    query_id = created.json()["query_id"]
+    listed = client.get("/queries").json()["items"]
+    ids = {item["query_id"] for item in listed}
+    assert query_id in ids
+    match = next(item for item in listed if item["query_id"] == query_id)
+    assert match["topic"] == "история теста"
+    assert match["area"] == "Edge"
+
+
 def test_insight_is_pending() -> None:
     created = client.post("/queries", json={"topic": "тема", "area": "Финтех"})
     query_id = created.json()["query_id"]

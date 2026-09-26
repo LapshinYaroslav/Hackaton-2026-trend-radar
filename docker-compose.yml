@@ -29,6 +29,9 @@ services:
     container_name: trend-radar-api
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://trend:trend@db:5432/trend_radar}
+    volumes:
+      # датасет организаторов и negatives.xlsx — обогащают посев, если лежат локально
+      - ./data/raw:/app/data/raw:ro
     ports:
       - "8000:8000"
     depends_on:

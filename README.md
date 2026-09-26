@@ -65,7 +65,14 @@ docker compose up --build -d
 docker compose down
 ```
 
-Если меняли `db/schema.sql` и нужно пересоздать БД с нуля (удалит данные volume):
+Схема — `db/schema.sql`: кэш сборщика, обучающая выборка (100 сигналов + 60 негативов), история запросов. Посев из `labels/`, `data/interim/technologies.csv` и при наличии — `data/raw/dataset.xlsx`.
+
+```bash
+# локально, когда Postgres уже запущен
+python -m db
+```
+
+API при старте с `DATABASE_URL` сам применяет схему и заливает справочники. Если меняли `db/schema.sql` и нужно пересоздать volume с нуля:
 
 ```bash
 docker compose down -v

@@ -4,7 +4,10 @@ venv
 __pycache__
 *.pyc
 .env
-data/
+data/*
+!data/interim/
+data/interim/*
+!data/interim/technologies.csv
 artifacts/
 .pytest_cache
 .mypy_cache

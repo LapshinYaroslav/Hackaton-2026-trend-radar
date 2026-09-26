@@ -2,9 +2,8 @@
 API запросов на новом контракте docs/contracts/query_result.example.json.
 
 Пока оркестратора нет: POST создаёт запрос и через несколько секунд
-кладёт в память пример из контракта (без PostgreSQL и без Docker).
-Когда появится оркестратор Ярослава и save/load Славы — меняется только
-место, откуда берётся готовый JSON.
+кладёт пример из контракта. Если задан DATABASE_URL — схема, посев
+обучающей выборки и история запросов пишутся в Postgres.
 """
 
 from __future__ import annotations
@@ -20,6 +19,8 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+
+from api import store
 
 STAGES = (
     "Подзапросы",
@@ -72,8 +73,16 @@ class CreateQuery(BaseModel):
 
 
 app = FastAPI(title="Trend Radar API", version="0.2.0")
-_jobs: dict[str, dict] = {}
 _lock = threading.Lock()
+
+
+@app.on_event("startup")
+def _startup() -> None:
+    try:
+        store.ensure_ready()
+    except Exception:  # noqa: BLE001
+        # Без живой БД API остаётся на моке и памяти процесса.
+        pass
 
 
 def _public(job: dict) -> dict:
@@ -103,34 +112,41 @@ def _run(query_id: str) -> None:
     try:
         for index, stage in enumerate(STAGES, start=1):
             with _lock:
-                job = _jobs[query_id]
-                job["progress_stage"] = stage
-                job["progress_done"] = index
-                job["progress_total"] = len(STAGES)
-                job["status"] = "running"
+                store.update_progress(
+                    query_id,
+                    progress_stage=stage,
+                    progress_done=index,
+                    progress_total=len(STAGES),
+                    status="running",
+                )
             if step:
                 time.sleep(step)
         example = load_example()
         with _lock:
-            job = _jobs[query_id]
+            job = store.get_query(query_id) or {}
             example["query_id"] = query_id
-            example["topic"] = job["topic"]
-            example["area"] = job["area"]
-            job["result"] = example
-            job["status"] = "done"
-            job["progress_stage"] = STAGES[-1]
-            job["progress_done"] = len(STAGES)
-            job["progress_total"] = len(STAGES)
+            example["topic"] = job.get("topic")
+            example["area"] = job.get("area")
+            store.update_progress(
+                query_id,
+                progress_stage=STAGES[-1],
+                progress_done=len(STAGES),
+                progress_total=len(STAGES),
+                status="done",
+                model_version=example.get("model_version"),
+                threshold=example.get("threshold"),
+                cutoff_date=example.get("cutoff_date"),
+            )
+            store.finish_query(query_id, example)
     except Exception as exc:  # noqa: BLE001
         with _lock:
-            job = _jobs[query_id]
-            job["status"] = "error"
-            job["error"] = str(exc)
+            store.update_progress(query_id, status="error", error=str(exc))
+            store.finish_query(query_id, None, error=str(exc))
 
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok"}
+    return {"status": "ok", "database": bool(store.database_url())}
 
 
 @app.post("/queries")
@@ -144,26 +160,33 @@ def create_query(body: CreateQuery) -> dict:
     elif area not in AREAS:
         raise HTTPException(status_code=422, detail="неизвестная область")
     query_id = f"q-{uuid.uuid4().hex[:8]}"
+    job = {
+        "query_id": query_id,
+        "topic": topic,
+        "area": area,
+        "status": "running",
+        "progress_stage": STAGES[0],
+        "progress_done": 0,
+        "progress_total": len(STAGES),
+        "result": None,
+        "error": None,
+        "created_at": None,
+    }
     with _lock:
-        _jobs[query_id] = {
-            "query_id": query_id,
-            "topic": topic,
-            "area": area,
-            "status": "running",
-            "progress_stage": STAGES[0],
-            "progress_done": 0,
-            "progress_total": len(STAGES),
-            "result": None,
-            "error": None,
-        }
+        store.create_query(job)
     threading.Thread(target=_run, args=(query_id,), daemon=True).start()
     return {"query_id": query_id}
+
+
+@app.get("/queries")
+def list_queries(limit: int = 30) -> dict:
+    return {"items": store.list_queries(limit=max(1, min(limit, 100)))}
 
 
 @app.get("/queries/{query_id}")
 def get_query(query_id: str) -> dict:
     with _lock:
-        job = _jobs.get(query_id)
+        job = store.get_query(query_id)
         if job is None:
             raise HTTPException(status_code=404, detail="запрос не найден")
         return _public(copy.deepcopy(job))
@@ -173,10 +196,22 @@ def get_query(query_id: str) -> dict:
 def get_insight(query_id: str, rank: int) -> dict:
     """Пока без LLM: инсайт не на критическом пути (задача 2.9)."""
     with _lock:
-        job = _jobs.get(query_id)
+        job = store.get_query(query_id)
         if job is None:
             raise HTTPException(status_code=404, detail="запрос не найден")
         status = job["status"]
     if status != "done":
         return {"query_id": query_id, "rank": rank, "status": "pending"}
-    return {"query_id": query_id, "rank": rank, "status": "pending"}
+    return store.insight_status(query_id, rank)
+
+
+@app.get("/catalog/balance")
+def catalog_balance() -> dict:
+    return {"areas": store.training_balance()}
+
+
+@app.get("/catalog/technologies")
+def catalog_technologies(label: Optional[int] = None) -> dict:
+    if label not in (None, 0, 1):
+        raise HTTPException(status_code=422, detail="label: 0, 1 или пусто")
+    return {"items": store.list_technologies(label)}
