@@ -14,6 +14,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Callable, Sequence
@@ -112,13 +113,24 @@ def translate_one(term_en: str, quote: str | None, term_ru: str | None, llm: Cal
             "attempts": len(TEMPERATURES)}
 
 
-def translate_entries(entries: Sequence[dict], llm: Callable | None = None, use_cache: bool = True) -> dict:
-    """Переводит name_ru записей выдачи на месте (до WORKERS параллельно); числа — для stats."""
+def translate_entries(entries: Sequence[dict], llm: Callable | None = None, use_cache: bool = True,
+                      on_done: Callable[[int], None] | None = None) -> dict:
+    """Переводит name_ru записей выдачи на месте (до WORKERS параллельно); числа — для stats.
+
+    on_done(done) — после каждого названия (прогресс, задача И1)."""
     if llm is None:
         from search.llm_yandex_gpt import ask_llm as llm
+    done, lock = [0], threading.Lock()
+
+    def one(entry: dict) -> dict:
+        result = translate_one(entry["name_en"], entry.get("quote"), entry.get("name_ru"), llm, use_cache)
+        with lock:
+            done[0] += 1
+            if on_done:
+                on_done(done[0])
+        return result
     with ThreadPoolExecutor(max_workers=WORKERS) as pool:
-        results = list(pool.map(lambda e: translate_one(e["name_en"], e.get("quote"), e.get("name_ru"), llm, use_cache),
-                                entries))
+        results = list(pool.map(one, entries))
     for entry, result in zip(entries, results):
         entry.update({k: result[k] for k in ("name_ru", "name_ru_source", "name_ru_auto")})
     return {"переведено": len(results), "из кэша": sum(r["attempts"] == 0 for r in results),

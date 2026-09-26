@@ -510,3 +510,21 @@ def test_patent_fields_use_six_windows_without_prev6() -> None:
                                                                       "techcrunch": 50}}
     fields = rq.patent_fields(counters, {"n_pat": 2, "failed": False})
     assert fields["share_patent"] == 0.2
+
+
+def test_queue_stats_show_transport_retries() -> None:
+    """И3: у arXiv и TechCrunch retries и n429 — из транспорта; у остальных источников — как раньше."""
+    from pipeline.fetch import retry_counts
+
+    class Adapter:
+        def __init__(self, source, transport):
+            self.source, self._transport = source, transport
+
+    class Transport:
+        retry_stats = {"export.arxiv.org": {"retries": 2, "n429": 1, "wait_s": 20.0, "disabled": False}}
+
+    class Collector:
+        def __init__(self, source):
+            self.adapters = [Adapter(source, Transport())]
+    assert retry_counts(Collector("arxiv")) == {"retries": 2, "n429": 1}
+    assert retry_counts(Collector("techcrunch")) == {} and retry_counts(Collector("openalex")) == {}
