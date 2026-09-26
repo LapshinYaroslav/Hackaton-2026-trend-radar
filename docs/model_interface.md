@@ -1,7 +1,8 @@
 # Модель: что вызывать и что придёт в ответ
 
-Короткое описание для интерфейса. Подробности методологии — в `docs/methodology.md`,
-числа качества — в `evidence/model_release_20260922.md`.
+Короткое описание для интерфейса. Боевая модель — `s2a2-v1` (шесть признаков, порог 0.400).
+Подробности методологии — в `docs/methodology.md` (разделы 6.0 и 9.3b).
+`s2a1-v1` (`volume` вместо `share_patent`, порог 0.325) оставлена только для воспроизводимости прошлых отчётов.
 
 ## Что вызывать
 
@@ -25,12 +26,12 @@ probability, contributions = predict(features, area)
 
 | имя | что это |
 |---|---|
-| `volume` | объём документов о технологии |
-| `growth_research` | рост научных публикаций против фона источника |
-| `recency` | свежесть документов |
-| `share_news_wordmatch` | доля новостей, найденных по словам названия, среди всех документов |
-| `share_prev6` | доля документов предыдущей шестилетки |
+| `share_news_wordmatch` | доля новостей, найденных по словам названия, среди новостей и научных работ |
+| `recency` | свежесть документов: доля за последние 24 месяца |
+| `share_patent` | доля патентов Роспатента среди патентов и научных работ |
 | `age_first_arxiv` | годы от первого препринта arXiv до даты среза |
+| `share_prev6` | доля документов предыдущей шестилетки |
+| `growth_research` | рост научных публикаций против фона источника |
 
 Пропуск передаётся как `None` — это нормально, у `age_first_arxiv` его нет у 43 %
 технологий. Модель подставит медиану обучающей выборки, а вклад признака в ответе
@@ -46,7 +47,7 @@ probability, contributions = predict(features, area)
 
 ```python
 features = {
-    "volume": 3.6635616461296463,
+    "share_patent": 0.0,
     "growth_research": 0.3539803477132245,
     "recency": 0.4736842105263157,
     "share_news_wordmatch": 0.9736842105263158,
@@ -58,29 +59,29 @@ explain(features, "Роботы")
 
 ```json
 {
-  "score": 0.9475067822392682,
+  "score": 0.9594256257025895,
   "is_signal": true,
-  "threshold": 0.325,
-  "model_version": "s2a1-v1",
+  "threshold": 0.4,
+  "model_version": "s2a2-v1",
   "cutoff_date": "2026-09-01",
   "top_features": [
     {
       "name": "share_news_wordmatch",
       "value": 0.9736842105263158,
-      "contribution": 2.133493861562786,
+      "contribution": 1.965811832931176,
       "explanation_ru": "доля новостей, найденных по словам названия, среди всех документов"
     },
     {
       "name": "recency",
       "value": 0.4736842105263157,
-      "contribution": 0.6811456901879308,
+      "contribution": 0.6522426649246156,
       "explanation_ru": "свежесть документов"
     },
     {
-      "name": "age_first_arxiv",
-      "value": null,
-      "contribution": -0.29290384971208505,
-      "explanation_ru": "годы от первого препринта arXiv до даты среза"
+      "name": "share_patent",
+      "value": 0.0,
+      "contribution": 0.41398113132491227,
+      "explanation_ru": "доля патентов Роспатента среди патентов и научных работ"
     }
   ]
 }
@@ -106,12 +107,15 @@ explain(features, "Роботы")
 ```python
 from model.candidate import candidate_features
 
-answer = candidate_features("edge model compression", area="Edge")
-answer["features"]   # шесть чисел в порядке model.config.FEATURES
+answer = candidate_features("edge model compression", area="Edge", n_pat=0)
+answer["features"]   # шесть чисел в порядке model.config.FEATURES_S2A2
 answer["counters"]   # окно -> источник -> число документов
 answer["sources"]    # какие источники ответили
 answer["complete"]   # False, если счётчиков не нашлось
 ```
+
+`n_pat` — число патентов Роспатента по фразе (в запросе его приносит очередь Роспатента);
+без него `share_patent` — пропуск, и модель подставит медиану обучения.
 
 Внутри: сборка булева запроса из терминов, счётчики по семи окнам из трёх
 источников (OpenAlex, arXiv, TechCrunch), поправка на рост корпуса по
@@ -150,16 +154,18 @@ rank_candidates(["edge model compression", "humanoid robot"], area="Edge")
 ### Внутренний формат одного кандидата
 
 Контракт выдачи согласуется отдельно; ниже то, что модель отдаёт сегодня.
-Пример настоящий, счётчики обрезаны до трёх окон для краткости.
+Пример настоящий (`model.ranking.score_candidate` из кэша, `n_pat` = 0), счётчики обрезаны до трёх окон, `top_features` — до одного.
 
 ```json
 {
   "name": "edge model compression",
   "area": "Edge",
+  "area_known": true,
+  "normalization": "по области",
   "query": "(\"edge model compression\")",
   "terms": ["edge model compression"],
   "features": {
-    "volume": 4.007333185232471,
+    "share_patent": 0.0,
     "growth_research": 1.7760465637281835,
     "recency": 0.4074074074074074,
     "share_news_wordmatch": 0.6851851851851851,
@@ -173,22 +179,22 @@ rank_candidates(["edge model compression", "humanoid robot"], area="Edge")
   },
   "sources": ["arxiv", "openalex", "techcrunch"],
   "documents": [],
-  "model_version": "s2a1-v1",
+  "model_version": "s2a2-v1",
   "cutoff_date": "2026-09-01",
-  "threshold": 0.325,
-  "score": 0.8711975407854855,
+  "threshold": 0.4,
+  "score": 0.9030772443987704,
   "is_signal": true,
   "contributions": {
-    "volume": 0.0071082600999151264,
-    "growth_research": -0.028746178427801118,
-    "recency": -0.08314657651607074,
-    "share_news_wordmatch": 1.554722541472033,
-    "share_prev6": -0.06908018904502182,
-    "age_first_arxiv": 0.12232172346249015
+    "share_patent": 0.4234531325523244,
+    "growth_research": 0.0035651212956271977,
+    "recency": -0.07961842147344085,
+    "share_news_wordmatch": 1.4325290660605965,
+    "share_prev6": -0.02800148494927769,
+    "age_first_arxiv": 0.09871746434482485
   },
   "top_features": [
     {"name": "share_news_wordmatch", "value": 0.6851851851851851,
-     "contribution": 1.554722541472033,
+     "contribution": 1.4325290660605965,
      "explanation_ru": "доля новостей, найденных по словам названия, среди всех документов"}
   ],
   "skipped_reason": null
@@ -236,29 +242,16 @@ rank_candidates(names, area=OTHER_AREA)    # откат
 
 ### Какие метрики заявлять
 
-Это разные режимы, и числа у них разные. Полностью — в
-`evidence/fallback_mode_20260922.md`, порог во всех строках подобран внутренней
-кросс-валидацией на обучающей части.
-
-Кросс-валидация, среднее ± std по 10 повторам:
+Числа `s2a2-v1` — `docs/methodology.md`, раздел 9.3b: нормировка по области, порог подобран внутренней
+кросс-валидацией на обучающей части; 160 строк.
 
 | режим | AUC | Precision | Recall | F1 | Accuracy |
 |---|---|---|---|---|---|
-| `area_known: true` | 0.805 | 0.764 ± 0.015 | 0.787 ± 0.043 | 0.775 ± 0.025 | 0.715 ± 0.027 |
-| `area_known: false` | 0.791 | 0.752 ± 0.022 | 0.772 ± 0.020 | 0.762 ± 0.014 | 0.698 ± 0.020 |
+| кросс-валидация, среднее ± std по 10 повторам | 0.828 ± 0.007 | 0.776 ± 0.020 | 0.843 ± 0.034 | 0.808 ± 0.018 | 0.749 ± 0.022 |
+| leave-one-area-out, среднее по шести областям | 0.837 | 0.832 | 0.783 | 0.797 | 0.757 |
 
-Leave-one-area-out, среднее по шести областям — ближе всего к тому, что увидит
-жюри на незнакомой теме:
-
-| режим | AUC | Precision | Recall | F1 | Accuracy |
-|---|---|---|---|---|---|
-| `area_known: true` | 0.811 | 0.817 | 0.763 | 0.779 | 0.738 |
-| `area_known: false` | 0.821 | 0.771 | 0.812 | 0.783 | 0.726 |
-
-Откат по кросс-валидации хуже на 0.014 AUC и 0.017 Accuracy. На
-leave-one-area-out картина неоднородна: AUC у отката выше (0.821 против 0.811),
-Accuracy ниже (0.726 против 0.738) — ранжирует он не хуже, а порог на нём
-ложится хуже. Если в демо область не выбрана, называть надо вторую строку.
+Leave-one-area-out ближе всего к тому, что увидит жюри на незнакомой теме. Режим отката (`area_known: false`)
+для `s2a2-v1` отдельно не пересчитывался; его замер для `s2a1-v1` — `evidence/fallback_mode_20260922.md`.
 
 ## Чего у модели по-прежнему нет
 

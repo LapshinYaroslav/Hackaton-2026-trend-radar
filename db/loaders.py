@@ -11,7 +11,6 @@ from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 SIGNALS_XLSX = ROOT / "data" / "raw" / "dataset.xlsx"
-NEGATIVES_XLSX = ROOT / "data" / "raw" / "negatives.xlsx"
 NEGATIVES_CSV = ROOT / "labels" / "negatives.csv"
 TECHNOLOGIES_CSV = ROOT / "data" / "interim" / "technologies.csv"
 GROUPS_CSV = ROOT / "labels" / "signal_groups.csv"

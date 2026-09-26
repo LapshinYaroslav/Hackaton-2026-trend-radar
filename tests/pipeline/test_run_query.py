@@ -11,11 +11,13 @@ import search.subqueries as sq
 from collector.api import tech_key
 from collector.constants import COLLECTION_START, COUNTER_WINDOWS, CUTOFF_DATE
 from collector.settings import Settings
-from pipeline import naming
+from pipeline import naming, translate
+from search import llm_yandex_gpt as llm_module
 from pipeline import run_query as rq
 from pipeline import fetch as fetch_module
 from pipeline import search_cache
 from tests.collector.fakes import FakeAdapter, doc
+from tests.data_required import require_model
 
 SIGNAL, MAINSTREAM = "robotic teleoperation data", "humanoid robot"
 NO_TRACE, PARTIAL = "phantom gripper lattice", "partial counter device"
@@ -104,6 +106,11 @@ def fake_extract(system_prompt, user_prompt, **kwargs):
             "model_version": "t", "usage": {}, "elapsed_s": 0, "error": None}
 
 
+def fake_translate(system, user, **kwargs):
+    """Перевод названия без сети: «русское <термин>»."""
+    return {"text": f"русское {user}", "error": None}
+
+
 def fake_ask_name(name_ru, area, repeat=0, note=""):
     """Нормализатор без сети: три строки VARIANT, как отвечает модель."""
     return "\n".join(f"VARIANT: {name}" for name in VARIANTS[name_ru]), True
@@ -113,7 +120,9 @@ def run(tmp_path, extract=fake_extract, patents=None, **options):
     """run_query на заглушках; по умолчанию с нормализатором, как в Д5 и И2.
 
     Роспатент всегда заглушка (patents — ответы по фразам; по умолчанию все сбои): сеть не нужна.
+    Нужен настоящий артефакт модели: без data/model тест пропускается.
     """
+    require_model()
     from collector import rospatent as rp
     options = {"naming_mode": "normalizer", **options}
     stages, extract_prompts = [], []
@@ -134,6 +143,8 @@ def run(tmp_path, extract=fake_extract, patents=None, **options):
          patch.object(fetch_module, "COUNTERS_CACHE_DIR", tmp_path / "counters"), \
          patch.object(rp, "count_all", patents or fake_patents({})), \
          patch.object(naming.T, "ask_name", side_effect=fake_ask_name), \
+         patch.object(translate, "CACHE_DIR", tmp_path / "translate"), \
+         patch.object(llm_module, "ask_llm", side_effect=fake_translate), \
          patch.object(et, "dedupe_candidates", lambda items, threshold=None: [
              {**item, "doc_ids": [item["doc"]], "doc_count": 1} for item in items]):
         out = rq.run_query("роботы для промышленности", "Роботы", adapters=adapters(), settings=Settings(),
@@ -178,21 +189,25 @@ def test_output_matches_schema(result) -> None:
                                  "documents_for_candidates_by_source",
                                  "candidates_found", "candidates_named",
                                  "candidates_scored", "above_threshold", "above_075",
-                                 "rospatent_enabled", "rospatent_failures"}
+                                 "rospatent_enabled", "rospatent_failures", "translation"}
     assert out["model_version"] == "s2a2-v1"
-    assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "total",
-                                   "queues"}
-    assert {"subqueries", "search", "candidates", "naming", "counters", "ranking"} <= set(stages)
+    assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "translate",
+                                   "total", "queues"}
+    assert {"subqueries", "search", "candidates", "naming", "counters", "ranking", "translate"} <= set(stages)
     patent_keys = {"n_pat", "share_patent", "rospatent_failed", "note_ru"}
     for item in out["top"]:
         assert set(item) == {"rank", "name_ru", "name_en", "score", "explanation_ru", "contributions",
-                             "counters", "sources", "model_version"} | DETAIL_KEYS | patent_keys
+                             "counters", "sources", "model_version", "name_ru_source", "name_ru_auto"}             | DETAIL_KEYS | patent_keys
+        assert item["name_ru"] == f"Русское {item['name_en']}" and item["name_ru_source"] == "translate"
         assert item["name_choice_rule"] == "max_trace" and len(item["name_variants"]) == 3
         assert len(item["sources"]) <= 5
     for item in out["excluded"]:
-        base = {"name_ru", "name_en", "score", "skipped_reason", "reason_ru", "model_version"} | DETAIL_KEYS
+        base = {"name_ru", "name_en", "score", "skipped_reason", "reason_ru", "model_version",
+                "name_ru_source", "name_ru_auto"} | DETAIL_KEYS
         assert set(item) == (base | patent_keys if item["score"] is not None else base)
-        assert item["model_version"] == "s2a2-v1"
+        assert item["model_version"] == "s2a2-v1" and item["name_ru_auto"] is True
+        scored = item["skipped_reason"] in ("below_threshold", "beyond_top")
+        assert item["name_ru_source"] == ("translate" if scored else "extract" if item["name_ru"] else None)
 
 
 def test_each_reason_in_its_case(result) -> None:

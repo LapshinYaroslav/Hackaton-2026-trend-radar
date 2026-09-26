@@ -31,13 +31,13 @@ from model.config import ROSPATENT_DATASETS
 from model.features import RESEARCH_SOURCES, share_patent
 from model.predict import load
 from model.ranking import rank_candidates
-from pipeline import naming
+from pipeline import naming, translate
 from pipeline.fetch import parallel_fetch
 from pipeline.search_cache import CachedSearch
 from pipeline.reasons import SPECIAL, explanation_top, reason_below
 from search.extract_candidates import extract_candidates
 from search.extract_terms import extract_terms
-from search.subqueries import PROMPT_VERSION, PROMPT_VERSION_V3, generate_subqueries
+from search.subqueries import generate_subqueries
 
 ROOT = Path(__file__).resolve().parents[1]
 TECHNOLOGIES = ROOT / "data" / "interim" / "technologies.csv"
@@ -55,8 +55,8 @@ ROSPATENT_OFF_WARNING = ("Роспатент выключен: патентны�
 PATENT_FAILED_NOTE = "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения"
 ROSPATENT_NO_KEY_WARNING = ("Нет ключа ROSPATENT в .env: патентный признак share_patent недоступен у всех кандидатов, "
                             "модель подставила медиану обучения")
-# Вариант генерации кандидатов (задача Г): версия промпта подзапросов; v3 ещё и меняет состав шага 4.
-CANDIDATES_VERSIONS = {"v2": PROMPT_VERSION, "v3": PROMPT_VERSION_V3}
+# Генерация кандидатов v3 (задача Г): промпт подзапросов subq-v3 и состав документов шага 4 (step4_documents).
+CANDIDATES_VERSION = "v3"
 OUTCOME_REASON = {"no_trace": "no_trace", "bad_format": "bad_name", "trace_unknown": "trace_unknown"}
 Progress = Callable[[str, int, int], None]
 
@@ -211,11 +211,9 @@ def is_russian(doc: dict, subqueries: Sequence[dict]) -> bool:
     return doc["source"] == "openalex" and (origin(doc, subqueries) == "openalex_ru" or doc.get("language") == "ru")
 
 
-def step4_documents(documents: Sequence[dict], subqueries: Sequence[dict], version: str = "v2") -> list[dict]:
-    """Документы для шага 4. v2 — все как есть. v3 — все arXiv, затем TechCrunch, затем
-    английские OpenAlex в прежнем порядке, не больше половины переданных; русские OpenAlex не идут."""
-    if version == "v2":
-        return list(documents)
+def step4_documents(documents: Sequence[dict], subqueries: Sequence[dict]) -> list[dict]:
+    """Документы для шага 4 (v3): все arXiv, затем TechCrunch, затем английские OpenAlex
+    в прежнем порядке, не больше половины переданных; русские OpenAlex не идут."""
     head = ([doc for doc in documents if doc["source"] == "arxiv"]
             + [doc for doc in documents if doc["source"] == "techcrunch"])
     english = [doc for doc in documents if doc["source"] == "openalex" and not is_russian(doc, subqueries)]
@@ -322,6 +320,19 @@ def score_pool(pool: list[dict], area: str | None, adapters: Sequence[SourceAdap
     return ranked, dict(fetch.patents)
 
 
+def name_in_russian(top: list[dict], excluded_entries: list[dict], use_cache: bool) -> dict:
+    """Русские названия (задача З): перевод у ТОП-15 и оценённых исключённых, у остальных — name_ru шага 4.
+
+    Оценённые исключённые (below_threshold, beyond_top) показываются с причиной по признакам модели.
+    """
+    scored = [e for e in excluded_entries if e.get("skipped_reason") in ("below_threshold", "beyond_top")]
+    numbers = translate.translate_entries(top + scored, use_cache=use_cache)
+    for entry in excluded_entries:
+        if entry not in scored:
+            entry.update(name_ru_source="extract" if entry.get("name_ru") else None, name_ru_auto=True)
+    return numbers
+
+
 def staged(name: str, timings: dict, progress: Progress, action: Callable):
     """Выполняет шаг, пишет его время и прогресс 0/1 -> 1/1."""
     mark = time.monotonic()
@@ -337,7 +348,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
               settings: Settings | None = None, candidate_sources: set[str] | None = None,
               extract_model: str | None = "yandexgpt-5-pro", naming_mode: str = "direct",
               counters_cache: bool | None = None, extract_version: str = "v2",
-              rospatent: bool | None = None, candidates_version: str = "v3") -> dict:
+              rospatent: bool | None = None) -> dict:
     """Тема -> JSON с ТОП-15, исключёнными, статистикой и временем по шагам.
 
     candidate_sources — из документов каких источников извлекать кандидатов (openalex,
@@ -352,22 +363,18 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     rospatent — очередь Роспатента в этапе счётчиков; None — как collector.rospatent.ROSPATENT_ENABLED.
     n_pat идёт в признак share_patent модели s2a2-v1; у кандидатов с оценкой — n_pat, share_patent,
     rospatent_failed (при сбое ещё note_ru). Выключенный при s2a2-v1 — предупреждение в warnings.
-    candidates_version — v3 (по умолчанию, принят в задаче Г): промпт subq-v3 и состав шага 4 из
-    step4_documents; v2 — прежний вариант, для воспроизведения старых прогонов.
+    Генерация кандидатов — v3 (задача Г): промпт subq-v3 и состав шага 4 из step4_documents.
     """
     if extract_version not in ("v1", "v2"):
         raise ValueError(f"extract_version {extract_version!r}: ожидалось v1 или v2")
-    if candidates_version not in CANDIDATES_VERSIONS:
-        raise ValueError(f"candidates_version {candidates_version!r}: ожидалось v2 или v3")
     progress = progress or (lambda stage, done, total: None)
     settings = settings or Settings.from_env()
     adapters = list(adapters) if adapters is not None else default_adapters(settings)
     meta, started, timings = load()["meta"], time.monotonic(), {}
     query_id = f"q{datetime.now():%Y%m%d%H%M%S}"
 
-    subq = staged("subqueries", timings, progress, lambda: generate_subqueries(topic, query_id, use_cache=use_cache,
-                                                   prompt_version=CANDIDATES_VERSIONS[candidates_version]))
-    warnings = list(subq["warnings"])
+    subq = staged("subqueries", timings, progress, lambda: generate_subqueries(topic, query_id, use_cache=use_cache))
+    warnings = list(subq.get("warnings", []))
     searchers = [CachedSearch(adapter, use_cache=use_cache) for adapter in adapters]
     collector = DocumentCollector(adapters=searchers, cache=MemoryCache(), settings=settings)
     documents = staged("search", timings, progress,
@@ -375,7 +382,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     all_documents = documents
     if candidate_sources is not None:
         documents = [doc for doc in documents if origin(doc, subq["subqueries"]) in candidate_sources]
-    documents = step4_documents(documents, subq["subqueries"], candidates_version)
+    documents = step4_documents(documents, subq["subqueries"])
     if extract_version == "v1":
         extract = lambda: extract_candidates(documents, topic, query_id, use_cache=use_cache)
     else:
@@ -393,7 +400,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     merged = merge_subtopics(merge_candidates(named))
     dropped = [excluded(item, item["skipped_reason"], documents) for item in unnamed]
     dropped += [excluded(item, "bad_name", documents) for item in merged if not good_name(item["name_en"])]
-    pool, capped = apply_cap([item for item in merged if good_name(item["name_en"])], documents)
+    good = [item for item in merged if good_name(item["name_en"])]
+    pool, capped = apply_cap(good, documents)
     options = rospatent_options(rospatent)
     if options is not None and not options["token"]:
         warnings.append(ROSPATENT_NO_KEY_WARNING)
@@ -410,6 +418,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
                 entry.update(patent_fields(by_name[key]["counters"], patents.get(key)))
     elif "share_patent" in meta["features"]:
         warnings.append(ROSPATENT_OFF_WARNING)
+    translation = staged("translate", timings, progress,
+                         lambda: name_in_russian(top, dropped + capped + below, use_cache))
     for entry in top + dropped + capped + below:
         entry["model_version"] = meta["model_version"]
     scores = [item["score"] for item in ranked if item["score"] is not None]
@@ -420,7 +430,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
         "subqueries": subq["subqueries"],
         "candidate_sources": sorted(candidate_sources) if candidate_sources is not None else None,
         "extract_version": extract_version, "extract_model": extract_model if extract_version == "v2" else None,
-        "naming_mode": naming_mode, "candidates_version": candidates_version,
+        "naming_mode": naming_mode, "candidates_version": CANDIDATES_VERSION,
         "stats": {"documents_by_source": document_stats(all_documents, subq["subqueries"]),
                   "documents_for_candidates_by_source": document_stats(documents, subq["subqueries"]),
                   "documents_total": len(all_documents), "documents_for_candidates": len(documents),
@@ -430,7 +440,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
                   "above_threshold": sum(score >= meta["threshold"] for score in scores),
                   "above_075": sum(score >= HIGH_SCORE for score in scores),
                   "rospatent_enabled": options is not None,
-                  "rospatent_failures": sum(result["failed"] for result in patents.values())},
+                  "rospatent_failures": sum(result["failed"] for result in patents.values()),
+                  "translation": translation},
         "normalizer_deviations": list(naming.DEVIATIONS),
         "top": top, "excluded": dropped + capped + below,
         "timings": timings, "warnings": warnings,
