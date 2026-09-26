@@ -11,7 +11,7 @@ import search.subqueries as sq
 from collector.api import tech_key
 from collector.constants import COLLECTION_START, COUNTER_WINDOWS, CUTOFF_DATE
 from collector.settings import Settings
-from pipeline import naming, translate
+from pipeline import dedup as dedup_module, naming, translate
 from search import llm_yandex_gpt as llm_module
 from pipeline import run_query as rq
 from pipeline import fetch as fetch_module
@@ -144,6 +144,7 @@ def run(tmp_path, extract=fake_extract, patents=None, **options):
          patch.object(rp, "count_all", patents or fake_patents({})), \
          patch.object(naming.T, "ask_name", side_effect=fake_ask_name), \
          patch.object(translate, "CACHE_DIR", tmp_path / "translate"), \
+         patch.object(dedup_module, "CACHE_DIR", tmp_path / "dedup"), \
          patch.object(llm_module, "ask_llm", side_effect=fake_translate), \
          patch.object(et, "dedupe_candidates", lambda items, threshold=None: [
              {**item, "doc_ids": [item["doc"]], "doc_count": 1} for item in items]):
@@ -191,20 +192,21 @@ def test_output_matches_schema(result) -> None:
                                  "candidates_scored", "above_threshold", "above_075",
                                  "rospatent_enabled", "rospatent_failures", "translation"}
     assert out["model_version"] == "s2a2-v1"
-    assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "translate",
-                                   "total", "queues"}
-    assert {"subqueries", "search", "candidates", "naming", "counters", "ranking", "translate"} <= set(stages)
+    assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup",
+                                   "translate", "total", "queues"}
+    assert {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup", "translate"} <= set(stages)
     patent_keys = {"n_pat", "share_patent", "rospatent_failed", "note_ru"}
     for item in out["top"]:
         assert set(item) == {"rank", "name_ru", "name_en", "score", "explanation_ru", "contributions",
-                             "counters", "sources", "model_version", "name_ru_source", "name_ru_auto"}             | DETAIL_KEYS | patent_keys
+                             "counters", "sources", "model_version", "name_ru_source", "name_ru_auto",
+                             "variants"} | DETAIL_KEYS | patent_keys
         assert item["name_ru"] == f"Русское {item['name_en']}" and item["name_ru_source"] == "translate"
         assert item["name_choice_rule"] == "max_trace" and len(item["name_variants"]) == 3
         assert len(item["sources"]) <= 5
     for item in out["excluded"]:
         base = {"name_ru", "name_en", "score", "skipped_reason", "reason_ru", "model_version",
                 "name_ru_source", "name_ru_auto"} | DETAIL_KEYS
-        assert set(item) == (base | patent_keys if item["score"] is not None else base)
+        assert set(item) == (base | patent_keys | {"variants"} if item["score"] is not None else base)
         assert item["model_version"] == "s2a2-v1" and item["name_ru_auto"] is True
         scored = item["skipped_reason"] in ("below_threshold", "beyond_top")
         assert item["name_ru_source"] == ("translate" if scored else "extract" if item["name_ru"] else None)

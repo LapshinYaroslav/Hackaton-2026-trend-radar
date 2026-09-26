@@ -1,5 +1,5 @@
 {
-  "query_id": "q20260926225257",
+  "query_id": "q20260927000840",
   "topic": "слабые сигналы в области кибербезопасности",
   "area": "Защита ИИ",
   "model_version": "s2a2-v1",
@@ -7,57 +7,57 @@
   "cutoff_date": "2026-09-01",
   "subqueries": [
     {
-      "subquery_id": "q20260926225257-ru-1",
+      "subquery_id": "q20260927000840-ru-1",
       "language": "ru",
       "text": "кибербезопасность в квантовую эпоху"
     },
     {
-      "subquery_id": "q20260926225257-ru-2",
+      "subquery_id": "q20260927000840-ru-2",
       "language": "ru",
       "text": "защита распределённых систем"
     },
     {
-      "subquery_id": "q20260926225257-ru-3",
+      "subquery_id": "q20260927000840-ru-3",
       "language": "ru",
       "text": "безопасность интернета вещей"
     },
     {
-      "subquery_id": "q20260926225257-en-1",
+      "subquery_id": "q20260927000840-en-1",
       "language": "en",
       "text": "zero trust architecture"
     },
     {
-      "subquery_id": "q20260926225257-en-2",
+      "subquery_id": "q20260927000840-en-2",
       "language": "en",
       "text": "cybersecurity threat intelligence"
     },
     {
-      "subquery_id": "q20260926225257-en-3",
+      "subquery_id": "q20260927000840-en-3",
       "language": "en",
       "text": "advanced persistent threat detection"
     },
     {
-      "subquery_id": "q20260926225257-en-4",
+      "subquery_id": "q20260927000840-en-4",
       "language": "en",
       "text": "cloud security solutions"
     },
     {
-      "subquery_id": "q20260926225257-en-5",
+      "subquery_id": "q20260927000840-en-5",
       "language": "en",
       "text": "quantum cryptography applications"
     },
     {
-      "subquery_id": "q20260926225257-en-6",
+      "subquery_id": "q20260927000840-en-6",
       "language": "en",
       "text": "AI-powered security analytics"
     },
     {
-      "subquery_id": "q20260926225257-en-7",
+      "subquery_id": "q20260927000840-en-7",
       "language": "en",
       "text": "IoT device security protocols"
     },
     {
-      "subquery_id": "q20260926225257-en-8",
+      "subquery_id": "q20260927000840-en-8",
       "language": "en",
       "text": "cybersecurity incident response automation"
     }
@@ -90,11 +90,11 @@
     "rospatent_enabled": true,
     "rospatent_failures": 0,
     "translation": {
-      "переведено": 60,
-      "из кэша": 58,
+      "переведено": 58,
+      "из кэша": 55,
       "с первого раза": 0,
       "с повтором": 0,
-      "откат на term_ru": 2,
+      "откат на term_ru": 3,
       "без названия": 0
     }
   },
@@ -182,6 +182,12 @@
           "source_type": "preprint",
           "language": "en",
           "trust_level": "medium"
+        }
+      ],
+      "variants": [
+        {
+          "term_en": "AI-driven threat detection",
+          "score": 0.716068846251338
         }
       ],
       "n_pat": 0,
@@ -273,6 +279,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -362,6 +369,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -451,6 +459,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -540,6 +549,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -629,6 +639,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -718,6 +729,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -834,6 +846,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -923,6 +936,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -1021,6 +1035,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 1,
       "share_patent": 7.807620237351655e-05,
       "rospatent_failed": false,
@@ -1030,95 +1045,6 @@
     },
     {
       "rank": 11,
-      "name_ru": "Обнаружение угроз на основе ИИ",
-      "name_en": "AI-driven threat detection",
-      "score": 0.716068846251338,
-      "explanation_ru": [
-        "Упоминания свежие: 78% за последние два года",
-        "Молодой термин: первый препринт 2 лет назад"
-      ],
-      "contributions": {
-        "share_patent": 0.39178415590604293,
-        "growth_research": -0.00036181678083247446,
-        "recency": 1.191995240938528,
-        "share_news_wordmatch": -1.641475059638236,
-        "share_prev6": 0.11453567951139537,
-        "age_first_arxiv": 0.4873174373433225
-      },
-      "counters": {
-        "prev6": {
-          "arxiv": 0,
-          "openalex": 20,
-          "techcrunch": 5
-        },
-        "2020": {
-          "arxiv": 0,
-          "openalex": 21,
-          "techcrunch": 3
-        },
-        "2021": {
-          "arxiv": 0,
-          "openalex": 45,
-          "techcrunch": 2
-        },
-        "2022": {
-          "arxiv": 0,
-          "openalex": 71,
-          "techcrunch": 3
-        },
-        "2023": {
-          "arxiv": 0,
-          "openalex": 195,
-          "techcrunch": 7
-        },
-        "2024": {
-          "arxiv": 4,
-          "openalex": 642,
-          "techcrunch": 3
-        },
-        "2025": {
-          "arxiv": 1,
-          "openalex": 542,
-          "techcrunch": 4
-        }
-      },
-      "name_raw": "AI-driven threat detection",
-      "name_variants": [
-        {
-          "name": "ai-driven threat detection",
-          "n_works": 1516,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 1516,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "AI-Driven Threat Detection and Automated Incident Response",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "sources": [
-        {
-          "title": "AI-Driven Threat Detection and Automated Incident Response for Enhancing Network Security",
-          "url": "https://doi.org/10.3390/network6020032",
-          "published_at": "2026-05-25",
-          "source": "openalex",
-          "source_type": "paper",
-          "language": "en",
-          "trust_level": "high"
-        }
-      ],
-      "n_pat": 0,
-      "share_patent": 0.0,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "rank": 12,
       "name_ru": "Аналитика состояния безопасности",
       "name_en": "Security Health Analytics",
       "score": 0.7149861056248257,
@@ -1199,6 +1125,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -1207,7 +1134,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "rank": 13,
+      "rank": 12,
       "name_ru": "Блокчейн-основанная модель нулевого доверия",
       "name_en": "blockchain-based zero-trust",
       "score": 0.6992930443055004,
@@ -1288,6 +1215,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -1296,7 +1224,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "rank": 14,
+      "rank": 13,
       "name_ru": "Набор данных сетевого трафика IoT",
       "name_en": "IoT Network Traffic Dataset",
       "score": 0.6640450106748444,
@@ -1377,6 +1305,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -1385,7 +1314,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "rank": 15,
+      "rank": 14,
       "name_ru": "Архитектура ИИ, управляемая данными",
       "name_en": "Data-Driven AI Architecture",
       "score": 0.6568871668899059,
@@ -1466,8 +1395,108 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 15,
+      "name_ru": "Генеративный искусственный интеллект",
+      "name_en": "Generative AI",
+      "score": 0.6528398042813278,
+      "explanation_ru": [
+        "Упоминания свежие: 91% за последние два года",
+        "Патентов мало относительно научных работ: 574 патента на 286 935 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.38649198757593106,
+        "growth_research": 0.0031568754011347933,
+        "recency": 1.7615155194399952,
+        "share_news_wordmatch": -1.5929682463741393,
+        "share_prev6": 0.11998890282222602,
+        "age_first_arxiv": -0.42788848156974657
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 27,
+          "openalex": 149,
+          "techcrunch": 1501
+        },
+        "2020": {
+          "arxiv": 26,
+          "openalex": 122,
+          "techcrunch": 540
+        },
+        "2021": {
+          "arxiv": 35,
+          "openalex": 334,
+          "techcrunch": 612
+        },
+        "2022": {
+          "arxiv": 348,
+          "openalex": 2517,
+          "techcrunch": 1619
+        },
+        "2023": {
+          "arxiv": 1328,
+          "openalex": 16591,
+          "techcrunch": 2135
+        },
+        "2024": {
+          "arxiv": 2080,
+          "openalex": 77297,
+          "techcrunch": 1792
+        },
+        "2025": {
+          "arxiv": 2334,
+          "openalex": 183923,
+          "techcrunch": 1517
+        }
+      },
+      "name_raw": "Generative AI",
+      "name_variants": [
+        {
+          "name": "generative ai",
+          "n_works": 280784,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 280784,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "governing generative AI",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Governing generative AI in higher education: a global Delphi study on policy and practice",
+          "url": "https://doi.org/10.1186/s41239-026-00602-z",
+          "published_at": "2026-05-22",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        },
+        {
+          "title": "AI in Cybersecurity: A Systematic Review and Conceptual Audit Model",
+          "url": "https://doi.org/10.63158/journalisi.v8i2.1579",
+          "published_at": "2026-04-21",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 574,
+      "share_patent": 0.0019964592412759254,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -4041,32 +4070,34 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Генеративный искусственный интеллект",
-      "name_en": "Generative AI",
-      "score": 0.6528398042813278,
-      "skipped_reason": "beyond_top",
-      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "Generative AI",
+      "name_ru": "обнаружение угроз на основе ИИ",
+      "name_en": "AI-driven threat detection",
+      "score": 0.716068846251338,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «ai-powered real-time threat detection», — показан вариантом названия",
+      "name_raw": "AI-driven threat detection",
       "name_variants": [
         {
-          "name": "generative ai",
-          "n_works": 280784,
+          "name": "ai-driven threat detection",
+          "n_works": 1516,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 280784,
+      "n_works": 1516,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "governing generative AI",
-      "n_docs": 2,
+      "quote": "AI-Driven Threat Detection and Automated Incident Response",
+      "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
-      "n_pat": 574,
-      "share_patent": 0.0019964592412759254,
+      "duplicate_of": "ai-powered real-time threat detection",
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
       "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -4093,6 +4124,7 @@
       "n_docs": 2,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 28,
       "share_patent": 0.0013246912996167858,
       "rospatent_failed": false,
@@ -4123,6 +4155,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -4153,6 +4186,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -4161,7 +4195,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "КАЯ-модели «контекстно-расширенные языковые»",
+      "name_ru": "Языковые модели, дополненные контекстом",
       "name_en": "context-augmented language models",
       "score": 0.5905728652440149,
       "skipped_reason": "beyond_top",
@@ -4183,10 +4217,11 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -4213,6 +4248,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 49,
       "share_patent": 0.04152542372881356,
       "rospatent_failed": false,
@@ -4243,6 +4279,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -4273,6 +4310,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 1,
       "share_patent": 0.00015822784810126583,
       "rospatent_failed": false,
@@ -4303,6 +4341,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -4333,6 +4372,7 @@
       "n_docs": 6,
       "n_sources": 2,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 521,
       "share_patent": 0.00220845060870155,
       "rospatent_failed": false,
@@ -4363,6 +4403,7 @@
       "n_docs": 5,
       "n_sources": 2,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 183,
       "share_patent": 0.02646038172353962,
       "rospatent_failed": false,
@@ -4393,6 +4434,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -4423,6 +4465,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 24,
       "share_patent": 0.02321083172147002,
       "rospatent_failed": false,
@@ -4453,6 +4496,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -4483,6 +4527,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 28,
       "share_patent": 0.1003584229390681,
       "rospatent_failed": false,
@@ -4513,6 +4558,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 12665,
       "share_patent": 0.08724614918299303,
       "rospatent_failed": false,
@@ -4543,6 +4589,12 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [
+        {
+          "term_en": "post-quantum cryptography",
+          "score": 0.30744826494945576
+        }
+      ],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -4573,6 +4625,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 1,
       "share_patent": 0.006578947368421052,
       "rospatent_failed": false,
@@ -4603,6 +4656,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 16,
       "share_patent": 0.007611798287345386,
       "rospatent_failed": false,
@@ -4633,6 +4687,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 6764,
       "share_patent": 0.061369843127648184,
       "rospatent_failed": false,
@@ -4663,6 +4718,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 19,
       "share_patent": 0.04909560723514212,
       "rospatent_failed": false,
@@ -4693,6 +4749,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 1208,
       "share_patent": 0.01443008337912416,
       "rospatent_failed": false,
@@ -4701,11 +4758,11 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Постквантовая криптография",
+      "name_ru": "постквантовая криптография",
       "name_en": "post-quantum cryptography",
       "score": 0.30744826494945576,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 8479 публикаций — технология уже хорошо изучена",
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «Quantum-Safe Security Protocols», — показан вариантом названия",
       "name_raw": "post-quantum cryptography",
       "name_variants": [
         {
@@ -4723,10 +4780,12 @@
       "n_docs": 3,
       "n_sources": 2,
       "known_training_label": null,
+      "duplicate_of": "Quantum-Safe Security Protocols",
+      "variants": [],
       "n_pat": 952,
       "share_patent": 0.10094369632064468,
       "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -4753,6 +4812,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 8133,
       "share_patent": 0.06439429928741093,
       "rospatent_failed": false,
@@ -4783,6 +4843,7 @@
       "n_docs": 3,
       "n_sources": 2,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 240,
       "share_patent": 0.02304147465437788,
       "rospatent_failed": false,
@@ -4813,6 +4874,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 22,
       "share_patent": 0.02511415525114155,
       "rospatent_failed": false,
@@ -4843,6 +4905,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -4873,6 +4936,7 @@
       "n_docs": 2,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 402,
       "share_patent": 0.25654116145500955,
       "rospatent_failed": false,
@@ -4903,6 +4967,7 @@
       "n_docs": 2,
       "n_sources": 2,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 22011,
       "share_patent": 0.14960137564483353,
       "rospatent_failed": false,
@@ -4933,6 +4998,7 @@
       "n_docs": 3,
       "n_sources": 2,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 2233,
       "share_patent": 0.12190860948845335,
       "rospatent_failed": false,
@@ -4963,6 +5029,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 2147,
       "share_patent": 0.055395015222663706,
       "rospatent_failed": false,
@@ -4993,6 +5060,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 1039,
       "share_patent": 0.3047814608389557,
       "rospatent_failed": false,
@@ -5023,6 +5091,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 44,
       "share_patent": 0.1004566210045662,
       "rospatent_failed": false,
@@ -5053,6 +5122,7 @@
       "n_docs": 2,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 11696,
       "share_patent": 0.13457754662923288,
       "rospatent_failed": false,
@@ -5083,6 +5153,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 2528,
       "share_patent": 0.13701154408975122,
       "rospatent_failed": false,
@@ -5113,6 +5184,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 2379,
       "share_patent": 0.037920811017597554,
       "rospatent_failed": false,
@@ -5143,6 +5215,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 3323,
       "share_patent": 0.11442049445630466,
       "rospatent_failed": false,
@@ -5176,6 +5249,7 @@
         "id": "n58",
         "label": "mainstream"
       },
+      "variants": [],
       "n_pat": 2326,
       "share_patent": 0.15757739990515549,
       "rospatent_failed": false,
@@ -5206,6 +5280,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 9107,
       "share_patent": 0.18989928477594512,
       "rospatent_failed": false,
@@ -5236,6 +5311,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -5266,6 +5342,7 @@
       "n_docs": 2,
       "n_sources": 2,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 1580,
       "share_patent": 0.3006088280060883,
       "rospatent_failed": false,
@@ -5296,6 +5373,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 239798,
       "share_patent": 0.3817782929050418,
       "rospatent_failed": false,
@@ -5326,6 +5404,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 7795,
       "share_patent": 0.5217886070018074,
       "rospatent_failed": false,
@@ -5356,6 +5435,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 238300,
       "share_patent": 0.5361164292801012,
       "rospatent_failed": false,
@@ -5386,6 +5466,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 3120,
       "share_patent": 0.65504933865211,
       "rospatent_failed": false,
@@ -5395,12 +5476,12 @@
     }
   ],
   "timings": {
-    "subqueries": 0.01,
+    "subqueries": 0.0,
     "search": 0.02,
-    "candidates": 0.08,
-    "naming": 19.3,
-    "counters": 0.25,
-    "ranking": 1.5,
+    "candidates": 0.05,
+    "naming": 19.42,
+    "counters": 0.27,
+    "ranking": 1.3,
     "queues": [
       {
         "source": "openalex",
@@ -5423,8 +5504,8 @@
         "n429": null,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 0.06,
-        "duration_s": 0.06
+        "finished_s": 0.05,
+        "duration_s": 0.05
       },
       {
         "source": "techcrunch",
@@ -5448,12 +5529,13 @@
         "n429": 0,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 0.24,
-        "duration_s": 0.24
+        "finished_s": 0.23,
+        "duration_s": 0.23
       }
     ],
-    "translate": 1.06,
-    "total": 22.22
+    "dedup": 0.02,
+    "translate": 1.36,
+    "total": 22.44
   },
   "warnings": [
     "отброшен (ru): «защита от атак на основе искусственного интеллекта» — слов 7, нужно 2-4",
@@ -5512,10 +5594,10 @@
   "meta": {
     "query": "слабые сигналы в области кибербезопасности",
     "area": "Защита ИИ",
-    "run_date": "2026-09-26T22:52:57",
+    "run_date": "2026-09-27T00:08:40",
     "model_version": "s2a2-v1",
     "candidates_version": "v3",
-    "seconds": 22.22,
+    "seconds": 22.44,
     "counters_cache_share": 1.0
   }
 }

@@ -1,5 +1,5 @@
 {
-  "_note": "ПРИМЕР контракта для разработки БД и UI. Числа и названия условные, не результат модели. Задача З: name_ru — название на русском, переведённое автоматически (name_ru_auto: true); name_ru_source — translate (перевод YandexGPT), extract (название шага 4) или null; name_en — оригинальное название, по нему идут источники и признаки.",
+  "_note": "ПРИМЕР контракта для разработки БД и UI. Числа и названия условные, не результат модели. Задача З: name_ru — название на русском, переведённое автоматически (name_ru_auto: true); name_ru_source — translate (перевод YandexGPT), extract (название шага 4) или null; name_en — оригинальное название, по нему идут источники и признаки. Задача К: variants — склеенные дубли [{term_en, score}] у оценённых кандидатов (показывать под названием: «также: …»); у дубля skipped_reason = duplicate_of и поле duplicate_of (term_en принятого).",
   "query_id": "q-example-001",
   "topic": "роботы для промышленности",
   "area": "Роботы",
@@ -96,6 +96,12 @@
           "language": "en",
           "trust_level": "medium"
         }
+      ],
+      "variants": [
+        {
+          "term_en": "robot teleoperation dataset",
+          "score": 0.81
+        }
       ]
     },
     {
@@ -138,7 +144,8 @@
           "language": "en",
           "trust_level": "high"
         }
-      ]
+      ],
+      "variants": []
     }
   ],
   "excluded": [
@@ -153,7 +160,8 @@
       "model_version": "s2a2-v1",
       "n_pat": 690,
       "share_patent": 0.3651,
-      "rospatent_failed": false
+      "rospatent_failed": false,
+      "variants": []
     },
     {
       "name_ru": "Промышленные роботы-манипуляторы",
@@ -167,7 +175,8 @@
       "n_pat": null,
       "share_patent": null,
       "rospatent_failed": true,
-      "note_ru": "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения"
+      "note_ru": "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения",
+      "variants": []
     },
     {
       "name_ru": "Роботизированный цех будущего",

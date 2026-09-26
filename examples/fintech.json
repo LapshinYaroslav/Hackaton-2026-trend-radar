@@ -1,5 +1,5 @@
 {
-  "query_id": "q20260926224940",
+  "query_id": "q20260927000810",
   "topic": "перспективные решения в финтехе",
   "area": "Финтех",
   "model_version": "s2a2-v1",
@@ -7,62 +7,62 @@
   "cutoff_date": "2026-09-01",
   "subqueries": [
     {
-      "subquery_id": "q20260926224940-ru-1",
+      "subquery_id": "q20260927000810-ru-1",
       "language": "ru",
       "text": "децентрализованные финансовые протоколы"
     },
     {
-      "subquery_id": "q20260926224940-ru-2",
+      "subquery_id": "q20260927000810-ru-2",
       "language": "ru",
       "text": "цифровые платёжные экосистемы"
     },
     {
-      "subquery_id": "q20260926224940-ru-3",
+      "subquery_id": "q20260927000810-ru-3",
       "language": "ru",
       "text": "умные финансовые алгоритмы"
     },
     {
-      "subquery_id": "q20260926224940-ru-4",
+      "subquery_id": "q20260927000810-ru-4",
       "language": "ru",
       "text": "децентрализованные финансовые сервисы"
     },
     {
-      "subquery_id": "q20260926224940-ru-5",
+      "subquery_id": "q20260927000810-ru-5",
       "language": "ru",
       "text": "технологии автоматической верификации"
     },
     {
-      "subquery_id": "q20260926224940-en-1",
+      "subquery_id": "q20260927000810-en-1",
       "language": "en",
       "text": "decentralized finance protocols"
     },
     {
-      "subquery_id": "q20260926224940-en-2",
+      "subquery_id": "q20260927000810-en-2",
       "language": "en",
       "text": "biometric authentication methods"
     },
     {
-      "subquery_id": "q20260926224940-en-3",
+      "subquery_id": "q20260927000810-en-3",
       "language": "en",
       "text": "cross-border payment solutions"
     },
     {
-      "subquery_id": "q20260926224940-en-4",
+      "subquery_id": "q20260927000810-en-4",
       "language": "en",
       "text": "embedded finance platforms"
     },
     {
-      "subquery_id": "q20260926224940-en-5",
+      "subquery_id": "q20260927000810-en-5",
       "language": "en",
       "text": "cryptoasset risk management"
     },
     {
-      "subquery_id": "q20260926224940-en-6",
+      "subquery_id": "q20260927000810-en-6",
       "language": "en",
       "text": "open banking APIs"
     },
     {
-      "subquery_id": "q20260926224940-en-7",
+      "subquery_id": "q20260927000810-en-7",
       "language": "en",
       "text": "digital identity verification"
     }
@@ -95,11 +95,11 @@
     "rospatent_enabled": true,
     "rospatent_failures": 0,
     "translation": {
-      "переведено": 60,
-      "из кэша": 2,
-      "с первого раза": 52,
+      "переведено": 57,
+      "из кэша": 49,
+      "с первого раза": 0,
       "с повтором": 0,
-      "откат на term_ru": 6,
+      "откат на term_ru": 8,
       "без названия": 0
     }
   },
@@ -189,6 +189,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -198,7 +199,7 @@
     },
     {
       "rank": 2,
-      "name_ru": "А2А-финансы (агент-агенту)",
+      "name_ru": "Финансы агент-агенту",
       "name_en": "agent-to-agent finance",
       "score": 0.9102646448909577,
       "explanation_ru": [
@@ -278,10 +279,11 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -367,6 +369,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -456,6 +459,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -545,6 +549,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -652,6 +657,12 @@
           "trust_level": "high"
         }
       ],
+      "variants": [
+        {
+          "term_en": "multimodal biometric identity verification",
+          "score": 0.04464099567332898
+        }
+      ],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -741,6 +752,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -830,6 +842,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 3,
       "share_patent": 0.005747126436781609,
       "rospatent_failed": false,
@@ -919,6 +932,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 6,
       "share_patent": 0.007380073800738007,
       "rospatent_failed": false,
@@ -1008,6 +1022,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 32,
       "share_patent": 0.08333333333333333,
       "rospatent_failed": false,
@@ -1097,6 +1112,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -1195,6 +1211,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 1,
       "share_patent": 0.029411764705882353,
       "rospatent_failed": false,
@@ -1284,6 +1301,7 @@
           "trust_level": "medium"
         }
       ],
+      "variants": [],
       "n_pat": 521,
       "share_patent": 0.00220845060870155,
       "rospatent_failed": false,
@@ -1373,6 +1391,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -1462,6 +1481,7 @@
           "trust_level": "high"
         }
       ],
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -2412,6 +2432,12 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [
+        {
+          "term_en": "diffusion models",
+          "score": 0.37373230998605944
+        }
+      ],
       "n_pat": 3,
       "share_patent": 0.0015641293013555788,
       "rospatent_failed": false,
@@ -2442,6 +2468,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -2472,6 +2499,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 1,
       "share_patent": 0.1111111111111111,
       "rospatent_failed": false,
@@ -2502,6 +2530,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 23,
       "share_patent": 0.323943661971831,
       "rospatent_failed": false,
@@ -2532,6 +2561,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 2,
       "share_patent": 0.05555555555555555,
       "rospatent_failed": false,
@@ -2562,6 +2592,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -2592,6 +2623,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -2622,6 +2654,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 28,
       "share_patent": 0.0059271803556308214,
       "rospatent_failed": false,
@@ -2652,6 +2685,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -2682,6 +2716,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 521,
       "share_patent": 0.012973430613312084,
       "rospatent_failed": false,
@@ -2690,7 +2725,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Автоматизированный маркетмейкер (АММ)",
+      "name_ru": "Автоматизированный маркетмейкер",
       "name_en": "automated market maker",
       "score": 0.5277060934004493,
       "skipped_reason": "beyond_top",
@@ -2712,6 +2747,7 @@
       "n_docs": 3,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 41,
       "share_patent": 0.05236270753512133,
       "rospatent_failed": false,
@@ -2742,6 +2778,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 270,
       "share_patent": 0.0327431481930633,
       "rospatent_failed": false,
@@ -2772,6 +2809,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 82,
       "share_patent": 0.1889400921658986,
       "rospatent_failed": false,
@@ -2802,6 +2840,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 262,
       "share_patent": 0.1657179000632511,
       "rospatent_failed": false,
@@ -2832,6 +2871,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 307,
       "share_patent": 0.06036177742823437,
       "rospatent_failed": false,
@@ -2862,6 +2902,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 5,
       "share_patent": 0.625,
       "rospatent_failed": false,
@@ -2870,11 +2911,11 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Модели диффузии",
+      "name_ru": "диффузионные модели",
       "name_en": "diffusion models",
       "score": 0.37373230998605944,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 91362 публикаций — технология уже хорошо изучена",
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «generative diffusion models», — показан вариантом названия",
       "name_raw": "diffusion models",
       "name_variants": [
         {
@@ -2892,10 +2933,12 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "duplicate_of": "generative diffusion models",
+      "variants": [],
       "n_pat": 367,
       "share_patent": 0.00400091574093253,
       "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -2922,6 +2965,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 48,
       "share_patent": 0.026651860077734593,
       "rospatent_failed": false,
@@ -2952,6 +2996,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 8,
       "share_patent": 0.011834319526627219,
       "rospatent_failed": false,
@@ -2982,6 +3027,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 235,
       "share_patent": 0.11491442542787286,
       "rospatent_failed": false,
@@ -3012,6 +3058,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 99,
       "share_patent": 0.18574108818011256,
       "rospatent_failed": false,
@@ -3042,6 +3089,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 251,
       "share_patent": 0.552863436123348,
       "rospatent_failed": false,
@@ -3072,6 +3120,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 602,
       "share_patent": 0.21415866239772324,
       "rospatent_failed": false,
@@ -3102,6 +3151,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 8809,
       "share_patent": 0.15486445624274814,
       "rospatent_failed": false,
@@ -3110,7 +3160,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Децентрализованная автономная организация (ДАО)",
+      "name_ru": "Децентрализованная автономная организация",
       "name_en": "decentralized autonomous organization",
       "score": 0.284776862140397,
       "skipped_reason": "below_threshold",
@@ -3132,10 +3182,11 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 257,
       "share_patent": 0.07391429393155019,
       "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -3162,6 +3213,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 232,
       "share_patent": 0.04232032105071142,
       "rospatent_failed": false,
@@ -3192,6 +3244,7 @@
       "n_docs": 4,
       "n_sources": 2,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 10600,
       "share_patent": 0.09582960411524866,
       "rospatent_failed": false,
@@ -3222,6 +3275,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 4,
       "share_patent": 0.011627906976744186,
       "rospatent_failed": false,
@@ -3252,6 +3306,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 5,
       "share_patent": 0.05555555555555555,
       "rospatent_failed": false,
@@ -3282,6 +3337,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 13,
       "share_patent": 0.01668806161745828,
       "rospatent_failed": false,
@@ -3312,6 +3368,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 1555,
       "share_patent": 0.17931273062730627,
       "rospatent_failed": false,
@@ -3342,6 +3399,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 1,
       "share_patent": 0.03571428571428571,
       "rospatent_failed": false,
@@ -3372,6 +3430,12 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [
+        {
+          "term_en": "handwriting generation",
+          "score": 0.07955839214289949
+        }
+      ],
       "n_pat": 10,
       "share_patent": 0.12048192771084337,
       "rospatent_failed": false,
@@ -3402,6 +3466,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 32,
       "share_patent": 0.057971014492753624,
       "rospatent_failed": false,
@@ -3432,6 +3497,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 857,
       "share_patent": 0.24436840604505275,
       "rospatent_failed": false,
@@ -3462,6 +3528,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 1198,
       "share_patent": 0.3082068433239002,
       "rospatent_failed": false,
@@ -3492,6 +3559,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 4,
       "share_patent": 0.021052631578947368,
       "rospatent_failed": false,
@@ -3522,6 +3590,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 45,
       "share_patent": 0.28662420382165604,
       "rospatent_failed": false,
@@ -3552,6 +3621,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 34,
       "share_patent": 0.68,
       "rospatent_failed": false,
@@ -3560,11 +3630,11 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Генерация рукописного текста",
+      "name_ru": "генерация рукописного текста",
       "name_en": "handwriting generation",
       "score": 0.07955839214289949,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 128 публикаций — технология уже хорошо изучена",
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «handwriting synthesis», — показан вариантом названия",
       "name_raw": "handwriting generation",
       "name_variants": [
         {
@@ -3582,10 +3652,12 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "duplicate_of": "handwriting synthesis",
+      "variants": [],
       "n_pat": 61,
       "share_patent": 0.32275132275132273,
       "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -3612,6 +3684,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 5647,
       "share_patent": 0.4045998423730028,
       "rospatent_failed": false,
@@ -3645,6 +3718,7 @@
         "id": "n53",
         "label": "mainstream"
       },
+      "variants": [],
       "n_pat": 25404,
       "share_patent": 0.6169913051925973,
       "rospatent_failed": false,
@@ -3675,6 +3749,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 99,
       "share_patent": 0.2239819004524887,
       "rospatent_failed": false,
@@ -3683,11 +3758,11 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Мультимодальная биометрическая верификация личности",
+      "name_ru": "мультимодальная верификация биометрической личности",
       "name_en": "multimodal biometric identity verification",
       "score": 0.04464099567332898,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Интерес не нарастает: за последние два года 0% всех упоминаний",
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «sequential multimodal biometric authentication», — показан вариантом названия",
       "name_raw": "multimodal biometric identity verification",
       "name_variants": [
         {
@@ -3705,10 +3780,12 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "duplicate_of": "sequential multimodal biometric authentication",
+      "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -3735,6 +3812,7 @@
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "variants": [],
       "n_pat": 2867,
       "share_patent": 0.7165708572856786,
       "rospatent_failed": false,
@@ -3744,65 +3822,66 @@
     }
   ],
   "timings": {
-    "subqueries": 2.08,
-    "search": 11.34,
-    "candidates": 47.36,
+    "subqueries": 0.0,
+    "search": 0.02,
+    "candidates": 0.03,
     "naming": 11.86,
-    "counters": 111.25,
-    "ranking": 1.5,
+    "counters": 0.23,
+    "ranking": 1.36,
     "queues": [
       {
         "source": "openalex",
         "candidates": 60,
-        "requests": 33,
-        "cache_hits": 27,
+        "requests": 0,
+        "cache_hits": 60,
         "retries": null,
         "n429": null,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 99.03,
-        "duration_s": 99.03
+        "finished_s": 0.06,
+        "duration_s": 0.06
       },
       {
         "source": "arxiv",
         "candidates": 60,
-        "requests": 33,
-        "cache_hits": 27,
+        "requests": 0,
+        "cache_hits": 60,
         "retries": null,
         "n429": null,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 106.89,
-        "duration_s": 106.89
+        "finished_s": 0.07,
+        "duration_s": 0.07
       },
       {
         "source": "techcrunch",
         "candidates": 60,
-        "requests": 33,
-        "cache_hits": 27,
+        "requests": 0,
+        "cache_hits": 60,
         "retries": null,
         "n429": null,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 111.24,
-        "duration_s": 111.23
+        "finished_s": 0.07,
+        "duration_s": 0.06
       },
       {
         "source": "rospatent",
         "candidates": 60,
         "parallel": 4,
-        "requests": 33,
-        "cache_hits": 27,
+        "requests": 0,
+        "cache_hits": 60,
         "retries": 0,
         "n429": 0,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 10.43,
-        "duration_s": 10.43
+        "finished_s": 0.24,
+        "duration_s": 0.23
       }
     ],
-    "translate": 10.16,
-    "total": 195.55
+    "dedup": 13.41,
+    "translate": 2.39,
+    "total": 29.3
   },
   "warnings": [
     "отброшен (ru): «биометрическая аутентификация в банковском секторе» — слов 5, нужно 2-4",
@@ -3832,10 +3911,10 @@
   "meta": {
     "query": "перспективные решения в финтехе",
     "area": "Финтех",
-    "run_date": "2026-09-26T22:49:40",
+    "run_date": "2026-09-27T00:08:09",
     "model_version": "s2a2-v1",
     "candidates_version": "v3",
-    "seconds": 195.55,
-    "counters_cache_share": 0.45
+    "seconds": 29.3,
+    "counters_cache_share": 1.0
   }
 }

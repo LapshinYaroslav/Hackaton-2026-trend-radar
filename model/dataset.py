@@ -20,30 +20,7 @@ NEGATIVES_CSV = ROOT / "labels" / "negatives.csv"
 # (scripts/build_company_stoplist.py). Лежит в git: у жюри датасета организаторов нет.
 COMPANY_STOPLIST_TXT = ROOT / "labels" / "company_stoplist.txt"
 
-# Хвостовые скобки: только в самом конце строки и без вложенных скобок внутри.
-TAIL_PARENS = re.compile(r"\s*\(([^()]*)\)\s*$")
-# Скобки в любой другой позиции. Их содержимое тоже снимается: у сигналов внутри
-# почти всегда глосса или примеры — (OCS), (brain-inspired), (метро, геотермия, НПЗ).
-# На s8 именно внутренняя скобка ломала нормализатор: английское слово посреди русской
-# фразы, и модель отвечала смесью алфавитов пять попыток подряд.
-INLINE_PARENS = re.compile(r"\s*\(([^()]*)\)")
 MIN_COMPANY_LEN = 4
-
-
-def split_tail_parens(name: str) -> tuple[str, str]:
-    """Название без хвостовых скобок и содержимое скобок. Скобок нет — вторая строка пустая."""
-    text = " ".join(str(name).split())
-    match = TAIL_PARENS.search(text)
-    if not match:
-        return text, ""
-    return text[: match.start()].strip(), match.group(1).strip()
-
-
-def strip_inline_parens(name: str) -> tuple[str, str]:
-    """Название без внутренних скобок и всё, что в них было, через точку с запятой."""
-    inside = [item.strip() for item in INLINE_PARENS.findall(name) if item.strip()]
-    text = " ".join(INLINE_PARENS.sub(" ", name).split())
-    return text, "; ".join(inside)
 
 
 def load_signals() -> pd.DataFrame:

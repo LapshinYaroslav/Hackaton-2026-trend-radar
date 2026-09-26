@@ -126,7 +126,8 @@
    "rospatent_failed": true,
    "score": 0.23120586681936858,
    "share_patent": null,
-   "skipped_reason": "below_threshold"
+   "skipped_reason": "below_threshold",
+   "variants": []
   },
   {
    "known_training_label": null,
@@ -385,7 +386,8 @@
      "trust_level": "high",
      "url": "https://arxiv/3"
     }
-   ]
+   ],
+   "variants": []
   }
  ],
  "topic": "роботы для промышленности",

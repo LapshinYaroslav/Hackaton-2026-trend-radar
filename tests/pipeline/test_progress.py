@@ -106,7 +106,10 @@ def _strip(value):
 
 
 def test_without_callback_output_is_byte_identical_to_snapshot(tmp_path) -> None:
-    """Снимок снят до задачи И1 на тех же заглушках (без изменчивых query_id, времени и дат)."""
+    """Снимок снят до задачи И1 на тех же заглушках (без изменчивых query_id, времени и дат).
+
+    Переснят в задаче К (решение Ярослава): склейка дублей включена, у оценённых кандидатов поле variants.
+    """
     out, _, _ = base.run(tmp_path)
     text = json.dumps(_strip(out), ensure_ascii=False, sort_keys=True, indent=1) + "\n"
     assert re.sub(r"q\d{14}", "Q", text) == SNAPSHOT.read_text(encoding="utf-8")  # query_id внутри subquery_ids

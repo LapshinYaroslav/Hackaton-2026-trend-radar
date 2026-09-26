@@ -136,3 +136,41 @@ def test_refusal_goes_to_retry_then_fallback() -> None:
     got = tr.translate_one("federated learning", "q", "федеративное обучение", llm)
     assert [c["temperature"] for c in calls] == [0.0, 0.3]
     assert got["name_ru"] == "Федеративное обучение" and got["name_ru_source"] == "extract"
+
+
+@pytest.mark.parametrize("name, term", [("ДНТ — глубокие нейронные трансформаторы", "deep neural transformer"),
+                                        ("БСД — бисимметрическое взвешенное расстояние", "bi-symmetrical weighted distance"),
+                                        ("А2А-финансы (агент-агенту)", "agent-to-agent finance"),
+                                        ("Сетиlora модели", "lora networks")])
+def test_cyrillic_abbreviations_and_mixed_alphabets_rejected(name, term) -> None:
+    assert not tr.passes(name, term)
+
+
+@pytest.mark.parametrize("name, term", [("ИИ-агенты", "AI agents"), ("6G-сети на базе ИИ", "AI-native 6G networks"),
+                                        ("VLA-модели «зрение–язык–действие»", "vision-language-action models"),
+                                        ("Сети IoT на базе MQTT", "MQTT based IoT networks"),
+                                        ("ЦОД на базе ИИ", "AI data centers"),
+                                        ("3D-моделирование молекул", "3D molecular generation"),
+                                        ("ДНК-кодируемая библиотека", "DNA-encoded library"),
+                                        ("РНК-интерференция на базе ИИ", "AI RNA interference")])
+def test_whitelist_and_homogeneous_parts_pass(name, term) -> None:
+    assert tr.passes(name, term)
+
+
+def test_abbreviation_goes_to_retry_then_fallback() -> None:
+    llm, calls = fake(["ДНТ — глубокие нейронные трансформаторы", "ДНТ-модели"])
+    got = tr.translate_one("deep neural transformer", "q", "глубокие нейронные трансформеры", llm)
+    assert [c["temperature"] for c in calls] == [0.0, 0.3]
+    assert got["name_ru"] == "Глубокие нейронные трансформеры" and got["name_ru_source"] == "extract"
+
+
+def test_cached_name_failing_new_checks_is_translated_again() -> None:
+    """Кэш, записанный до новой проверки (К3), не отдаётся, если название её не проходит."""
+    import json as _json
+    tr.CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    tr.cache_path("deep neural transformer").write_text(_json.dumps({"term_en": "deep neural transformer", "answer": {
+        "name_ru": "ДНТ — глубокие нейронные трансформаторы", "name_ru_source": "translate", "name_ru_auto": True}},
+        ensure_ascii=False), encoding="utf-8")
+    llm, calls = fake(["Глубокие нейронные трансформеры"])
+    got = tr.translate_one("deep neural transformer", "q", None, llm)
+    assert got["name_ru"] == "Глубокие нейронные трансформеры" and got["attempts"] == 1 and len(calls) == 1

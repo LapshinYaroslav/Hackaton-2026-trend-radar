@@ -12,11 +12,12 @@ import time
 from typing import Callable
 
 # Этапы в порядке прогона и их веса, % (сумма 100).
-STAGE_WEIGHTS = {"subqueries": 1, "search": 3, "candidates": 6, "naming": 2, "counters": 82, "ranking": 1,
-                 "translate": 5}
+# Склейка дублей (задача К) — 1 %, взят у ранжирования (оно быстрее секунды).
+STAGE_WEIGHTS = {"subqueries": 1, "search": 3, "candidates": 6, "naming": 2, "counters": 82, "ranking": 0,
+                 "dedup": 1, "translate": 5}
 STAGE_RU = {"subqueries": "Подзапросы", "search": "Поиск документов", "candidates": "Извлечение технологий",
             "naming": "Проверка названий",
-            "counters": "Сбор счётчиков (arXiv, OpenAlex, TechCrunch, Роспатент)", "ranking": "Оценка моделью",
+            "counters": "Сбор счётчиков (arXiv, OpenAlex, TechCrunch, Роспатент)", "ranking": "Оценка моделью", "dedup": "Склейка дублей",
             "translate": "Перевод названий", "done": "Готово"}
 MIN_INTERVAL_S = 1.0
 ETA_FROM_PCT = 10

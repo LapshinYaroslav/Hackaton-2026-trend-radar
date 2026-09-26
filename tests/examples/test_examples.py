@@ -13,7 +13,7 @@ DETAIL = {"name_raw", "name_variants", "name_choice_rule", "n_works", "n_institu
           "n_docs", "n_sources", "known_training_label", "quote"}
 PATENT = {"n_pat", "share_patent", "rospatent_failed"}
 TOP_ITEM = {"rank", "name_ru", "name_en", "score", "explanation_ru", "contributions", "counters", "sources",
-            "model_version", "name_ru_source", "name_ru_auto"} | DETAIL | PATENT
+            "model_version", "name_ru_source", "name_ru_auto", "variants"} | DETAIL | PATENT
 EXCLUDED_ITEM = {"name_ru", "name_en", "score", "skipped_reason", "reason_ru", "model_version", "name_ru_source",
                  "name_ru_auto"} | DETAIL
 META = {"query", "area", "run_date", "model_version", "candidates_version", "seconds", "counters_cache_share"}
@@ -34,7 +34,9 @@ def test_example_matches_contract(path: Path) -> None:
         assert TOP_ITEM <= set(item) <= TOP_ITEM | {"note_ru"} and item["score"] >= data["threshold"]
         assert item["name_ru_auto"] is True and item["name_ru_source"] in ("translate", "extract", None)
     for item in data["excluded"]:
-        assert EXCLUDED_ITEM <= set(item) <= EXCLUDED_ITEM | PATENT | {"note_ru"}
+        assert EXCLUDED_ITEM <= set(item) <= EXCLUDED_ITEM | PATENT | {"note_ru", "variants", "duplicate_of"}
+        assert ("variants" in item) == (item["score"] is not None)
+        assert ("duplicate_of" in item) == (item["skipped_reason"] == "duplicate_of")
     assert 0.0 <= data["meta"]["counters_cache_share"] <= 1.0
 
 

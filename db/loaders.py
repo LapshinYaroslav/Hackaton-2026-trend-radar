@@ -88,11 +88,7 @@ EVAL_FILES = {
     "g6_eval": "g6_eval_labels.csv",
     "d5_eval": "d5_eval_labels.csv",
     "i2_eval": "i2_eval_labels.csv",
-    "g_blind": "g_blind_labels.csv",
-    "n_blind": "n_blind_labels.csv",
-    "n2_blind": "n2_blind_labels.csv",
     "k_blind": "k_blind_labels.csv",
-    "p2_blind": "p2_blind_labels.csv",
 }
 
 
