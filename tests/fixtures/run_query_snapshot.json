@@ -1,0 +1,396 @@
+{
+ "area": "Роботы",
+ "candidate_sources": null,
+ "candidates_version": "v3",
+ "cutoff_date": "2026-09-01",
+ "excluded": [
+  {
+   "known_training_label": null,
+   "model_version": "s2a2-v1",
+   "n_docs": 1,
+   "n_institutions": null,
+   "n_institutions_capped": null,
+   "n_sources": 1,
+   "n_works": null,
+   "name_choice_rule": "max_trace",
+   "name_en": "phantom thing",
+   "name_raw": "phantom thing",
+   "name_ru": "фантомная решётка захвата",
+   "name_ru_auto": true,
+   "name_ru_source": "extract",
+   "name_variants": [
+    {
+     "n_institutions": 0,
+     "n_institutions_capped": false,
+     "n_works": 0,
+     "name": "phantom gripper lattice"
+    },
+    {
+     "n_institutions": 0,
+     "n_institutions_capped": false,
+     "n_works": 0,
+     "name": "phantom lattice gripper"
+    },
+    {
+     "n_institutions": 0,
+     "n_institutions_capped": false,
+     "n_works": 0,
+     "name": "lattice gripper phantom"
+    }
+   ],
+   "quote": null,
+   "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+   "score": null,
+   "skipped_reason": "no_trace"
+  },
+  {
+   "known_training_label": null,
+   "model_version": "s2a2-v1",
+   "n_docs": 1,
+   "n_institutions": 3,
+   "n_institutions_capped": false,
+   "n_sources": 1,
+   "n_works": 50,
+   "name_choice_rule": "max_trace",
+   "name_en": "welding",
+   "name_raw": "robotic welding",
+   "name_ru": "робот сварщик",
+   "name_ru_auto": true,
+   "name_ru_source": "extract",
+   "name_variants": [
+    {
+     "n_institutions": 3,
+     "n_institutions_capped": false,
+     "n_works": 50,
+     "name": "welding"
+    },
+    {
+     "n_institutions": 0,
+     "n_institutions_capped": false,
+     "n_works": 0,
+     "name": "welds"
+    },
+    {
+     "n_institutions": 0,
+     "n_institutions_capped": false,
+     "n_works": 0,
+     "name": "welder"
+    }
+   ],
+   "quote": null,
+   "reason_ru": "Название не является устойчивым термином",
+   "score": null,
+   "skipped_reason": "bad_name"
+  },
+  {
+   "known_training_label": {
+    "id": "n49",
+    "label": "mainstream"
+   },
+   "model_version": "s2a2-v1",
+   "n_docs": 1,
+   "n_institutions": 3,
+   "n_institutions_capped": false,
+   "n_pat": null,
+   "n_sources": 1,
+   "n_works": 900,
+   "name_choice_rule": "max_trace",
+   "name_en": "humanoid robot",
+   "name_raw": "humanoid robot",
+   "name_ru": "Русское humanoid robot",
+   "name_ru_auto": true,
+   "name_ru_source": "translate",
+   "name_variants": [
+    {
+     "n_institutions": 3,
+     "n_institutions_capped": false,
+     "n_works": 900,
+     "name": "humanoid robot"
+    },
+    {
+     "n_institutions": 3,
+     "n_institutions_capped": false,
+     "n_works": 40,
+     "name": "humanoid robots"
+    },
+    {
+     "n_institutions": 0,
+     "n_institutions_capped": false,
+     "n_works": 0,
+     "name": "bipedal humanoid"
+    }
+   ],
+   "note_ru": "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения",
+   "quote": null,
+   "reason_ru": "Большой объём научной литературы: 33000 публикаций — технология уже хорошо изучена",
+   "rospatent_failed": true,
+   "score": 0.23120586681936858,
+   "share_patent": null,
+   "skipped_reason": "below_threshold"
+  },
+  {
+   "known_training_label": null,
+   "model_version": "s2a2-v1",
+   "n_docs": 1,
+   "n_institutions": 3,
+   "n_institutions_capped": false,
+   "n_sources": 1,
+   "n_works": 3,
+   "name_choice_rule": "max_trace",
+   "name_en": "partial counter device",
+   "name_raw": "partial counter device",
+   "name_ru": "частичное устройство счёта",
+   "name_ru_auto": true,
+   "name_ru_source": "extract",
+   "name_variants": [
+    {
+     "n_institutions": 3,
+     "n_institutions_capped": false,
+     "n_works": 3,
+     "name": "partial counter device"
+    },
+    {
+     "n_institutions": 0,
+     "n_institutions_capped": false,
+     "n_works": 0,
+     "name": "partial counters"
+    },
+    {
+     "n_institutions": 0,
+     "n_institutions_capped": false,
+     "n_works": 0,
+     "name": "counter device"
+    }
+   ],
+   "quote": null,
+   "reason_ru": "Не оценён: счётчики источников получены не полностью",
+   "score": null,
+   "skipped_reason": "no_counters"
+  }
+ ],
+ "extract_model": "yandexgpt-5-pro",
+ "extract_version": "v2",
+ "model_version": "s2a2-v1",
+ "naming_mode": "normalizer",
+ "normalizer_deviations": [
+  "company_stoplist_off"
+ ],
+ "stats": {
+  "above_075": 1,
+  "above_threshold": 1,
+  "candidates_found": 6,
+  "candidates_named": 4,
+  "candidates_scored": 2,
+  "documents_by_source": {
+   "arxiv": 3,
+   "openalex": 3,
+   "openalex_ru": 0,
+   "techcrunch": 3
+  },
+  "documents_for_candidates": 9,
+  "documents_for_candidates_by_source": {
+   "arxiv": 3,
+   "openalex": 3,
+   "openalex_ru": 0,
+   "techcrunch": 3
+  },
+  "documents_total": 9,
+  "rospatent_enabled": true,
+  "rospatent_failures": 3,
+  "translation": {
+   "без названия": 0,
+   "из кэша": 0,
+   "откат на term_ru": 0,
+   "переведено": 2,
+   "с первого раза": 2,
+   "с повтором": 0
+  }
+ },
+ "subqueries": [
+  {
+   "language": "ru",
+   "subquery_id": "Q-ru-1",
+   "text": "фотонные вычисления"
+  },
+  {
+   "language": "ru",
+   "subquery_id": "Q-ru-2",
+   "text": "оптический интерконнект"
+  },
+  {
+   "language": "ru",
+   "subquery_id": "Q-ru-3",
+   "text": "мемристорные матрицы"
+  },
+  {
+   "language": "ru",
+   "subquery_id": "Q-ru-4",
+   "text": "нейроморфные ускорители"
+  },
+  {
+   "language": "ru",
+   "subquery_id": "Q-ru-5",
+   "text": "квантовые сенсоры"
+  },
+  {
+   "language": "en",
+   "subquery_id": "Q-en-1",
+   "text": "photonic computing"
+  },
+  {
+   "language": "en",
+   "subquery_id": "Q-en-2",
+   "text": "optical interconnect"
+  },
+  {
+   "language": "en",
+   "subquery_id": "Q-en-3",
+   "text": "memristor crossbar arrays"
+  },
+  {
+   "language": "en",
+   "subquery_id": "Q-en-4",
+   "text": "neuromorphic accelerators"
+  },
+  {
+   "language": "en",
+   "subquery_id": "Q-en-5",
+   "text": "quantum sensing"
+  },
+  {
+   "language": "en",
+   "subquery_id": "Q-en-6",
+   "text": "spiking neural networks"
+  },
+  {
+   "language": "en",
+   "subquery_id": "Q-en-7",
+   "text": "silicon photonic modulators"
+  },
+  {
+   "language": "en",
+   "subquery_id": "Q-en-8",
+   "text": "analog inference chips"
+  }
+ ],
+ "threshold": 0.4,
+ "top": [
+  {
+   "contributions": {
+    "age_first_arxiv": 0.6092404200285906,
+    "growth_research": 0.007208655587442516,
+    "recency": 3.9707850296615383,
+    "share_news_wordmatch": 1.7558957724110993,
+    "share_patent": 0.3282115942254954,
+    "share_prev6": 0.20740552786542543
+   },
+   "counters": {
+    "2020": {
+     "arxiv": 0,
+     "openalex": 0,
+     "techcrunch": 0
+    },
+    "2021": {
+     "arxiv": 0,
+     "openalex": 0,
+     "techcrunch": 0
+    },
+    "2022": {
+     "arxiv": 0,
+     "openalex": 0,
+     "techcrunch": 0
+    },
+    "2023": {
+     "arxiv": 0,
+     "openalex": 0,
+     "techcrunch": 0
+    },
+    "2024": {
+     "arxiv": 0,
+     "openalex": 3,
+     "techcrunch": 40
+    },
+    "2025": {
+     "arxiv": 2,
+     "openalex": 5,
+     "techcrunch": 60
+    },
+    "prev6": {
+     "arxiv": 0,
+     "openalex": 0,
+     "techcrunch": 0
+    }
+   },
+   "explanation_ru": [
+    "Упоминания свежие: 100% за последние два года",
+    "Про технологию пока мало научных публикаций: 10"
+   ],
+   "known_training_label": {
+    "id": "s14",
+    "label": "signal"
+   },
+   "model_version": "s2a2-v1",
+   "n_docs": 2,
+   "n_institutions": 3,
+   "n_institutions_capped": false,
+   "n_pat": null,
+   "n_sources": 1,
+   "n_works": 5,
+   "name_choice_rule": "max_trace",
+   "name_en": "robotic teleoperation data",
+   "name_raw": "Robotic Teleoperation Data",
+   "name_ru": "Русское robotic teleoperation data",
+   "name_ru_auto": true,
+   "name_ru_source": "translate",
+   "name_variants": [
+    {
+     "n_institutions": 3,
+     "n_institutions_capped": false,
+     "n_works": 5,
+     "name": "robotic teleoperation data"
+    },
+    {
+     "n_institutions": 0,
+     "n_institutions_capped": false,
+     "n_works": 0,
+     "name": "teleoperation logs"
+    },
+    {
+     "n_institutions": 3,
+     "n_institutions_capped": false,
+     "n_works": 2,
+     "name": "teleoperation data"
+    }
+   ],
+   "note_ru": "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения",
+   "quote": null,
+   "rank": 1,
+   "rospatent_failed": true,
+   "score": 0.9992973830897272,
+   "share_patent": null,
+   "sources": [
+    {
+     "language": "en",
+     "source": "arxiv",
+     "source_type": "preprint",
+     "title": "arxiv doc 4",
+     "trust_level": "high",
+     "url": "https://arxiv/4"
+    },
+    {
+     "language": "en",
+     "source": "arxiv",
+     "source_type": "preprint",
+     "title": "arxiv doc 3",
+     "trust_level": "high",
+     "url": "https://arxiv/3"
+    }
+   ]
+  }
+ ],
+ "topic": "роботы для промышленности",
+ "warnings": [
+  "Нет ключа ROSPATENT в .env: патентный признак share_patent недоступен у всех кандидатов, модель подставила медиану обучения",
+  "partial counter device: нет счётчиков [('arxiv', '2025')], кандидат не оценён"
+ ]
+}

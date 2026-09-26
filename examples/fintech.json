@@ -1,0 +1,3841 @@
+{
+  "query_id": "q20260926224940",
+  "topic": "перспективные решения в финтехе",
+  "area": "Финтех",
+  "model_version": "s2a2-v1",
+  "threshold": 0.4,
+  "cutoff_date": "2026-09-01",
+  "subqueries": [
+    {
+      "subquery_id": "q20260926224940-ru-1",
+      "language": "ru",
+      "text": "децентрализованные финансовые протоколы"
+    },
+    {
+      "subquery_id": "q20260926224940-ru-2",
+      "language": "ru",
+      "text": "цифровые платёжные экосистемы"
+    },
+    {
+      "subquery_id": "q20260926224940-ru-3",
+      "language": "ru",
+      "text": "умные финансовые алгоритмы"
+    },
+    {
+      "subquery_id": "q20260926224940-ru-4",
+      "language": "ru",
+      "text": "децентрализованные финансовые сервисы"
+    },
+    {
+      "subquery_id": "q20260926224940-ru-5",
+      "language": "ru",
+      "text": "технологии автоматической верификации"
+    },
+    {
+      "subquery_id": "q20260926224940-en-1",
+      "language": "en",
+      "text": "decentralized finance protocols"
+    },
+    {
+      "subquery_id": "q20260926224940-en-2",
+      "language": "en",
+      "text": "biometric authentication methods"
+    },
+    {
+      "subquery_id": "q20260926224940-en-3",
+      "language": "en",
+      "text": "cross-border payment solutions"
+    },
+    {
+      "subquery_id": "q20260926224940-en-4",
+      "language": "en",
+      "text": "embedded finance platforms"
+    },
+    {
+      "subquery_id": "q20260926224940-en-5",
+      "language": "en",
+      "text": "cryptoasset risk management"
+    },
+    {
+      "subquery_id": "q20260926224940-en-6",
+      "language": "en",
+      "text": "open banking APIs"
+    },
+    {
+      "subquery_id": "q20260926224940-en-7",
+      "language": "en",
+      "text": "digital identity verification"
+    }
+  ],
+  "candidate_sources": null,
+  "extract_version": "v2",
+  "extract_model": "yandexgpt-5-pro",
+  "naming_mode": "direct",
+  "candidates_version": "v3",
+  "stats": {
+    "documents_by_source": {
+      "openalex": 166,
+      "arxiv": 81,
+      "techcrunch": 12,
+      "openalex_ru": 32
+    },
+    "documents_for_candidates_by_source": {
+      "openalex": 93,
+      "arxiv": 81,
+      "techcrunch": 12,
+      "openalex_ru": 0
+    },
+    "documents_total": 291,
+    "documents_for_candidates": 186,
+    "candidates_found": 94,
+    "candidates_named": 77,
+    "candidates_scored": 60,
+    "above_threshold": 30,
+    "above_075": 10,
+    "rospatent_enabled": true,
+    "rospatent_failures": 0,
+    "translation": {
+      "переведено": 60,
+      "из кэша": 2,
+      "с первого раза": 52,
+      "с повтором": 0,
+      "откат на term_ru": 6,
+      "без названия": 0
+    }
+  },
+  "normalizer_deviations": [
+    "company_stoplist_off"
+  ],
+  "top": [
+    {
+      "rank": 1,
+      "name_ru": "Децентрализованные ИИ-агенты",
+      "name_en": "decentralized AI agents",
+      "score": 0.9611842234835091,
+      "explanation_ru": [
+        "Упоминания свежие: 76% за последние два года",
+        "Молодой термин: первый препринт 2 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.006655620102858793,
+        "recency": 1.4254582916283622,
+        "share_news_wordmatch": 0.14495037206157935,
+        "share_prev6": 0.017747703079881053,
+        "age_first_arxiv": 0.7642914094936978
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 16
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 1
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 5
+        },
+        "2024": {
+          "arxiv": 4,
+          "openalex": 4,
+          "techcrunch": 7
+        },
+        "2025": {
+          "arxiv": 3,
+          "openalex": 15,
+          "techcrunch": 9
+        }
+      },
+      "name_raw": "decentralized AI agents",
+      "name_variants": [
+        {
+          "name": "decentralized ai agents",
+          "n_works": 20,
+          "n_institutions": 24,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 20,
+      "n_institutions": 24,
+      "n_institutions_capped": false,
+      "quote": "decentralized AI Agents and Blockchain",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Decentralized AI Agents and Blockchain: Architectures, Coordination Mechanisms, and Governance Frameworks",
+          "url": "https://doi.org/10.3390/fi18070352",
+          "published_at": "2026-07-06",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 2,
+      "name_ru": "А2А-финансы (агент-агенту)",
+      "name_en": "agent-to-agent finance",
+      "score": 0.9102646448909577,
+      "explanation_ru": [
+        "Молодой термин: первый препринт 1 лет назад",
+        "Патентов мало относительно научных работ: 0 патентов на 3 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.000144216503272829,
+        "recency": 0.2846300302786233,
+        "share_news_wordmatch": 0.11415999174881453,
+        "share_prev6": 0.16010432993533827,
+        "age_first_arxiv": 0.9075960487737661
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 1
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 1
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 0,
+          "techcrunch": 1
+        }
+      },
+      "name_raw": "agent-to-agent finance",
+      "name_variants": [
+        {
+          "name": "agent-to-agent finance",
+          "n_works": 2,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "Agent-to-Agent Finance",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Agent-to-Agent Finance: Blockchain Payments and Trust Infrastructure for Autonomous AI Agents",
+          "url": "https://arxiv.org/abs/2607.00245",
+          "published_at": "2026-06-30",
+          "source": "openalex",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 3,
+      "name_ru": "Автономная торговля с помощью ИИ",
+      "name_en": "autonomous AI trading",
+      "score": 0.8990340277369715,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 7",
+        "Патентов мало относительно научных работ: 0 патентов на 7 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.00020870322398004054,
+        "recency": -0.15708190243583825,
+        "share_news_wordmatch": 1.725594255522415,
+        "share_prev6": 0.003962943737316398,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 101
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 47
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 47
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 47
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 31
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 45
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 65
+        }
+      },
+      "name_raw": "autonomous AI trading",
+      "name_variants": [
+        {
+          "name": "autonomous ai trading",
+          "n_works": 7,
+          "n_institutions": 4,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7,
+      "n_institutions": 4,
+      "n_institutions_capped": false,
+      "quote": "AI agents trade",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Binance now lets AI agents trade, but keeping them in check is largely up to users",
+          "url": "https://techcrunch.com/2026/08/20/binance-now-lets-ai-agents-trade-but-keeping-them-in-check-is-largely-up-to-users/",
+          "published_at": "2026-08-20",
+          "source": "techcrunch",
+          "source_type": "news",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 4,
+      "name_ru": "Гибридная архитектура «край-облако»",
+      "name_en": "hybrid edge-cloud architecture",
+      "score": 0.8880769351579426,
+      "explanation_ru": [
+        "Упоминания свежие: 87% за последние два года",
+        "Молодой термин: первый препринт 2 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.006403025911906139,
+        "recency": 1.8931669122963257,
+        "share_news_wordmatch": -1.5793109254532605,
+        "share_prev6": 0.1364603227067502,
+        "age_first_arxiv": 0.7642914094936978
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 14,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 8,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 11,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 10,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 15,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 1,
+          "openalex": 106,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 2,
+          "openalex": 190,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "hybrid edge-cloud architecture",
+      "name_variants": [
+        {
+          "name": "hybrid edge-cloud architecture",
+          "n_works": 340,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 340,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Hybrid Edge-Cloud Architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "A Hybrid Edge-Cloud Architecture for Low-Latency Entitlement Verification in Resource-Constrained Devices",
+          "url": "http://arxiv.org/abs/2606.10536v1",
+          "published_at": "2026-06-09",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 5,
+      "name_ru": "Распространение данных об угрозах кибербезопасности",
+      "name_en": "cyber threat intelligence dissemination",
+      "score": 0.8606765884957388,
+      "explanation_ru": [
+        "Молодой термин: первый препринт 1 лет назад",
+        "Патентов мало относительно научных работ: 0 патентов на 2 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.00017645986362643478,
+        "recency": -0.14809793092300164,
+        "share_news_wordmatch": 0.4528541751892294,
+        "share_prev6": -0.24184379295065853,
+        "age_first_arxiv": 0.9075960487737661
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 10
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 1
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 1,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "cyber threat intelligence dissemination",
+      "name_variants": [
+        {
+          "name": "cyber threat intelligence dissemination",
+          "n_works": 1,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "timely dissemination of cyber threat intelligence",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "DisCTI: Who Needs to Know Timely? Automated Sector-Aware Cyber Threat Intelligence Dissemination",
+          "url": "http://arxiv.org/abs/2608.27967v1",
+          "published_at": "2026-08-28",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 6,
+      "name_ru": "Последовательная мультимодальная биометрическая аутентификация",
+      "name_en": "sequential multimodal biometric authentication",
+      "score": 0.8381519987567253,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 2 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.001625262600846933,
+        "recency": 2.4482698362867485,
+        "share_news_wordmatch": -1.5793109254532605,
+        "share_prev6": 0.16010432993533827,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "sequential multimodal biometric authentication",
+      "name_variants": [
+        {
+          "name": "sequential multimodal biometric authentication",
+          "n_works": 2,
+          "n_institutions": 2,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 2,
+      "n_institutions_capped": false,
+      "quote": "Sequential Multimodal Biometric Authentication Fusion System",
+      "n_docs": 3,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Tiny-transformer based multimodal biometric authentication with edge fusion and federated split learning",
+          "url": "https://doi.org/10.1007/s11760-026-05521-0",
+          "published_at": "2026-06-27",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        },
+        {
+          "title": "Feature extraction and machine learning methods for biometric recognition based on fusion of ECG and fingerprint",
+          "url": "https://doi.org/10.11591/eei.v15i3.10541",
+          "published_at": "2026-06-01",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        },
+        {
+          "title": "Sequential Multimodal Biometric Authentication Fusion System",
+          "url": "https://doi.org/10.3390/math14071178",
+          "published_at": "2026-04-01",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 7,
+      "name_ru": "Диффузионные подделки отпечатков пальцев",
+      "name_en": "diffusion-generated fingerprint forgery",
+      "score": 0.83795974584843,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 1 публикацию"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.00020870322398004054,
+        "recency": 2.4482698362867485,
+        "share_news_wordmatch": -1.5793109254532605,
+        "share_prev6": 0.16010432993533827,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "diffusion-generated fingerprint forgery",
+      "name_variants": [
+        {
+          "name": "diffusion-generated fingerprint forgery",
+          "n_works": 1,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "Towards Trustworthy Biometrics: Generalized Detection of Diffusion-Generated Fingerprint Forgeries",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Towards Trustworthy Biometrics: Generalized Detection of Diffusion-Generated Fingerprint Forgeries in Partial Scenarios",
+          "url": "https://doi.org/10.1109/tbiom.2026.3683085",
+          "published_at": "2026-04-13",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 8,
+      "name_ru": "Системы мгновенных платежей",
+      "name_en": "instant payment systems",
+      "score": 0.8352759896001932,
+      "explanation_ru": [
+        "Молодой термин: первый препринт 2 лет назад",
+        "Упоминания свежие: 55% за последние два года"
+      ],
+      "contributions": {
+        "share_patent": 0.44556741204550704,
+        "growth_research": 0.003369632630241059,
+        "recency": 0.48387571928845047,
+        "share_news_wordmatch": -0.4722949173211649,
+        "share_prev6": 0.01743264473273444,
+        "age_first_arxiv": 0.7642914094936978
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 44,
+          "techcrunch": 195
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 13,
+          "techcrunch": 50
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 36,
+          "techcrunch": 74
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 43,
+          "techcrunch": 45
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 49,
+          "techcrunch": 40
+        },
+        "2024": {
+          "arxiv": 1,
+          "openalex": 128,
+          "techcrunch": 22
+        },
+        "2025": {
+          "arxiv": 2,
+          "openalex": 247,
+          "techcrunch": 21
+        }
+      },
+      "name_raw": "instant payment systems",
+      "name_variants": [
+        {
+          "name": "instant payment systems",
+          "n_works": 516,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 516,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Instant Payment Systems Research",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Instant Payment Systems Research: A Bibliometric Study",
+          "url": "https://doi.org/10.58812/wsshs.v4i04.2819",
+          "published_at": "2026-04-30",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 3,
+      "share_patent": 0.005747126436781609,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 9,
+      "name_ru": "Платформенное финансирование",
+      "name_en": "platform finance",
+      "score": 0.7942523664550372,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 807",
+        "Молодой термин: первый препринт 4 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.43891312884893313,
+        "growth_research": -0.0005467079462365132,
+        "recency": -1.1234240484520965,
+        "share_news_wordmatch": 1.2312365478449956,
+        "share_prev6": -0.054359023131687494,
+        "age_first_arxiv": 0.4776821309335611
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 65,
+          "techcrunch": 2553
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 31,
+          "techcrunch": 1068
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 90,
+          "techcrunch": 1171
+        },
+        "2022": {
+          "arxiv": 1,
+          "openalex": 119,
+          "techcrunch": 814
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 143,
+          "techcrunch": 477
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 192,
+          "techcrunch": 260
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 231,
+          "techcrunch": 145
+        }
+      },
+      "name_raw": "platform finance",
+      "name_variants": [
+        {
+          "name": "platform finance",
+          "n_works": 806,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 806,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "platform finance",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Platform finance and informal economies: a conceptual framework for digital accounting inclusion in Sub-Saharan Africa",
+          "url": "https://doi.org/10.1108/fdar-03-2026-0016",
+          "published_at": "2026-05-26",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 6,
+      "share_patent": 0.007380073800738007,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 10,
+      "name_ru": "Цифровой кошелёк удостоверений личности",
+      "name_en": "digital identity wallet",
+      "score": 0.7818166239771267,
+      "explanation_ru": [
+        "Молодой термин: первый препринт 2 лет назад",
+        "Упоминания свежие: 56% за последние два года"
+      ],
+      "contributions": {
+        "share_patent": 0.12940254094595494,
+        "growth_research": 0.0026918237837264525,
+        "recency": 0.5260097246608686,
+        "share_news_wordmatch": -0.6106318206845279,
+        "share_prev6": 0.08327176839252824,
+        "age_first_arxiv": 0.7642914094936978
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 72
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 19
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 15,
+          "techcrunch": 57
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 36,
+          "techcrunch": 31
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 40,
+          "techcrunch": 20
+        },
+        "2024": {
+          "arxiv": 4,
+          "openalex": 87,
+          "techcrunch": 7
+        },
+        "2025": {
+          "arxiv": 3,
+          "openalex": 166,
+          "techcrunch": 7
+        }
+      },
+      "name_raw": "digital identity wallet",
+      "name_variants": [
+        {
+          "name": "digital identity wallet",
+          "n_works": 345,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 345,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "European Digital Identity Wallet",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Who Assures the Verifier? An Executable Assurance-Locus Audit of the European Digital Identity Wallet",
+          "url": "http://arxiv.org/abs/2609.26220v1",
+          "published_at": "2026-08-11",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 32,
+      "share_patent": 0.08333333333333333,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 11,
+      "name_ru": "Справедливость пакетного заказа",
+      "name_en": "batch order fairness",
+      "score": 0.7332004269000867,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 12",
+        "Молодой термин: первый препринт 4 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.003377672994464574,
+        "recency": -1.142451543896949,
+        "share_news_wordmatch": 0.942879802294511,
+        "share_prev6": -0.12080259685430725,
+        "age_first_arxiv": 0.4776821309335611
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 41
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 12
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 9
+        },
+        "2022": {
+          "arxiv": 2,
+          "openalex": 2,
+          "techcrunch": 12
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 4,
+          "openalex": 4,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "batch order fairness",
+      "name_variants": [
+        {
+          "name": "batch order fairness",
+          "n_works": 6,
+          "n_institutions": 13,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6,
+      "n_institutions": 13,
+      "n_institutions_capped": false,
+      "quote": "Batch-order-fairness (batch-OF)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Herring: Parallel Batch-Order-Fairness on DAG-based Blockchain Consensus",
+          "url": "http://arxiv.org/abs/2605.23648v1",
+          "published_at": "2026-05-22",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 12,
+      "name_ru": "Протокол соответствия нормативным требованиям",
+      "name_en": "regulatory compliance protocol",
+      "score": 0.7190996868891792,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 33",
+        "Патентов мало относительно научных работ: 1 патент на 33 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.3491336822983669,
+        "growth_research": -3.997250385920452e-05,
+        "recency": -0.5950916490873176,
+        "share_news_wordmatch": 0.5793992547164174,
+        "share_prev6": 0.034277091466678386,
+        "age_first_arxiv": 0.1910728523734244
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 22
+        },
+        "2020": {
+          "arxiv": 1,
+          "openalex": 2,
+          "techcrunch": 9
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 22
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 16
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 6,
+          "techcrunch": 6
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 9,
+          "techcrunch": 2
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 12,
+          "techcrunch": 3
+        }
+      },
+      "name_raw": "regulatory compliance protocol",
+      "name_variants": [
+        {
+          "name": "regulatory compliance protocol",
+          "n_works": 31,
+          "n_institutions": 65,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 31,
+      "n_institutions": 65,
+      "n_institutions_capped": false,
+      "quote": "Regulatory Compliance Protocol (RCP)",
+      "n_docs": 2,
+      "n_sources": 2,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "A Regulatory Compliance Protocol for Asset Interoperability Between Traditional and Decentralized Finance in Tokenized Capital Markets",
+          "url": "http://arxiv.org/abs/2603.29278v2",
+          "published_at": "2026-03-31",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "A Regulatory Compliance Protocol for Asset Interoperability Between Traditional and Decentralized Finance in Tokenized Capital Markets",
+          "url": "https://arxiv.org/abs/2603.29278",
+          "published_at": "2026-03-31",
+          "source": "openalex",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 1,
+      "share_patent": 0.029411764705882353,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 13,
+      "name_ru": "Большие языковые модели",
+      "name_en": "large language models",
+      "score": 0.7092893339987316,
+      "explanation_ru": [
+        "Упоминания свежие: 82% за последние два года",
+        "Патентов мало относительно научных работ: 521 патент на 235 391 публикацию"
+      ],
+      "contributions": {
+        "share_patent": 0.4599875652119039,
+        "growth_research": 0.0025444240815315007,
+        "recency": 1.6783836092789088,
+        "share_news_wordmatch": -1.549927599298085,
+        "share_prev6": 0.1585392126377677,
+        "age_first_arxiv": -0.2388410654667806
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 25,
+          "openalex": 167,
+          "techcrunch": 426
+        },
+        "2020": {
+          "arxiv": 58,
+          "openalex": 151,
+          "techcrunch": 117
+        },
+        "2021": {
+          "arxiv": 275,
+          "openalex": 317,
+          "techcrunch": 147
+        },
+        "2022": {
+          "arxiv": 3323,
+          "openalex": 3869,
+          "techcrunch": 501
+        },
+        "2023": {
+          "arxiv": 15046,
+          "openalex": 17773,
+          "techcrunch": 669
+        },
+        "2024": {
+          "arxiv": 25817,
+          "openalex": 46031,
+          "techcrunch": 350
+        },
+        "2025": {
+          "arxiv": 31519,
+          "openalex": 91212,
+          "techcrunch": 276
+        }
+      },
+      "name_raw": "large language models",
+      "name_variants": [
+        {
+          "name": "large language models",
+          "n_works": 159353,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 159353,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Large Language Models (LLMs)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Smallholder Farmers on Remote Islands Receiving Retrieval-Grounded Multilingual LLM Assistance and Agronomic Advice",
+          "url": "http://arxiv.org/abs/2606.25647v3",
+          "published_at": "2026-06-24",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 521,
+      "share_patent": 0.00220845060870155,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 14,
+      "name_ru": "Биометрическая аутентификация по взгляду",
+      "name_en": "gaze-based biometric authentication",
+      "score": 0.6982506606525788,
+      "explanation_ru": [
+        "Упоминания свежие: 83% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 6 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.0034099163548181803,
+        "recency": 1.7270565676173735,
+        "share_news_wordmatch": -1.5793109254532605,
+        "share_prev6": 0.07397258931691036,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "gaze-based biometric authentication",
+      "name_variants": [
+        {
+          "name": "gaze-based biometric authentication",
+          "n_works": 6,
+          "n_institutions": 5,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6,
+      "n_institutions": 5,
+      "n_institutions_capped": false,
+      "quote": "Gaze-based biometric authentication using symmetric dynamic stimuli",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Gaze-based biometric authentication using symmetric dynamic stimuli",
+          "url": "https://doi.org/10.1007/s11042-026-21622-x",
+          "published_at": "2026-04-15",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 15,
+      "name_ru": "Встраиваемые финансовые технологии",
+      "name_en": "embedded finance",
+      "score": 0.697191092471668,
+      "explanation_ru": [
+        "Упоминания свежие: 57% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 942 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.003474816028416276,
+        "recency": 0.575268213175237,
+        "share_news_wordmatch": -0.45995914649240066,
+        "share_prev6": 0.10132038380448048,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 19,
+          "techcrunch": 133
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 14,
+          "techcrunch": 89
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 39,
+          "techcrunch": 137
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 49,
+          "techcrunch": 116
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 95,
+          "techcrunch": 70
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 257,
+          "techcrunch": 41
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 488,
+          "techcrunch": 12
+        }
+      },
+      "name_raw": "embedded finance",
+      "name_variants": [
+        {
+          "name": "embedded finance",
+          "n_works": 942,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 942,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "embedded finance",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "The Effect Of Embedded Finance On Customer Loyalty In Digital Commerce Platforms",
+          "url": "https://doi.org/10.64771/ijesat.2026.v26.i9.3895",
+          "published_at": "2026-09-01",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    }
+  ],
+  "excluded": [
+    {
+      "name_ru": "MPC для верификации личности",
+      "name_en": "MPC for identity verification",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "MPC for identity verification",
+      "name_variants": [
+        {
+          "name": "mpc for identity verification",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Transparent Identity Verification Approach Using MPC",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обобщение диалектов NL2SQL",
+      "name_en": "NL2SQL dialect generalization",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "NL2SQL dialect generalization",
+      "name_variants": [
+        {
+          "name": "nl2sql dialect generalization",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "NL2SQL dialect generalization",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "агентское мышление в DeFi",
+      "name_en": "agentic reasoning over DeFi",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "agentic reasoning over DeFi",
+      "name_variants": [
+        {
+          "name": "agentic reasoning over defi",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "agentic reasoning over decentralized finance protocols",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "агентский анализ выживаемости",
+      "name_en": "agentic survival analysis",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "agentic survival analysis",
+      "name_variants": [
+        {
+          "name": "agentic survival analysis",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Agentic Survival Analysis",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "встраивание биометрических водяных знаков",
+      "name_en": "biometric embedded watermarking",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "biometric embedded watermarking",
+      "name_variants": [
+        {
+          "name": "biometric embedded watermarking",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Biometric Embedded Non-Blind Color Image Watermarking",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "биометрическая аутентификация личности онлайн",
+      "name_en": "biometric identity online authentication",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "biometric identity online authentication",
+      "name_variants": [
+        {
+          "name": "biometric identity online authentication",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Biometric Identity Online Authentication Framework",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "предоставление биометрической идентичности",
+      "name_en": "biometric identity provisioning",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "biometric identity provisioning",
+      "name_variants": [
+        {
+          "name": "biometric identity provisioning",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Biometric Identity Provisioning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "кроссплатформенные встраиваемые представления сессий",
+      "name_en": "cross-platform session embeddings",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "cross-platform session embeddings",
+      "name_variants": [
+        {
+          "name": "cross-platform session embeddings",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Cross-Platform Session Embeddings",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "сотрудничество агентов между пользователями",
+      "name_en": "cross-user agent collaboration",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "cross-user agent collaboration",
+      "name_variants": [
+        {
+          "name": "cross-user agent collaboration",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "cross-user agent collaboration",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "автономное сотрудничество между пользователями",
+      "name_en": "cross-user autonomous cooperation",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "cross-user autonomous cooperation",
+      "name_variants": [
+        {
+          "name": "cross-user autonomous cooperation",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "cross-user autonomous cooperation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "децентрализованная проверка целостности файлов",
+      "name_en": "decentralized file integrity verification",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "decentralized file integrity verification",
+      "name_variants": [
+        {
+          "name": "decentralized file integrity verification",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Decentralized File Integrity Verification",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "корпоративный эталон Oracle",
+      "name_en": "enterprise oracle benchmark",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "enterprise oracle benchmark",
+      "name_variants": [
+        {
+          "name": "enterprise oracle benchmark",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Enterprise Oracle Benchmark",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обнаружение подделок на местах",
+      "name_en": "field-localized forgery detection",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "field-localized forgery detection",
+      "name_variants": [
+        {
+          "name": "field-localized forgery detection",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Field-Localized Forgery Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "нейро-символическое управление участием",
+      "name_en": "neuro-symbolic participation governance",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "neuro-symbolic participation governance",
+      "name_variants": [
+        {
+          "name": "neuro-symbolic participation governance",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Neuro-Symbolic Participation Governance",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "вывод биометрических данных ладони",
+      "name_en": "palm biometric data exfiltration",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "palm biometric data exfiltration",
+      "name_variants": [
+        {
+          "name": "palm biometric data exfiltration",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "EMPalm: Exfiltrating Palm Biometric Data via Electromagnetic Side-Channel",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "безопасное бенчмаркинг идентификационных документов",
+      "name_en": "secure ID benchmarking",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "secure ID benchmarking",
+      "name_variants": [
+        {
+          "name": "secure id benchmarking",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Secure ID Benchmarking",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "унификация семантических графов",
+      "name_en": "semantic graph unification",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "semantic graph unification",
+      "name_variants": [
+        {
+          "name": "semantic graph unification",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Semantic Graph Unification for Industrial Digital Threads",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "защищенная квантовыми технологиями система здравоохранения",
+      "name_en": "quantum-secure healthchain",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "quantum-secure healthchain",
+      "name_variants": [
+        {
+          "name": "quantum-secure healthchain",
+          "n_works": 3,
+          "n_institutions": 13,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3,
+      "n_institutions": 13,
+      "n_institutions_capped": false,
+      "quote": "Enhancing Cloud‐Based Healthcare Security With Quantum‐Secure HealthChain",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "многоязычная помощь LLM, основанная на поиске",
+      "name_en": "retrieval-grounded multilingual LLM assistance",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "retrieval-grounded multilingual LLM assistance",
+      "name_variants": [
+        {
+          "name": "retrieval-grounded multilingual llm assistance",
+          "n_works": 1,
+          "n_institutions": 2,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 2,
+      "n_institutions_capped": false,
+      "quote": "Retrieval-Grounded Multilingual LLM Assistance",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "отзывные биометрические шаблоны",
+      "name_en": "revocable biometric template",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "revocable biometric template",
+      "name_variants": [
+        {
+          "name": "revocable biometric template",
+          "n_works": 11,
+          "n_institutions": 18,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 11,
+      "n_institutions": 18,
+      "n_institutions_capped": false,
+      "quote": "Generating High-Security Revocable Biometric Templates",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "вложения сессий",
+      "name_en": "session embeddings",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "session embeddings",
+      "name_variants": [
+        {
+          "name": "session embeddings",
+          "n_works": 170,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 170,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Cross-Platform Session Embeddings",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "распознавание походки на основе силуэтов",
+      "name_en": "silhouette-based gait recognition",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "silhouette-based gait recognition",
+      "name_variants": [
+        {
+          "name": "silhouette-based gait recognition",
+          "n_works": 58,
+          "n_institutions": 96,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 58,
+      "n_institutions": 96,
+      "n_institutions_capped": false,
+      "quote": "Silhouette-Based Cross-View Motion Gait Recognition",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "смарт-контракт",
+      "name_en": "smart contract",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "smart contract",
+      "name_variants": [
+        {
+          "name": "smart contract",
+          "n_works": 50765,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 50765,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "smart contract vulnerabilities",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обнаружение уязвимостей смарт-контрактов",
+      "name_en": "smart contract vulnerability detection",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "smart contract vulnerability detection",
+      "name_variants": [
+        {
+          "name": "smart contract vulnerability detection",
+          "n_works": 601,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 601,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Smart Contract Vulnerability Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "платежи с использованием стейблкоинов",
+      "name_en": "stablecoin payments",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "stablecoin payments",
+      "name_variants": [
+        {
+          "name": "stablecoin payments",
+          "n_works": 74,
+          "n_institutions": 68,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 74,
+      "n_institutions": 68,
+      "n_institutions_capped": false,
+      "quote": "Platform-Embedded Activation of Stablecoin Payments",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "протокол стейблкоина",
+      "name_en": "stablecoin protocol",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "stablecoin protocol",
+      "name_variants": [
+        {
+          "name": "stablecoin protocol",
+          "n_works": 30,
+          "n_institutions": 39,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 30,
+      "n_institutions": 39,
+      "n_institutions_capped": false,
+      "quote": "optimal design of a stablecoin protocol",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "суперприложения",
+      "name_en": "super apps",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "super apps",
+      "name_variants": [
+        {
+          "name": "super apps",
+          "n_works": 1848,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1848,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "super app",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обучение с использованием инструментов",
+      "name_en": "tool learning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "tool learning",
+      "name_variants": [
+        {
+          "name": "tool learning",
+          "n_works": 3105,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3105,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Tool learning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "LLM, дополненные инструментами",
+      "name_en": "tool-augmented LLMs",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "tool-augmented LLMs",
+      "name_variants": [
+        {
+          "name": "tool-augmented llms",
+          "n_works": 130,
+          "n_institutions": 197,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 130,
+      "n_institutions": 197,
+      "n_institutions_capped": false,
+      "quote": "Tool-Augmented LLMs",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "справедливое упорядочение транзакций",
+      "name_en": "transaction fair ordering",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "transaction fair ordering",
+      "name_variants": [
+        {
+          "name": "transaction fair ordering",
+          "n_works": 1,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "Transaction Fair Ordering on a DAG",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "распознавание лиц в видимом и тепловом диапазонах",
+      "name_en": "visible-thermal face recognition",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "visible-thermal face recognition",
+      "name_variants": [
+        {
+          "name": "visible-thermal face recognition",
+          "n_works": 1,
+          "n_institutions": 2,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 2,
+      "n_institutions_capped": false,
+      "quote": "visible-thermal face recognition",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "визуальное разделение секрета",
+      "name_en": "visual secret sharing",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "visual secret sharing",
+      "name_variants": [
+        {
+          "name": "visual secret sharing",
+          "n_works": 357,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 357,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Visual secret sharing",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "доказательство с нулевым знанием",
+      "name_en": "zero knowledge proof",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "zero knowledge proof",
+      "name_variants": [
+        {
+          "name": "zero knowledge proof",
+          "n_works": 7682,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7682,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Zero-Knowledge-Based Auditable Cross-Chain Framework",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "доказательства с нулевым знанием",
+      "name_en": "zero-knowledge proofs",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "zero-knowledge proofs",
+      "name_variants": [
+        {
+          "name": "zero-knowledge proofs",
+          "n_works": 7682,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7682,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Zero-Knowledge Proofs (ZKPs)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Генеративные диффузионные модели",
+      "name_en": "generative diffusion models",
+      "score": 0.6928670075394344,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "generative diffusion models",
+      "name_variants": [
+        {
+          "name": "generative diffusion models",
+          "n_works": 1362,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1362,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Generative diffusion models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 3,
+      "share_patent": 0.0015641293013555788,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Анализ квантильной связанности",
+      "name_en": "quantile connectedness analysis",
+      "score": 0.6780076322494547,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "quantile connectedness analysis",
+      "name_variants": [
+        {
+          "name": "quantile connectedness analysis",
+          "n_works": 96,
+          "n_institutions": 199,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 96,
+      "n_institutions": 199,
+      "n_institutions_capped": false,
+      "quote": "Quantile Connectedness Approach",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обнаружение поддельных отпечатков пальцев",
+      "name_en": "fingerprint forgery detection",
+      "score": 0.6707505939455749,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "fingerprint forgery detection",
+      "name_variants": [
+        {
+          "name": "fingerprint forgery detection",
+          "n_works": 7,
+          "n_institutions": 12,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7,
+      "n_institutions": 12,
+      "n_institutions_capped": false,
+      "quote": "Towards Trustworthy Biometrics: Generalized Detection of Diffusion-Generated Fingerprint Forgeries",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 1,
+      "share_patent": 0.1111111111111111,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Цифровые документы удостоверяющие личность",
+      "name_en": "digital identity documents",
+      "score": 0.6633511168855892,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "digital identity documents",
+      "name_variants": [
+        {
+          "name": "digital identity documents",
+          "n_works": 47,
+          "n_institutions": 46,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 47,
+      "n_institutions": 46,
+      "n_institutions_capped": false,
+      "quote": "Digital Identity Documents",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 23,
+      "share_patent": 0.323943661971831,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Синтез эксплойтов",
+      "name_en": "exploit synthesis",
+      "score": 0.660370262819916,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "exploit synthesis",
+      "name_variants": [
+        {
+          "name": "exploit synthesis",
+          "n_works": 33,
+          "n_institutions": 73,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 33,
+      "n_institutions": 73,
+      "n_institutions_capped": false,
+      "quote": "Exploit Synthesis for DeFi Smart Contracts",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 2,
+      "share_patent": 0.05555555555555555,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Децентрализованные финансы Ethereum",
+      "name_en": "ethereum decentralized finance",
+      "score": 0.6569836695008396,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "ethereum decentralized finance",
+      "name_variants": [
+        {
+          "name": "ethereum decentralized finance",
+          "n_works": 7,
+          "n_institutions": 9,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7,
+      "n_institutions": 9,
+      "n_institutions_capped": false,
+      "quote": "Ethereum decentralized finance (DeFi)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Финансы в метавселенной",
+      "name_en": "metaverse finance",
+      "score": 0.6480851390452218,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "metaverse finance",
+      "name_variants": [
+        {
+          "name": "metaverse finance",
+          "n_works": 40,
+          "n_institutions": 57,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 40,
+      "n_institutions": 57,
+      "n_institutions_capped": false,
+      "quote": "Metaverse Finance (MetaFi)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Непрерывный аудит",
+      "name_en": "continuous auditing",
+      "score": 0.6426691291868283,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "continuous auditing",
+      "name_variants": [
+        {
+          "name": "continuous auditing",
+          "n_works": 4674,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4674,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Enhancing continuous auditing with large language models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 28,
+      "share_patent": 0.0059271803556308214,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Биометрическое шифрование изображений",
+      "name_en": "biometric image encryption",
+      "score": 0.5722239791911107,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "biometric image encryption",
+      "name_variants": [
+        {
+          "name": "biometric image encryption",
+          "n_works": 38,
+          "n_institutions": 64,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 38,
+      "n_institutions": 64,
+      "n_institutions_capped": false,
+      "quote": "A novel 1-D compound sine-cosine chaotic map & novel pseudorandom key based biometric image encryption method",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Цифровые платежи",
+      "name_en": "digital payments",
+      "score": 0.5493278747638728,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "digital payments",
+      "name_variants": [
+        {
+          "name": "digital payments",
+          "n_works": 39579,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 39579,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "digital payments",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 521,
+      "share_patent": 0.012973430613312084,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Автоматизированный маркетмейкер (АММ)",
+      "name_en": "automated market maker",
+      "score": 0.5277060934004493,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "automated market maker",
+      "name_variants": [
+        {
+          "name": "automated market maker",
+          "n_works": 549,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 549,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "automated market maker (AMM) pool",
+      "n_docs": 3,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 41,
+      "share_patent": 0.05236270753512133,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Децентрализованные финансы",
+      "name_en": "decentralized finance",
+      "score": 0.5058880900845233,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "decentralized finance",
+      "name_variants": [
+        {
+          "name": "decentralized finance",
+          "n_works": 7584,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7584,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Decentralized Finance (DeFi) applications",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 270,
+      "share_patent": 0.0327431481930633,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Опционы на блокчейне",
+      "name_en": "on chain options",
+      "score": 0.4937515664760914,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "on chain options",
+      "name_variants": [
+        {
+          "name": "on chain options",
+          "n_works": 348,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 348,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "on-chain options",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 82,
+      "share_patent": 0.1889400921658986,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Мобильные платёжные приложения",
+      "name_en": "mobile payment applications",
+      "score": 0.44729102766849377,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "mobile payment applications",
+      "name_variants": [
+        {
+          "name": "mobile payment applications",
+          "n_works": 1318,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1318,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "mobile payment applications",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 262,
+      "share_patent": 0.1657179000632511,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Разведка киберугроз",
+      "name_en": "cyber threat intelligence",
+      "score": 0.41774724257815354,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "cyber threat intelligence",
+      "name_variants": [
+        {
+          "name": "cyber threat intelligence",
+          "n_works": 4587,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4587,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "timely dissemination of cyber threat intelligence (CTI)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 307,
+      "share_patent": 0.06036177742823437,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Пальмовые биометрические данные",
+      "name_en": "palm biometric data",
+      "score": 0.3804821218460816,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 5 патентов на 3 публикации",
+      "name_raw": "palm biometric data",
+      "name_variants": [
+        {
+          "name": "palm biometric data",
+          "n_works": 1,
+          "n_institutions": 2,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 2,
+      "n_institutions_capped": false,
+      "quote": "Exfiltrating Palm Biometric Data via Electromagnetic Side-Channel",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 5,
+      "share_patent": 0.625,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Модели диффузии",
+      "name_en": "diffusion models",
+      "score": 0.37373230998605944,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 91362 публикаций — технология уже хорошо изучена",
+      "name_raw": "diffusion models",
+      "name_variants": [
+        {
+          "name": "diffusion models",
+          "n_works": 73325,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 73325,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Latent Diffusion Models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 367,
+      "share_patent": 0.00400091574093253,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Распознавание в открытых множествах",
+      "name_en": "open-set recognition",
+      "score": 0.35208486492039565,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 1753 публикаций — технология уже хорошо изучена",
+      "name_raw": "open-set recognition",
+      "name_variants": [
+        {
+          "name": "open-set recognition",
+          "n_works": 1527,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1527,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "open-set recognition (OSR)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 48,
+      "share_patent": 0.026651860077734593,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Проверка авторства",
+      "name_en": "authorship verification",
+      "score": 0.33759292225556425,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 668 публикаций — технология уже хорошо изучена",
+      "name_raw": "authorship verification",
+      "name_variants": [
+        {
+          "name": "authorship verification",
+          "n_works": 606,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 606,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Authorship Verification",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 8,
+      "share_patent": 0.011834319526627219,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Децентрализованная биржа",
+      "name_en": "decentralized exchange",
+      "score": 0.3359414478032851,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 1810 публикаций — технология уже хорошо изучена",
+      "name_raw": "decentralized exchange",
+      "name_variants": [
+        {
+          "name": "decentralized exchange",
+          "n_works": 1651,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1651,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "decentralized exchange~(DEX) swap protocols",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 235,
+      "share_patent": 0.11491442542787286,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Платежи на основе блокчейна",
+      "name_en": "blockchain payments",
+      "score": 0.33258723003444945,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Интерес не нарастает: за последние два года 28% всех упоминаний",
+      "name_raw": "blockchain payments",
+      "name_variants": [
+        {
+          "name": "blockchain payments",
+          "n_works": 432,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 432,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "payments blockchain company Ripple",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 99,
+      "share_patent": 0.18574108818011256,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Генераторы документов",
+      "name_en": "document generator",
+      "score": 0.3264624954047159,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 251 патент на 203 публикации",
+      "name_raw": "document generator",
+      "name_variants": [
+        {
+          "name": "document generator",
+          "n_works": 80,
+          "n_institutions": 114,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 80,
+      "n_institutions": 114,
+      "n_institutions_capped": false,
+      "quote": "Document Generator",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 251,
+      "share_patent": 0.552863436123348,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Криптографическая защита",
+      "name_en": "cryptographic protection",
+      "score": 0.32157420053736663,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 2209 публикаций — технология уже хорошо изучена",
+      "name_raw": "cryptographic protection",
+      "name_variants": [
+        {
+          "name": "cryptographic protection",
+          "n_works": 2188,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2188,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "confidentiality and integrity of fingerprint data using cryptographic protection methods",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 602,
+      "share_patent": 0.21415866239772324,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обнаружение мошенничества",
+      "name_en": "fraud detection",
+      "score": 0.3092602778943252,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 48073 публикаций — технология уже хорошо изучена",
+      "name_raw": "fraud detection",
+      "name_variants": [
+        {
+          "name": "fraud detection",
+          "n_works": 47317,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 47317,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "digital fraud detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 8809,
+      "share_patent": 0.15486445624274814,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Децентрализованная автономная организация (ДАО)",
+      "name_en": "decentralized autonomous organization",
+      "score": 0.284776862140397,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 3220 публикаций — технология уже хорошо изучена",
+      "name_raw": "decentralized autonomous organization",
+      "name_variants": [
+        {
+          "name": "decentralized autonomous organization",
+          "n_works": 3121,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3121,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "decentralized autonomous organizations (DAOs)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 257,
+      "share_patent": 0.07391429393155019,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Решения на основе блокчейна",
+      "name_en": "blockchain-based solution",
+      "score": 0.2765913256111652,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 5250 публикаций — технология уже хорошо изучена",
+      "name_raw": "blockchain-based solution",
+      "name_variants": [
+        {
+          "name": "blockchain-based solution",
+          "n_works": 5211,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 5211,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Blockchain-based solution for secure and transparent pharmaceutical supply chain management",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 232,
+      "share_patent": 0.04232032105071142,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Технология блокчейн",
+      "name_en": "blockchain technology",
+      "score": 0.26783739101890325,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 100013 публикаций — технология уже хорошо изучена",
+      "name_raw": "blockchain technology",
+      "name_variants": [
+        {
+          "name": "blockchain technology",
+          "n_works": 99019,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 99019,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "quantum blockchain",
+      "n_docs": 4,
+      "n_sources": 2,
+      "known_training_label": null,
+      "n_pat": 10600,
+      "share_patent": 0.09582960411524866,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Ускоренный на GPU метод Монте-Карло",
+      "name_en": "GPU-accelerated Monte Carlo",
+      "score": 0.2490566083251259,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 340 публикаций — технология уже хорошо изучена",
+      "name_raw": "GPU-accelerated Monte Carlo",
+      "name_variants": [
+        {
+          "name": "gpu-accelerated monte carlo",
+          "n_works": 324,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 324,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "GPU-Accelerated Monte Carlo Evaluation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 4,
+      "share_patent": 0.011627906976744186,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Синтез изображений лиц",
+      "name_en": "facial image synthesis",
+      "score": 0.2341781194848623,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 85 публикаций — технология уже хорошо изучена",
+      "name_raw": "facial image synthesis",
+      "name_variants": [
+        {
+          "name": "facial image synthesis",
+          "n_works": 76,
+          "n_institutions": 123,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 76,
+      "n_institutions": 123,
+      "n_institutions_capped": false,
+      "quote": "facial image synthesis",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 5,
+      "share_patent": 0.05555555555555555,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Отменяемая биометрия",
+      "name_en": "cancelable biometrics",
+      "score": 0.21842643376406912,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 766 публикаций — технология уже хорошо изучена",
+      "name_raw": "cancelable biometrics",
+      "name_variants": [
+        {
+          "name": "cancelable biometrics",
+          "n_works": 747,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 747,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Benchmarking of cancelable biometrics for deep templates",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 13,
+      "share_patent": 0.01668806161745828,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Технология распознавания лиц",
+      "name_en": "facial recognition technology",
+      "score": 0.2081998267884125,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 7117 публикаций — технология уже хорошо изучена",
+      "name_raw": "facial recognition technology",
+      "name_variants": [
+        {
+          "name": "facial recognition technology",
+          "n_works": 7090,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7090,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "facial recognition technology based on deep neural networks",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 1555,
+      "share_patent": 0.17931273062730627,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Кросс-спектральное распознавание лиц",
+      "name_en": "cross-spectral face recognition",
+      "score": 0.1851103544146823,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 27 публикаций — технология уже хорошо изучена",
+      "name_raw": "cross-spectral face recognition",
+      "name_variants": [
+        {
+          "name": "cross-spectral face recognition",
+          "n_works": 22,
+          "n_institutions": 47,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 22,
+      "n_institutions": 47,
+      "n_institutions_capped": false,
+      "quote": "Cross-spectral face recognition",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 1,
+      "share_patent": 0.03571428571428571,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Синтез рукописного текста",
+      "name_en": "handwriting synthesis",
+      "score": 0.17330315087030496,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 73 публикаций — технология уже хорошо изучена",
+      "name_raw": "handwriting synthesis",
+      "name_variants": [
+        {
+          "name": "handwriting synthesis",
+          "n_works": 64,
+          "n_institutions": 96,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 64,
+      "n_institutions": 96,
+      "n_institutions_capped": false,
+      "quote": "Realistic handwritten text generation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 10,
+      "share_patent": 0.12048192771084337,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Защита биометрических шаблонов",
+      "name_en": "biometric template protection",
+      "score": 0.16646211063112049,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 520 публикаций — технология уже хорошо изучена",
+      "name_raw": "biometric template protection",
+      "name_variants": [
+        {
+          "name": "biometric template protection",
+          "n_works": 506,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 506,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Generating High-Security Revocable Biometric Templates",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 32,
+      "share_patent": 0.057971014492753624,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Биометрическая система аутентификации",
+      "name_en": "biometric authentication system",
+      "score": 0.15160236157744125,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 2650 публикаций — технология уже хорошо изучена",
+      "name_raw": "biometric authentication system",
+      "name_variants": [
+        {
+          "name": "biometric authentication system",
+          "n_works": 2612,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2612,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Biometric authentication systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 857,
+      "share_patent": 0.24436840604505275,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Биометрическая безопасность",
+      "name_en": "biometric security",
+      "score": 0.12766676623124548,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 2689 публикаций — технология уже хорошо изучена",
+      "name_raw": "biometric security",
+      "name_variants": [
+        {
+          "name": "biometric security",
+          "n_works": 2644,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2644,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "biometric security and artificial intelligence (AI)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 1198,
+      "share_patent": 0.3082068433239002,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Верификация по венозному рисунку пальца",
+      "name_en": "finger vein verification",
+      "score": 0.1115704483458423,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 186 публикаций — технология уже хорошо изучена",
+      "name_raw": "finger vein verification",
+      "name_variants": [
+        {
+          "name": "finger vein verification",
+          "n_works": 184,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 184,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Finger vein verification",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 4,
+      "share_patent": 0.021052631578947368,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Квантовая слепая передача",
+      "name_en": "quantum oblivious transfer",
+      "score": 0.10950612508206292,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 112 публикаций — технология уже хорошо изучена",
+      "name_raw": "quantum oblivious transfer",
+      "name_variants": [
+        {
+          "name": "quantum oblivious transfer",
+          "n_works": 90,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 90,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Secure multi-party biometric verification using QKD assisted quantum oblivious transfer",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 45,
+      "share_patent": 0.28662420382165604,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обнаружение голограмм",
+      "name_en": "hologram detection",
+      "score": 0.08803352730706479,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 34 патента на 16 публикаций",
+      "name_raw": "hologram detection",
+      "name_variants": [
+        {
+          "name": "hologram detection",
+          "n_works": 15,
+          "n_institutions": 25,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 15,
+      "n_institutions": 25,
+      "n_institutions_capped": false,
+      "quote": "Hologram Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 34,
+      "share_patent": 0.68,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Генерация рукописного текста",
+      "name_en": "handwriting generation",
+      "score": 0.07955839214289949,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 128 публикаций — технология уже хорошо изучена",
+      "name_raw": "handwriting generation",
+      "name_variants": [
+        {
+          "name": "handwriting generation",
+          "n_works": 107,
+          "n_institutions": 185,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 107,
+      "n_institutions": 185,
+      "n_institutions_capped": false,
+      "quote": "Realistic handwritten text generation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 61,
+      "share_patent": 0.32275132275132273,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Доказательство доли",
+      "name_en": "proof of stake",
+      "score": 0.07914290456787638,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 8310 публикаций — технология уже хорошо изучена",
+      "name_raw": "proof of stake",
+      "name_variants": [
+        {
+          "name": "proof of stake",
+          "n_works": 8091,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8091,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Proof of Stake (PoS) blockchain",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 5647,
+      "share_patent": 0.4045998423730028,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Верификация личности",
+      "name_en": "identity verification",
+      "score": 0.07559370622707358,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 25 404 патента на 15 770 публикаций",
+      "name_raw": "identity verification",
+      "name_variants": [
+        {
+          "name": "identity verification",
+          "n_works": 15618,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 15618,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "identity verification barriers",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": {
+        "id": "n53",
+        "label": "mainstream"
+      },
+      "n_pat": 25404,
+      "share_patent": 0.6169913051925973,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Нечёткий vault (нечёткий хранилище)",
+      "name_en": "fuzzy vault",
+      "score": 0.056684680654309545,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 343 публикаций — технология уже хорошо изучена",
+      "name_raw": "fuzzy vault",
+      "name_variants": [
+        {
+          "name": "fuzzy vault",
+          "n_works": 340,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 340,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Fuzzy-Vault Methods",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 99,
+      "share_patent": 0.2239819004524887,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Мультимодальная биометрическая верификация личности",
+      "name_en": "multimodal biometric identity verification",
+      "score": 0.04464099567332898,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Интерес не нарастает: за последние два года 0% всех упоминаний",
+      "name_raw": "multimodal biometric identity verification",
+      "name_variants": [
+        {
+          "name": "multimodal biometric identity verification",
+          "n_works": 3,
+          "n_institutions": 8,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3,
+      "n_institutions": 8,
+      "n_institutions_capped": false,
+      "quote": "A Multimodal Biometric Identity Verification Method",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Автоматическое экстренное торможение",
+      "name_en": "automatic emergency braking",
+      "score": 0.022118563513222465,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 2 867 патентов на 1 134 публикации",
+      "name_raw": "automatic emergency braking",
+      "name_variants": [
+        {
+          "name": "automatic emergency braking",
+          "n_works": 1106,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1106,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Automatic Emergency Braking (AEB)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 2867,
+      "share_patent": 0.7165708572856786,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    }
+  ],
+  "timings": {
+    "subqueries": 2.08,
+    "search": 11.34,
+    "candidates": 47.36,
+    "naming": 11.86,
+    "counters": 111.25,
+    "ranking": 1.5,
+    "queues": [
+      {
+        "source": "openalex",
+        "candidates": 60,
+        "requests": 33,
+        "cache_hits": 27,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 99.03,
+        "duration_s": 99.03
+      },
+      {
+        "source": "arxiv",
+        "candidates": 60,
+        "requests": 33,
+        "cache_hits": 27,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 106.89,
+        "duration_s": 106.89
+      },
+      {
+        "source": "techcrunch",
+        "candidates": 60,
+        "requests": 33,
+        "cache_hits": 27,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 111.24,
+        "duration_s": 111.23
+      },
+      {
+        "source": "rospatent",
+        "candidates": 60,
+        "parallel": 4,
+        "requests": 33,
+        "cache_hits": 27,
+        "retries": 0,
+        "n429": 0,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 10.43,
+        "duration_s": 10.43
+      }
+    ],
+    "translate": 10.16,
+    "total": 195.55
+  },
+  "warnings": [
+    "отброшен (ru): «биометрическая аутентификация в банковском секторе» — слов 5, нужно 2-4",
+    "отброшен (ru): «алгоритмы предсказательной аналитики для кредитования» — слов 5, нужно 2-4",
+    "отброшен (ru): «технологии распределённого реестра в страховании» — слов 5, нужно 2-4",
+    "отброшен (ru): «платформы для краудфандинга нового поколения» — слов 5, нужно 2-4",
+    "отброшен (en): «regulatory technology compliance» — слово зрелой области regulatory",
+    "подзапросов меньше нужного (ru), выполнен повтор",
+    "отброшен: term_en «reverse kelly automated market maker»: слов 5, нужно 2–4",
+    "отброшен: term_en «zero knowledge based auditable cross chain framework»: слов 7, нужно 2–4",
+    "отброшен: term_en «llm driven universal fraud detection»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «decentralized exchange»: quote не найден в документе 7",
+    "отброшен: term_en «prompt bank for coding-model compliance»: слов 5, нужно 2–4",
+    "отброшен: term_en «identity verification for blind and low vision»: слов 7, нужно 2–4",
+    "отброшен: term_en «multi-modal web platform for fraud detection»: слов 6, нужно 2–4",
+    "отброшен: term_en «AI identification framework»: последнее слово framework",
+    "отброшен: term_en «foundation models for identity document attack»: слов 6, нужно 2–4",
+    "отброшен: term_en «protocol-embedded compliance for digital payments»: слов 5, нужно 2–4",
+    "отброшен: term_en «document generator for identity verification»: слов 5, нужно 2–4",
+    "отброшен: term_en «video transformer for hologram detection»: слов 5, нужно 2–4",
+    "отброшен: term_en «agentic reasoning over DeFi protocols»: слов 5, нужно 2–4",
+    "отброшен: term_en «quantile connectedness approach»: последнее слово approach",
+    "отброшен после повтора: term_en «decentralized finance protocols»: quote не найден в документе 94",
+    "отброшен: term_en «quantum-secure healthchain»: quote не найден в документе 141",
+    "отброшен: term_en «fuzzy vault methods»: последнее слово methods"
+  ],
+  "meta": {
+    "query": "перспективные решения в финтехе",
+    "area": "Финтех",
+    "run_date": "2026-09-26T22:49:40",
+    "model_version": "s2a2-v1",
+    "candidates_version": "v3",
+    "seconds": 195.55,
+    "counters_cache_share": 0.45
+  }
+}

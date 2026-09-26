@@ -1,0 +1,5521 @@
+{
+  "query_id": "q20260926225257",
+  "topic": "слабые сигналы в области кибербезопасности",
+  "area": "Защита ИИ",
+  "model_version": "s2a2-v1",
+  "threshold": 0.4,
+  "cutoff_date": "2026-09-01",
+  "subqueries": [
+    {
+      "subquery_id": "q20260926225257-ru-1",
+      "language": "ru",
+      "text": "кибербезопасность в квантовую эпоху"
+    },
+    {
+      "subquery_id": "q20260926225257-ru-2",
+      "language": "ru",
+      "text": "защита распределённых систем"
+    },
+    {
+      "subquery_id": "q20260926225257-ru-3",
+      "language": "ru",
+      "text": "безопасность интернета вещей"
+    },
+    {
+      "subquery_id": "q20260926225257-en-1",
+      "language": "en",
+      "text": "zero trust architecture"
+    },
+    {
+      "subquery_id": "q20260926225257-en-2",
+      "language": "en",
+      "text": "cybersecurity threat intelligence"
+    },
+    {
+      "subquery_id": "q20260926225257-en-3",
+      "language": "en",
+      "text": "advanced persistent threat detection"
+    },
+    {
+      "subquery_id": "q20260926225257-en-4",
+      "language": "en",
+      "text": "cloud security solutions"
+    },
+    {
+      "subquery_id": "q20260926225257-en-5",
+      "language": "en",
+      "text": "quantum cryptography applications"
+    },
+    {
+      "subquery_id": "q20260926225257-en-6",
+      "language": "en",
+      "text": "AI-powered security analytics"
+    },
+    {
+      "subquery_id": "q20260926225257-en-7",
+      "language": "en",
+      "text": "IoT device security protocols"
+    },
+    {
+      "subquery_id": "q20260926225257-en-8",
+      "language": "en",
+      "text": "cybersecurity incident response automation"
+    }
+  ],
+  "candidate_sources": null,
+  "extract_version": "v2",
+  "extract_model": "yandexgpt-5-pro",
+  "naming_mode": "direct",
+  "candidates_version": "v3",
+  "stats": {
+    "documents_by_source": {
+      "openalex": 190,
+      "arxiv": 149,
+      "techcrunch": 42,
+      "openalex_ru": 51
+    },
+    "documents_for_candidates_by_source": {
+      "openalex": 190,
+      "arxiv": 149,
+      "techcrunch": 42,
+      "openalex_ru": 0
+    },
+    "documents_total": 432,
+    "documents_for_candidates": 381,
+    "candidates_found": 157,
+    "candidates_named": 138,
+    "candidates_scored": 60,
+    "above_threshold": 31,
+    "above_075": 9,
+    "rospatent_enabled": true,
+    "rospatent_failures": 0,
+    "translation": {
+      "переведено": 60,
+      "из кэша": 58,
+      "с первого раза": 0,
+      "с повтором": 0,
+      "откат на term_ru": 2,
+      "без названия": 0
+    }
+  },
+  "normalizer_deviations": [
+    "company_stoplist_off"
+  ],
+  "top": [
+    {
+      "rank": 1,
+      "name_ru": "Обнаружение угроз в реальном времени на основе ИИ",
+      "name_en": "ai-powered real-time threat detection",
+      "score": 0.9196657610244691,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 5",
+        "Молодой термин: первый препринт 1 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": -0.0012555593496957973,
+        "recency": -0.058920442072790555,
+        "share_news_wordmatch": 1.0299788643647891,
+        "share_prev6": 0.07691733694675551,
+        "age_first_arxiv": 0.6180611400451895
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 4
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 3
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 0,
+          "techcrunch": 2
+        }
+      },
+      "name_raw": "ai-powered real-time threat detection",
+      "name_variants": [
+        {
+          "name": "ai-powered real-time threat detection",
+          "n_works": 4,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "SentinelSphere: Integrating AI-Powered Real-Time Threat Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "SentinelSphere: Integrating AI-Powered Real-Time Threat Detection with Cybersecurity Awareness Training",
+          "url": "http://arxiv.org/abs/2604.06900v1",
+          "published_at": "2026-04-08",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 2,
+      "name_ru": "Контекстно-зависимый извлечение сущностных отношений",
+      "name_en": "context-aware entity-relation extraction",
+      "score": 0.8758264132439125,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Молодой термин: первый препринт 1 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": -0.0012555593496957973,
+        "recency": 2.1330878056818148,
+        "share_news_wordmatch": -1.6924208085398045,
+        "share_prev6": 0.12298181265261676,
+        "age_first_arxiv": 0.6180611400451895
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 0,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "context-aware entity-relation extraction",
+      "name_variants": [
+        {
+          "name": "context-aware entity-relation extraction",
+          "n_works": 1,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "Context-aware Entity-Relation Extraction for Threat Intelligence Knowledge Graphs",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Context-aware Entity-Relation Extraction for Threat Intelligence Knowledge Graphs",
+          "url": "http://arxiv.org/abs/2605.15904v1",
+          "published_at": "2026-05-15",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 3,
+      "name_ru": "Безопасность на основе обратного рассеяния",
+      "name_en": "backscatter-based security",
+      "score": 0.8609829763250082,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Молодой термин: первый препринт 2 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": -0.0005209555500683142,
+        "recency": 2.1330878056818148,
+        "share_news_wordmatch": -1.6924208085398045,
+        "share_prev6": 0.12298181265261676,
+        "age_first_arxiv": 0.4873174373433225
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 1,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 2,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "backscatter-based security",
+      "name_variants": [
+        {
+          "name": "backscatter-based security",
+          "n_works": 2,
+          "n_institutions": 6,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 6,
+      "n_institutions_capped": false,
+      "quote": "A Protocol-Agnostic Backscatter-Based Security Layer",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "A Protocol-Agnostic Backscatter-Based Security Layer for Ultra-Low-Power SWIPT IoT Networks",
+          "url": "http://arxiv.org/abs/2604.15831v1",
+          "published_at": "2026-04-17",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 4,
+      "name_ru": "Edge AI-мост",
+      "name_en": "Edge AI Bridge",
+      "score": 0.8016505447142319,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 4",
+        "Патентов мало относительно научных работ: 0 патентов на 4 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": 0.0005941196387827854,
+        "recency": -0.8061959810800422,
+        "share_news_wordmatch": 1.7105787825909373,
+        "share_prev6": -0.04498499510412118,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 39
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 16
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 11
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 10
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 22
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 11
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 10
+        }
+      },
+      "name_raw": "Edge AI Bridge",
+      "name_variants": [
+        {
+          "name": "edge ai bridge",
+          "n_works": 4,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "Edge AI Bridge",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Edge AI Bridge: A Micro-Layer Intrusion Detection Architecture for Smart-City IoT Networks",
+          "url": "https://doi.org/10.3390/iot7020033",
+          "published_at": "2026-04-16",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 5,
+      "name_ru": "Инструмент обнаружения ИИ",
+      "name_en": "AI detection tool",
+      "score": 0.7970342855796099,
+      "explanation_ru": [
+        "Упоминания свежие: 60% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 1 254 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": 0.0004675986638286041,
+        "recency": 0.4648970660579897,
+        "share_news_wordmatch": -0.15596649314427422,
+        "share_prev6": 0.05959937979363162,
+        "age_first_arxiv": 0.22583003193958853
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 5,
+          "techcrunch": 294
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 121
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 139
+        },
+        "2022": {
+          "arxiv": 1,
+          "openalex": 39,
+          "techcrunch": 182
+        },
+        "2023": {
+          "arxiv": 4,
+          "openalex": 164,
+          "techcrunch": 225
+        },
+        "2024": {
+          "arxiv": 8,
+          "openalex": 395,
+          "techcrunch": 135
+        },
+        "2025": {
+          "arxiv": 5,
+          "openalex": 636,
+          "techcrunch": 144
+        }
+      },
+      "name_raw": "AI detection tool",
+      "name_variants": [
+        {
+          "name": "ai detection tool",
+          "n_works": 1236,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1236,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI detection tool",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Quantitative Analysis of AI-Generated Texts in Academic Research: A Study of AI Presence in arXiv Submissions using AI Detection Tool",
+          "url": "https://doi.org/10.33140/amlai.07.03.01",
+          "published_at": "2026-07-13",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 6,
+      "name_ru": "Когнитивный анализ угроз",
+      "name_en": "cognitive threat intelligence",
+      "score": 0.7889839419977015,
+      "explanation_ru": [
+        "Молодой термин: первый препринт 1 лет назад",
+        "Патентов мало относительно научных работ: 0 патентов на 7 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": -0.0007322289606551457,
+        "recency": -0.09877513748651051,
+        "share_news_wordmatch": 0.21325896249341111,
+        "share_prev6": -0.18603404520753575,
+        "age_first_arxiv": 0.6180611400451895
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 21
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 2
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 4,
+          "techcrunch": 1
+        }
+      },
+      "name_raw": "cognitive threat intelligence",
+      "name_variants": [
+        {
+          "name": "cognitive threat intelligence",
+          "n_works": 6,
+          "n_institutions": 4,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6,
+      "n_institutions": 4,
+      "n_institutions_capped": false,
+      "quote": "Cognitive Threat Intelligence and Explainable Federated Security Analytics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Cognitive Threat Intelligence and Explainable Federated Security Analytics for distributed Infrastructure Systems",
+          "url": "http://arxiv.org/abs/2606.05701v1",
+          "published_at": "2026-06-04",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 7,
+      "name_ru": "Аналитика безопасности на базе ИИ",
+      "name_en": "AI-powered security analytics",
+      "score": 0.775988130841931,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 18",
+        "Патентов мало относительно научных работ: 0 патентов на 18 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": -0.0006275628828470155,
+        "recency": -0.6785364098329701,
+        "share_news_wordmatch": 1.3782546037695762,
+        "share_prev6": 0.006697099590259728,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 35
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 7
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 14
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 18
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 41
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 8,
+          "techcrunch": 20
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 10
+        }
+      },
+      "name_raw": "AI-powered security analytics",
+      "name_variants": [
+        {
+          "name": "ai-powered security analytics",
+          "n_works": 18,
+          "n_institutions": 20,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 18,
+      "n_institutions": 20,
+      "n_institutions_capped": false,
+      "quote": "AI-Powered Security Health Analytics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "AI-Powered Security Health Analytics: A Scalable Framework for Enterprise Risk and Operational Intelligence",
+          "url": "https://doi.org/10.21590/ijhit.08.03.04",
+          "published_at": "2026-07-30",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 8,
+      "name_ru": "Федеративное обучение с нулевым доверием",
+      "name_en": "zero trust federated learning",
+      "score": 0.7568352081727551,
+      "explanation_ru": [
+        "Патентов мало относительно научных работ: 0 патентов на 31 публикацию",
+        "Молодой термин: первый препринт 3 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": 0.001199922439371252,
+        "recency": 0.20166795101691776,
+        "share_news_wordmatch": -0.24941809730071088,
+        "share_prev6": 0.052349616570296194,
+        "age_first_arxiv": 0.3565737346414555
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 8
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 8
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 4
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 7
+        },
+        "2023": {
+          "arxiv": 1,
+          "openalex": 2,
+          "techcrunch": 1
+        },
+        "2024": {
+          "arxiv": 1,
+          "openalex": 8,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 17,
+          "techcrunch": 1
+        }
+      },
+      "name_raw": "zero trust federated learning",
+      "name_variants": [
+        {
+          "name": "zero trust federated learning",
+          "n_works": 28,
+          "n_institutions": 57,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 28,
+      "n_institutions": 57,
+      "n_institutions_capped": false,
+      "quote": "Zero-Trust Federated Learning for Connected Aftermarket Devices",
+      "n_docs": 4,
+      "n_sources": 2,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Zero-Trust Federated Learning for Connected Aftermarket Devices",
+          "url": "http://arxiv.org/abs/2608.07591v1",
+          "published_at": "2026-08-05",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Federated Learning and LLM-Driven Threat Intelligence for Zero Trust IoT Architecture",
+          "url": "http://arxiv.org/abs/2607.17035v1",
+          "published_at": "2026-07-19",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Federated Learning over Blockchain-Enabled Cloud Infrastructure",
+          "url": "http://arxiv.org/abs/2604.20062v1",
+          "published_at": "2026-04-21",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "Recent trends in data privacy and security of IoT networks through federated learning",
+          "url": "https://doi.org/10.1007/s44354-026-00021-6",
+          "published_at": "2026-04-03",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 9,
+      "name_ru": "Логическая блокировка на основе SRAM PUF",
+      "name_en": "SRAM PUF-based logic locking",
+      "score": 0.7500898760837178,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 1 публикацию"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": -0.0012075809071598483,
+        "recency": 2.1330878056818148,
+        "share_news_wordmatch": -1.6924208085398045,
+        "share_prev6": 0.12298181265261676,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "SRAM PUF-based logic locking",
+      "name_variants": [
+        {
+          "name": "sram puf-based logic locking",
+          "n_works": 1,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "SRAM PUF-based logic locking framework for IoT authentication",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "SRAM PUF-based logic locking framework for IoT authentication and IP protection",
+          "url": "https://doi.org/10.1016/j.compeleceng.2026.111143",
+          "published_at": "2026-04-02",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 10,
+      "name_ru": "Агентивный ИИ",
+      "name_en": "agentic AI",
+      "score": 0.7287766313875284,
+      "explanation_ru": [
+        "Упоминания свежие: 90% за последние два года",
+        "Патентов мало относительно научных работ: 1 патент на 12 807 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.39157719330094987,
+        "growth_research": 0.005485374122866494,
+        "recency": 1.7185098082088657,
+        "share_news_wordmatch": -1.1845352576657737,
+        "share_prev6": 0.1040270380790818,
+        "age_first_arxiv": -0.42788848156974657
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 7,
+          "openalex": 224,
+          "techcrunch": 323
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 105,
+          "techcrunch": 80
+        },
+        "2021": {
+          "arxiv": 5,
+          "openalex": 162,
+          "techcrunch": 92
+        },
+        "2022": {
+          "arxiv": 2,
+          "openalex": 282,
+          "techcrunch": 117
+        },
+        "2023": {
+          "arxiv": 23,
+          "openalex": 369,
+          "techcrunch": 242
+        },
+        "2024": {
+          "arxiv": 300,
+          "openalex": 1462,
+          "techcrunch": 625
+        },
+        "2025": {
+          "arxiv": 1268,
+          "openalex": 8829,
+          "techcrunch": 966
+        }
+      },
+      "name_raw": "agentic AI",
+      "name_variants": [
+        {
+          "name": "agentic ai",
+          "n_works": 11209,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 11209,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Agentic AI and Large Language Models for Autonomous IoT Cybersecurity",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Agentic AI and Large Language Models for Autonomous IoT Cybersecurity: A Systematic Survey, Taxonomy, and Research Roadmap",
+          "url": "https://doi.org/10.3390/electronics15122740",
+          "published_at": "2026-06-22",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        },
+        {
+          "title": "Agentic AI systems in electrical power systems engineering: current state-of-the-art and challenges",
+          "url": "https://doi.org/10.3389/frai.2026.1814651",
+          "published_at": "2026-06-11",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 1,
+      "share_patent": 7.807620237351655e-05,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 11,
+      "name_ru": "Обнаружение угроз на основе ИИ",
+      "name_en": "AI-driven threat detection",
+      "score": 0.716068846251338,
+      "explanation_ru": [
+        "Упоминания свежие: 78% за последние два года",
+        "Молодой термин: первый препринт 2 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": -0.00036181678083247446,
+        "recency": 1.191995240938528,
+        "share_news_wordmatch": -1.641475059638236,
+        "share_prev6": 0.11453567951139537,
+        "age_first_arxiv": 0.4873174373433225
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 20,
+          "techcrunch": 5
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 21,
+          "techcrunch": 3
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 45,
+          "techcrunch": 2
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 71,
+          "techcrunch": 3
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 195,
+          "techcrunch": 7
+        },
+        "2024": {
+          "arxiv": 4,
+          "openalex": 642,
+          "techcrunch": 3
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 542,
+          "techcrunch": 4
+        }
+      },
+      "name_raw": "AI-driven threat detection",
+      "name_variants": [
+        {
+          "name": "ai-driven threat detection",
+          "n_works": 1516,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1516,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-Driven Threat Detection and Automated Incident Response",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "AI-Driven Threat Detection and Automated Incident Response for Enhancing Network Security",
+          "url": "https://doi.org/10.3390/network6020032",
+          "published_at": "2026-05-25",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 12,
+      "name_ru": "Аналитика состояния безопасности",
+      "name_en": "Security Health Analytics",
+      "score": 0.7149861056248257,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 3",
+        "Патентов мало относительно научных работ: 0 патентов на 3 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": 0.0005941196387827854,
+        "recency": -1.3119279115192934,
+        "share_news_wordmatch": 1.8265901322885767,
+        "share_prev6": -0.1321816182206879,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 184
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 57
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 49
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 31
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 26
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 23
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 9
+        }
+      },
+      "name_raw": "Security Health Analytics",
+      "name_variants": [
+        {
+          "name": "security health analytics",
+          "n_works": 3,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "AI-Powered Security Health Analytics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "AI-Powered Security Health Analytics: A Scalable Framework for Enterprise Risk and Operational Intelligence",
+          "url": "https://doi.org/10.21590/ijhit.08.03.04",
+          "published_at": "2026-07-30",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 13,
+      "name_ru": "Блокчейн-основанная модель нулевого доверия",
+      "name_en": "blockchain-based zero-trust",
+      "score": 0.6992930443055004,
+      "explanation_ru": [
+        "Упоминания свежие: 79% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 124 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": 0.0008618162533857349,
+        "recency": 1.2626612578461682,
+        "share_news_wordmatch": -1.6638356119743063,
+        "share_prev6": 0.11463942728856313,
+        "age_first_arxiv": 0.3565737346414555
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 1
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 1
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 8,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 1,
+          "openalex": 14,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 30,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 68,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "blockchain-based zero-trust",
+      "name_variants": [
+        {
+          "name": "blockchain-based zero-trust",
+          "n_works": 122,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 122,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Blockchain-based Zero-Trust Framework",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Skillsets on the Chain: A Blockchain-based Zero-Trust Framework for Agentic AI Networking",
+          "url": "http://arxiv.org/abs/2608.00104v1",
+          "published_at": "2026-07-31",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 14,
+      "name_ru": "Набор данных сетевого трафика IoT",
+      "name_en": "IoT Network Traffic Dataset",
+      "score": 0.6640450106748444,
+      "explanation_ru": [
+        "Упоминания свежие: 80% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 103 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": 0.0012209732445013172,
+        "recency": 1.279887772795865,
+        "share_news_wordmatch": -1.6924208085398045,
+        "share_prev6": 0.0938217317012,
+        "age_first_arxiv": 0.22583003193958853
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 5
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 1,
+          "openalex": 6,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 10,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 2,
+          "openalex": 25,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 55,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "IoT Network Traffic Dataset",
+      "name_variants": [
+        {
+          "name": "iot network traffic dataset",
+          "n_works": 100,
+          "n_institutions": 164,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 100,
+      "n_institutions": 164,
+      "n_institutions_capped": false,
+      "quote": "IoT network traffic dataset",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "A Device-Level IoT Network Traffic Dataset with Distributed Capture and Non-IID Characteristics",
+          "url": "https://doi.org/10.3390/data11080207",
+          "published_at": "2026-08-14",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 15,
+      "name_ru": "Архитектура ИИ, управляемая данными",
+      "name_en": "Data-Driven AI Architecture",
+      "score": 0.6568871668899059,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 2",
+        "Патентов мало относительно научных работ: 0 патентов на 2 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.39178415590604293,
+        "growth_research": -0.0012075809071598483,
+        "recency": -1.3820963298082976,
+        "share_news_wordmatch": 1.5948767964924924,
+        "share_prev6": -0.0987704308616455,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 18
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 4
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 7
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 8
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 2
+        }
+      },
+      "name_raw": "Data-Driven AI Architecture",
+      "name_variants": [
+        {
+          "name": "data-driven ai architecture",
+          "n_works": 2,
+          "n_institutions": 33,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 33,
+      "n_institutions_capped": false,
+      "quote": "Data-Driven AI Architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "CYBERVISOR-X:A Data-Driven AI Architecture For Real-Time Cybersecurity Threat Intelligence and Response",
+          "url": "https://doi.org/10.5281/zenodo.19520424",
+          "published_at": "2026-04-11",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    }
+  ],
+  "excluded": [
+    {
+      "name_ru": "Усиленная ИИ веб-разведка",
+      "name_en": "AI-Augmented Web Reconnaissance",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "AI-Augmented Web Reconnaissance",
+      "name_variants": [
+        {
+          "name": "ai-augmented web reconnaissance",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "AI-Augmented Web Reconnaissance and Cybersecurity Threat-Intelligence Platform",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обнаружение угроз с помощью больших языковых моделей",
+      "name_en": "LLM-assisted threat detection",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "LLM-assisted threat detection",
+      "name_variants": [
+        {
+          "name": "llm-assisted threat detection",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "LLM-Assisted Advanced Persistent Threat Detection and Explanation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обнаружение вторжений на основе бинарных изображений",
+      "name_en": "binary image-based intrusion detection",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "binary image-based intrusion detection",
+      "name_variants": [
+        {
+          "name": "binary image-based intrusion detection",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Binary Image-Based Intrusion Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "модели объяснимого ИИ типа blackbox",
+      "name_en": "blackbox xai models",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "blackbox xai models",
+      "name_variants": [
+        {
+          "name": "blackbox xai models",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Post-Hoc Explanation Integrity Guarantees in Blackbox XAI Models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "переносное обучение между операционными системами",
+      "name_en": "cross-operating-system transfer learning",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "cross-operating-system transfer learning",
+      "name_variants": [
+        {
+          "name": "cross-operating-system transfer learning",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "cross-operating-system (cross-OS) settings",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обнаружение киберустойчивости",
+      "name_en": "cyber persistence detection",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "cyber persistence detection",
+      "name_variants": [
+        {
+          "name": "cyber persistence detection",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Cyber Persistence Detector (CPD)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "объяснимое адаптивное нулевое доверие",
+      "name_en": "explainable adaptive zero trust",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "explainable adaptive zero trust",
+      "name_variants": [
+        {
+          "name": "explainable adaptive zero trust",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Explainable Adaptive Zero Trust Framework",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "готовность к судебной экспертизе с нулевым доверием",
+      "name_en": "forensic-ready zero trust",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "forensic-ready zero trust",
+      "name_variants": [
+        {
+          "name": "forensic-ready zero trust",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Forensic-Ready Zero Trust at the Capture-Containment Boundary",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "сервис удалённых таймеров",
+      "name_en": "remote timer service",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "remote timer service",
+      "name_variants": [
+        {
+          "name": "remote timer service",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Remote-Timer-as-a-Service: Efficient Microarchitectural Leakage in the Cloud",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обеспечение безопасности с учётом нулевого доверия",
+      "name_en": "safety-aware zero trust enforcement",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "safety-aware zero trust enforcement",
+      "name_variants": [
+        {
+          "name": "safety-aware zero trust enforcement",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Safety-Aware Zero Trust Enforcement for IoT",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "переносное обучение с использованием одного исходного домена между операционными системами",
+      "name_en": "source-only cross-os transfer learning",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "source-only cross-os transfer learning",
+      "name_variants": [
+        {
+          "name": "source-only cross-os transfer learning",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "source-only cross-OS transfer learning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "кибербезопасность на основе TinyML",
+      "name_en": "tinyml-driven cybersecurity",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "tinyml-driven cybersecurity",
+      "name_variants": [
+        {
+          "name": "tinyml-driven cybersecurity",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "TinyML-Driven Cybersecurity for Autonomous Spacecraft",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "передачи данных на основе доверия",
+      "name_en": "trust-driven transmissions",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "trust-driven transmissions",
+      "name_variants": [
+        {
+          "name": "trust-driven transmissions",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Behaviour-aware Hybrid Architecture for Trust-driven Transmissions",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "нейро-символическое выполнение с приоритетом доверия",
+      "name_en": "trust-first neuro-symbolic execution",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "trust-first neuro-symbolic execution",
+      "name_variants": [
+        {
+          "name": "trust-first neuro-symbolic execution",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Moxia: A Trust-First Neuro-Symbolic Execution Architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "вариационное квантовое управление",
+      "name_en": "variational quantum control",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "variational quantum control",
+      "name_variants": [
+        {
+          "name": "variational quantum control",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "VQC-ZTI: Variational Quantum Control for Zero Trust Protection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "классификация угроз без предварительного обучения",
+      "name_en": "zero-shot threat classification",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "zero-shot threat classification",
+      "name_variants": [
+        {
+          "name": "zero-shot threat classification",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "zero-shot threat classification",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "архитектура обеспечения выполнения MCP с нулевым доверием",
+      "name_en": "zero-trust mcp enforcement architecture",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "zero-trust mcp enforcement architecture",
+      "name_variants": [
+        {
+          "name": "zero-trust mcp enforcement architecture",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Hardware Keystores for AI Agent Signing Workflows: A Zero-Trust MCP Enforcement Architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "свёрточная нейронная сеть",
+      "name_en": "convolutional neural network",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "convolutional neural network",
+      "name_variants": [
+        {
+          "name": "convolutional neural network",
+          "n_works": 476587,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 476587,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "1D Convolutional Neural Network (1D-CNN)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "кибератака",
+      "name_en": "cyber attack",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "cyber attack",
+      "name_variants": [
+        {
+          "name": "cyber attack",
+          "n_works": 52721,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 52721,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "hackers breached water treatment plants",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "киберполигон",
+      "name_en": "cyber range",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "cyber range",
+      "name_variants": [
+        {
+          "name": "cyber range",
+          "n_works": 1566,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1566,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Dynamic Cyber Ranges",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "разведка киберугроз",
+      "name_en": "cyber threat intelligence",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "cyber threat intelligence",
+      "name_variants": [
+        {
+          "name": "cyber threat intelligence",
+          "n_works": 4587,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4587,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Cyber threat intelligence (CTI)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "набор данных об угрозах кибербезопасности",
+      "name_en": "cyber threat intelligence dataset",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "cyber threat intelligence dataset",
+      "name_variants": [
+        {
+          "name": "cyber threat intelligence dataset",
+          "n_works": 13,
+          "n_institutions": 19,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 13,
+      "n_institutions": 19,
+      "n_institutions_capped": false,
+      "quote": "a structured cyber threat intelligence dataset",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "инициатива в области кибербезопасности",
+      "name_en": "cybersecurity initiative",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "cybersecurity initiative",
+      "name_variants": [
+        {
+          "name": "cybersecurity initiative",
+          "n_works": 927,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 927,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Anthropic debuts preview of powerful new AI model Mythos in new cybersecurity initiative",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "анализ рисков кибербезопасности",
+      "name_en": "cybersecurity risk analysis",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "cybersecurity risk analysis",
+      "name_variants": [
+        {
+          "name": "cybersecurity risk analysis",
+          "n_works": 384,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 384,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "An integrated STPA-STRIDE-BN framework for cybersecurity risk analysis",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "стартап в области кибербезопасности",
+      "name_en": "cybersecurity startup",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "cybersecurity startup",
+      "name_variants": [
+        {
+          "name": "cybersecurity startup",
+          "n_works": 60,
+          "n_institutions": 73,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 60,
+      "n_institutions": 73,
+      "n_institutions_capped": false,
+      "quote": "Glow , a cybersecurity startup founded by former Meta and Snowflake executives",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "утечка данных",
+      "name_en": "data breach",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "data breach",
+      "name_variants": [
+        {
+          "name": "data breach",
+          "n_works": 43587,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 43587,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "covering up several data breaches",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "децентрализованное доверие",
+      "name_en": "decentralised trust",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "decentralised trust",
+      "name_variants": [
+        {
+          "name": "decentralised trust",
+          "n_works": 298,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 298,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "decentralised trust and security mechanisms",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "децентрализованные механизмы доверия",
+      "name_en": "decentralised trust mechanisms",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "decentralised trust mechanisms",
+      "name_variants": [
+        {
+          "name": "decentralised trust mechanisms",
+          "n_works": 23,
+          "n_institutions": 39,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 23,
+      "n_institutions": 39,
+      "n_institutions_capped": false,
+      "quote": "decentralised trust and security mechanisms",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "технология обмана",
+      "name_en": "deception technology",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "deception technology",
+      "name_variants": [
+        {
+          "name": "deception technology",
+          "n_works": 288,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 288,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Deception technology can improve industrial control systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "глубокое обучение",
+      "name_en": "deep learning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "deep learning",
+      "name_variants": [
+        {
+          "name": "deep learning",
+          "n_works": 1015592,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1015592,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "deep learning-based cybersecurity mechanisms",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "глубокая Q-сеть",
+      "name_en": "deep q-network",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "deep q-network",
+      "name_variants": [
+        {
+          "name": "deep q-network",
+          "n_works": 17766,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 17766,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Deep Q-Network (DQN)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "цифровой двойник здания",
+      "name_en": "digital building twin",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "digital building twin",
+      "name_variants": [
+        {
+          "name": "digital building twin",
+          "n_works": 113,
+          "n_institutions": 186,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 113,
+      "n_institutions": 186,
+      "n_institutions_capped": false,
+      "quote": "decentralized digital building twins",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "динамическая графовая нейронная сеть",
+      "name_en": "dynamic graph neural network",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "dynamic graph neural network",
+      "name_variants": [
+        {
+          "name": "dynamic graph neural network",
+          "n_works": 1096,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1096,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Dynamic Graph Neural Network (Dynamic-GNN)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "зашифрованное управление",
+      "name_en": "encrypted control",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "encrypted control",
+      "name_variants": [
+        {
+          "name": "encrypted control",
+          "n_works": 176,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 176,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Encrypted control",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "объяснимый искусственный интеллект",
+      "name_en": "explainable artificial intelligence",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "explainable artificial intelligence",
+      "name_variants": [
+        {
+          "name": "explainable artificial intelligence",
+          "n_works": 44623,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 44623,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Explainable Artificial Intelligence for Industrial Cybersecurity",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "полностью гомоморфное шифрование",
+      "name_en": "fully homomorphic encryption",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "fully homomorphic encryption",
+      "name_variants": [
+        {
+          "name": "fully homomorphic encryption",
+          "n_works": 4171,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4171,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "FPGA Acceleration of Fully Homomorphic Encryption with Adaptive Key Switching",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "генеративный ИИ в кибербезопасности",
+      "name_en": "generative AI in cybersecurity",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "generative AI in cybersecurity",
+      "name_variants": [
+        {
+          "name": "generative ai in cybersecurity",
+          "n_works": 551,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 551,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "adoption of generative AI (GenAI) and predictive AI (PredAI) in cybersecurity auditing",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "графическое рассуждение",
+      "name_en": "graph-based reasoning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "graph-based reasoning",
+      "name_variants": [
+        {
+          "name": "graph-based reasoning",
+          "n_works": 739,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 739,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Graph-based RAG",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "аппаратные хранилища ключей",
+      "name_en": "hardware keystores",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "hardware keystores",
+      "name_variants": [
+        {
+          "name": "hardware keystores",
+          "n_works": 5,
+          "n_institutions": 5,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 5,
+      "n_institutions": 5,
+      "n_institutions_capped": false,
+      "quote": "Hardware Keystores for AI Agent Signing Workflows",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "гибридный агентский ИИ",
+      "name_en": "hybrid agentic AI",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "hybrid agentic AI",
+      "name_variants": [
+        {
+          "name": "hybrid agentic ai",
+          "n_works": 18,
+          "n_institutions": 17,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 18,
+      "n_institutions": 17,
+      "n_institutions_capped": false,
+      "quote": "hybrid agentic AI and multi-agent systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "извлечение знаний из графов",
+      "name_en": "knowledge graph extraction",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "knowledge graph extraction",
+      "name_variants": [
+        {
+          "name": "knowledge graph extraction",
+          "n_works": 141,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 141,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "OntoLogX: Ontology‐Guided Knowledge Graph Extraction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "удалённая аттестация на уровне пода Kubernetes",
+      "name_en": "kubernetes pod-level remote attestation",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "kubernetes pod-level remote attestation",
+      "name_variants": [
+        {
+          "name": "kubernetes pod-level remote attestation",
+          "n_works": 1,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "Implement Kubernetes Pod-Level Remote Attestation for Confidential Workloads",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "большие фундаментальные модели",
+      "name_en": "large foundation models",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "large foundation models",
+      "name_variants": [
+        {
+          "name": "large foundation models",
+          "n_works": 946,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 946,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Large Foundation Models (LFMs)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обучение с ошибками",
+      "name_en": "learning with errors",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "learning with errors",
+      "name_variants": [
+        {
+          "name": "learning with errors",
+          "n_works": 8722,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8722,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "GPU Acceleration of Learning With Errors KEMs Using OpenACC for Post-Quantum Cryptography",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "платформа SOAR на базе low-code",
+      "name_en": "low-code SOAR",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "low-code SOAR",
+      "name_variants": [
+        {
+          "name": "low-code soar",
+          "n_works": 2,
+          "n_institutions": 2,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 2,
+      "n_institutions_capped": false,
+      "quote": "lowcode Security Orchestration, Automation, and Response",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "исследование вредоносного ПО",
+      "name_en": "malware research",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "malware research",
+      "name_variants": [
+        {
+          "name": "malware research",
+          "n_works": 550,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 550,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Malware research group vx-underground",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "описание использования производителя",
+      "name_en": "manufacturer usage description",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "manufacturer usage description",
+      "name_variants": [
+        {
+          "name": "manufacturer usage description",
+          "n_works": 127,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 127,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "device identification using Manufacturer Usage Description (MUD) profiles",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "памятьная криминалистика",
+      "name_en": "memory forensics",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "memory forensics",
+      "name_variants": [
+        {
+          "name": "memory forensics",
+          "n_works": 857,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 857,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Memory Forensics for Advanced Persistent Threat Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "сетчатое сетевое взаимодействие",
+      "name_en": "mesh networking",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "mesh networking",
+      "name_variants": [
+        {
+          "name": "mesh networking",
+          "n_works": 10344,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10344,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Thread--the dominant low-power mesh networking standard",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "стандарт ячеистой сети",
+      "name_en": "mesh networking standard",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "mesh networking standard",
+      "name_variants": [
+        {
+          "name": "mesh networking standard",
+          "n_works": 45,
+          "n_institutions": 86,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 45,
+      "n_institutions": 86,
+      "n_institutions_capped": false,
+      "quote": "Thread--the dominant low-power mesh networking standard",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обнаружение вторжений на микроуровне",
+      "name_en": "micro-layer intrusion detection",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "micro-layer intrusion detection",
+      "name_variants": [
+        {
+          "name": "micro-layer intrusion detection",
+          "n_works": 2,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "micro-layer intrusion detection architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обнаружение аномалий с помощью микросегментации",
+      "name_en": "micro-segmentation anomaly detection",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "micro-segmentation anomaly detection",
+      "name_variants": [
+        {
+          "name": "micro-segmentation anomaly detection",
+          "n_works": 3,
+          "n_institutions": 2,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3,
+      "n_institutions": 2,
+      "n_institutions_capped": false,
+      "quote": "Micro-Segmentation Anomaly Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "архитектура микросервисов",
+      "name_en": "microservices architecture",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "microservices architecture",
+      "name_variants": [
+        {
+          "name": "microservices architecture",
+          "n_works": 10268,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10268,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Detecting Privilege Escalation in Polyglot Microservices",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "атаки на извлечение моделей",
+      "name_en": "model extraction attacks",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "model extraction attacks",
+      "name_variants": [
+        {
+          "name": "model extraction attacks",
+          "n_works": 488,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 488,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "model extraction attacks",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "мультимодальный поведенческий анализ",
+      "name_en": "multi-modal behavioral analysis",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multi-modal behavioral analysis",
+      "name_variants": [
+        {
+          "name": "multi-modal behavioral analysis",
+          "n_works": 15,
+          "n_institutions": 20,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 15,
+      "n_institutions": 20,
+      "n_institutions_capped": false,
+      "quote": "multi-modal behavioral analysis",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "многоканальная архитектура",
+      "name_en": "multi-pathway architecture",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multi-pathway architecture",
+      "name_variants": [
+        {
+          "name": "multi-pathway architecture",
+          "n_works": 70,
+          "n_institutions": 149,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 70,
+      "n_institutions": 149,
+      "n_institutions_capped": false,
+      "quote": "a multi-pathway architecture for detecting living-off-the-land APT attacks",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "многомерная криптография",
+      "name_en": "multivariate cryptography",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "multivariate cryptography",
+      "name_variants": [
+        {
+          "name": "multivariate cryptography",
+          "n_works": 283,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 283,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Multivariate Cryptography-Based Anonymous Certificate Scheme",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "муонная рассеивающая томография",
+      "name_en": "muon scattering tomography",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "muon scattering tomography",
+      "name_variants": [
+        {
+          "name": "muon scattering tomography",
+          "n_works": 110,
+          "n_institutions": 192,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 110,
+      "n_institutions": 192,
+      "n_institutions_capped": false,
+      "quote": "Muon Scattering Tomography (MST)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "система обнаружения сетевых вторжений",
+      "name_en": "network intrusion detection system",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "network intrusion detection system",
+      "name_variants": [
+        {
+          "name": "network intrusion detection system",
+          "n_works": 10133,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10133,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Network Intrusion Detection Systems (NIDS)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "нейросимволическое выполнение",
+      "name_en": "neuro-symbolic execution",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "neuro-symbolic execution",
+      "name_variants": [
+        {
+          "name": "neuro-symbolic execution",
+          "n_works": 8,
+          "n_institutions": 5,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8,
+      "n_institutions": 5,
+      "n_institutions_capped": false,
+      "quote": "trust-first neuro-symbolic execution architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "нейросимвольное обучение",
+      "name_en": "neurosymbolic learning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "neurosymbolic learning",
+      "name_variants": [
+        {
+          "name": "neurosymbolic learning",
+          "n_works": 80,
+          "n_institutions": 150,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 80,
+      "n_institutions": 150,
+      "n_institutions_capped": false,
+      "quote": "Neurosymbolic Learning for Advanced Persistent Threat Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "протокол односторонней передачи",
+      "name_en": "oblivious transfer protocol",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "oblivious transfer protocol",
+      "name_variants": [
+        {
+          "name": "oblivious transfer protocol",
+          "n_works": 195,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 195,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Oblivious Transfer (OT)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "управление рисками на основе онтологий",
+      "name_en": "ontology-based risk management",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "ontology-based risk management",
+      "name_variants": [
+        {
+          "name": "ontology-based risk management",
+          "n_works": 50,
+          "n_institutions": 70,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 50,
+      "n_institutions": 70,
+      "n_institutions_capped": false,
+      "quote": "the SECUMAN ontology",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "извлечение онтологии на основе графа знаний",
+      "name_en": "ontology-guided knowledge graph extraction",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "ontology-guided knowledge graph extraction",
+      "name_variants": [
+        {
+          "name": "ontology-guided knowledge graph extraction",
+          "n_works": 2,
+          "n_institutions": 5,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 5,
+      "n_institutions_capped": false,
+      "quote": "OntoLogX: Ontology‐Guided Knowledge Graph Extraction From Cybersecurity Logs",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "фотонный ускоритель",
+      "name_en": "photonic accelerator",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "photonic accelerator",
+      "name_variants": [
+        {
+          "name": "photonic accelerator",
+          "n_works": 414,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 414,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "PHAT: PHotonic Accelerator for TFHE",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "сертификаты с доказательствами",
+      "name_en": "proof-carrying certificates",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "proof-carrying certificates",
+      "name_variants": [
+        {
+          "name": "proof-carrying certificates",
+          "n_works": 1,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "Proof-Carrying Certificates for LLM Pipelines",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "провенансный анализ",
+      "name_en": "provenance analytics",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "provenance analytics",
+      "name_variants": [
+        {
+          "name": "provenance analytics",
+          "n_works": 53,
+          "n_institutions": 127,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 53,
+      "n_institutions": 127,
+      "n_institutions_capped": false,
+      "quote": "Cyber Persistence Detector (CPD), a novel system dedicated to detecting cyber persistence through provenance analytics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "системы обнаружения вторжений на основе происхождения",
+      "name_en": "provenance-based intrusion detection systems",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "provenance-based intrusion detection systems",
+      "name_variants": [
+        {
+          "name": "provenance-based intrusion detection systems",
+          "n_works": 48,
+          "n_institutions": 90,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 48,
+      "n_institutions": 90,
+      "n_institutions_capped": false,
+      "quote": "provenance-based intrusion detection systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "алгоритм квантового приближенного оптимизации",
+      "name_en": "quantum approximate optimization algorithm",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "quantum approximate optimization algorithm",
+      "name_variants": [
+        {
+          "name": "quantum approximate optimization algorithm",
+          "n_works": 2928,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2928,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Quantum approximate optimization algorithm (QAOA)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "квантово-устойчивая подпись",
+      "name_en": "quantum-resistant signature",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "quantum-resistant signature",
+      "name_variants": [
+        {
+          "name": "quantum-resistant signature",
+          "n_works": 94,
+          "n_institutions": 151,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 94,
+      "n_institutions": 151,
+      "n_institutions_capped": false,
+      "quote": "quantum-resistant signature algorithms",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "алгоритмы квантово-устойчивой подписи",
+      "name_en": "quantum-resistant signature algorithms",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "quantum-resistant signature algorithms",
+      "name_variants": [
+        {
+          "name": "quantum-resistant signature algorithms",
+          "n_works": 12,
+          "n_institutions": 25,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 12,
+      "n_institutions": 25,
+      "n_institutions_capped": false,
+      "quote": "Quantum-resistant Signature Algorithms",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "атака программ-вымогателей",
+      "name_en": "ransomware attack",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "ransomware attack",
+      "name_variants": [
+        {
+          "name": "ransomware attack",
+          "n_works": 8430,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8430,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "ransomware group that sends fake IT workers to hack victims",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "приложения IoT с ограниченными ресурсами",
+      "name_en": "resource-constrained IoT applications",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "resource-constrained IoT applications",
+      "name_variants": [
+        {
+          "name": "resource-constrained iot applications",
+          "n_works": 124,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 124,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Resource-Constrained IoT Applications",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "поисковое шифрование",
+      "name_en": "searchable encryption",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "searchable encryption",
+      "name_variants": [
+        {
+          "name": "searchable encryption",
+          "n_works": 2639,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2639,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Searchable Encryption (SE) enables users to query outsourced encrypted data",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "бессерверные вычисления",
+      "name_en": "serverless computing",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "serverless computing",
+      "name_variants": [
+        {
+          "name": "serverless computing",
+          "n_works": 4183,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4183,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Permissions on the Loose: Measuring Overprivilege in Real-World Serverless Applications",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "генерация правил Sigma",
+      "name_en": "sigma rule generation",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "sigma rule generation",
+      "name_variants": [
+        {
+          "name": "sigma rule generation",
+          "n_works": 3,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "template-based rule grounding for automated Sigma rule generation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "небольшие языковые модели",
+      "name_en": "small language models",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "small language models",
+      "name_variants": [
+        {
+          "name": "small language models",
+          "n_works": 2353,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2353,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "locally deployable SLMs",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "программно-определяемая сеть",
+      "name_en": "software-defined networking",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "software-defined networking",
+      "name_variants": [
+        {
+          "name": "software-defined networking",
+          "n_works": 22419,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 22419,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "trust-aware Software-Defined Networking (SDN)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "раздельное обучение",
+      "name_en": "split learning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "split learning",
+      "name_variants": [
+        {
+          "name": "split learning",
+          "n_works": 1310,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1310,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "A Survey on Split Learning for LLM Fine-Tuning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "атака шпионского ПО",
+      "name_en": "spyware attack",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "spyware attack",
+      "name_variants": [
+        {
+          "name": "spyware attack",
+          "n_works": 127,
+          "n_institutions": 168,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 127,
+      "n_institutions": 168,
+      "n_institutions_capped": false,
+      "quote": "A spyware investigator exposed Russian government hackers",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "генерация синтетических наборов данных",
+      "name_en": "synthetic dataset generation",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "synthetic dataset generation",
+      "name_variants": [
+        {
+          "name": "synthetic dataset generation",
+          "n_works": 712,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 712,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-Driven Synthetic Dataset Generation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "временное обучение графов",
+      "name_en": "temporal graph learning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "temporal graph learning",
+      "name_variants": [
+        {
+          "name": "temporal graph learning",
+          "n_works": 426,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 426,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Temporal Graph Learning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "топологический анализ данных",
+      "name_en": "topological data analysis",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "topological data analysis",
+      "name_variants": [
+        {
+          "name": "topological data analysis",
+          "n_works": 4542,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4542,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Topological Data Analysis (TDA)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "операционная система Trust OS",
+      "name_en": "trust os",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "trust os",
+      "name_variants": [
+        {
+          "name": "trust os",
+          "n_works": 97,
+          "n_institutions": 154,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 97,
+      "n_institutions": 154,
+      "n_institutions_capped": false,
+      "quote": "AI Trust OS",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "доверенная среда выполнения",
+      "name_en": "trusted execution environment",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "trusted execution environment",
+      "name_variants": [
+        {
+          "name": "trusted execution environment",
+          "n_works": 3436,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3436,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Cross-TEE Mutual Attestation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "беспилотный летательный аппарат",
+      "name_en": "unmanned aerial vehicle",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "unmanned aerial vehicle",
+      "name_variants": [
+        {
+          "name": "unmanned aerial vehicle",
+          "n_works": 110018,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 110018,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Unmanned aerial vehicle (UAV)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "неконтролируемое обучение",
+      "name_en": "unsupervised learning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "unsupervised learning",
+      "name_variants": [
+        {
+          "name": "unsupervised learning",
+          "n_works": 79548,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 79548,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "unsupervised, context-augmented language models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "вариационные квантовые схемы",
+      "name_en": "variational quantum circuit",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "variational quantum circuit",
+      "name_variants": [
+        {
+          "name": "variational quantum circuit",
+          "n_works": 2069,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2069,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "variational quantum circuit framework",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "трансформер зрения",
+      "name_en": "vision transformer",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "vision transformer",
+      "name_variants": [
+        {
+          "name": "vision transformer",
+          "n_works": 45761,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 45761,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Vision Transformer (ViT)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "нулевое доверие",
+      "name_en": "zero trust",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "zero trust",
+      "name_variants": [
+        {
+          "name": "zero trust",
+          "n_works": 14004,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 14004,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Zero Trust (ZT)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "кибербезопасность с нулевым доверием",
+      "name_en": "zero trust cybersecurity",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "zero trust cybersecurity",
+      "name_variants": [
+        {
+          "name": "zero trust cybersecurity",
+          "n_works": 240,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 240,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "the adoption of the Zero Trust framework",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обеспечение выполнения с нулевым доверием во время выполнения",
+      "name_en": "zero trust runtime enforcement",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "zero trust runtime enforcement",
+      "name_variants": [
+        {
+          "name": "zero trust runtime enforcement",
+          "n_works": 1,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "Ethical Hyper-Velocity (EHV): A Hardware-Rooted Zero-Trust Runtime Enforcement Architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "безопасность нулевого доверия",
+      "name_en": "zero trust security",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "zero trust security",
+      "name_variants": [
+        {
+          "name": "zero trust security",
+          "n_works": 3422,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3422,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Zero Trust Security (ZTS)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "доказательство с нулевым знанием",
+      "name_en": "zero-knowledge proof",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "zero-knowledge proof",
+      "name_variants": [
+        {
+          "name": "zero-knowledge proof",
+          "n_works": 7682,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7682,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "zero-knowledge proof (ZKP) technology",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обучение с нуля",
+      "name_en": "zero-shot learning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "zero-shot learning",
+      "name_variants": [
+        {
+          "name": "zero-shot learning",
+          "n_works": 6612,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6612,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Generalized zero-shot learning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Генеративный искусственный интеллект",
+      "name_en": "Generative AI",
+      "score": 0.6528398042813278,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "Generative AI",
+      "name_variants": [
+        {
+          "name": "generative ai",
+          "n_works": 280784,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 280784,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "governing generative AI",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 574,
+      "share_patent": 0.0019964592412759254,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Генерация с расширенным извлечением",
+      "name_en": "retrieval-augmented generation",
+      "score": 0.6425526752876183,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "retrieval-augmented generation",
+      "name_variants": [
+        {
+          "name": "retrieval-augmented generation",
+          "n_works": 15287,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 15287,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Retrieval-Augmented Generation",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 28,
+      "share_patent": 0.0013246912996167858,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Наблюдение с помощью привязанных дронов",
+      "name_en": "Tethered Drone Surveillance",
+      "score": 0.629115512784357,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "Tethered Drone Surveillance",
+      "name_variants": [
+        {
+          "name": "tethered drone surveillance",
+          "n_works": 1,
+          "n_institutions": 2,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 2,
+      "n_institutions_capped": false,
+      "quote": "tethered drone architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Децентрализованный протокол на основе блокчейна",
+      "name_en": "blockchain-based decentralized protocol",
+      "score": 0.6004864339537637,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "blockchain-based decentralized protocol",
+      "name_variants": [
+        {
+          "name": "blockchain-based decentralized protocol",
+          "n_works": 2,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "blockchain-based decentralized protocol",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "КАЯ-модели «контекстно-расширенные языковые»",
+      "name_en": "context-augmented language models",
+      "score": 0.5905728652440149,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "context-augmented language models",
+      "name_variants": [
+        {
+          "name": "context-augmented language models",
+          "n_works": 3,
+          "n_institutions": 24,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3,
+      "n_institutions": 24,
+      "n_institutions_capped": false,
+      "quote": "unsupervised, context-augmented language models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Продвинутая детекция аномалий",
+      "name_en": "advanced anomaly detection",
+      "score": 0.5839065993503993,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "advanced anomaly detection",
+      "name_variants": [
+        {
+          "name": "advanced anomaly detection",
+          "n_works": 1108,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1108,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Advanced Anomaly Detection and Threat Intelligence in Zero Trust IoT Environments",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 49,
+      "share_patent": 0.04152542372881356,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Контрастивные графовые нейронные сети",
+      "name_en": "contrastive GNNs",
+      "score": 0.5762023368019623,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "contrastive GNNs",
+      "name_variants": [
+        {
+          "name": "contrastive gnns",
+          "n_works": 215,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 215,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Contrastive GNNs and Semantic Validation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Тексты, сгенерированные ИИ",
+      "name_en": "AI-Generated Texts",
+      "score": 0.563363637163624,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "AI-Generated Texts",
+      "name_variants": [
+        {
+          "name": "ai-generated texts",
+          "n_works": 6000,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6000,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-Generated Texts in Academic Research",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 1,
+      "share_patent": 0.00015822784810126583,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Агентивное сотрудничество",
+      "name_en": "agentic collaboration",
+      "score": 0.5595161631786196,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "agentic collaboration",
+      "name_variants": [
+        {
+          "name": "agentic collaboration",
+          "n_works": 3120,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3120,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Global Agentic Collaboration",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Большие языковые модели",
+      "name_en": "large language models",
+      "score": 0.5470023597126118,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "large language models",
+      "name_variants": [
+        {
+          "name": "large language models",
+          "n_works": 159353,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 159353,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Large Language Models (LLMs)",
+      "n_docs": 6,
+      "n_sources": 2,
+      "known_training_label": null,
+      "n_pat": 521,
+      "share_patent": 0.00220845060870155,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Архитектура нулевого доверия",
+      "name_en": "zero trust architecture",
+      "score": 0.536046629165425,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "zero trust architecture",
+      "name_variants": [
+        {
+          "name": "zero trust architecture",
+          "n_works": 6643,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6643,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Zero Trust Architecture",
+      "n_docs": 5,
+      "n_sources": 2,
+      "known_training_label": null,
+      "n_pat": 183,
+      "share_patent": 0.02646038172353962,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Усовершенствования конфиденциальности DNS",
+      "name_en": "DNS privacy enhancements",
+      "score": 0.5190397589889143,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "DNS privacy enhancements",
+      "name_variants": [
+        {
+          "name": "dns privacy enhancements",
+          "n_works": 2,
+          "n_institutions": 6,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 6,
+      "n_institutions_capped": false,
+      "quote": "DNS Privacy Enhancements for the Constrained IoT",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Платформа SOAR для автоматизации кибербезопасности",
+      "name_en": "SOAR platform",
+      "score": 0.4477487828261603,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "SOAR platform",
+      "name_variants": [
+        {
+          "name": "soar platform",
+          "n_works": 1006,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1006,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "SOAR Automation Platform for Cybersecurity Incident Response",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 24,
+      "share_patent": 0.02321083172147002,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Тестовая среда на базе контейнеров",
+      "name_en": "container-based testbed",
+      "score": 0.4324543806826342,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "container-based testbed",
+      "name_variants": [
+        {
+          "name": "container-based testbed",
+          "n_works": 5,
+          "n_institutions": 19,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 5,
+      "n_institutions": 19,
+      "n_institutions_capped": false,
+      "quote": "container-based testbed",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обнаружение аномалий с помощью Isolation Forest",
+      "name_en": "isolation forest anomaly detection",
+      "score": 0.4127420837500531,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "isolation forest anomaly detection",
+      "name_variants": [
+        {
+          "name": "isolation forest anomaly detection",
+          "n_works": 250,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 250,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "isolation forest-based anomaly detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 28,
+      "share_patent": 0.1003584229390681,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Модель ИИ",
+      "name_en": "AI model",
+      "score": 0.40741251815209195,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "AI model",
+      "name_variants": [
+        {
+          "name": "ai model",
+          "n_works": 128104,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 128104,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "new frontier model, Mythos",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 12665,
+      "share_patent": 0.08724614918299303,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Протоколы квантовой безопасности",
+      "name_en": "Quantum-Safe Security Protocols",
+      "score": 0.3849524239292446,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 11 публикаций — технология уже хорошо изучена",
+      "name_raw": "Quantum-Safe Security Protocols",
+      "name_variants": [
+        {
+          "name": "quantum-safe security protocols",
+          "n_works": 11,
+          "n_institutions": 8,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 11,
+      "n_institutions": 8,
+      "n_institutions_capped": false,
+      "quote": "lightweight quantum-safe security protocols",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Протоколы MQTT и HTTP",
+      "name_en": "MQTT and HTTP Protocols",
+      "score": 0.36040642601669826,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 151 публикаций — технология уже хорошо изучена",
+      "name_raw": "MQTT and HTTP Protocols",
+      "name_variants": [
+        {
+          "name": "mqtt and http protocols",
+          "n_works": 151,
+          "n_institutions": 182,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 151,
+      "n_institutions": 182,
+      "n_institutions_capped": false,
+      "quote": "MQTT and HTTP Protocols on low-power ESP32 devices",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 1,
+      "share_patent": 0.006578947368421052,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Кибербезопасность IoT",
+      "name_en": "IoT cybersecurity",
+      "score": 0.35463977679363473,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 2086 публикаций — технология уже хорошо изучена",
+      "name_raw": "IoT cybersecurity",
+      "name_variants": [
+        {
+          "name": "iot cybersecurity",
+          "n_works": 2069,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2069,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Toward Cybersecurity Testing and Monitoring of IoT Ecosystems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 16,
+      "share_patent": 0.007611798287345386,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Прогнозная аналитика",
+      "name_en": "Predictive Analytics",
+      "score": 0.3485129511621985,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 103453 публикаций — технология уже хорошо изучена",
+      "name_raw": "Predictive Analytics",
+      "name_variants": [
+        {
+          "name": "predictive analytics",
+          "n_works": 103184,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 103184,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-Driven Predictive Analytics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 6764,
+      "share_patent": 0.061369843127648184,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обнаружение сложных постоянных угроз",
+      "name_en": "advanced persistent threat detection",
+      "score": 0.3327312860889464,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 368 публикаций — технология уже хорошо изучена",
+      "name_raw": "advanced persistent threat detection",
+      "name_variants": [
+        {
+          "name": "advanced persistent threat detection",
+          "n_works": 356,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 356,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Advanced Persistent Threat Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 19,
+      "share_patent": 0.04909560723514212,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Графовые нейронные сети",
+      "name_en": "Graph Neural Networks",
+      "score": 0.30806283535896795,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 82506 публикаций — технология уже хорошо изучена",
+      "name_raw": "Graph Neural Networks",
+      "name_variants": [
+        {
+          "name": "graph neural networks",
+          "n_works": 71329,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 71329,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Graph Neural Network (GNN)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 1208,
+      "share_patent": 0.01443008337912416,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Постквантовая криптография",
+      "name_en": "post-quantum cryptography",
+      "score": 0.30744826494945576,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 8479 публикаций — технология уже хорошо изучена",
+      "name_raw": "post-quantum cryptography",
+      "name_variants": [
+        {
+          "name": "post-quantum cryptography",
+          "n_works": 8119,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8119,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Blockchain-Driven AI-Enhanced Post-Quantum Multivariate Identity-based Signature",
+      "n_docs": 3,
+      "n_sources": 2,
+      "known_training_label": null,
+      "n_pat": 952,
+      "share_patent": 0.10094369632064468,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Цифровой двойник",
+      "name_en": "Digital Twin",
+      "score": 0.30721403673476455,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 118167 публикаций — технология уже хорошо изучена",
+      "name_raw": "Digital Twin",
+      "name_variants": [
+        {
+          "name": "digital twin",
+          "n_works": 114978,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 114978,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "security twin",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 8133,
+      "share_patent": 0.06439429928741093,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Квантовое машинное обучение",
+      "name_en": "quantum machine learning",
+      "score": 0.2742973962319267,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 10176 публикаций — технология уже хорошо изучена",
+      "name_raw": "quantum machine learning",
+      "name_variants": [
+        {
+          "name": "quantum machine learning",
+          "n_works": 8386,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8386,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Quantum Machine Learning (QML)",
+      "n_docs": 3,
+      "n_sources": 2,
+      "known_training_label": null,
+      "n_pat": 240,
+      "share_patent": 0.02304147465437788,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обнаружение аномалий на графах",
+      "name_en": "Graph-Based Anomaly Detection",
+      "score": 0.27292726453440763,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 854 публикаций — технология уже хорошо изучена",
+      "name_raw": "Graph-Based Anomaly Detection",
+      "name_variants": [
+        {
+          "name": "graph-based anomaly detection",
+          "n_works": 821,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 821,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Graph-Based Anomaly Detection in Cybersecurity Threat Intelligence",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 22,
+      "share_patent": 0.02511415525114155,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Федеративное контрастное обучение представлений",
+      "name_en": "Federated Contrastive Representation Learning",
+      "score": 0.26735444944398973,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Интерес не нарастает: за последние два года 0% всех упоминаний",
+      "name_raw": "Federated Contrastive Representation Learning",
+      "name_variants": [
+        {
+          "name": "federated contrastive representation learning",
+          "n_works": 1,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Federated Contrastive Representation Learning for IoT Anomaly Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Конфиденциальные вычисления",
+      "name_en": "confidential computing",
+      "score": 0.2632712482673645,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 1165 публикаций — технология уже хорошо изучена",
+      "name_raw": "confidential computing",
+      "name_variants": [
+        {
+          "name": "confidential computing",
+          "n_works": 1036,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1036,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "confidential computing",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 402,
+      "share_patent": 0.25654116145500955,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Обнаружение аномалий",
+      "name_en": "anomaly detection",
+      "score": 0.21245831357175204,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 125120 публикаций — технология уже хорошо изучена",
+      "name_raw": "anomaly detection",
+      "name_variants": [
+        {
+          "name": "anomaly detection",
+          "n_works": 118834,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 118834,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Graph-Based Anomaly Detection",
+      "n_docs": 2,
+      "n_sources": 2,
+      "known_training_label": null,
+      "n_pat": 22011,
+      "share_patent": 0.14960137564483353,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Квантовая криптография",
+      "name_en": "quantum cryptography",
+      "score": 0.19387103374546621,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 16084 публикаций — технология уже хорошо изучена",
+      "name_raw": "quantum cryptography",
+      "name_variants": [
+        {
+          "name": "quantum cryptography",
+          "n_works": 15362,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 15362,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "quantum-based solutions",
+      "n_docs": 3,
+      "n_sources": 2,
+      "known_training_label": null,
+      "n_pat": 2233,
+      "share_patent": 0.12190860948845335,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Сети долговременной краткосрочной памяти (LSTM)",
+      "name_en": "Long Short-Term Memory networks",
+      "score": 0.19196987823907272,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 36611 публикаций — технология уже хорошо изучена",
+      "name_raw": "Long Short-Term Memory networks",
+      "name_variants": [
+        {
+          "name": "long short-term memory networks",
+          "n_works": 36167,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 36167,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Long Short-Term Memory (LSTM) networks",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 2147,
+      "share_patent": 0.055395015222663706,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Технология автономных транспортных средств",
+      "name_en": "autonomous vehicle technology",
+      "score": 0.19053768496125428,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Интерес не нарастает: за последние два года 35% всех упоминаний",
+      "name_raw": "autonomous vehicle technology",
+      "name_variants": [
+        {
+          "name": "autonomous vehicle technology",
+          "n_works": 2317,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2317,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Uber is building an autonomous vehicle empire",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 1039,
+      "share_patent": 0.3047814608389557,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Архитектура управления доступом",
+      "name_en": "access-control architecture",
+      "score": 0.17465526597704453,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 394 публикаций — технология уже хорошо изучена",
+      "name_raw": "access-control architecture",
+      "name_variants": [
+        {
+          "name": "access-control architecture",
+          "n_works": 388,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 388,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "access-control architecture for automated, anomaly-driven network revocation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 44,
+      "share_patent": 0.1004566210045662,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Квантовые вычисления",
+      "name_en": "Quantum Computing",
+      "score": 0.17415132601118913,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 75213 публикаций — технология уже хорошо изучена",
+      "name_raw": "Quantum Computing",
+      "name_variants": [
+        {
+          "name": "quantum computing",
+          "n_works": 59143,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 59143,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "quantum computing",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 11696,
+      "share_patent": 0.13457754662923288,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Когнитивные вычисления",
+      "name_en": "Cognitive Computing",
+      "score": 0.16118370419141537,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 15923 публикаций — технология уже хорошо изучена",
+      "name_raw": "Cognitive Computing",
+      "name_variants": [
+        {
+          "name": "cognitive computing",
+          "n_works": 15843,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 15843,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Cognitive Computing for Cybersecurity Threat Intelligence",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 2528,
+      "share_patent": 0.13701154408975122,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Киберфизические системы",
+      "name_en": "Cyber-Physical Systems",
+      "score": 0.14348727073401546,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 60357 публикаций — технология уже хорошо изучена",
+      "name_raw": "Cyber-Physical Systems",
+      "name_variants": [
+        {
+          "name": "cyber-physical systems",
+          "n_works": 58816,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 58816,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-driven Cyber-Physical Systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 2379,
+      "share_patent": 0.037920811017597554,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Классификация с помощью машинного обучения",
+      "name_en": "Machine Learning Classification",
+      "score": 0.12852629921600908,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 25719 публикаций — технология уже хорошо изучена",
+      "name_raw": "Machine Learning Classification",
+      "name_variants": [
+        {
+          "name": "machine learning classification",
+          "n_works": 25428,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 25428,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "machine learning classification techniques",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 3323,
+      "share_patent": 0.11442049445630466,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Квантовое распределение ключей",
+      "name_en": "quantum key distribution",
+      "score": 0.12531632751017097,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 12435 публикаций — технология уже хорошо изучена",
+      "name_raw": "quantum key distribution",
+      "name_variants": [
+        {
+          "name": "quantum key distribution",
+          "n_works": 10713,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10713,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Quantum Key Distribution (QKD)",
+      "n_docs": 2,
+      "n_sources": 2,
+      "known_training_label": {
+        "id": "n58",
+        "label": "mainstream"
+      },
+      "n_pat": 2326,
+      "share_patent": 0.15757739990515549,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Извлечение информации",
+      "name_en": "Information Extraction",
+      "score": 0.09906666769232399,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 38850 публикаций — технология уже хорошо изучена",
+      "name_raw": "Information Extraction",
+      "name_variants": [
+        {
+          "name": "information extraction",
+          "n_works": 36509,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 36509,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Information Extraction (IE) technology",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 9107,
+      "share_patent": 0.18989928477594512,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Булевы динамические системы",
+      "name_en": "boolean dynamical systems",
+      "score": 0.08911849126197495,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 73 публикаций — технология уже хорошо изучена",
+      "name_raw": "boolean dynamical systems",
+      "name_variants": [
+        {
+          "name": "boolean dynamical systems",
+          "n_works": 65,
+          "n_institutions": 117,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 65,
+      "n_institutions": 117,
+      "n_institutions_capped": false,
+      "quote": "the theory of Boolean Dynamical Systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Физически неклонируемая функция",
+      "name_en": "physical unclonable function",
+      "score": 0.08595758050163194,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 3676 публикаций — технология уже хорошо изучена",
+      "name_raw": "physical unclonable function",
+      "name_variants": [
+        {
+          "name": "physical unclonable function",
+          "n_works": 3486,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3486,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Physical Unclonable Functions (PUFs)",
+      "n_docs": 2,
+      "n_sources": 2,
+      "known_training_label": null,
+      "n_pat": 1580,
+      "share_patent": 0.3006088280060883,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Интернет вещей",
+      "name_en": "Internet of Things",
+      "score": 0.06989863509442537,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 388310 публикаций — технология уже хорошо изучена",
+      "name_raw": "Internet of Things",
+      "name_variants": [
+        {
+          "name": "internet of things",
+          "n_works": 383131,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 383131,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "The Internet of Things (IoT)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 239798,
+      "share_patent": 0.3817782929050418,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Графовые базы данных",
+      "name_en": "Graph Database",
+      "score": 0.04975418247961843,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 7144 публикаций — технология уже хорошо изучена",
+      "name_raw": "Graph Database",
+      "name_variants": [
+        {
+          "name": "graph database",
+          "n_works": 6852,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6852,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Neo4j graph database",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 7795,
+      "share_patent": 0.5217886070018074,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Облачные вычисления",
+      "name_en": "cloud computing",
+      "score": 0.04626919989383782,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 206193 публикаций — технология уже хорошо изучена",
+      "name_raw": "cloud computing",
+      "name_variants": [
+        {
+          "name": "cloud computing",
+          "n_works": 204598,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 204598,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Cloud computing has become a fundamental paradigm",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 238300,
+      "share_patent": 0.5361164292801012,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Протокол для ограниченных приложений",
+      "name_en": "Constrained Application Protocol",
+      "score": 0.01910605023131788,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 1643 публикаций — технология уже хорошо изучена",
+      "name_raw": "Constrained Application Protocol",
+      "name_variants": [
+        {
+          "name": "constrained application protocol",
+          "n_works": 1638,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1638,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Constrained Application Protocol (CoAP)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "n_pat": 3120,
+      "share_patent": 0.65504933865211,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    }
+  ],
+  "timings": {
+    "subqueries": 0.01,
+    "search": 0.02,
+    "candidates": 0.08,
+    "naming": 19.3,
+    "counters": 0.25,
+    "ranking": 1.5,
+    "queues": [
+      {
+        "source": "openalex",
+        "candidates": 60,
+        "requests": 0,
+        "cache_hits": 60,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.06,
+        "duration_s": 0.06
+      },
+      {
+        "source": "arxiv",
+        "candidates": 60,
+        "requests": 0,
+        "cache_hits": 60,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.06,
+        "duration_s": 0.06
+      },
+      {
+        "source": "techcrunch",
+        "candidates": 60,
+        "requests": 0,
+        "cache_hits": 60,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.06,
+        "duration_s": 0.06
+      },
+      {
+        "source": "rospatent",
+        "candidates": 60,
+        "parallel": 4,
+        "requests": 0,
+        "cache_hits": 60,
+        "retries": 0,
+        "n429": 0,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.24,
+        "duration_s": 0.24
+      }
+    ],
+    "translate": 1.06,
+    "total": 22.22
+  },
+  "warnings": [
+    "отброшен (ru): «защита от атак на основе искусственного интеллекта» — слов 7, нужно 2-4",
+    "отброшен (ru): «методы обнаружения аномалий в сетевом трафике» — слов 6, нужно 2-4",
+    "отброшен: term_en «continuous governance framework»: последнее слово framework",
+    "отброшен: term_en «decentralised trust and security mechanisms»: слов 5, нужно 2–4",
+    "отброшен: term_en «explainable adaptive zero trust framework»: слов 5, нужно 2–4",
+    "отброшен: term_en «remote execution of zero-trust authorization»: слов 5, нужно 2–4",
+    "отброшен: term_en «blockchain-based zero-trust framework»: последнее слово framework",
+    "отброшен: term_en «zero-trust bilateral edge service trading»: слов 5, нужно 2–4",
+    "отброшен: term_en «proactive approach to cyber-threat intelligence»: слов 5, нужно 2–4",
+    "отброшен: term_en «agentic ai cybersecurity framework»: последнее слово framework",
+    "отброшен после повтора: term_en «micro-segmentation»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «zero trust architecture»: quote не найден в документе 7",
+    "отброшен после повтора: term_en «remote execution of zero-trust authorization»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «cyber security and resilience bill»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «zero-trust bilateral edge service trading»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «proactive approach to cyber-threat intelligence»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «threat intelligence joint extraction model»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «agentic ai cybersecurity framework»: последнее слово framework",
+    "отброшен: term_en «ontology»: слов 1, нужно 2–4",
+    "отброшен: term_en «large language model»: quote не найден в документе 70",
+    "отброшен: term_en «watermarking»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «graph-driven neuro-symbolic framework»: последнее слово framework",
+    "отброшен после повтора: term_en «anomaly detection via self-supervised classification»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «cross-operating-system transfer learning»: quote не найден в документе 61",
+    "отброшен после повтора: term_en «machine learning algorithms for malware detection»: слов 6, нужно 2–4",
+    "отброшен: term_en «oblivious transfer protocol»: quote не найден в документе 123",
+    "отброшен: term_en «container-based framework»: последнее слово framework",
+    "отброшен: term_en «cybersecurity»: слов 1, нужно 2–4",
+    "отброшен: term_en «ransomware»: слов 1, нужно 2–4",
+    "отброшен: term_en «spyware»: слов 1, нужно 2–4",
+    "отброшен: term_en «malware»: слов 1, нужно 2–4",
+    "отброшен: term_en «Adaptive AI-Driven Zero Trust Architecture»: слов 5, нужно 2–4",
+    "отброшен: term_en «SHAP»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «SHAP»: слов 1, нужно 2–4",
+    "отброшен: term_en «machine learning for threat detection»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «machine learning for threat detection»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «hybrid optimization»: последнее слово optimization",
+    "отброшен: term_en «blockchain-based IoT framework»: последнее слово framework",
+    "отброшен: term_en «decentralised trust and security mechanisms»: слов 5, нужно 2–4",
+    "отброшен: term_en «Zigbee Vs. Matter Over Thread»: слов 5, нужно 2–4",
+    "отброшен: term_en «Layered Security Framework»: последнее слово Framework",
+    "отброшен после повтора: term_en «IoT integrated framework»: последнее слово framework",
+    "отброшен после повтора: term_en «blockchain-based IoT framework»: последнее слово framework",
+    "отброшен после повтора: term_en «layered security framework»: последнее слово framework",
+    "отброшен: term_en «low-code Security Orchestration, Automation, and Response»: слов 6, нужно 2–4",
+    "отброшен: term_en «machine learning for power-grid cybersecurity»: слов 5, нужно 2–4",
+    "отброшен: term_en «multi-agent framework for adaptive cyber attack simulation»: слов 7, нужно 2–4",
+    "отброшен: term_en «agentic AI for IoT cybersecurity»: слов 5, нужно 2–4",
+    "отброшен: term_en «anomaly detection using knowledge graphs»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «human-AI integration»: последнее слово integration",
+    "отброшен после повтора: term_en «multi-agent framework»: последнее слово framework",
+    "отброшен после повтора: term_en «zero trust framework»: последнее слово framework"
+  ],
+  "meta": {
+    "query": "слабые сигналы в области кибербезопасности",
+    "area": "Защита ИИ",
+    "run_date": "2026-09-26T22:52:57",
+    "model_version": "s2a2-v1",
+    "candidates_version": "v3",
+    "seconds": 22.22,
+    "counters_cache_share": 1.0
+  }
+}
