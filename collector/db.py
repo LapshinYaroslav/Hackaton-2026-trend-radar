@@ -1,7 +1,7 @@
 """PostgreSQL cache of the collector: source_totals and Search #2 counters.
 
-Документы и признаки (documents, features) сборщик больше не пишет и не читает: этот путь
-вызывал только CLI сборщика, удалён в задаче Л. Таблицы остаются в db/schema.sql.
+Документы поиска №1 и признаки пишет pipeline/persist.py (один URL — одна строка).
+Сборщик по-прежнему кладёт сюда только счётчики и корпусные итоги.
 """
 
 from __future__ import annotations

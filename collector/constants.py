@@ -41,6 +41,8 @@ ALLOWED_SOURCE_TYPES: Final[frozenset[str]] = frozenset(
 )
 
 ALLOWED_TRUST_LEVELS: Final[frozenset[str]] = frozenset({"high", "medium", "low"})
+# ТЗ: блог и пресс-релиз не могут быть единственным основанием слабого сигнала.
+SOLE_SOURCE_WEAK_TYPES: Final[frozenset[str]] = frozenset({"blog", "press_release"})
 # Окна счётчиков поиска №2: шесть годовых отрезков с 2020-09-01 по 2026-09-01.
 # Границы полуоткрытые: [from, to). Ключ окна — год его начала.
 #

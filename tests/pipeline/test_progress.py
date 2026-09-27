@@ -4,8 +4,11 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 from pipeline import progress as pg
 from pipeline.__main__ import printer, progress_line
+from tests.data_required import _real_model
 from tests.pipeline import test_run_query as base
 
 SNAPSHOT = Path(__file__).resolve().parents[1] / "fixtures" / "run_query_snapshot.json"
@@ -100,8 +103,13 @@ def test_run_events_are_monotonic_and_end_with_done(tmp_path) -> None:
 
 
 def _strip(value):
+    drop = {"query_id", "timings", "published_at", "_documents", "candidates", "enrichment",
+            "tech_key", "features", "is_signal", "weak_source_only"}
     if isinstance(value, dict):
-        return {k: _strip(v) for k, v in value.items() if k not in ("query_id", "timings", "published_at")}
+        extra = set(drop)
+        if "rank" in value or "skipped_reason" in value:
+            extra.add("threshold")
+        return {k: _strip(v) for k, v in value.items() if k not in extra}
     return [_strip(v) for v in value] if isinstance(value, list) else value
 
 
@@ -111,6 +119,8 @@ def test_without_callback_output_is_byte_identical_to_snapshot(tmp_path) -> None
     Переснят в задаче К (решение Ярослава): склейка дублей включена, у оценённых кандидатов поле variants.
     Переснят в задаче Л: нормализатор удалён, обвязка в боевом режиме direct (name_en = термин шага 4).
     """
+    if not _real_model():
+        pytest.skip("снимок снят на обученной модели, не на bootstrap")
     out, _, _ = base.run(tmp_path)
     text = json.dumps(_strip(out), ensure_ascii=False, sort_keys=True, indent=1) + "\n"
     assert re.sub(r"q\d{14}", "Q", text) == SNAPSHOT.read_text(encoding="utf-8")  # query_id внутри subquery_ids

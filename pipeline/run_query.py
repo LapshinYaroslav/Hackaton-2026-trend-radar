@@ -26,8 +26,11 @@ from collector import rospatent as rospatent_source
 from collector.adapters.base import SourceAdapter
 from collector.api import DocumentCollector, default_adapters, tech_key
 from collector.constants import AGGREGATE_WINDOWS
-from collector.db import MemoryCache
+from collector.db import build_cache
 from collector.settings import Settings
+from pipeline.catalog import catalog_candidates
+from pipeline.persist import persist_features_and_scores, persist_search_documents
+from pipeline.weak_sources import move_weak_only
 from model.config import ROSPATENT_DATASETS
 from model.features import RESEARCH_SOURCES, share_patent
 from model.predict import load
@@ -168,7 +171,8 @@ def details(candidate: dict, documents: Sequence[dict]) -> dict:
 def excluded(candidate: dict, reason: str, documents: Sequence[dict], score: float | None = None,
              text: str | None = None) -> dict:
     """Запись исключённого кандидата."""
-    return {"name_ru": candidate["name_ru"], "name_en": candidate["name_en"], "score": score,
+    return {"name_ru": candidate["name_ru"], "name_en": candidate["name_en"],
+            "tech_key": tech_key(candidate["name_en"]), "score": score,
             "skipped_reason": reason, "reason_ru": text or SPECIAL[reason], **details(candidate, documents)}
 
 
@@ -237,24 +241,32 @@ def split_ranked(ranked: list[dict], by_key: dict[str, dict], documents: Sequenc
         candidate = by_key[item["name"]]
         n_pat = (n_pats or {}).get(item["name"])
         extra = {"variants": variants.get(index, [])} if item["score"] is not None else {}
+        scored = {"features": item.get("features") or {}, "contributions": item.get("contributions") or {},
+                  "counters": item.get("counters") or {}, "is_signal": item.get("is_signal"),
+                  "model_version": item.get("model_version"), "threshold": item.get("threshold")}
         if index in duplicate_of:
             accepted = by_key[ranked[duplicate_of[index]]["name"]]["name_en"]
             dropped.append({**excluded(candidate, "duplicate_of", documents, item["score"],
-                                       DUPLICATE_TEXT.format(accepted)), "duplicate_of": accepted, **extra})
+                                       DUPLICATE_TEXT.format(accepted)), "duplicate_of": accepted,
+                            **scored, **extra})
         elif item["score"] is None:
             dropped.append(excluded(candidate, "no_counters", documents))
         elif item["score"] < threshold:
             dropped.append({**excluded(candidate, "below_threshold", documents, item["score"],
                                        reason_below(item["features"], item["contributions"], item["counters"],
-                                                    n_pat)), **extra})
+                                                    n_pat)), **scored, **extra})
         elif len(top) >= TOP_N:
-            dropped.append({**excluded(candidate, "beyond_top", documents, item["score"]), **extra})
+            dropped.append({**excluded(candidate, "beyond_top", documents, item["score"]), **scored, **extra})
         else:
             top.append({"rank": len(top) + 1, "name_ru": candidate["name_ru"], "name_en": candidate["name_en"],
-                        "score": item["score"],
+                        "tech_key": tech_key(candidate["name_en"]),
+                        "score": item["score"], "is_signal": item.get("is_signal"),
+                        "features": item.get("features") or {},
                         "explanation_ru": explanation_top(item["features"], item["contributions"], item["counters"],
                                                           n_pat=n_pat),
                         "contributions": item["contributions"], "counters": item["counters"],
+                        "model_version": item.get("model_version"),
+                        "threshold": item.get("threshold"),
                         **details(candidate, documents), "sources": sources_of(candidate["doc_ids"], documents),
                         **extra})
     return top, dropped
@@ -380,7 +392,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
               settings: Settings | None = None, candidate_sources: set[str] | None = None,
               extract_model: str | None = "yandexgpt-5-pro", counters_cache: bool | None = None,
               rospatent: bool | None = None, on_progress: Callable[[dict], None] | None = None,
-              dedup: bool = True) -> dict:
+              dedup: bool = True, query_id: str | None = None) -> dict:
     """Тема -> JSON с ТОП-15, исключёнными, статистикой и временем по шагам.
 
     candidate_sources — из документов каких источников извлекать кандидатов (openalex,
@@ -400,13 +412,17 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     progress = both_progress(progress, report)
     settings = settings or Settings.from_env()
     adapters = list(adapters) if adapters is not None else default_adapters(settings)
+    from model.bootstrap import ensure_artifact
+    ensure_artifact()
     meta, started, timings = load()["meta"], time.monotonic(), {}
-    query_id = f"q{datetime.now():%Y%m%d%H%M%S}"
+    query_id = query_id or f"q{datetime.now():%Y%m%d%H%M%S}"
 
     subq = staged("subqueries", timings, progress, lambda: generate_subqueries(topic, query_id, use_cache=use_cache))
     warnings = list(subq.get("warnings", []))
     searchers = [CachedSearch(adapter, use_cache=use_cache) for adapter in adapters]
-    collector = DocumentCollector(adapters=searchers, cache=MemoryCache(), settings=settings)
+    collector = DocumentCollector(
+        adapters=searchers, cache=build_cache(settings.database_url), settings=settings
+    )
     documents = staged("search", timings, progress,
                        lambda: collector.search_recent(subq["subqueries"]).to_dict()["documents"])
     all_documents = documents
@@ -435,6 +451,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     by_key = {tech_key(c["name_en"]): c for c in pool}
     duplicate_of = staged("dedup", timings, progress, lambda: find_duplicates(ranked, by_key, warnings)) if dedup else {}
     top, below = split_ranked(ranked, by_key, documents, meta["threshold"], n_pats, duplicate_of)
+    top, below = move_weak_only(top, below)
     if options is not None:
         by_name = {item["name"]: item for item in ranked}
         for entry in top + below:
@@ -452,6 +469,12 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     if finish:
         finish()
     warnings += progress_warnings
+    excluded_items = dropped + capped + below
+    candidates = catalog_candidates(found["candidates"], top, excluded_items)
+    persist_search_documents(query_id, all_documents, top + excluded_items)
+    persist_features_and_scores(
+        query_id, top + excluded_items, model_version=meta["model_version"], threshold=meta["threshold"]
+    )
     return {
         "query_id": query_id, "topic": topic.strip(), "area": area,
         "model_version": meta["model_version"], "threshold": meta["threshold"], "cutoff_date": meta["cutoff_date"],
@@ -471,6 +494,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
                   "rospatent_failures": sum(result["failed"] for result in patents.values()),
                   "translation": translation},
         "normalizer_deviations": list(naming.DEVIATIONS),
-        "top": top, "excluded": dropped + capped + below,
+        "top": top, "excluded": excluded_items, "candidates": candidates,
+        "enrichment": "pending",
+        "_documents": all_documents,
         "timings": timings, "warnings": warnings,
     }

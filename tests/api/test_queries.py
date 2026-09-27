@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 
+os.environ["QUERY_MOCK"] = "1"
 os.environ["QUERY_MOCK_SECONDS"] = "0"
 
 from fastapi.testclient import TestClient

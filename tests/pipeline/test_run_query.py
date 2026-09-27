@@ -160,13 +160,15 @@ def test_candidate_sources_default_is_all(tmp_path) -> None:
 
 DETAIL_KEYS = {"name_raw", "name_variants", "name_choice_rule", "n_works", "n_institutions",
                "n_institutions_capped", "n_docs", "n_sources", "known_training_label", "quote"}
+SCORED_KEYS = {"tech_key", "features", "is_signal", "threshold", "weak_source_only"}
 
 
 def test_output_matches_schema(result) -> None:
     out, stages = result
     assert set(out) == {"query_id", "topic", "area", "model_version", "threshold", "cutoff_date", "subqueries",
                         "candidate_sources", "extract_version", "extract_model", "naming_mode", "candidates_version",
-                        "stats", "normalizer_deviations", "top", "excluded",
+                        "stats", "normalizer_deviations", "top", "excluded", "candidates",
+                        "enrichment", "_documents",
                         "timings", "warnings"}
     assert out["normalizer_deviations"] == ["company_stoplist_off"]
     assert set(out["stats"]) == {"documents_by_source", "documents_total", "documents_for_candidates",
@@ -182,14 +184,16 @@ def test_output_matches_schema(result) -> None:
     for item in out["top"]:
         assert set(item) == {"rank", "name_ru", "name_en", "score", "explanation_ru", "contributions",
                              "counters", "sources", "model_version", "name_ru_source", "name_ru_auto",
-                             "variants"} | DETAIL_KEYS | patent_keys
+                             "variants"} | DETAIL_KEYS | patent_keys | SCORED_KEYS
         assert item["name_ru"] == f"Русское {item['name_en']}" and item["name_ru_source"] == "translate"
         assert item["name_choice_rule"] == "direct" and len(item["name_variants"]) == 1
         assert len(item["sources"]) <= 5
     for item in out["excluded"]:
         base = {"name_ru", "name_en", "score", "skipped_reason", "reason_ru", "model_version",
-                "name_ru_source", "name_ru_auto"} | DETAIL_KEYS
-        assert set(item) == (base | patent_keys | {"variants"} if item["score"] is not None else base)
+                "name_ru_source", "name_ru_auto", "tech_key"} | DETAIL_KEYS
+        scored_extra = patent_keys | {"variants", "features", "contributions", "counters",
+                                      "is_signal", "threshold"}
+        assert set(item) == (base | scored_extra if item["score"] is not None else base)
         assert item["model_version"] == "s2a2-v1" and item["name_ru_auto"] is True
         scored = item["skipped_reason"] in ("below_threshold", "beyond_top")
         assert item["name_ru_source"] == ("translate" if scored else "extract" if item["name_ru"] else None)
