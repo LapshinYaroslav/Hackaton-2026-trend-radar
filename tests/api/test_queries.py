@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 
+os.environ["QUERY_MODE"] = "mock"
 os.environ["QUERY_MOCK_SECONDS"] = "0"
 
 from fastapi.testclient import TestClient
@@ -32,6 +33,17 @@ def test_query_returns_example_contract() -> None:
     assert body["excluded"]
     assert body["stats"]["candidates_found"] == 64
     assert "_note" not in body
+
+
+def test_area_comes_from_the_topic_when_omitted() -> None:
+    created = client.post("/queries", json={"topic": "промышленные роботы"})
+    query_id = created.json()["query_id"]
+    body = {"status": "running"}
+    for _ in range(20):
+        body = client.get(f"/queries/{query_id}").json()
+        if body["status"] == "done":
+            break
+    assert body["area"] == "Роботы"
 
 
 def test_other_area_is_null() -> None:

@@ -27,8 +27,11 @@ services:
       context: .
       dockerfile: api/Dockerfile
     container_name: trend-radar-api
+    env_file:
+      - .env
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://trend:trend@db:5432/trend_radar}
+      QUERY_MODE: ${QUERY_MODE:-live}
     ports:
       - "8000:8000"
     depends_on:

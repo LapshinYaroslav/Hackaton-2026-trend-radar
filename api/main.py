@@ -18,8 +18,11 @@ import uuid
 from pathlib import Path
 from typing import Optional
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+
+load_dotenv()
 
 STAGES = (
     "Подзапросы",
@@ -97,7 +100,67 @@ def _public(job: dict) -> dict:
     return payload
 
 
+def _ensure_area(query_id: str, *, use_llm: bool) -> None:
+    """Пустую область заполняем по теме. Явное значение с клиента не трогаем."""
+    from search.area import detect_area
+
+    with _lock:
+        job = _jobs[query_id]
+        topic, area = job["topic"], job["area"]
+        if not area:
+            job["progress_stage"] = "Область"
+    if area:
+        return
+    found = detect_area(topic, use_llm=use_llm)
+    with _lock:
+        _jobs[query_id]["area"] = found
+
+
+def _live(query_id: str) -> None:
+    from pipeline.query import run_query
+
+    with _lock:
+        job = _jobs[query_id]
+        topic = job["topic"]
+        area = job["area"]
+
+    def on_progress(stage: str, done: int, total: int) -> None:
+        with _lock:
+            current = _jobs[query_id]
+            current["progress_stage"] = stage
+            current["progress_done"] = done
+            current["progress_total"] = total
+            current["status"] = "running"
+
+    result = run_query(topic, area, query_id, on_progress=on_progress)
+    with _lock:
+        job = _jobs[query_id]
+        job["result"] = result
+        job["status"] = "done"
+        job["progress_stage"] = STAGES[-1]
+        job["progress_done"] = len(STAGES)
+        job["progress_total"] = len(STAGES)
+
+
 def _run(query_id: str) -> None:
+    live = os.getenv("QUERY_MODE", "mock").strip().lower() == "live"
+    try:
+        _ensure_area(query_id, use_llm=live)
+    except Exception as exc:  # noqa: BLE001
+        with _lock:
+            job = _jobs[query_id]
+            job["status"] = "error"
+            job["error"] = str(exc)
+        return
+    if live:
+        try:
+            _live(query_id)
+        except Exception as exc:  # noqa: BLE001
+            with _lock:
+                job = _jobs[query_id]
+                job["status"] = "error"
+                job["error"] = str(exc)
+        return
     seconds = mock_seconds()
     step = seconds / len(STAGES) if STAGES else 0
     try:

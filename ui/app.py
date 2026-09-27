@@ -23,15 +23,6 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 EXAMPLE_PATH = ROOT / "docs" / "contracts" / "query_result.example.json"
 
-AREAS = [
-    "Edge",
-    "Защита ИИ",
-    "Индустриальный ИИ",
-    "Инфраструктура ИИ",
-    "Роботы",
-    "Финтех",
-    "Другое",
-]
 SCORE_HIGH = 0.75
 
 SOURCE_TYPE_RU = {
@@ -89,10 +80,12 @@ def init_state() -> None:
             st.session_state[key] = value
 
 
-def start_local(topic: str, area: str | None) -> None:
+def start_local(topic: str) -> None:
+    from search.area import detect_area
+
     data = load_example()
     data["topic"] = topic
-    data["area"] = area
+    data["area"] = detect_area(topic, use_llm=False)
     st.session_state.result = data
     st.session_state.query_id = data.get("query_id")
     st.session_state.polling = False
@@ -101,10 +94,10 @@ def start_local(topic: str, area: str | None) -> None:
     st.session_state.rank = None
 
 
-def start_remote(topic: str, area: str | None) -> None:
+def start_remote(topic: str) -> None:
     response = requests.post(
         api_base() + "/queries",
-        json={"topic": topic, "area": area},
+        json={"topic": topic},
         timeout=30,
     )
     response.raise_for_status()
@@ -589,8 +582,6 @@ topic = st.text_input(
     "Технологическое направление",
     value=(data or {}).get("topic") or "роботы для промышленности",
 )
-area_label = st.selectbox("Область", AREAS, index=AREAS.index("Роботы"))
-area = None if area_label == "Другое" else area_label
 
 if st.button("Найти сигналы", type="primary"):
     st.session_state.error = None
@@ -598,7 +589,7 @@ if st.button("Найти сигналы", type="primary"):
         st.session_state.error = "Введите тему."
     elif api_base():
         try:
-            start_remote(topic.strip(), area)
+            start_remote(topic.strip())
         except requests.RequestException as exc:
             st.session_state.error = (
                 "API недоступен. Запустите его локально или уберите API_URL. "
@@ -607,7 +598,7 @@ if st.button("Найти сигналы", type="primary"):
     else:
         with st.spinner("Считаем пример контракта…"):
             time.sleep(0.4)
-        start_local(topic.strip(), area)
+        start_local(topic.strip())
     st.rerun()
 
 if st.session_state.error:
@@ -625,11 +616,11 @@ if st.session_state.polling:
     st.rerun()
 
 if data is None:
-    st.info("Введите тему, выберите область и нажмите «Найти сигналы».")
+    st.info("Введите тему и нажмите «Найти сигналы». Область определится по теме.")
     render_footer()
     st.stop()
 
-st.success(f"Запрос: «{data.get('topic', '')}» · область: {data.get('area') or 'не задана'}")
+st.success(f"Запрос: «{data.get('topic', '')}» · область: {data.get('area') or 'Другое'}")
 render_stats(data)
 
 views = [VIEW_TOP, VIEW_LIST, VIEW_EXCLUDED]

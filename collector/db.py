@@ -6,6 +6,7 @@ Yaroslav's compute_features; the collector only reads it to skip Search #2.
 
 from __future__ import annotations
 
+import threading
 from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -61,14 +62,16 @@ class MemoryCache:
     """In-memory stand-in used by tests and demos without PostgreSQL."""
 
     def __init__(self) -> None:
+        self._lock = threading.Lock()
         self._documents: dict[str, list[Document]] = {}
         self._totals: list[SourceTotal] | None = None
         self._features: set[str] = set()
         self._counters: dict[tuple[str, str, str], dict[tuple[str, str | None], Counter]] = {}
 
     def get_documents(self, tech_key: str) -> list[Document] | None:
-        docs = self._documents.get(tech_key)
-        return list(docs) if docs is not None else None
+        with self._lock:
+            docs = self._documents.get(tech_key)
+            return list(docs) if docs is not None else None
 
     def put_documents(
         self,
@@ -79,20 +82,24 @@ class MemoryCache:
         query_id: str | None = None,
     ) -> None:
         del candidate_id, query_id
-        self._documents[tech_key] = list(documents)
+        with self._lock:
+            self._documents[tech_key] = list(documents)
 
     def get_source_totals(self) -> list[SourceTotal] | None:
-        if self._totals is None:
-            return None
-        return list(self._totals)
+        with self._lock:
+            if self._totals is None:
+                return None
+            return list(self._totals)
 
     def put_source_totals(self, totals: list[SourceTotal]) -> None:
-        self._totals = [_stamped(row) for row in totals]
+        with self._lock:
+            self._totals = [_stamped(row) for row in totals]
 
     def get_counters(self, tech_key: str, terms_hash: str,
                      source: str) -> list[Counter] | None:
-        rows = self._counters.get((tech_key, terms_hash, source))
-        return list(rows.values()) if rows is not None else None
+        with self._lock:
+            rows = self._counters.get((tech_key, terms_hash, source))
+            return list(rows.values()) if rows is not None else None
 
     def put_counters(
         self,
@@ -105,15 +112,18 @@ class MemoryCache:
         query_id: str | None = None,
     ) -> None:
         del candidate_id, query_id
-        rows = self._counters.setdefault((tech_key, terms_hash, source), {})
-        rows.update({(row.window, row.query_variant): row for row in counters})
+        with self._lock:
+            rows = self._counters.setdefault((tech_key, terms_hash, source), {})
+            rows.update({(row.window, row.query_variant): row for row in counters})
 
     def has_features(self, tech_key: str) -> bool:
-        return tech_key in self._features
+        with self._lock:
+            return tech_key in self._features
 
     def put_features(self, tech_key: str) -> None:
         """Test helper: simulate a row written by compute_features."""
-        self._features.add(tech_key)
+        with self._lock:
+            self._features.add(tech_key)
 
 
 class PostgresCache:
