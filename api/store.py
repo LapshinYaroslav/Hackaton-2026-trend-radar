@@ -153,6 +153,8 @@ def finish_query(query_id: str, result: dict[str, Any] | None, *, error: str | N
             if result and not error:
                 _replace_children(cur, query_id, result)
         conn.commit()
+    if result and not error:
+        _persist_side_tables(query_id, result)
 
 
 def _replace_children(cur, query_id: str, result: dict[str, Any]) -> None:
@@ -246,6 +248,20 @@ def _insert_candidate(cur, query_id: str, bucket: str, item: dict[str, Any]) -> 
             (query_id, item["rank"], candidate_pk),
         )
     tech_key = item.get("tech_key") or item.get("name_en")
+    features = item.get("features") or {}
+    if tech_key and features:
+        cur.execute(
+            """
+            INSERT INTO features (tech_key, candidate_id, query_id, payload)
+            VALUES (%s, %s, %s, %s::jsonb)
+            ON CONFLICT (tech_key) DO UPDATE SET
+                candidate_id = EXCLUDED.candidate_id,
+                query_id = EXCLUDED.query_id,
+                payload = EXCLUDED.payload,
+                computed_at = now()
+            """,
+            (tech_key, item.get("candidate_id"), query_id, _json(features)),
+        )
     model_version = item.get("model_version")
     if tech_key and model_version and item.get("score") is not None:
         cur.execute(
@@ -360,37 +376,6 @@ def list_queries(limit: int = 30) -> list[dict[str, Any]]:
     return out
 
 
-def list_technologies(label: int | None = None) -> list[dict[str, Any]]:
-    if not database_url():
-        return []
-    sql = """
-        SELECT tech_id, name_ru, name_en, area, label, negative_type, expert_score, tech_key
-        FROM technologies
-    """
-    params: tuple = ()
-    if label is not None:
-        sql += " WHERE label = %s"
-        params = (label,)
-    sql += " ORDER BY area, tech_id"
-    with _connect() as conn:
-        with conn.cursor() as cur:
-            cur.execute(sql, params)
-            rows = cur.fetchall()
-    return [
-        {
-            "tech_id": row[0],
-            "name_ru": row[1],
-            "name_en": row[2],
-            "area": row[3],
-            "label": row[4],
-            "negative_type": row[5],
-            "expert_score": row[6],
-            "tech_key": row[7],
-        }
-        for row in rows
-    ]
-
-
 def training_balance() -> list[dict[str, Any]]:
     if not database_url():
         return []
@@ -404,18 +389,98 @@ def training_balance() -> list[dict[str, Any]]:
     ]
 
 
-def insight_status(query_id: str, rank: int) -> dict[str, Any]:
-    if database_url():
-        with _connect() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    "SELECT status, description_ru FROM insights WHERE query_id = %s AND rank = %s",
-                    (query_id, rank),
-                )
-                row = cur.fetchone()
-        if row:
-            return {"query_id": query_id, "rank": rank, "status": row[0], "description_ru": row[1]}
-    return {"query_id": query_id, "rank": rank, "status": "pending"}
+def public_result(result: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Ответ клиенту без сырых документов поиска — они остаются во внутреннем снимке."""
+    if not result:
+        return result
+    out = dict(result)
+    out.pop("_documents", None)
+    return out
+
+
+def patch_result(query_id: str, result: dict[str, Any]) -> None:
+    job = _memory.get(query_id)
+    if job is not None:
+        job["result"] = result
+        job["status"] = "done"
+    if not database_url():
+        return
+    with _connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                UPDATE queries SET result = %s::jsonb, stats = %s::jsonb, warnings = %s::jsonb
+                WHERE query_id = %s
+                """,
+                (
+                    _json(result),
+                    _json(result.get("stats") or {}),
+                    _json(result.get("warnings") or []),
+                    query_id,
+                ),
+            )
+        conn.commit()
+
+
+def save_insight(query_id: str, rank: int, payload: dict[str, Any]) -> None:
+    job = _memory.get(query_id)
+    if job is not None:
+        job.setdefault("insights", {})[rank] = payload
+    if not database_url():
+        return
+    from pipeline.persist import persist_insight
+
+    persist_insight(query_id, rank, payload)
+
+
+def get_insight(query_id: str, rank: int) -> dict[str, Any] | None:
+    job = _memory.get(query_id)
+    if job is not None:
+        stored = (job.get("insights") or {}).get(rank)
+        if stored:
+            return stored
+    if not database_url():
+        return None
+    with _connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT status, description_ru, advantages_ru, cases_ru, payload
+                FROM insights WHERE query_id = %s AND rank = %s
+                """,
+                (query_id, rank),
+            )
+            row = cur.fetchone()
+    if row is None:
+        return None
+    payload = row[4] if isinstance(row[4], dict) else {}
+    if payload.get("status") == "done" or row[1]:
+        return {
+            **payload,
+            "status": row[0],
+            "description_ru": row[1] or payload.get("description_ru"),
+            "advantages_ru": row[2] or payload.get("advantages_ru") or [],
+            "cases_ru": row[3] or payload.get("cases_ru") or [],
+        }
+    return {"status": row[0] or "pending"}
+
+
+def _persist_side_tables(query_id: str, result: dict[str, Any]) -> None:
+    try:
+        from pipeline.persist import persist_features_and_scores, persist_search_documents
+    except Exception:
+        return
+    persist_search_documents(
+        query_id,
+        result.get("_documents") or [],
+        list(result.get("top") or []) + list(result.get("excluded") or []),
+    )
+    persist_features_and_scores(
+        query_id,
+        list(result.get("top") or []) + list(result.get("excluded") or []),
+        model_version=result.get("model_version"),
+        threshold=result.get("threshold"),
+    )
 
 
 def _as_int(value: Any) -> int | None:

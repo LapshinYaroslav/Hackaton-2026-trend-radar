@@ -11,8 +11,6 @@ from collector.constants import (
     ALLOWED_SOURCE_TYPES,
     ALLOWED_TRUST_LEVELS,
     ALLOWED_WINDOWS,
-    COLLECTION_START,
-    CUTOFF_DATE,
 )
 from collector.exceptions import InvalidSourceTypeError
 from collector.query import build_query, clean_terms
@@ -79,9 +77,6 @@ class Document:
         orgs = [str(item).strip() for item in (self.organizations or []) if str(item).strip()]
         object.__setattr__(self, "organizations", orgs)
         object.__setattr__(self, "text", self.text or "")
-
-    def in_collection_window(self) -> bool:
-        return COLLECTION_START <= self.published_at < CUTOFF_DATE
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -202,7 +197,6 @@ class CounterResult:
     source_totals: list[SourceTotal] = field(default_factory=list)
     query_id: str | None = None
     cache_hit: bool = False
-    skipped_as_mainstream: bool = False
 
     def to_contract_dict(self) -> dict[str, Any]:
         """Проводной формат для Ярослава. Недоступные источники в итоги не идут."""
@@ -223,8 +217,7 @@ class Candidate:
     query_id: str | None = None
     name_ru: str | None = None
     aliases: list[str] = field(default_factory=list)
-    # Два списка терминов для счётчиков (pipeline.md 0.2). aliases остаётся для
-    # collect_history: он по-прежнему выгружает документы поиску №1 и инсайтам.
+    # Два списка терминов для счётчиков (pipeline.md 0.2).
     terms: list[str] = field(default_factory=list)
     context_terms: list[str] = field(default_factory=list)
 
@@ -246,69 +239,6 @@ class Candidate:
             terms=list(payload.get("terms") or []),
             context_terms=list(payload.get("context_terms") or []),
         )
-
-
-@dataclass
-class Technology:
-    """Input for training mode: one labelled technology (signal or negative)."""
-
-    tech_id: str
-    name_en: str
-    aliases: list[str] = field(default_factory=list)
-    label: str | None = None
-    queries: list[str] | None = None
-    terms: list[str] = field(default_factory=list)
-    context_terms: list[str] = field(default_factory=list)
-
-    def __post_init__(self) -> None:
-        if not self.tech_id.strip() or not self.name_en.strip():
-            raise ValueError("tech_id and name_en are required")
-        self.aliases = _clean_list(self.aliases)
-        self.terms = _clean_list(self.terms)
-        self.context_terms = _clean_list(self.context_terms)
-
-    def as_candidate(self) -> Candidate:
-        return Candidate(
-            candidate_id=self.tech_id,
-            query_id="training",
-            name_en=self.name_en,
-            aliases=self.aliases,
-            terms=self.terms,
-            context_terms=self.context_terms,
-        )
-
-    @classmethod
-    def from_dict(cls, payload: dict[str, Any]) -> Technology:
-        return cls(
-            tech_id=str(payload.get("tech_id") or payload["candidate_id"]),
-            name_en=str(payload["name_en"]),
-            aliases=list(payload.get("aliases") or []),
-            label=_optional_str(payload.get("label")),
-            queries=list(payload["queries"]) if payload.get("queries") else None,
-            terms=list(payload.get("terms") or []),
-            context_terms=list(payload.get("context_terms") or []),
-        )
-
-
-@dataclass
-class CollectionResult:
-    """Output for Yaroslav: documents + source_totals. Same shape in both modes."""
-
-    candidate_id: str
-    documents: list[Document] = field(default_factory=list)
-    source_totals: list[SourceTotal] = field(default_factory=list)
-    query_id: str | None = None
-    independent_confirmation: bool = True
-    cache_hit: bool = False
-    skipped_as_mainstream: bool = False
-
-    def to_contract_dict(self) -> dict[str, Any]:
-        """Wire format agreed with Yaroslav. Extra collector fields are omitted."""
-        return {
-            "candidate_id": self.candidate_id,
-            "documents": [doc.to_dict() for doc in self.documents],
-            "source_totals": [row.to_dict() for row in self.source_totals if row.available],
-        }
 
 
 @dataclass

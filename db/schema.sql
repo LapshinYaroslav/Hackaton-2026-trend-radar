@@ -28,6 +28,8 @@ CREATE INDEX IF NOT EXISTS documents_tech_key_idx ON documents (tech_key);
 CREATE INDEX IF NOT EXISTS documents_published_at_idx ON documents (published_at);
 CREATE INDEX IF NOT EXISTS documents_source_idx ON documents (source);
 CREATE INDEX IF NOT EXISTS documents_candidate_id_idx ON documents (candidate_id);
+-- Один URL хранится один раз; связь с технологиями — tech_documents.
+CREATE UNIQUE INDEX IF NOT EXISTS documents_url_uq ON documents (url);
 
 -- period, а не window: WINDOW — зарезервированное слово PostgreSQL.
 -- В контракте (SourceTotal, compute_features) поле по-прежнему называется window.

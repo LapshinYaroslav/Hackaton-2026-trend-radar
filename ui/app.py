@@ -3,7 +3,6 @@
 
 Без Docker: если API_URL не задан, читаем файл примера локально.
 Если API_URL задан — POST /queries и опрос GET, пока status != done.
-Старый api_response.json больше не используем.
 """
 
 from __future__ import annotations
@@ -97,13 +96,16 @@ def open_history_item(query_id: str) -> None:
     if status == "done":
         st.session_state.result = data
         st.session_state.polling = False
+        st.session_state.enriching = data.get("enrichment") == "pending"
     elif status == "error":
         st.session_state.result = None
         st.session_state.error = data.get("error") or "Ошибка расчёта"
         st.session_state.polling = False
+        st.session_state.enriching = False
     else:
         st.session_state.result = None
         st.session_state.polling = True
+        st.session_state.enriching = False
         st.session_state.progress_stage = data.get("progress_stage") or ""
         st.session_state.progress_done = int(data.get("progress_done") or 0)
         st.session_state.progress_total = int(data.get("progress_total") or 6)
@@ -120,6 +122,8 @@ def init_state() -> None:
         "progress_done": 0,
         "progress_total": 6,
         "polling": False,
+        "insight": None,
+        "enriching": False,
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -136,6 +140,8 @@ def start_local(topic: str, area: str | None) -> None:
     st.session_state.error = None
     st.session_state.view = VIEW_TOP
     st.session_state.rank = None
+    st.session_state.insight = None
+    st.session_state.enriching = False
 
 
 def start_remote(topic: str, area: str | None) -> None:
@@ -151,6 +157,8 @@ def start_remote(topic: str, area: str | None) -> None:
     st.session_state.error = None
     st.session_state.view = VIEW_TOP
     st.session_state.rank = None
+    st.session_state.insight = None
+    st.session_state.enriching = False
 
 
 def poll_remote() -> None:
@@ -165,9 +173,31 @@ def poll_remote() -> None:
     if status == "done":
         st.session_state.result = data
         st.session_state.polling = False
+        st.session_state.enriching = data.get("enrichment") == "pending"
     elif status == "error":
         st.session_state.error = data.get("error") or "Ошибка расчёта"
         st.session_state.polling = False
+        st.session_state.enriching = False
+
+
+def fetch_insight(query_id: str, rank: int) -> dict:
+    response = requests.get(f"{api_base()}/queries/{query_id}/insights/{rank}", timeout=90)
+    response.raise_for_status()
+    return response.json()
+
+
+def refresh_if_enriching() -> None:
+    if not (st.session_state.get("enriching") and api_base() and st.session_state.query_id):
+        return
+    try:
+        response = requests.get(f"{api_base()}/queries/{st.session_state.query_id}", timeout=30)
+        response.raise_for_status()
+        data = response.json()
+        if (data.get("status") or "").lower() == "done":
+            st.session_state.result = data
+            st.session_state.enriching = data.get("enrichment") == "pending"
+    except requests.RequestException:
+        st.session_state.enriching = False
 
 
 def render_sources(sources: list) -> None:
@@ -187,26 +217,72 @@ def render_sources(sources: list) -> None:
             st.write(f"Тип: {SOURCE_TYPE_RU.get(raw_type, raw_type)}")
             st.write(f"Язык оригинала: {source.get('language', '—')}")
             st.write(f"Доверие: {TRUST_RU.get(trust, trust or '—')}")
+            summary = source.get("summary_ru")
+            if summary:
+                st.write(summary)
+                note = source.get("summary_note")
+                if note:
+                    st.caption(note)
 
 
 def render_card(item: dict) -> None:
     if st.button("← Назад к ТОП"):
         st.session_state.view = VIEW_TOP
         st.session_state.rank = None
+        st.session_state.insight = None
         st.rerun()
     st.title(item.get("name_ru") or "Карточка")
     st.write(f"**Английское название:** {item.get('name_en', '—')}")
     score = item.get("score")
     st.write(f"**Уверенность модели:** {score if score is not None else '—'}")
+    insight = st.session_state.get("insight")
+    if insight is None and item.get("rank") is not None:
+        if api_base() and st.session_state.query_id:
+            try:
+                insight = fetch_insight(st.session_state.query_id, int(item["rank"]))
+                st.session_state.insight = insight
+            except requests.RequestException as exc:
+                st.warning(f"Инсайт не собран. ({exc})")
+                insight = {}
+        else:
+            from pipeline.insights import build_insight
+
+            insight = build_insight(item, use_llm=False)
+            st.session_state.insight = insight
+    insight = insight or {}
+    if insight.get("weak_source_note") or item.get("weak_source_only"):
+        st.error(insight.get("weak_source_note") or "Блог или пресс-релиз не могут быть единственным основанием.")
+    st.subheader("О технологии")
+    st.write(insight.get("description_ru") or "Описания по документам пока нет.")
     st.subheader("Почему это слабый сигнал")
     for line in item.get("explanation_ru") or []:
         st.write(f"- {line}")
-    st.caption(
-        "Полный отчёт (описание, преимущество, кейс) появится после генерации инсайта. "
-        "Числа модели уже показаны выше и не пересказываются языковой моделью."
-    )
-    st.subheader("Источники")
-    render_sources(item.get("sources") or [])
+    st.subheader("Преимущества")
+    advantages = insight.get("advantages_ru") or []
+    if advantages:
+        for line in advantages:
+            st.write(f"- {line}")
+    else:
+        st.caption("В документах отдельных преимуществ не нашлось.")
+    st.subheader("Кейсы")
+    cases = insight.get("cases_ru") or []
+    if cases:
+        for case in cases:
+            if isinstance(case, str):
+                st.write(f"- {case}")
+                continue
+            title = case.get("title") or "Кейс"
+            text = case.get("text") or ""
+            url = case.get("source_url")
+            st.markdown(f"**{title}**")
+            if text:
+                st.write(text)
+            if url:
+                st.markdown(f"[{url}]({url})")
+    else:
+        st.caption("Кейсов в приложенных документах нет.")
+    st.subheader("Источники и резюме")
+    render_sources(insight.get("sources") or item.get("sources") or [])
 
 
 def render_top(items: list) -> None:
@@ -229,6 +305,7 @@ def render_top(items: list) -> None:
             if st.button("Смотреть", key=f"card_{rank}"):
                 st.session_state.rank = rank
                 st.session_state.view = VIEW_CARD
+                st.session_state.insight = None
                 st.rerun()
         st.divider()
 
@@ -250,31 +327,46 @@ def render_excluded(items: list) -> None:
 
 
 def render_candidates(data: dict) -> None:
-    top = data.get("top") or []
-    excluded = data.get("excluded") or []
-    st.caption(
-        "В контракте пока нет полного списка из 64 имён. "
-        "Показываем тех, кто попал в ТОП, и тех, кого исключили."
-    )
-    rows = []
-    for item in top:
-        rows.append(
+    items = data.get("candidates") or []
+    if items:
+        st.caption(f"Все найденные имена: {len(items)}. Стадия — ТОП, исключён или только найден.")
+        rows = [
             {
-                "Где": "ТОП",
+                "Где": {
+                    "top": "ТОП",
+                    "excluded": "исключён",
+                    "found": "найден",
+                }.get(item.get("stage"), item.get("stage") or "—"),
                 "Название": item.get("name_ru"),
                 "English": item.get("name_en"),
                 "Скоринг": item.get("score"),
+                "Причина": item.get("reason_ru") or item.get("skipped_reason") or "",
             }
-        )
-    for item in excluded:
-        rows.append(
-            {
-                "Где": "исключён",
-                "Название": item.get("name_ru"),
-                "English": item.get("name_en"),
-                "Скоринг": item.get("score"),
-            }
-        )
+            for item in items
+        ]
+    else:
+        st.caption("Полного списка нет — показываем ТОП и исключённых.")
+        rows = []
+        for item in data.get("top") or []:
+            rows.append(
+                {
+                    "Где": "ТОП",
+                    "Название": item.get("name_ru"),
+                    "English": item.get("name_en"),
+                    "Скоринг": item.get("score"),
+                    "Причина": "",
+                }
+            )
+        for item in data.get("excluded") or []:
+            rows.append(
+                {
+                    "Где": "исключён",
+                    "Название": item.get("name_ru"),
+                    "English": item.get("name_en"),
+                    "Скоринг": item.get("score"),
+                    "Причина": item.get("reason_ru") or item.get("skipped_reason") or "",
+                }
+            )
     st.dataframe(rows, use_container_width=True, hide_index=True)
 
 
@@ -305,6 +397,8 @@ if st.session_state.polling and st.session_state.query_id and api_base():
     except requests.RequestException as exc:
         st.session_state.error = f"Не удалось опросить API. ({exc})"
         st.session_state.polling = False
+elif st.session_state.get("enriching"):
+    refresh_if_enriching()
 
 data = st.session_state.result
 if (
@@ -392,6 +486,10 @@ if data is None:
     st.stop()
 
 st.success(f"Запрос: «{data.get('topic', '')}» · область: {data.get('area') or 'не задана'}")
+if st.session_state.get("enriching"):
+    st.info("Дашборд уже готов. Догружаем документы по ТОП-15…")
+    time.sleep(1.2)
+    st.rerun()
 render_stats(data)
 
 views = [VIEW_TOP, VIEW_LIST, VIEW_EXCLUDED]

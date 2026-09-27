@@ -18,12 +18,10 @@ from collector.constants import (
 from collector.db import MemoryCache
 from collector.models import (
     Candidate,
-    CollectionResult,
     Counter,
     CounterResult,
     RecentSearchResult,
     SourceTotal,
-    Technology,
     build_search_terms,
 )
 from tests.collector.fakes import FakeAdapter
@@ -102,11 +100,9 @@ def test_two_searches_cannot_be_mixed_up() -> None:
     """Защита по типам: у счётчиков нет документов, у поиска №1 нет счётчиков и итогов."""
     counter_fields = {item.name for item in fields(CounterResult)}
     recent_fields = {item.name for item in fields(RecentSearchResult)}
-    collection_fields = {item.name for item in fields(CollectionResult)}
 
     assert "documents" not in counter_fields
     assert {"counters", "source_totals"} & recent_fields == set()
-    assert "counters" not in collection_fields
 
 
 def test_counter_result_hides_unavailable_totals() -> None:
@@ -126,22 +122,6 @@ def test_counter_result_hides_unavailable_totals() -> None:
     assert [row["source"] for row in payload["source_totals"]] == ["openalex"]
     assert payload["counters"][0]["n"] == 39
     assert "documents" not in payload
-
-
-def test_terms_travel_from_technology_to_candidate() -> None:
-    """Термины переживают переход обучение -> кандидат, aliases остаются для документов."""
-    tech = Technology(
-        tech_id="s9",
-        name_en="neuromorphic computing",
-        aliases=["neuromorphic chip"],
-        terms=["neuromorphic computing", "neuromorphic chip"],
-        context_terms=["spiking neural network", "brain-inspired computing"],
-    )
-    candidate = tech.as_candidate()
-
-    assert candidate.terms == ["neuromorphic computing", "neuromorphic chip"]
-    assert candidate.context_terms == ["spiking neural network", "brain-inspired computing"]
-    assert candidate.aliases == ["neuromorphic chip"]
 
 
 def test_candidate_from_dict_reads_both_lists() -> None:

@@ -23,7 +23,7 @@ from collector.adapters.base import SourceAdapter
 from collector import rospatent as rospatent_source
 from collector.api import DocumentCollector, tech_key
 from collector.constants import COUNTER_WINDOWS
-from collector.db import build_cache
+from collector.db import PostgresCache, build_cache
 from collector.models import Candidate, Counter, SearchTerms, build_search_terms
 from collector.settings import Settings
 
@@ -83,8 +83,10 @@ def counters_cache_path(key: str, source: str) -> Path:
 
 
 def cached_count_source(collector: DocumentCollector, candidate: Candidate, use_cache: bool = True):
-    """count_source через файловый кэш; в кэш кладутся только полные ответы по всем окнам."""
+    """Счётчик: Postgres на пути запроса, файлы — только если общей базы нет."""
     source = collector.adapters[0].source
+    if isinstance(getattr(collector, "cache", None), PostgresCache):
+        return count_source(collector, candidate)
     path = counters_cache_path(tech_key(candidate.name_en), source)
     if use_cache and path.exists():
         rows = json.loads(path.read_text(encoding="utf-8"))
@@ -171,7 +173,11 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
             stats = {"source": source, "started": time.time(), "candidates": len(phrases),
                      "requests": 0, "cache_hits": 0, "retries": None, "n429": None, "failures": 0}
             for phrase in phrases:
-                hit = use_cache and counters_cache_path(tech_key(phrase), source).exists()
+                hit = (
+                    use_cache
+                    and not isinstance(collector.cache, PostgresCache)
+                    and counters_cache_path(tech_key(phrase), source).exists()
+                )
                 result = one(collector, phrase, [phrase], [])
                 stats["cache_hits" if hit else "requests"] += 1
                 stats["failures"] += not complete(result)

@@ -1,6 +1,7 @@
 """Счётчик патентов Роспатента по фразе (задачи П и Р): только поле total, документы не выгружаются.
 
-Запрос тот же, что собирал признак share_patent для обучения (scripts/ru_patents_collect.py):
+Запрос тот же, что собирал признак share_patent для обучения (снимок обучения —
+evidence/rospatent_training_counts.json, scripts/build_rospatent_snapshot.py):
 фраза в кавычках, date_published 2020-09-01…2026-08-31, набор датасетов передаётся параметром
 (определение признака живёт в model.config.ROSPATENT_DATASETS) и входит в ключ кэша.
 
