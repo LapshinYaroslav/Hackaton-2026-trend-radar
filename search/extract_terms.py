@@ -20,6 +20,8 @@ from search.llm_yandex_gpt import ask_llm, build_model_uri
 
 PROMPT_VERSION = "extract-v2"
 PROMPT_PATH = Path(__file__).resolve().parent / "prompts" / "extract_candidates_v2.txt"
+# Задача О2.1: extract-v4 знает тему запроса и возвращает общую технологию вместе с задачей темы.
+PROMPTS = {"extract-v2": PROMPT_PATH, "extract-v4": PROMPT_PATH.with_name("extract_candidates_v4.txt")}
 FIRST_TEMPERATURE, RETRY_TEMPERATURE = 0.2, 0.8
 MAX_PARALLEL_BATCHES = 10
 FORBIDDEN_CHARS = '"(),:;/'
@@ -68,16 +70,21 @@ def violation(item: Any, snippets: dict[int, str]) -> str | None:
     return None
 
 
+def system_prompt(version: str, topic: str) -> str:
+    """Системный промпт версии шага 4; {topic} есть только в extract-v4, у v2 текст прежний."""
+    return PROMPTS[version].read_text(encoding="utf-8").strip().replace("{topic}", topic.strip())
+
+
 def ask_batch(topic: str, batch: list[tuple[int, str]], model: str | None, use_cache: bool,
-              temperature: float, note: str = "") -> tuple[list, str]:
+              temperature: float, note: str = "", version: str = PROMPT_VERSION) -> tuple[list, str]:
     """Сырые объекты ответа на одну пачку и ошибка разбора (пустая строка — без ошибки)."""
-    system = PROMPT_PATH.read_text(encoding="utf-8").strip() + note
+    system = system_prompt(version, topic) + note
     user = build_user_prompt(topic, batch)
     key = _cache_key(f"{system}\n---\n{user}\n---\n{temperature}", build_model_uri(model))
     cached = _cache_get(key) if use_cache else None
     if cached is not None:
         return list(cached.get("candidates") or []), ""
-    answer = ask_llm(system, user, purpose=PROMPT_VERSION, temperature=temperature, json_object=False,
+    answer = ask_llm(system, user, purpose=version, temperature=temperature, json_object=False,
                      max_tokens=MAX_TOKENS, model=model)
     if answer["error"]:
         return [], f"вызов LLM не удался: {answer['error']}"
@@ -104,17 +111,17 @@ def check_batch(items: list, snippets: dict[int, str]) -> tuple[list[dict], list
 
 
 def extract_batch(topic: str, batch: list[tuple[int, str]], model: str | None,
-                  use_cache: bool) -> tuple[list[dict], list[str]]:
+                  use_cache: bool, version: str = PROMPT_VERSION) -> tuple[list[dict], list[str]]:
     """Одна пачка: вызов, проверка; при нарушениях — один повтор при 0.8 с их перечнем."""
     snippets = dict(batch)
-    items, error = ask_batch(topic, batch, model, use_cache, FIRST_TEMPERATURE)
+    items, error = ask_batch(topic, batch, model, use_cache, FIRST_TEMPERATURE, version=version)
     good, problems = check_batch(items, snippets)
     warnings = [error] if error else []
     warnings += [f"отброшен: {p}" for p in problems]
     if error or problems:
         note = "\n\nПрошлый ответ нарушил требования: " + "; ".join((problems or [error])[:15]) + \
                ". Исправь и верни JSON-массив заново."
-        retry_items, retry_error = ask_batch(topic, batch, model, use_cache, RETRY_TEMPERATURE, note)
+        retry_items, retry_error = ask_batch(topic, batch, model, use_cache, RETRY_TEMPERATURE, note, version)
         retry_good, retry_problems = check_batch(retry_items, snippets)
         seen = {(c["name_en"].casefold(), c["doc"]) for c in good}
         good += [c for c in retry_good if (c["name_en"].casefold(), c["doc"]) not in seen]
@@ -124,8 +131,10 @@ def extract_batch(topic: str, batch: list[tuple[int, str]], model: str | None,
 
 def extract_terms(documents: Iterable[dict], topic: str, query_id: str = "q1", *, model: str | None = None,
                   batch_size: int = BATCH_SIZE, max_candidates: int = 10**6, use_cache: bool = True,
-                  parallel: bool = True) -> dict:
-    """Контракт шага 4 (candidates, warnings, stats) плюс quote у каждого кандидата."""
+                  parallel: bool = True, version: str = PROMPT_VERSION) -> dict:
+    """Контракт шага 4 (candidates, warnings, stats) плюс quote у каждого кандидата; version — extract-v2 или v4."""
+    if version not in PROMPTS:
+        raise ValueError(f"version {version!r}: ожидалось {', '.join(PROMPTS)}")
     docs = list(documents)
     snippets = [(i, text) for i, doc in enumerate(docs, start=1) if (text := snippet_from_doc(doc))]
     batches = [snippets[start:start + batch_size] for start in range(0, len(snippets), batch_size)]
@@ -134,7 +143,7 @@ def extract_terms(documents: Iterable[dict], topic: str, query_id: str = "q1", *
     # у последовательного прогона. parallel=False — последовательно, для сверки.
     workers = MAX_PARALLEL_BATCHES if parallel else 1
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        results = list(pool.map(lambda batch: extract_batch(topic, batch, model, use_cache), batches))
+        results = list(pool.map(lambda batch: extract_batch(topic, batch, model, use_cache, version), batches))
     raw, warnings = [], []
     for good, batch_warnings in results:
         raw += good
@@ -152,4 +161,4 @@ def extract_terms(documents: Iterable[dict], topic: str, query_id: str = "q1", *
                   for n, c in enumerate(merged, start=1)]
     return {"query_id": query_id, "topic": topic.strip(), "candidates": candidates, "warnings": warnings,
             "stats": {"documents": len(docs), "valid_mentions": len(raw), "returned": len(candidates),
-                      "prompt_version": PROMPT_VERSION}}
+                      "prompt_version": version}}

@@ -347,6 +347,29 @@ def test_direct_naming_with_extract_v2(tmp_path) -> None:
     assert out["top"][0]["quote"] == "doc 3" and out["top"][0]["name_choice_rule"] == "direct"
 
 
+def test_extract_v4_gets_topic_in_system_prompt(tmp_path) -> None:
+    """extract_version="v4": шаг 4 идёт с промптом extract-v4, тема в первой строке, остальное как у v2."""
+    items = [{"term_en": SIGNAL, "term_ru": "данные телеуправления", "quote": "doc 3", "doc": 1}]
+    answer = {"text": json.dumps(items, ensure_ascii=False), "model_uri": "m", "model_version": "t",
+              "usage": {}, "elapsed_s": 0, "error": None}
+    systems = []
+    out, _, _ = run(tmp_path, extract=lambda system, user, **kwargs: systems.append(system) or answer,
+                    naming_mode="direct", extract_version="v4")
+    assert systems and all(s.startswith("Тема запроса пользователя: «") for s in systems)
+    assert (out["extract_version"], out["extract_model"]) == ("v4", "yandexgpt-5-pro")
+    assert [item["name_en"] for item in out["top"]] == [SIGNAL]
+
+
+def test_cli_passes_extract_version(tmp_path) -> None:
+    """Флаг --extract-version доходит до run_query; без флага — v2."""
+    from pipeline import __main__ as cli
+    fake = {"query_id": "q1", "top": [], "excluded": [], "timings": {"total": 0}}
+    with patch("pipeline.run_query.run_query", return_value=fake) as runner:
+        cli.main(["тема", "--quiet", "--out", str(tmp_path / "a.json"), "--extract-version", "v4"])
+        cli.main(["тема", "--quiet", "--out", str(tmp_path / "b.json")])
+    assert [c.kwargs["extract_version"] for c in runner.call_args_list] == ["v4", "v2"]
+
+
 def test_counters_file_cache_shared_between_runs(tmp_path) -> None:
     """Второй запрос той же фразы берёт счётчики из файла, источник не опрашивается."""
     from collector.api import DocumentCollector

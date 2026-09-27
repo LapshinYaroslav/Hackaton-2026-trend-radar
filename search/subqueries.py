@@ -13,23 +13,23 @@ from search.llm_yandex_gpt import ask_llm, build_model_uri
 
 ROOT = Path(__file__).resolve().parents[1]
 CACHE_DIR = ROOT / "data" / "interim" / "cache" / "subqueries"
-# subq-v3 (задача Г): «направления, оформившиеся за 2–3 года». Прежний subq-v2 удалён в задаче З;
-# строка версии входит в ключ кэша подзапросов.
-PROMPT_VERSION = "subq-v3"
-DIRECTIONS_V3 = (
-    "Назови направления внутри темы, которые оформились за последние 2–3 года (2023–2026): конкретные "
-    "классы технологий, о которых уже есть научные публикации или раунды финансирования стартапов, но "
-    "которые ещё не получили массового внедрения. Не называй устоявшиеся разделы области и общие "
-    "категории методов (например: „алгоритмы машинного обучения“, „методы аутентификации“, "
-    "„компьютерное зрение“, „блокчейн-технологии“). Каждое направление — короткое название класса "
-    "технологий, 2–5 слов.")
+# subq-v4 (задача О3): вариант V2 турнира О1 — узкие классы технологий и примеры «хорошо/плохо» на посторонней
+# теме (evidence/subqueries_choice.md). subq-v3 удалён; строка версии входит в ключ кэша подзапросов.
+PROMPT_VERSION = "subq-v4"
+EXAMPLES_V4 = (
+    "Пример для темы «технологии в сельском хозяйстве».\n"
+    "Хорошо (узкие, узнаваемо сельскохозяйственные, новые): „agricultural foundation models“, „laser weeding robots“, "
+    "„crop phenotyping drones“, „livestock digital twins“, „soil microbiome sequencing“.\n"
+    "Плохо: „agentic AI“ (общая технология без связи с темой), „precision agriculture“ (устоявшийся раздел), "
+    "„machine learning for crops“ (общий метод), „vertical farming“ (зрелая отрасль), „climate change“ (не технология).")
 
 N_SUBQUERIES_RU = 5
 N_SUBQUERIES_EN = 8
 LIMITS = {"ru": N_SUBQUERIES_RU, "en": N_SUBQUERIES_EN}
 # Меньше минимума после валидации — повтор по этому языку.
 MIN_SUBQUERIES = {"ru": 3, "en": 6}
-SUBQUERY_TEMPERATURE = 0.3
+# Задача О2.2: 0 — детерминизм подзапросов (воспроизводимость ТОП-15); повтор остаётся 0.8.
+SUBQUERY_TEMPERATURE = 0
 RETRY_TEMPERATURE = 0.8
 MAX_TOKENS = 400
 MAX_TOPIC_WORKERS = 8  # сколько тем обрабатывать одновременно в пакетном режиме
@@ -65,11 +65,12 @@ LANGUAGE_RULES = {
 
 
 def build_system_prompt(language: str) -> str:
-    """Системный промпт subq-v3 на один язык: ответ короче, поэтому приходит быстрее."""
-    return f"""Ты помогаешь искать научные публикации и технические документы.
-По теме пользователя составь {LIMITS[language]} поисковых подзапросов.
+    """Системный промпт subq-v4 на один язык: ответ короче, поэтому приходит быстрее."""
+    return f"""Ты помогаешь искать научные публикации и технические документы. По теме пользователя составь \
+{LIMITS[language]} поисковых подзапросов — узких классов технологий внутри темы, оформившихся в 2023–2026 и ещё не \
+получивших массового внедрения; 2–5 слов каждый.
 
-{DIRECTIONS_V3}
+{EXAMPLES_V4}
 
 Требования к каждому подзапросу:
 1. Никаких имён собственных: ни компаний, ни продуктов, ни учёных, ни организаций, ни стран.
@@ -273,9 +274,10 @@ def normalize_topic(topic: str) -> str:
     return " ".join(topic.casefold().split())
 
 
-def cache_key(topic: str, model_uri: str, version: str = PROMPT_VERSION) -> str:
-    """sha256 от (нормализованная тема, версия промпта, URI модели)."""
-    raw = json.dumps([normalize_topic(topic), version, model_uri], ensure_ascii=False)
+def cache_key(topic: str, model_uri: str, version: str = PROMPT_VERSION,
+              temperature: float = SUBQUERY_TEMPERATURE) -> str:
+    """sha256 от (нормализованная тема, версия промпта, URI модели, температура первой попытки)."""
+    raw = json.dumps([normalize_topic(topic), version, model_uri, temperature], ensure_ascii=False)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 

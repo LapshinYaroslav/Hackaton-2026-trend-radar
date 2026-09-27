@@ -89,3 +89,36 @@ def test_parallel_and_sequential_give_same_candidates() -> None:
     strip = lambda out: [(c["name_en"], c["doc_ids"]) for c in out["candidates"]]
     assert strip(parallel) == strip(sequential) and len(parallel["candidates"]) > 0
     assert parallel["warnings"] == sequential["warnings"]
+
+
+def test_v2_system_prompt_is_the_file_text() -> None:
+    assert et.system_prompt("extract-v2", "роботы") == et.PROMPT_PATH.read_text(encoding="utf-8").strip()
+
+
+def test_v4_system_prompt_starts_with_topic() -> None:
+    prompt = et.system_prompt("extract-v4", "  ИИ в медицине ")
+    assert prompt.startswith("Тема запроса пользователя: «ИИ в медицине».")
+    assert "{topic}" not in prompt and "Не добавляй отрасль применения" not in prompt
+    assert "clinical triage AI agents" in prompt and "не относящиеся к теме запроса" in prompt
+
+
+def test_v4_extract_uses_own_prompt_purpose_and_cache() -> None:
+    docs = [{"title": SNIPPETS[1]}]
+    with patch.object(et, "ask_llm", return_value=reply([GOOD])) as model:
+        v2 = et.extract_terms(docs, "роботы")
+        v4 = et.extract_terms(docs, "роботы", version="extract-v4")
+    assert model.call_count == 2  # ответ v2 из кэша для v4 не берётся
+    assert [c.kwargs["purpose"] for c in model.call_args_list] == ["extract-v2", "extract-v4"]
+    assert model.call_args_list[1].args[0].startswith("Тема запроса пользователя: «роботы».")
+    assert (v2["stats"]["prompt_version"], v4["stats"]["prompt_version"]) == ("extract-v2", "extract-v4")
+
+
+def test_v4_without_documents_calls_nothing() -> None:
+    with patch.object(et, "ask_llm") as model:
+        result = et.extract_terms([], "роботы", version="extract-v4")
+    assert model.call_count == 0 and result["candidates"] == []
+
+
+def test_unknown_version_rejected() -> None:
+    with pytest.raises(ValueError, match="extract-v3"):
+        et.extract_terms([], "роботы", version="extract-v3")

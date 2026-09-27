@@ -58,7 +58,7 @@ ROSPATENT_OFF_WARNING = ("Роспатент выключен: патентны�
 PATENT_FAILED_NOTE = "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения"
 ROSPATENT_NO_KEY_WARNING = ("Нет ключа ROSPATENT в .env: патентный признак share_patent недоступен у всех кандидатов, "
                             "модель подставила медиану обучения")
-# Генерация кандидатов v3 (задача Г): промпт подзапросов subq-v3 и состав документов шага 4 (step4_documents).
+# Генерация кандидатов v3 (задача Г): промпт подзапросов subq-v4 (задача О3) и состав документов шага 4 (step4_documents).
 CANDIDATES_VERSION = "v3"
 OUTCOME_REASON = {"no_trace": "no_trace", "bad_format": "bad_name", "trace_unknown": "trace_unknown"}
 Progress = Callable[[str, int, int], None]
@@ -412,17 +412,18 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     naming_mode — normalizer (нормализатор обучения) или direct (name_en = термин шага 4).
     counters_cache — файловый кэш счётчиков отдельно от остальных кэшей; None — как use_cache.
     extract_version — v2 (search/extract_terms.py) или v1 (прежний шаг 4, search/extract_candidates.py;
-    модель берётся из .env, extract_model не используется; в паре с naming_mode="normalizer").
+    модель берётся из .env, extract_model не используется; в паре с naming_mode="normalizer");
+    v4 — extract-v4 (задача О2: тема в промпте шага 4), до принятия только по флагу.
     По умолчанию — рука R1 задачи К: extract-v2 на yandexgpt-5-pro, без нормализатора.
     rospatent — очередь Роспатента в этапе счётчиков; None — как collector.rospatent.ROSPATENT_ENABLED.
     n_pat идёт в признак share_patent модели s2a2-v1; у кандидатов с оценкой — n_pat, share_patent,
     rospatent_failed (при сбое ещё note_ru). Выключенный при s2a2-v1 — предупреждение в warnings.
-    Генерация кандидатов — v3 (задача Г): промпт subq-v3 и состав шага 4 из step4_documents.
+    Генерация кандидатов — v3 (задача Г): промпт subq-v4 (задача О3) и состав шага 4 из step4_documents.
     on_progress(event) — прогресс в процентах (pipeline/progress.py, задача И1); None — выход не меняется.
     dedup — склейка дублей перед отбором ТОП-15 (pipeline/dedup.py; решение команды — evidence/dedup_check.md).
     """
-    if extract_version not in ("v1", "v2"):
-        raise ValueError(f"extract_version {extract_version!r}: ожидалось v1 или v2")
+    if extract_version not in ("v1", "v2", "v4"):
+        raise ValueError(f"extract_version {extract_version!r}: ожидалось v1, v2 или v4")
     progress_warnings: list[str] = []
     report, finish = tracker(on_progress, progress_warnings.append) if on_progress else (None, None)
     progress = both_progress(progress, report)
@@ -444,7 +445,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     if extract_version == "v1":
         extract = lambda: extract_candidates(documents, topic, query_id, use_cache=use_cache)
     else:
-        extract = lambda: extract_terms(documents, topic, query_id, model=extract_model, use_cache=use_cache)
+        extract = lambda: extract_terms(documents, topic, query_id, model=extract_model, use_cache=use_cache,
+                                         version=f"extract-{extract_version}")
     found = staged("candidates", timings, progress, extract)
     warnings += found["warnings"] + ([EMPTY_AREA_WARNING] if not area else [])
 
@@ -491,7 +493,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
         "model_version": meta["model_version"], "threshold": meta["threshold"], "cutoff_date": meta["cutoff_date"],
         "subqueries": subq["subqueries"],
         "candidate_sources": sorted(candidate_sources) if candidate_sources is not None else None,
-        "extract_version": extract_version, "extract_model": extract_model if extract_version == "v2" else None,
+        "extract_version": extract_version, "extract_model": extract_model if extract_version != "v1" else None,
         "naming_mode": naming_mode, "candidates_version": CANDIDATES_VERSION,
         "stats": {"documents_by_source": document_stats(all_documents, subq["subqueries"]),
                   "documents_for_candidates_by_source": document_stats(documents, subq["subqueries"]),

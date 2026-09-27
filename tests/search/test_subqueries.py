@@ -74,7 +74,7 @@ class GenerateSubqueriesTest(IsolatedTest):
         self.assertEqual(result["warnings"], [])
         self.assertEqual(result["model_uri"], MODEL_URI)
         self.assertEqual(result["model_version"], "test")
-        self.assertEqual(result["prompt_version"], "subq-v3")
+        self.assertEqual(result["prompt_version"], "subq-v4")
         self.assertEqual(result["subqueries"][0]["subquery_id"], "q7-ru-1")
         self.assertEqual(result["subqueries"][5]["subquery_id"], "q7-en-1")
         self.assertEqual(texts(result, "ru"), RU)
@@ -131,7 +131,7 @@ class GenerateSubqueriesTest(IsolatedTest):
         _, mock = self._generate({"ru": [answer(payload("ru", RU))],
                                   "en": [answer(payload("en", short_en)), answer(payload("en", EN[4:]))]})
         en_calls = [call for call in mock.call_args_list if language_of(call.args[0]) == "en"]
-        self.assertEqual([call.kwargs["temperature"] for call in en_calls], [0.3, 0.8])
+        self.assertEqual([call.kwargs["temperature"] for call in en_calls], [0, 0.8])
         retry_prompt = en_calls[1].args[0]
         self.assertTrue(retry_prompt.startswith(en_calls[0].args[0]))
         self.assertIn("«accuracy metrics design» — слово зрелой области metrics", retry_prompt)
