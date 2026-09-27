@@ -1,0 +1,81 @@
+o_id,on_topic,label,canonical_concept
+o2-001,yes,mature,graph security analytics
+o2-002,yes,noise,title phrase
+o2-003,yes,uncertain,AI liquid biopsy
+o2-004,yes,noise,title phrase
+o2-005,no,mature,AI text detection
+o2-006,no,noise,title phrase
+o2-007,no,umbrella,generative AI
+o2-008,yes,noise,dataset
+o2-009,yes,plausible_signal,AI trading agents
+o2-010,no,noise,title phrase
+o2-011,yes,uncertain,healthcare AI agents
+o2-012,yes,noise,title phrase
+o2-013,no,noise,off-topic
+o2-014,yes,noise,dataset
+o2-015,yes,noise,title phrase
+o2-016,yes,mature,instant payments
+o2-017,yes,noise,title phrase
+o2-018,yes,plausible_signal,agent-to-agent payments
+o2-019,yes,mature,identity verification
+o2-020,no,noise,title phrase
+o2-021,yes,plausible_signal,AI trading agents
+o2-022,yes,umbrella,AI cybersecurity
+o2-023,yes,plausible_signal,medical foundation models
+o2-024,no,mature,LLM
+o2-025,yes,plausible_signal,medical foundation models
+o2-026,no,mature,multimodal LLM
+o2-027,yes,uncertain,security-specialized frontier models
+o2-028,yes,noise,title phrase
+o2-029,yes,noise,title phrase
+o2-030,yes,uncertain,diffusion biometric forgery
+o2-031,yes,umbrella,AI cybersecurity
+o2-032,yes,noise,title phrase
+o2-033,yes,plausible_signal,order-fair consensus
+o2-034,no,noise,title phrase
+o2-035,yes,uncertain,LLM-as-a-judge in healthcare
+o2-036,yes,noise,title phrase
+o2-037,no,noise,title phrase
+o2-038,no,umbrella,generative AI
+o2-039,yes,noise,title phrase
+o2-040,no,noise,generic ML method
+o2-041,no,umbrella,explainable AI
+o2-042,yes,noise,title phrase
+o2-043,yes,uncertain,on-chain perpetual options
+o2-044,no,umbrella,explainable AI
+o2-045,yes,noise,title phrase
+o2-046,yes,umbrella,clinical AI
+o2-047,yes,noise,title phrase
+o2-048,no,mature,edge-cloud
+o2-049,yes,mature,AI drug discovery
+o2-050,no,noise,generic ML method
+o2-051,no,umbrella,agentic AI
+o2-052,yes,mature,AI threat detection
+o2-053,yes,uncertain,stablecoin payments infrastructure
+o2-054,yes,noise,title phrase
+o2-055,no,noise,off-topic
+o2-056,yes,uncertain,offline crypto payments
+o2-057,yes,mature,AI threat detection
+o2-058,yes,uncertain,PUF logic locking
+o2-059,yes,uncertain,LLM security agents
+o2-060,yes,uncertain,AI agent observability
+o2-061,yes,uncertain,backscatter security
+o2-062,no,umbrella,generative AI
+o2-063,yes,umbrella,AI compliance
+o2-064,yes,noise,title phrase
+o2-065,yes,uncertain,digital identity wallet
+o2-066,yes,noise,title phrase
+o2-067,no,noise,generic ML method
+o2-068,no,noise,off-topic
+o2-069,no,noise,off-topic
+o2-070,yes,uncertain,AI molecular biosensors
+o2-071,yes,mature,blockchain integrity
+o2-072,no,noise,title phrase
+o2-073,yes,mature,embedded finance
+o2-074,no,noise,generic ML method
+o2-075,no,noise,title phrase
+o2-076,yes,uncertain,backscatter security
+o2-077,yes,noise,title phrase
+o2-078,no,umbrella,agentic AI
+o2-079,no,mature,conversational AI
+o2-080,no,umbrella,humanoid robots

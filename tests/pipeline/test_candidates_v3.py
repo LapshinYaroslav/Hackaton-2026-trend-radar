@@ -1,4 +1,4 @@
-"""Задача Г: генерация кандидатов v3 — промпт subq-v3 и состав шага 4 (единственный вариант с задачи З)."""
+"""Генерация кандидатов v3 (задача Г): промпт подзапросов (с задачи О3 — subq-v4) и состав шага 4."""
 from datetime import date, timedelta
 import hashlib
 
@@ -10,10 +10,12 @@ from tests.collector.fakes import doc
 from tests.pipeline import test_run_query as base
 
 BASE_ADAPTERS = base.adapters  # до подмены в тестах: иначе рекурсия
-# Снимок subq-v3 на задаче З: sha256 системных промптов и ключ кэша. Ключ тот же, что до удаления subq-v2,
-# поэтому кэш подзапросов прежних прогонов v3 остаётся рабочим.
-V3_PROMPT_SHA = {"ru": "a416f4425edcfad27044334273be0c8fda139b7e0e1f903ddf7940f2219149a3", "en": "cce6a39441effa095b3192f93b872ee59497b08a4924ac05aabe3e73fc2cc41a"}
-V3_CACHE_KEY = "2dc88b63317905669119454eaa3b15cf32f68c7c81e0f241374c1c482f0d6af7"
+# Снимок subq-v4 (задача О3): sha256 системных промптов и ключ кэша (тема, версия, модель, температура 0).
+# V3_CACHE_KEY — ключ subq-v3 при T=0 (задача О2): v4 обязан от него отличаться, кэш v3 не подхватывается.
+V4_PROMPT_SHA = {"ru": "0aaeb7aed353ac7a1921cb4d7a6a8cda0b8f1cc47f685fab85104f60aa28e647", "en": "1cf82d75c5b81e9a3ec116454d1ffe506c61cfca352df9606a09ab1b544dc124"}
+V4_CACHE_KEY = "d73e6387379bb766f9e67563a3422b0a2ce3f88e768da0ffdeb6bce1d7426bfb"
+V4_T03_CACHE_KEY = "3d35641f2dbcc186514e547fbd8bdff75fb3ea4326d150f2c9ae4b96aac36128"
+V3_CACHE_KEY = "0ea5022925abee6add50e935b71fa496d41273ef8c5dc513282d53fa92a130c2"
 V2_CACHE_KEY = "b577fdb502c81d99eaca24201541953a6f5bd0ef9e251b8823737363c043608e"
 URI = "gpt://folder/yandexgpt-5-pro/latest"
 
@@ -28,20 +30,28 @@ SUBQUERIES = [{"subquery_id": "q-en-1", "language": "en"}, {"subquery_id": "q-ru
 
 
 @pytest.mark.parametrize("language", ["ru", "en"])
-def test_v3_prompt_is_unchanged(language):
-    assert hashlib.sha256(sq.build_system_prompt(language).encode("utf-8")).hexdigest() == V3_PROMPT_SHA[language]
+def test_v4_prompt_is_unchanged(language):
+    assert hashlib.sha256(sq.build_system_prompt(language).encode("utf-8")).hexdigest() == V4_PROMPT_SHA[language]
 
 
-def test_v3_cache_key_is_unchanged_and_not_v2():
-    assert sq.cache_key("Тема X", URI) == V3_CACHE_KEY != V2_CACHE_KEY
+def test_v4_cache_key_is_unchanged_and_depends_on_version():
+    assert sq.PROMPT_VERSION == "subq-v4"
+    assert sq.cache_key("Тема X", URI) == V4_CACHE_KEY
+    assert sq.cache_key("Тема X", URI, version="subq-v3") == V3_CACHE_KEY != V2_CACHE_KEY != V4_CACHE_KEY
+
+
+def test_cache_key_depends_on_temperature():
+    assert sq.SUBQUERY_TEMPERATURE == 0
+    assert sq.cache_key("Тема X", URI, temperature=0.3) == V4_T03_CACHE_KEY != V4_CACHE_KEY
 
 
 @pytest.mark.parametrize("language, count", [("ru", 5), ("en", 8)])
-def test_v3_prompt_has_directions_and_form(language, count):
+def test_v4_prompt_has_examples_and_form(language, count):
     prompt = sq.build_system_prompt(language)
-    assert sq.DIRECTIONS_V3 in prompt and f"составь {count} поисковых подзапросов" in prompt
+    assert sq.EXAMPLES_V4 in prompt and f"составь {count} поисковых подзапросов" in prompt
+    assert "„laser weeding robots“" in prompt and "„precision agriculture“ (устоявшийся раздел)" in prompt
     assert sq.LANGUAGE_RULES[language] in prompt and f'{{"{language}": ["...", "..."]}}' in prompt
-    assert "водородная" not in prompt and "раздел учебника" not in prompt
+    assert not hasattr(sq, "DIRECTIONS_V3")
 
 
 def test_v3_orders_sources_and_caps_openalex_at_half():

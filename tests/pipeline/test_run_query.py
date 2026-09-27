@@ -89,7 +89,7 @@ def fake_subqueries(system_prompt, user_prompt, **kwargs):
 
 
 def fake_extract(system_prompt, user_prompt, **kwargs):
-    """Шаг 4 (extract-v2) без сети: термин, русское название, цитата из документа и его номер."""
+    """Шаг 4 (extract-v4) без сети: термин, русское название, цитата из документа и его номер."""
     raw = ["robotic teleoperation data", "Robotic  Teleoperation Data", "humanoid robot", "phantom thing",
            "partial counter device", "robotic welding"]
     items = [{"doc": d, "term_ru": ru, "term_en": en, "quote": "doc"}
@@ -104,7 +104,7 @@ def fake_translate(system, user, **kwargs):
 
 
 def run(tmp_path, extract=fake_extract, patents=None, **options):
-    """run_query на заглушках в боевом режиме: extract-v2, name_en = термин шага 4.
+    """run_query на заглушках в боевом режиме: extract-v4, name_en = термин шага 4.
 
     Роспатент всегда заглушка (patents — ответы по фразам; по умолчанию все сбои): сеть не нужна.
     Нужен настоящий артефакт модели: без data/model тест пропускается.
@@ -319,16 +319,39 @@ def test_subtopic_merge_only_equal_stems(a, b, merged) -> None:
         assert [item["name_en"] for item in got] == [a, b]
 
 
-def test_direct_naming_with_extract_v2(tmp_path) -> None:
-    """extract-v2 + direct: name_en = термин шага 4, quote в выходе."""
+def test_direct_naming_with_extract_v4(tmp_path) -> None:
+    """extract-v4 + direct: name_en = термин шага 4, quote в выходе."""
     items = [{"term_en": SIGNAL, "term_ru": "данные телеуправления", "quote": "doc 3", "doc": 1},
              {"term_en": MAINSTREAM, "term_ru": "гуманоидный робот", "quote": "doc 4", "doc": 2}]
     answer = {"text": json.dumps(items, ensure_ascii=False), "model_uri": "m", "model_version": "t",
               "usage": {}, "elapsed_s": 0, "error": None}
     out, _, _ = run(tmp_path, extract=lambda *args, **kwargs: answer)
-    assert out["naming_mode"] == "direct" and out["extract_version"] == "v2"
+    assert out["naming_mode"] == "direct" and out["extract_version"] == "v4"
     assert [item["name_en"] for item in out["top"]] == [SIGNAL]
     assert out["top"][0]["quote"] == "doc 3" and out["top"][0]["name_choice_rule"] == "direct"
+
+
+def test_extract_v4_gets_topic_in_system_prompt(tmp_path) -> None:
+    """По умолчанию шаг 4 идёт с промптом extract-v4: тема запроса в первой строке системного промпта."""
+    items = [{"term_en": SIGNAL, "term_ru": "данные телеуправления", "quote": "doc 3", "doc": 1}]
+    answer = {"text": json.dumps(items, ensure_ascii=False), "model_uri": "m", "model_version": "t",
+              "usage": {}, "elapsed_s": 0, "error": None}
+    systems = []
+    out, _, _ = run(tmp_path, extract=lambda system, user, **kwargs: systems.append(system) or answer)
+    assert systems and all(s.startswith("Тема запроса пользователя: «") for s in systems)
+    assert (out["extract_version"], out["extract_model"]) == ("v4", "yandexgpt-5-pro")
+    assert [item["name_en"] for item in out["top"]] == [SIGNAL]
+
+
+def test_cli_has_no_extract_version_flag(tmp_path) -> None:
+    """Флаг --extract-version удалён вместе с extract-v2: CLI его не принимает и run_query не передаёт."""
+    from pipeline import __main__ as cli
+    fake = {"query_id": "q1", "top": [], "excluded": [], "timings": {"total": 0}}
+    with patch("pipeline.run_query.run_query", return_value=fake) as runner:
+        cli.main(["тема", "--quiet", "--out", str(tmp_path / "a.json")])
+        with pytest.raises(SystemExit):
+            cli.main(["тема", "--quiet", "--extract-version", "v4"])
+    assert runner.call_count == 1 and "extract_version" not in runner.call_args.kwargs
 
 
 def test_counters_file_cache_shared_between_runs(tmp_path) -> None:
@@ -347,11 +370,11 @@ def test_counters_file_cache_shared_between_runs(tmp_path) -> None:
 
 
 def test_default_mode_is_r1() -> None:
-    """Боевой режим — рука R1: extract-v2, yandexgpt-5-pro, без нормализатора."""
+    """Боевой режим — рука R1: extract-v4, yandexgpt-5-pro, без нормализатора."""
     import inspect
     defaults = {name: p.default for name, p in inspect.signature(rq.run_query).parameters.items()}
     assert defaults["extract_model"] == "yandexgpt-5-pro"
-    assert (rq.EXTRACT_VERSION, rq.NAMING_MODE) == ("v2", "direct")
+    assert (rq.EXTRACT_VERSION, rq.NAMING_MODE) == ("v4", "direct")
 
 
 def test_techcrunch_one_call_in_pipeline() -> None:

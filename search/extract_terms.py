@@ -1,4 +1,4 @@
-"""Шаг 4, версия extract-v2: документы -> устоявшиеся термины сообщества (задача К).
+"""Шаг 4, версия extract-v4: документы -> устоявшиеся термины сообщества (задача К, тема в промпте — задача О2).
 
 Механика прежнего шага 4 (extract-v1, удалён в задаче Л; общие функции перенесены сюда дословно) сохранена:
 фрагменты документов, пачки, глобальная нумерация doc, кэш ответов, слияние синонимов, отбор по числу документов.
@@ -30,8 +30,10 @@ SIMILARITY_THRESHOLD = 0.8
 MAX_TOKENS = 2500
 PUNCT_RE = re.compile(r"[^\w\s\-]+", re.UNICODE)
 SPACE_RE = re.compile(r"\s+")
-PROMPT_VERSION = "extract-v2"
-PROMPT_PATH = Path(__file__).resolve().parent / "prompts" / "extract_candidates_v2.txt"
+# extract-v4 (задача О2): промпт знает тему запроса и возвращает общую технологию вместе с задачей темы;
+# extract-v2 удалён по итогам слепой разметки (evidence/extract_choice.md).
+PROMPT_VERSION = "extract-v4"
+PROMPT_PATH = Path(__file__).resolve().parent / "prompts" / "extract_candidates_v4.txt"
 FIRST_TEMPERATURE, RETRY_TEMPERATURE = 0.2, 0.8
 MAX_PARALLEL_BATCHES = 10
 FORBIDDEN_CHARS = '"(),:;/'
@@ -224,10 +226,15 @@ def violation(item: Any, snippets: dict[int, str]) -> str | None:
     return None
 
 
+def system_prompt(topic: str) -> str:
+    """Системный промпт шага 4 с темой запроса в первой строке."""
+    return PROMPT_PATH.read_text(encoding="utf-8").strip().replace("{topic}", topic.strip())
+
+
 def ask_batch(topic: str, batch: list[tuple[int, str]], model: str | None, use_cache: bool,
               temperature: float, note: str = "") -> tuple[list, str]:
     """Сырые объекты ответа на одну пачку и ошибка разбора (пустая строка — без ошибки)."""
-    system = PROMPT_PATH.read_text(encoding="utf-8").strip() + note
+    system = system_prompt(topic) + note
     user = build_user_prompt(topic, batch)
     key = _cache_key(f"{system}\n---\n{user}\n---\n{temperature}", build_model_uri(model))
     cached = _cache_get(key) if use_cache else None

@@ -1,6 +1,6 @@
 """Оркестратор режима запроса: тема пользователя -> ТОП-15 и исключённые с причинами.
 
-Шаги: подзапросы -> поиск №1 -> кандидаты (шаг 4, extract-v2: name_en = термин) -> след названия
+Шаги: подзапросы -> поиск №1 -> кандидаты (шаг 4, extract-v4: name_en = термин) -> след названия
 в OpenAlex (pipeline/naming.py, no_trace) -> слияние по tech_key -> страховочная проверка названия -> лимит
 -> счётчики и признаки -> ранжирование -> склейка дублей -> перевод названий.
 
@@ -60,10 +60,10 @@ ROSPATENT_OFF_WARNING = ("Роспатент выключен: патентны�
 PATENT_FAILED_NOTE = "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения"
 ROSPATENT_NO_KEY_WARNING = ("Нет ключа ROSPATENT в .env: патентный признак share_patent недоступен у всех кандидатов, "
                             "модель подставила медиану обучения")
-# Генерация кандидатов v3 (задача Г): промпт подзапросов subq-v3 и состав документов шага 4 (step4_documents).
+# Генерация кандидатов v3 (задача Г): промпт подзапросов subq-v4 (задача О3) и состав документов шага 4 (step4_documents).
 CANDIDATES_VERSION = "v3"
-# Поля выхода о режиме шага 4 и названий (контракт): в продукте один режим — extract-v2 и direct.
-EXTRACT_VERSION, NAMING_MODE = "v2", "direct"
+# Поля выхода о режиме шага 4 и названий (контракт): в продукте один режим — extract-v4 (задача О2) и direct.
+EXTRACT_VERSION, NAMING_MODE = "v4", "direct"
 Progress = Callable[[str, int, int], None]
 
 
@@ -80,7 +80,7 @@ def training_labels() -> dict[str, dict]:
 
 
 def direct_candidates(raw: Sequence[dict], openalex, progress: Progress) -> tuple[list[dict], list[dict]]:
-    """Без нормализатора (extract-v2): name_en = термин шага 4, след и организации — тем же вызовом."""
+    """Без нормализатора (extract-v4): name_en = термин шага 4, след и организации — тем же вызовом."""
     phrases, done, lock = [tech_key(item["name_en"]) for item in raw], [0], threading.Lock()
 
     def traced(phrase: str) -> dict:
@@ -398,12 +398,12 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     candidate_sources — из документов каких источников извлекать кандидатов (openalex,
     openalex_ru, arxiv, techcrunch). None — из всех, как раньше. Поиск №1 и его статистика
     при этом по всем источникам; doc_ids кандидатов нумеруют только отобранные документы.
-    extract_model — модель шага 4 (extract-v2, search/extract_terms.py); name_en кандидата — его термин.
+    extract_model — модель шага 4 (extract-v4, search/extract_terms.py); name_en кандидата — его термин.
     counters_cache — файловый кэш счётчиков отдельно от остальных кэшей; None — как use_cache.
     rospatent — очередь Роспатента в этапе счётчиков; None — как collector.rospatent.ROSPATENT_ENABLED.
     n_pat идёт в признак share_patent модели s2a2-v1; у кандидатов с оценкой — n_pat, share_patent,
     rospatent_failed (при сбое ещё note_ru). Выключенный при s2a2-v1 — предупреждение в warnings.
-    Генерация кандидатов — v3 (задача Г): промпт subq-v3 и состав шага 4 из step4_documents.
+    Генерация кандидатов — v3 (задача Г): промпт subq-v4 (задача О3) и состав шага 4 из step4_documents.
     on_progress(event) — прогресс в процентах (pipeline/progress.py, задача И1); None — выход не меняется.
     dedup — склейка дублей перед отбором ТОП-15 (pipeline/dedup.py; решение команды — evidence/dedup_check.md).
     """

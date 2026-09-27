@@ -1,4 +1,4 @@
-"""Шаг 4 extract-v2 без сети: ask_llm подменяется."""
+"""Шаг 4 extract-v4 без сети: ask_llm подменяется."""
 import json
 from unittest.mock import patch
 
@@ -88,6 +88,33 @@ def test_parallel_and_sequential_give_same_candidates() -> None:
     strip = lambda out: [(c["name_en"], c["doc_ids"]) for c in out["candidates"]]
     assert strip(parallel) == strip(sequential) and len(parallel["candidates"]) > 0
     assert parallel["warnings"] == sequential["warnings"]
+
+
+def test_system_prompt_is_v4_with_topic() -> None:
+    prompt = et.system_prompt("  ИИ в медицине ")
+    assert et.PROMPT_VERSION == "extract-v4" and et.PROMPT_PATH.name == "extract_candidates_v4.txt"
+    assert prompt.startswith("Тема запроса пользователя: «ИИ в медицине».")
+    assert "{topic}" not in prompt and "Не добавляй отрасль применения" not in prompt
+    assert "clinical triage AI agents" in prompt and "не относящиеся к теме запроса" in prompt
+    assert not et.PROMPT_PATH.with_name("extract_candidates_v2.txt").exists()
+
+
+def test_topic_is_in_prompt_purpose_and_cache_key() -> None:
+    docs = [{"title": SNIPPETS[1]}]
+    with patch.object(et, "ask_llm", return_value=reply([GOOD])) as model:
+        first = et.extract_terms(docs, "роботы")
+        et.extract_terms(docs, "роботы")
+        et.extract_terms(docs, "медицина")
+    assert model.call_count == 2  # та же тема — из кэша, другая тема — новый вызов
+    assert {c.kwargs["purpose"] for c in model.call_args_list} == {"extract-v4"}
+    assert model.call_args_list[1].args[0].startswith("Тема запроса пользователя: «медицина».")
+    assert first["stats"]["prompt_version"] == "extract-v4"
+
+
+def test_without_documents_calls_nothing() -> None:
+    with patch.object(et, "ask_llm") as model:
+        result = et.extract_terms([], "роботы")
+    assert model.call_count == 0 and result["candidates"] == []
 
 
 def test_snippet_truncates_text() -> None:
