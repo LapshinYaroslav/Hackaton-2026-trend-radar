@@ -1,5 +1,5 @@
 {
-  "query_id": "q20260927000904",
+  "query_id": "q20260927204632",
   "topic": "роботы для промышленности",
   "area": "Роботы",
   "model_version": "s2a2-v1",
@@ -7,94 +7,104 @@
   "cutoff_date": "2026-09-01",
   "subqueries": [
     {
-      "subquery_id": "q20260927000904-ru-1",
+      "subquery_id": "q20260927204632-ru-1",
       "language": "ru",
       "text": "коллаборативные промышленные роботы"
     },
     {
-      "subquery_id": "q20260927000904-ru-2",
+      "subquery_id": "q20260927204632-ru-2",
       "language": "ru",
-      "text": "мобильные промышленные роботы"
+      "text": "мобильные манипуляторы для складов"
     },
     {
-      "subquery_id": "q20260927000904-ru-3",
-      "language": "ru",
-      "text": "роботы для сборки электроники"
-    },
-    {
-      "subquery_id": "q20260927000904-ru-4",
+      "subquery_id": "q20260927204632-ru-3",
       "language": "ru",
       "text": "роботизированные системы технического зрения"
     },
     {
-      "subquery_id": "q20260927000904-en-1",
+      "subquery_id": "q20260927204632-ru-4",
+      "language": "ru",
+      "text": "автономные логистические платформы"
+    },
+    {
+      "subquery_id": "q20260927204632-ru-5",
+      "language": "ru",
+      "text": "гибкие производственные ячейки"
+    },
+    {
+      "subquery_id": "q20260927204632-en-1",
       "language": "en",
       "text": "collaborative robot arms"
     },
     {
-      "subquery_id": "q20260927000904-en-2",
+      "subquery_id": "q20260927204632-en-2",
       "language": "en",
       "text": "autonomous mobile robots"
     },
     {
-      "subquery_id": "q20260927000904-en-3",
+      "subquery_id": "q20260927204632-en-3",
       "language": "en",
-      "text": "robotic process automation"
+      "text": "robotic quality control"
     },
     {
-      "subquery_id": "q20260927000904-en-4",
+      "subquery_id": "q20260927204632-en-4",
       "language": "en",
       "text": "industrial robotic exoskeletons"
     },
     {
-      "subquery_id": "q20260927000904-en-5",
+      "subquery_id": "q20260927204632-en-5",
       "language": "en",
-      "text": "cloud-based robotics"
+      "text": "robotic process automation"
     },
     {
-      "subquery_id": "q20260927000904-en-6",
+      "subquery_id": "q20260927204632-en-6",
       "language": "en",
-      "text": "swarm robotics for manufacturing"
+      "text": "swarm robotic systems"
     },
     {
-      "subquery_id": "q20260927000904-en-7",
+      "subquery_id": "q20260927204632-en-7",
       "language": "en",
-      "text": "robotics for predictive maintenance"
+      "text": "robotic assembly cells"
+    },
+    {
+      "subquery_id": "q20260927204632-en-8",
+      "language": "en",
+      "text": "industrial AI co-pilots"
     }
   ],
   "candidate_sources": null,
-  "extract_version": "v2",
+  "extract_version": "v4",
   "extract_model": "yandexgpt-5-pro",
   "naming_mode": "direct",
   "candidates_version": "v3",
   "stats": {
     "documents_by_source": {
-      "openalex": 149,
-      "arxiv": 92,
-      "techcrunch": 47,
-      "openalex_ru": 30
+      "openalex": 181,
+      "arxiv": 124,
+      "techcrunch": 52,
+      "openalex_ru": 32
     },
     "documents_for_candidates_by_source": {
-      "openalex": 139,
-      "arxiv": 92,
-      "techcrunch": 47,
+      "openalex": 176,
+      "arxiv": 124,
+      "techcrunch": 52,
       "openalex_ru": 0
     },
-    "documents_total": 318,
-    "documents_for_candidates": 278,
-    "candidates_found": 110,
-    "candidates_named": 92,
-    "candidates_scored": 60,
-    "above_threshold": 37,
-    "above_075": 16,
+    "documents_total": 389,
+    "documents_for_candidates": 352,
+    "candidates_found": 136,
+    "candidates_named": 102,
+    "candidates_scored": 59,
+    "above_threshold": 38,
+    "above_075": 14,
     "rospatent_enabled": true,
     "rospatent_failures": 0,
     "translation": {
-      "переведено": 55,
-      "из кэша": 54,
-      "с первого раза": 0,
+      "переведено": 53,
+      "из кэша": 23,
+      "с первого раза": 30,
       "с повтором": 0,
-      "откат на term_ru": 1,
+      "откат на term_ru": 0,
       "без названия": 0
     }
   },
@@ -104,20 +114,20 @@
   "top": [
     {
       "rank": 1,
-      "name_ru": "Многоагентные воплощённые системы",
-      "name_en": "multi-agent embodied systems",
-      "score": 0.9927142965332152,
+      "name_ru": "Автономное управление двухруким роботом",
+      "name_en": "autonomous dual-arm robotic manipulation",
+      "score": 0.9958047829917094,
       "explanation_ru": [
         "Упоминания свежие: 100% за последние два года",
-        "Молодой термин: первый препринт 2 лет назад"
+        "Молодой термин: первый препринт 1 лет назад"
       ],
       "contributions": {
         "share_patent": 0.41398113132491227,
-        "growth_research": 0.003682659314704829,
+        "growth_research": 0.00215305118162055,
         "recency": 3.9707850296615383,
-        "share_news_wordmatch": -0.5485160919648545,
+        "share_news_wordmatch": -0.11520787815057237,
         "share_prev6": 0.20740552786542543,
-        "age_first_arxiv": 0.48594176359423297
+        "age_first_arxiv": 0.6092404200285906
       },
       "counters": {
         "prev6": {
@@ -146,38 +156,38 @@
           "techcrunch": 0
         },
         "2024": {
-          "arxiv": 1,
-          "openalex": 0,
+          "arxiv": 0,
+          "openalex": 1,
           "techcrunch": 1
         },
         "2025": {
-          "arxiv": 2,
-          "openalex": 1,
+          "arxiv": 1,
+          "openalex": 0,
           "techcrunch": 0
         }
       },
-      "name_raw": "multi-agent embodied systems",
+      "name_raw": "autonomous dual-arm robotic manipulation",
       "name_variants": [
         {
-          "name": "multi-agent embodied systems",
+          "name": "autonomous dual-arm robotic manipulation",
           "n_works": 1,
-          "n_institutions": 7,
+          "n_institutions": 1,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
       "n_works": 1,
-      "n_institutions": 7,
+      "n_institutions": 1,
       "n_institutions_capped": false,
-      "quote": "multi-agent embodied systems hold promise for complex collaborative manipulation",
+      "quote": "Autonomous Dual-Arm Robotic Manipulation and Coordination",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "sources": [
         {
-          "title": "CoEnv: Driving Embodied Multi-Agent Collaboration via Compositional Environment",
-          "url": "http://arxiv.org/abs/2604.05484v1",
-          "published_at": "2026-04-07",
+          "title": "ROBOCYCLE: Autonomous Dual-Arm Robotic Manipulation and Coordination for Recycling Applications",
+          "url": "http://arxiv.org/abs/2607.03616v1",
+          "published_at": "2026-07-03",
           "source": "arxiv",
           "source_type": "preprint",
           "language": "en",
@@ -195,25 +205,25 @@
     {
       "rank": 2,
       "name_ru": "Прогнозирование на основе ИИ",
-      "name_en": "ai driven prognostics",
-      "score": 0.9763839602063568,
+      "name_en": "AI-driven prognostics",
+      "score": 0.9776364969822331,
       "explanation_ru": [
-        "Упоминания свежие: 90% за последние два года",
+        "Упоминания свежие: 92% за последние два года",
         "Молодой термин: первый препринт 2 лет назад"
       ],
       "contributions": {
         "share_patent": 0.41398113132491227,
         "growth_research": 0.011159843801288082,
-        "recency": 3.3444376296946365,
-        "share_news_wordmatch": -1.1123906880874133,
-        "share_prev6": 0.1975512104838309,
+        "recency": 3.4595501248236893,
+        "share_news_wordmatch": -1.1765202261754182,
+        "share_prev6": 0.20234609645809673,
         "age_first_arxiv": 0.48594176359423297
       },
       "counters": {
         "prev6": {
           "arxiv": 0,
           "openalex": 0,
-          "techcrunch": 2
+          "techcrunch": 1
         },
         "2020": {
           "arxiv": 0,
@@ -228,7 +238,7 @@
         "2022": {
           "arxiv": 0,
           "openalex": 0,
-          "techcrunch": 3
+          "techcrunch": 0
         },
         "2023": {
           "arxiv": 0,
@@ -246,10 +256,10 @@
           "techcrunch": 0
         }
       },
-      "name_raw": "ai driven prognostics",
+      "name_raw": "AI-driven prognostics",
       "name_variants": [
         {
-          "name": "ai driven prognostics",
+          "name": "ai-driven prognostics",
           "n_works": 145,
           "n_institutions": 200,
           "n_institutions_capped": true
@@ -259,7 +269,7 @@
       "n_works": 145,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Real-Time AI-Driven Prognostics and Health Management",
+      "quote": "AI-driven prognostics and health management",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -284,18 +294,18 @@
     },
     {
       "rank": 3,
-      "name_ru": "Микровидеодатчик наведения",
-      "name_en": "micro video guidance sensor",
-      "score": 0.9731861355632264,
+      "name_ru": "Энергоэффективная роевая робототехника",
+      "name_en": "energy-efficient swarm robotics",
+      "score": 0.971965499275632,
       "explanation_ru": [
-        "Упоминания свежие: 75% за последние два года",
-        "Про технологию пока мало научных публикаций: 2"
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 4 публикации"
       ],
       "contributions": {
         "share_patent": 0.41398113132491227,
-        "growth_research": 0.00449852592927486,
-        "recency": 2.3944774064115,
-        "share_news_wordmatch": 0.4264273891172799,
+        "growth_research": 0.0073248122414310505,
+        "recency": 3.9707850296615383,
+        "share_news_wordmatch": -1.1984784126862773,
         "share_prev6": 0.20740552786542543,
         "age_first_arxiv": -0.23638258619926467
       },
@@ -323,7 +333,7 @@
         "2023": {
           "arxiv": 0,
           "openalex": 0,
-          "techcrunch": 1
+          "techcrunch": 0
         },
         "2024": {
           "arxiv": 0,
@@ -332,36 +342,45 @@
         },
         "2025": {
           "arxiv": 0,
-          "openalex": 2,
-          "techcrunch": 1
+          "openalex": 4,
+          "techcrunch": 0
         }
       },
-      "name_raw": "micro video guidance sensor",
+      "name_raw": "energy-efficient swarm robotics",
       "name_variants": [
         {
-          "name": "micro video guidance sensor",
-          "n_works": 2,
-          "n_institutions": 2,
+          "name": "energy-efficient swarm robotics",
+          "n_works": 4,
+          "n_institutions": 5,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 2,
-      "n_institutions": 2,
+      "n_works": 4,
+      "n_institutions": 5,
       "n_institutions_capped": false,
-      "quote": "Micro Video Guidance Sensor (UVGS-2)",
-      "n_docs": 1,
+      "quote": "Energy-Efficient Swarm Robotics",
+      "n_docs": 2,
       "n_sources": 1,
       "known_training_label": null,
       "sources": [
         {
-          "title": "uVGS-2: The Micro Video Guidance Sensor: a 6-DOF Robust Pose Estimator for Autonomous Proximity Systems in Spacecraft, Drones and Mobile Robots",
-          "url": "https://doi.org/10.20944/preprints202605.1258.v1",
-          "published_at": "2026-05-19",
+          "title": "Optimizing communication and computational cost for IoT devices in energy efficient swarm robotics",
+          "url": "https://doi.org/10.1016/j.grets.2026.100409",
+          "published_at": "2026-05-09",
           "source": "openalex",
-          "source_type": "preprint",
+          "source_type": "paper",
           "language": "en",
-          "trust_level": "medium"
+          "trust_level": "high"
+        },
+        {
+          "title": "EACCO: Optimizing the Computation and Communication in Resource-Constrained IoT Devices for Energy-Efficient Swarm Robotics",
+          "url": "https://doi.org/10.3390/s26092839",
+          "published_at": "2026-05-01",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
         }
       ],
       "variants": [],
@@ -374,8 +393,8 @@
     },
     {
       "rank": 4,
-      "name_ru": "Облачно-робототехнические носимые системы",
-      "name_en": "cloud-robot-wearable system",
+      "name_ru": "Синтез автоматизированного управления БПЛА",
+      "name_en": "automated uav controller synthesis",
       "score": 0.971827027935035,
       "explanation_ru": [
         "Упоминания свежие: 100% за последние два года",
@@ -426,28 +445,28 @@
           "techcrunch": 0
         }
       },
-      "name_raw": "cloud-robot-wearable system",
+      "name_raw": "automated uav controller synthesis",
       "name_variants": [
         {
-          "name": "cloud-robot-wearable system",
+          "name": "automated uav controller synthesis",
           "n_works": 1,
-          "n_institutions": 3,
+          "n_institutions": 1,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
       "n_works": 1,
-      "n_institutions": 3,
+      "n_institutions": 1,
       "n_institutions_capped": false,
-      "quote": "A Cloud–Robot–Wearable System for Bilateral Reaching Rehabilitation",
+      "quote": "Automated UAV Controller Synthesis",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "sources": [
         {
-          "title": "A Cloud–Robot–Wearable System for Bilateral Reaching Rehabilitation: Affected-Side Identification and Quality Quantification",
-          "url": "https://doi.org/10.3390/electronics15071459",
-          "published_at": "2026-04-01",
+          "title": "Automated UAV Controller Synthesis via LLM-Generated Control Logic and Particle Swarm Optimization",
+          "url": "https://doi.org/10.1109/tii.2026.3675738",
+          "published_at": "2026-04-06",
           "source": "openalex",
           "source_type": "paper",
           "language": "en",
@@ -554,6 +573,96 @@
     },
     {
       "rank": 6,
+      "name_ru": "Роботизированные пальцы с силочувствительными датчиками",
+      "name_en": "force-sensorised robotic fingers",
+      "score": 0.971827027935035,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 1 публикацию"
+      ],
+      "contributions": {
+        "share_patent": 0.41398113132491227,
+        "growth_research": 0.0022551762776763353,
+        "recency": 3.9707850296615383,
+        "share_news_wordmatch": -1.1984784126862773,
+        "share_prev6": 0.20740552786542543,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "force-sensorised robotic fingers",
+      "name_variants": [
+        {
+          "name": "force-sensorised robotic fingers",
+          "n_works": 1,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "force-sensorised robotic fingers for gentle and stable handling",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "A novel design and testing of force-sensorised robotic fingers for stable grasping of high value crops",
+          "url": "https://doi.org/10.1016/j.measurement.2026.121707",
+          "published_at": "2026-05-02",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 7,
       "name_ru": "Шестиногие колёсно-ножные мобильные платформы",
       "name_en": "hexapod wheel-legged mobile platform",
       "score": 0.971827027935035,
@@ -619,7 +728,7 @@
       "n_works": 1,
       "n_institutions": 2,
       "n_institutions_capped": false,
-      "quote": "Integrated design of a hexapod wheel-legged mobile platform and robotic arm",
+      "quote": "Integrated design of a hexapod wheel-legged mobile platform and robotic arm based on reconfigurable parallel mechanism",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -636,8 +745,8 @@
       ],
       "variants": [
         {
-          "term_en": "legged-wheeled robots",
-          "score": 0.6726193375566084
+          "term_en": "legged-wheeled robot",
+          "score": 0.6288744861867697
         }
       ],
       "n_pat": 0,
@@ -648,100 +757,10 @@
       "model_version": "s2a2-v1"
     },
     {
-      "rank": 7,
-      "name_ru": "Мультимодальные большие языковые модели",
-      "name_en": "multimodal large language model",
-      "score": 0.9697913536065607,
-      "explanation_ru": [
-        "Упоминания свежие: 91% за последние два года",
-        "Патентов мало относительно научных работ: 2 патента на 9 895 публикаций"
-      ],
-      "contributions": {
-        "share_patent": 0.41341658927151465,
-        "growth_research": 0.010002942722896108,
-        "recency": 3.384046550725163,
-        "share_news_wordmatch": -1.1662859623403592,
-        "share_prev6": 0.20717930341418248,
-        "age_first_arxiv": 0.23934445072551777
-      },
-      "counters": {
-        "prev6": {
-          "arxiv": 0,
-          "openalex": 2,
-          "techcrunch": 1
-        },
-        "2020": {
-          "arxiv": 0,
-          "openalex": 1,
-          "techcrunch": 2
-        },
-        "2021": {
-          "arxiv": 0,
-          "openalex": 1,
-          "techcrunch": 4
-        },
-        "2022": {
-          "arxiv": 32,
-          "openalex": 15,
-          "techcrunch": 17
-        },
-        "2023": {
-          "arxiv": 565,
-          "openalex": 254,
-          "techcrunch": 39
-        },
-        "2024": {
-          "arxiv": 1671,
-          "openalex": 1253,
-          "techcrunch": 20
-        },
-        "2025": {
-          "arxiv": 2731,
-          "openalex": 3372,
-          "techcrunch": 17
-        }
-      },
-      "name_raw": "multimodal large language model",
-      "name_variants": [
-        {
-          "name": "multimodal large language model",
-          "n_works": 4920,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 4920,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "A Spatial Reasoning Multimodal Large Language Model for Robotic Assembly",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "sources": [
-        {
-          "title": "AssemLM: A Spatial Reasoning Multimodal Large Language Model for Robotic Assembly",
-          "url": "http://arxiv.org/abs/2604.08983v2",
-          "published_at": "2026-04-10",
-          "source": "arxiv",
-          "source_type": "preprint",
-          "language": "en",
-          "trust_level": "medium"
-        }
-      ],
-      "variants": [],
-      "n_pat": 2,
-      "share_patent": 0.0002020814388198444,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
       "rank": 8,
-      "name_ru": "Управление экзоскелетом на основе данных",
-      "name_en": "data driven exoskeleton control",
-      "score": 0.9542722889656367,
+      "name_ru": "Роботы-дюймовочки, активируемые светом, для подъёма по волокну",
+      "name_en": "light-actuated fiber-climbing inchworm robot",
+      "score": 0.971827027935035,
       "explanation_ru": [
         "Упоминания свежие: 100% за последние два года",
         "Патентов мало относительно научных работ: 0 патентов на 1 публикацию"
@@ -751,191 +770,6 @@
         "growth_research": 0.0022551762776763353,
         "recency": 3.9707850296615383,
         "share_news_wordmatch": -1.1984784126862773,
-        "share_prev6": -0.2951646585958946,
-        "age_first_arxiv": -0.23638258619926467
-      },
-      "counters": {
-        "prev6": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 2
-        },
-        "2020": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 0
-        },
-        "2021": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 0
-        },
-        "2022": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 0
-        },
-        "2023": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 0
-        },
-        "2024": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 0
-        },
-        "2025": {
-          "arxiv": 0,
-          "openalex": 1,
-          "techcrunch": 0
-        }
-      },
-      "name_raw": "data driven exoskeleton control",
-      "name_variants": [
-        {
-          "name": "data driven exoskeleton control",
-          "n_works": 1,
-          "n_institutions": 3,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 1,
-      "n_institutions": 3,
-      "n_institutions_capped": false,
-      "quote": "Synthetic Data-Driven Exoskeleton Control",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "sources": [
-        {
-          "title": "Synthetic Data-Driven Exoskeleton Control via Contralateral Gait Fusion for Variable-Speed Walking",
-          "url": "https://doi.org/10.3390/biomimetics11050319",
-          "published_at": "2026-05-03",
-          "source": "openalex",
-          "source_type": "paper",
-          "language": "en",
-          "trust_level": "high"
-        }
-      ],
-      "variants": [
-        {
-          "term_en": "data-driven exoskeletons",
-          "score": 0.8414004022665733
-        }
-      ],
-      "n_pat": 0,
-      "share_patent": 0.0,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "rank": 9,
-      "name_ru": "Автоматизированный роботизированный мониторинг влажности",
-      "name_en": "automated robotic moisture monitoring",
-      "score": 0.9398254111222781,
-      "explanation_ru": [
-        "Упоминания свежие: 50% за последние два года",
-        "Молодой термин: первый препринт 1 лет назад"
-      ],
-      "contributions": {
-        "share_patent": 0.41398113132491227,
-        "growth_research": -0.0003355531275802809,
-        "recency": 0.8181697831614623,
-        "share_news_wordmatch": 0.4264273891172799,
-        "share_prev6": 0.09971191648085684,
-        "age_first_arxiv": 0.6092404200285906
-      },
-      "counters": {
-        "prev6": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 1
-        },
-        "2020": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 0
-        },
-        "2021": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 1
-        },
-        "2022": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 0
-        },
-        "2023": {
-          "arxiv": 0,
-          "openalex": 1,
-          "techcrunch": 1
-        },
-        "2024": {
-          "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 0
-        },
-        "2025": {
-          "arxiv": 1,
-          "openalex": 1,
-          "techcrunch": 1
-        }
-      },
-      "name_raw": "automated robotic moisture monitoring",
-      "name_variants": [
-        {
-          "name": "automated robotic moisture monitoring",
-          "n_works": 2,
-          "n_institutions": 8,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 2,
-      "n_institutions": 8,
-      "n_institutions_capped": false,
-      "quote": "automated robotic moisture monitoring",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "sources": [
-        {
-          "title": "Automated Robotic Moisture Monitoring in Agricultural Fields",
-          "url": "http://arxiv.org/abs/2605.09050v1",
-          "published_at": "2026-05-09",
-          "source": "arxiv",
-          "source_type": "preprint",
-          "language": "en",
-          "trust_level": "medium"
-        }
-      ],
-      "variants": [],
-      "n_pat": 0,
-      "share_patent": 0.0,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "rank": 10,
-      "name_ru": "Бионическое искусственное сухожилие",
-      "name_en": "bionic artificial tendon",
-      "score": 0.9258474580255179,
-      "explanation_ru": [
-        "Упоминания свежие: 67% за последние два года",
-        "Патентов мало относительно научных работ: 0 патентов на 2 публикации"
-      ],
-      "contributions": {
-        "share_patent": 0.41398113132491227,
-        "growth_research": 0.00449852592927486,
-        "recency": 1.8690415319948206,
-        "share_news_wordmatch": -0.11520787815057237,
         "share_prev6": 0.20740552786542543,
         "age_first_arxiv": -0.23638258619926467
       },
@@ -953,7 +787,7 @@
         "2021": {
           "arxiv": 0,
           "openalex": 0,
-          "techcrunch": 1
+          "techcrunch": 0
         },
         "2022": {
           "arxiv": 0,
@@ -972,32 +806,32 @@
         },
         "2025": {
           "arxiv": 0,
-          "openalex": 2,
+          "openalex": 1,
           "techcrunch": 0
         }
       },
-      "name_raw": "bionic artificial tendon",
+      "name_raw": "light-actuated fiber-climbing inchworm robot",
       "name_variants": [
         {
-          "name": "bionic artificial tendon",
-          "n_works": 2,
-          "n_institutions": 6,
+          "name": "light-actuated fiber-climbing inchworm robot",
+          "n_works": 1,
+          "n_institutions": 2,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 2,
-      "n_institutions": 6,
+      "n_works": 1,
+      "n_institutions": 2,
       "n_institutions_capped": false,
-      "quote": "bionic artificial tendon for self–force-regulated artificial muscle–driven wearable robotics",
+      "quote": "Light‐Actuated Fiber‐Climbing Inchworm Robot Toward Endoluminal Navigation",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "sources": [
         {
-          "title": "Filament sensing tension: A bionic artificial tendon for self–force-regulated artificial muscle–driven wearable robotics",
-          "url": "https://doi.org/10.1126/sciadv.aea2709",
-          "published_at": "2026-04-08",
+          "title": "Light‐Actuated Fiber‐Climbing Inchworm Robot Toward Endoluminal Navigation",
+          "url": "https://doi.org/10.1002/adfm.75627",
+          "published_at": "2026-04-27",
           "source": "openalex",
           "source_type": "paper",
           "language": "en",
@@ -1013,7 +847,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "rank": 11,
+      "rank": 9,
       "name_ru": "Многоагентное взаимодействие",
       "name_en": "multi-agent collaboration",
       "score": 0.9171850476404506,
@@ -1070,20 +904,29 @@
       "name_variants": [
         {
           "name": "multi-agent collaboration",
-          "n_works": 2120,
+          "n_works": 2121,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 2120,
+      "n_works": 2121,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "multi-agent embodied systems hold promise for complex collaborative manipulation",
-      "n_docs": 1,
+      "quote": "Multi-agent embodied systems hold promise for complex collaborative manipulation",
+      "n_docs": 2,
       "n_sources": 1,
       "known_training_label": null,
       "sources": [
+        {
+          "title": "MA-VLA: Multi-Arm Vision-Language-Action Model for Collaboration and Compositional Generalization",
+          "url": "http://arxiv.org/abs/2608.25864v1",
+          "published_at": "2026-08-26",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        },
         {
           "title": "CoEnv: Driving Embodied Multi-Agent Collaboration via Compositional Environment",
           "url": "http://arxiv.org/abs/2604.05484v1",
@@ -1103,81 +946,81 @@
       "model_version": "s2a2-v1"
     },
     {
-      "rank": 12,
-      "name_ru": "Автоматизированная роботизированная подготовка",
-      "name_en": "automated robotic preparation",
-      "score": 0.8970385392807095,
+      "rank": 10,
+      "name_ru": "Механическая точная прополка",
+      "name_en": "mechanical precision weeding",
+      "score": 0.886067022992705,
       "explanation_ru": [
-        "Про технологию пока мало научных публикаций: 7",
-        "Молодой термин: первый препринт 1 лет назад"
+        "Упоминания свежие: 67% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 2 публикации"
       ],
       "contributions": {
         "share_patent": 0.41398113132491227,
-        "growth_research": 0.0032669924315817736,
-        "recency": -1.0733993647385833,
-        "share_news_wordmatch": 1.9175174190076032,
-        "share_prev6": -0.08711140936190734,
-        "age_first_arxiv": 0.6092404200285906
+        "growth_research": 0.0022551762776763353,
+        "recency": 1.8690415319948206,
+        "share_news_wordmatch": -0.11520787815057237,
+        "share_prev6": -0.26375402194206216,
+        "age_first_arxiv": -0.23638258619926467
       },
       "counters": {
         "prev6": {
           "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 109
+          "openalex": 1,
+          "techcrunch": 4
         },
         "2020": {
           "arxiv": 0,
           "openalex": 0,
-          "techcrunch": 43
+          "techcrunch": 1
         },
         "2021": {
           "arxiv": 0,
           "openalex": 0,
-          "techcrunch": 49
+          "techcrunch": 0
         },
         "2022": {
           "arxiv": 0,
-          "openalex": 1,
-          "techcrunch": 30
+          "openalex": 0,
+          "techcrunch": 0
         },
         "2023": {
           "arxiv": 0,
-          "openalex": 1,
-          "techcrunch": 12
+          "openalex": 0,
+          "techcrunch": 0
         },
         "2024": {
           "arxiv": 0,
-          "openalex": 0,
-          "techcrunch": 11
+          "openalex": 1,
+          "techcrunch": 0
         },
         "2025": {
-          "arxiv": 1,
-          "openalex": 4,
-          "techcrunch": 18
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
         }
       },
-      "name_raw": "automated robotic preparation",
+      "name_raw": "mechanical precision weeding",
       "name_variants": [
         {
-          "name": "automated robotic preparation",
-          "n_works": 6,
-          "n_institutions": 15,
+          "name": "mechanical precision weeding",
+          "n_works": 2,
+          "n_institutions": 4,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 6,
-      "n_institutions": 15,
+      "n_works": 2,
+      "n_institutions": 4,
       "n_institutions_capped": false,
-      "quote": "automated robotic preparation of 2D materials",
+      "quote": "Mechanical Precision Weeding with a Quadruped Robot",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "sources": [
         {
-          "title": "Advances and opportunities for automated robotic preparation of 2D materials and fabrication of 2D heterostructures",
-          "url": "http://arxiv.org/abs/2608.11485v1",
-          "published_at": "2026-08-11",
+          "title": "Mechanical Precision Weeding with a Quadruped Robot",
+          "url": "http://arxiv.org/abs/2609.20048v1",
+          "published_at": "2026-09-17",
           "source": "arxiv",
           "source_type": "preprint",
           "language": "en",
@@ -1193,90 +1036,279 @@
       "model_version": "s2a2-v1"
     },
     {
-      "rank": 13,
-      "name_ru": "Геопространственный анализ",
-      "name_en": "geospatial reasoning",
-      "score": 0.8950835225473355,
+      "rank": 11,
+      "name_ru": "Физический искусственный интеллект",
+      "name_en": "physical AI",
+      "score": 0.8824839148502163,
       "explanation_ru": [
-        "Упоминания свежие: 72% за последние два года",
-        "Патентов мало относительно научных работ: 5 патентов на 212 публикаций"
+        "Упоминания свежие: 59% за последние два года",
+        "Про технологию пока мало научных публикаций: 840"
       ],
       "contributions": {
-        "share_patent": 0.34961163014430974,
-        "growth_research": 0.00924197780246284,
-        "recency": 2.180740779530139,
-        "share_news_wordmatch": -0.867989097065215,
-        "share_prev6": 0.09815113950426888,
-        "age_first_arxiv": -0.0072528621431974805
+        "share_patent": -0.8458940859001356,
+        "growth_research": 0.014823125880644616,
+        "recency": 1.4086939420643916,
+        "share_news_wordmatch": 0.8812338565745118,
+        "share_prev6": 0.06001382318082103,
+        "age_first_arxiv": 0.11604579429116013
       },
       "counters": {
         "prev6": {
           "arxiv": 0,
-          "openalex": 26,
-          "techcrunch": 14
+          "openalex": 12,
+          "techcrunch": 555
         },
         "2020": {
-          "arxiv": 1,
-          "openalex": 9,
-          "techcrunch": 1
+          "arxiv": 0,
+          "openalex": 14,
+          "techcrunch": 184
         },
         "2021": {
-          "arxiv": 0,
-          "openalex": 10,
-          "techcrunch": 5
+          "arxiv": 2,
+          "openalex": 6,
+          "techcrunch": 187
         },
         "2022": {
-          "arxiv": 1,
-          "openalex": 11,
-          "techcrunch": 8
+          "arxiv": 0,
+          "openalex": 17,
+          "techcrunch": 225
         },
         "2023": {
-          "arxiv": 4,
-          "openalex": 13,
-          "techcrunch": 4
+          "arxiv": 3,
+          "openalex": 30,
+          "techcrunch": 280
         },
         "2024": {
-          "arxiv": 9,
-          "openalex": 21,
-          "techcrunch": 4
+          "arxiv": 23,
+          "openalex": 84,
+          "techcrunch": 270
         },
         "2025": {
-          "arxiv": 35,
-          "openalex": 98,
-          "techcrunch": 2
+          "arxiv": 132,
+          "openalex": 529,
+          "techcrunch": 347
         }
       },
-      "name_raw": "geospatial reasoning",
+      "name_raw": "physical AI",
       "name_variants": [
         {
-          "name": "geospatial reasoning",
-          "n_works": 162,
+          "name": "physical ai",
+          "n_works": 683,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 162,
+      "n_works": 683,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Geospatial Reasoning and Dynamic Planning",
-      "n_docs": 1,
+      "quote": "VC Eclipse has a new $1.3B fund to back — and build — ‘physical AI’ startups",
+      "n_docs": 2,
       "n_sources": 1,
       "known_training_label": null,
       "sources": [
         {
-          "title": "G-DRAGON: Geospatial Reasoning and Dynamic Planning for Retrieval-Augmented Outdoor Navigation",
-          "url": "http://arxiv.org/abs/2605.25646v1",
-          "published_at": "2026-05-25",
-          "source": "arxiv",
-          "source_type": "preprint",
+          "title": "BMW i Ventures has a new $300M fund and AI is riding shotgun",
+          "url": "https://techcrunch.com/2026/04/29/bmw-i-ventures-has-a-new-300m-fund-and-ai-is-riding-shotgun/",
+          "published_at": "2026-04-29",
+          "source": "techcrunch",
+          "source_type": "news",
+          "language": "en",
+          "trust_level": "medium"
+        },
+        {
+          "title": "VC Eclipse has a new $1.3B fund to back — and build — ‘physical AI’ startups",
+          "url": "https://techcrunch.com/2026/04/07/vc-eclipse-has-a-new-1-3b-to-back-and-build-physical-ai-startups/",
+          "published_at": "2026-04-07",
+          "source": "techcrunch",
+          "source_type": "news",
           "language": "en",
           "trust_level": "medium"
         }
       ],
       "variants": [],
-      "n_pat": 5,
-      "share_patent": 0.02304147465437788,
+      "n_pat": 690,
+      "share_patent": 0.45098039215686275,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 12,
+      "name_ru": "Биогибридные роботы с мышечным приводом",
+      "name_en": "muscle-driven biohybrid robots",
+      "score": 0.8774329334616193,
+      "explanation_ru": [
+        "Упоминания свежие: 75% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 4 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.41398113132491227,
+        "growth_research": 0.006090207837533367,
+        "recency": 2.3944774064115,
+        "share_news_wordmatch": -1.1984784126862773,
+        "share_prev6": 0.20740552786542543,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "muscle-driven biohybrid robots",
+      "name_variants": [
+        {
+          "name": "muscle-driven biohybrid robots",
+          "n_works": 4,
+          "n_institutions": 6,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4,
+      "n_institutions": 6,
+      "n_institutions_capped": false,
+      "quote": "Advances in muscle-driven biohybrid robots",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Advances in muscle-driven biohybrid robots: electrical, optical and neuromuscular junction-based stimulations",
+          "url": "https://doi.org/10.1098/rsfs.2025.0052",
+          "published_at": "2026-04-24",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 13,
+      "name_ru": "Интеллектуальная мягкая роботизированная одежда",
+      "name_en": "intelligent soft robotic clothing",
+      "score": 0.8714040055016008,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 2",
+        "Патентов мало относительно научных работ: 0 патентов на 2 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.41398113132491227,
+        "growth_research": 0.00449852592927486,
+        "recency": 0.3677961765185941,
+        "share_news_wordmatch": 1.122815589890233,
+        "share_prev6": -0.14052767814625775,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 6
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 1
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 1
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "intelligent soft robotic clothing",
+      "name_variants": [
+        {
+          "name": "intelligent soft robotic clothing",
+          "n_works": 2,
+          "n_institutions": 9,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 9,
+      "n_institutions_capped": false,
+      "quote": "Texoskeletons: Developing the Fundamental Technologies for Creating Intelligent Soft Robotic Clothing",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Texoskeletons: Developing the Fundamental Technologies for Creating Intelligent Soft Robotic Clothing With Integrated 1D Sensors and Actuators",
+          "url": "https://doi.org/10.1002/adfm.75714",
+          "published_at": "2026-05-06",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -1349,7 +1381,7 @@
       "n_works": 4,
       "n_institutions": 19,
       "n_institutions_capped": false,
-      "quote": "Multi-Tool Robotics",
+      "quote": "Multi-Tool Robotics Enables In-Situ Sample Manipulation",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1366,8 +1398,8 @@
       ],
       "variants": [
         {
-          "term_en": "multi-robot systems",
-          "score": 0.38546020255888275
+          "term_en": "multi-robotic systems",
+          "score": 0.39297545934621614
         }
       ],
       "n_pat": 0,
@@ -1379,87 +1411,92 @@
     },
     {
       "rank": 15,
-      "name_ru": "Активное ассистивное управление",
-      "name_en": "active assistive control",
-      "score": 0.8098403071543966,
+      "name_ru": "Роботическое управление на основе обучения",
+      "name_en": "learning-based robotic control",
+      "score": 0.7230748453504335,
       "explanation_ru": [
-        "Про технологию пока мало научных публикаций: 21",
-        "Патентов мало относительно научных работ: 0 патентов на 21 публикацию"
+        "Упоминания свежие: 60% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 76 публикаций"
       ],
       "contributions": {
         "share_patent": 0.41398113132491227,
-        "growth_research": 0.0015163763239161292,
-        "recency": -0.8864802144241739,
-        "share_news_wordmatch": 1.9088571080904624,
-        "share_prev6": -0.13376783300088788,
-        "age_first_arxiv": -0.23638258619926467
+        "growth_research": 0.005335450884513845,
+        "recency": 1.4486928324614774,
+        "share_news_wordmatch": -1.0359878325059213,
+        "share_prev6": 0.12364383012187208,
+        "age_first_arxiv": -0.3771488314462703
       },
       "counters": {
         "prev6": {
-          "arxiv": 0,
-          "openalex": 7,
-          "techcrunch": 389
+          "arxiv": 1,
+          "openalex": 3,
+          "techcrunch": 6
         },
         "2020": {
-          "arxiv": 0,
+          "arxiv": 2,
           "openalex": 1,
-          "techcrunch": 93
+          "techcrunch": 2
         },
         "2021": {
-          "arxiv": 0,
-          "openalex": 3,
-          "techcrunch": 107
+          "arxiv": 1,
+          "openalex": 6,
+          "techcrunch": 1
         },
         "2022": {
-          "arxiv": 0,
-          "openalex": 4,
-          "techcrunch": 94
+          "arxiv": 1,
+          "openalex": 8,
+          "techcrunch": 1
         },
         "2023": {
-          "arxiv": 0,
-          "openalex": 3,
-          "techcrunch": 64
+          "arxiv": 2,
+          "openalex": 7,
+          "techcrunch": 0
         },
         "2024": {
-          "arxiv": 0,
-          "openalex": 4,
-          "techcrunch": 55
+          "arxiv": 3,
+          "openalex": 9,
+          "techcrunch": 0
         },
         "2025": {
-          "arxiv": 0,
-          "openalex": 6,
-          "techcrunch": 45
+          "arxiv": 7,
+          "openalex": 29,
+          "techcrunch": 0
         }
       },
-      "name_raw": "active assistive control",
+      "name_raw": "learning-based robotic control",
       "name_variants": [
         {
-          "name": "active assistive control",
-          "n_works": 21,
-          "n_institutions": 42,
+          "name": "learning-based robotic control",
+          "n_works": 60,
+          "n_institutions": 57,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 21,
-      "n_institutions": 42,
+      "n_works": 60,
+      "n_institutions": 57,
       "n_institutions_capped": false,
-      "quote": "Active-Assistive Control Based on Dynamic Moving Window",
+      "quote": "Learning-Based Strategy for Composite Robot Assembly Skill Adaptation",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "sources": [
         {
-          "title": "Active-Assistive Control Based on Dynamic Moving Window for Trajectory Tracking of an Upper Limb Exoskeleton in Assisted Rehabilitation",
-          "url": "https://doi.org/10.3390/s26072160",
-          "published_at": "2026-03-31",
-          "source": "openalex",
-          "source_type": "paper",
+          "title": "Learning-Based Strategy for Composite Robot Assembly Skill Adaptation",
+          "url": "http://arxiv.org/abs/2604.06949v1",
+          "published_at": "2026-04-08",
+          "source": "arxiv",
+          "source_type": "preprint",
           "language": "en",
-          "trust_level": "high"
+          "trust_level": "medium"
         }
       ],
-      "variants": [],
+      "variants": [
+        {
+          "term_en": "deep learning control",
+          "score": 0.5251405610875551
+        }
+      ],
       "n_pat": 0,
       "share_patent": 0.0,
       "rospatent_failed": false,
@@ -1470,15 +1507,15 @@
   ],
   "excluded": [
     {
-      "name_ru": "автоматизированная роботизированная система производства",
-      "name_en": "automated robotic manufacturing system",
+      "name_ru": "локализация AMR с помощью UWB",
+      "name_en": "UWB localization for AMRs",
       "score": null,
       "skipped_reason": "no_trace",
       "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
-      "name_raw": "automated robotic manufacturing system",
+      "name_raw": "UWB localization for AMRs",
       "name_variants": [
         {
-          "name": "automated robotic manufacturing system",
+          "name": "uwb localization for amrs",
           "n_works": 0,
           "n_institutions": 0,
           "n_institutions_capped": false
@@ -1488,7 +1525,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "automated robotic manufacturing system",
+      "quote": "Deployment-Ready UWB Localization for Industrial Ground Robots",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1497,15 +1534,15 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "автоматизированная роботизированная постобработка",
-      "name_en": "automated robotic post processing",
+      "name_ru": "самосовершенствование политики роботизированных агентов",
+      "name_en": "agentic robot policy self-improvement",
       "score": null,
       "skipped_reason": "no_trace",
       "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
-      "name_raw": "automated robotic post processing",
+      "name_raw": "agentic robot policy self-improvement",
       "name_variants": [
         {
-          "name": "automated robotic post processing",
+          "name": "agentic robot policy self-improvement",
           "n_works": 0,
           "n_institutions": 0,
           "n_institutions_capped": false
@@ -1515,7 +1552,142 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "automated robotic post processing",
+      "quote": "ENPIRE: Agentic Robot Policy Self-Improvement in the Real World",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "агентский робототехнический цикл",
+      "name_en": "agentic robotics loop",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "agentic robotics loop",
+      "name_variants": [
+        {
+          "name": "agentic robotics loop",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "An Agentic Robotics Loop for Robot-Policy Improvement",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "искусственное восприятие с центральной ямкой",
+      "name_en": "artificial foveated perception",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "artificial foveated perception",
+      "name_variants": [
+        {
+          "name": "artificial foveated perception",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Artificial Foveated Perception",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "автоматизированная роботизированная швейная система",
+      "name_en": "automated robotic sewing",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "automated robotic sewing",
+      "name_variants": [
+        {
+          "name": "automated robotic sewing",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Automated Straight-line Sewing of Stretchable Fabrics with Different Lengths",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "автоматизированное распознавание сварных швов",
+      "name_en": "automated weld seam recognition",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "automated weld seam recognition",
+      "name_variants": [
+        {
+          "name": "automated weld seam recognition",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Automated Weld Seam Recognition",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "автономные промышленные роевые роботы",
+      "name_en": "autonomous industrial swarm robots",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "autonomous industrial swarm robots",
+      "name_variants": [
+        {
+          "name": "autonomous industrial swarm robots",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "autonomous industrial swarm robots",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1551,15 +1723,15 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "двухрукая роботизированная ячейка",
-      "name_en": "dual-arm robotic cell",
+      "name_ru": "распределённое многопокрытие",
+      "name_en": "distributed multi-coverage",
       "score": null,
       "skipped_reason": "no_trace",
       "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
-      "name_raw": "dual-arm robotic cell",
+      "name_raw": "distributed multi-coverage",
       "name_variants": [
         {
-          "name": "dual-arm robotic cell",
+          "name": "distributed multi-coverage",
           "n_works": 0,
           "n_institutions": 0,
           "n_institutions_capped": false
@@ -1569,7 +1741,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "modular dual-arm robotic cell for repair-oriented disassembly",
+      "quote": "Distributed Multi-Coverage for Robot Swarms",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1578,7 +1750,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "восприятие окружающей среды двухруким роботом",
+      "name_ru": "восприятие окружающей среды двуруким роботом",
       "name_en": "dual-arm robotic perception",
       "score": null,
       "skipped_reason": "no_trace",
@@ -1605,6 +1777,33 @@
       "model_version": "s2a2-v1"
     },
     {
+      "name_ru": "ячейка для производства стали с двумя роботами",
+      "name_en": "dual-robot steel fabrication cell",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "dual-robot steel fabrication cell",
+      "name_variants": [
+        {
+          "name": "dual-robot steel fabrication cell",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "dual-robot fabrication cell",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
       "name_ru": "динамическое многоагентное сотрудничество",
       "name_en": "dynamic multi-agent cooperation",
       "score": null,
@@ -1623,7 +1822,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "dynamic multi-agent cooperation for sample-efficient bimanual manipulation",
+      "quote": "Dynamic Multi-Agent Cooperation for Sample-Efficient Bimanual Manipulation",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1632,7 +1831,34 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "передовые визуальные модели",
+      "name_ru": "оценка смещения на основе силы",
+      "name_en": "force-based offset estimation",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "force-based offset estimation",
+      "name_variants": [
+        {
+          "name": "force-based offset estimation",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Force-Based Offset Estimation for Keyed Peg-in-Hole Assembly",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "передовые модели компьютерного зрения",
       "name_en": "frontier vision models",
       "score": null,
       "skipped_reason": "no_trace",
@@ -1650,7 +1876,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "frontier vision models that aim to help machines more competently interact with their physical environments",
+      "quote": "the firm develops frontier vision models that aim to help machines more competently interact with their physical environments",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1659,15 +1885,15 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "сборка с посадкой в паз с ключом",
-      "name_en": "keyed peg-in-hole assembly",
+      "name_ru": "обученная роботизированная автоматизация",
+      "name_en": "learning-augmented robotic automation",
       "score": null,
       "skipped_reason": "no_trace",
       "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
-      "name_raw": "keyed peg-in-hole assembly",
+      "name_raw": "learning-augmented robotic automation",
       "name_variants": [
         {
-          "name": "keyed peg-in-hole assembly",
+          "name": "learning-augmented robotic automation",
           "n_works": 0,
           "n_institutions": 0,
           "n_institutions_capped": false
@@ -1677,7 +1903,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "force-based offset estimation for keyed peg-in-hole assembly",
+      "quote": "Learning-augmented robotic automation for real-world manufacturing",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1686,7 +1912,34 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "модульный двухрукий роботизированный комплекс",
+      "name_ru": "робот-гусеница, активируемый светом",
+      "name_en": "light-actuated inchworm robot",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "light-actuated inchworm robot",
+      "name_variants": [
+        {
+          "name": "light-actuated inchworm robot",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Light‐Actuated Fiber‐Climbing Inchworm Robot",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "модульный двухрукий роботизированный модуль",
       "name_en": "modular dual-arm robotic cell",
       "score": null,
       "skipped_reason": "no_trace",
@@ -1704,7 +1957,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "modular dual-arm robotic cell for repair-oriented disassembly",
+      "quote": "A Modular Dual-Arm Robotic Cell for Disassembly and Repair",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1713,7 +1966,34 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "система телеуправления многоруким роботом",
+      "name_ru": "модульная система фиксации на основе вакуума",
+      "name_en": "modular vacuum-based fixturing system",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "modular vacuum-based fixturing system",
+      "name_variants": [
+        {
+          "name": "modular vacuum-based fixturing system",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "a modular vacuum-based fixturing system",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "система телеуправления многорукими роботами",
       "name_en": "multi-arm teleoperation system",
       "score": null,
       "skipped_reason": "no_trace",
@@ -1731,7 +2011,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "effective multi-arm teleoperation system",
+      "quote": "multi-arm teleoperation system",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1758,7 +2038,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "Multi-arm Vision-Language-Action Model",
+      "quote": "Multi-Arm Vision-Language-Action Model for Collaboration",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1767,15 +2047,15 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "адаптация навыков роботизированной сборки",
-      "name_en": "robotic assembly skill adaptation",
+      "name_ru": "манипуляция многопотоковым роботом",
+      "name_en": "multi-stream robot manipulation",
       "score": null,
       "skipped_reason": "no_trace",
       "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
-      "name_raw": "robotic assembly skill adaptation",
+      "name_raw": "multi-stream robot manipulation",
       "name_variants": [
         {
-          "name": "robotic assembly skill adaptation",
+          "name": "multi-stream robot manipulation",
           "n_works": 0,
           "n_institutions": 0,
           "n_institutions_capped": false
@@ -1785,7 +2065,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "Composite Robot Assembly Skill Adaptation",
+      "quote": "multi-stream robot manipulation policies",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1794,15 +2074,15 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "роботизированная платформа для переработки",
-      "name_en": "robotic recycling platform",
+      "name_ru": "нейронные модели динамики роботов",
+      "name_en": "neural robot dynamic models",
       "score": null,
       "skipped_reason": "no_trace",
       "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
-      "name_raw": "robotic recycling platform",
+      "name_raw": "neural robot dynamic models",
       "name_variants": [
         {
-          "name": "robotic recycling platform",
+          "name": "neural robot dynamic models",
           "n_works": 0,
           "n_institutions": 0,
           "n_institutions_capped": false
@@ -1812,7 +2092,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "autonomous dual-arm robotic recycling platform",
+      "quote": "Neural Robot Dynamics on the Fly for Predictive Control",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1821,15 +2101,15 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "навигация по подписанным расстояниям",
-      "name_en": "signed-distance navigation",
+      "name_ru": "всенаправленный ходячий вспомогательный робот",
+      "name_en": "omnidirectional walking assistive robot",
       "score": null,
       "skipped_reason": "no_trace",
       "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
-      "name_raw": "signed-distance navigation",
+      "name_raw": "omnidirectional walking assistive robot",
       "name_variants": [
         {
-          "name": "signed-distance navigation",
+          "name": "omnidirectional walking assistive robot",
           "n_works": 0,
           "n_institutions": 0,
           "n_institutions_capped": false
@@ -1839,7 +2119,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "Exact Signed-Distance Navigation",
+      "quote": "Omnidirectional Walking Assistive Robot",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1848,15 +2128,15 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "унифицированное планирование движений в реальном времени",
-      "name_en": "unified real-time motion planning",
+      "name_ru": "физически согласованная оценка движения робота",
+      "name_en": "physically-consistent robotic motion estimation",
       "score": null,
       "skipped_reason": "no_trace",
       "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
-      "name_raw": "unified real-time motion planning",
+      "name_raw": "physically-consistent robotic motion estimation",
       "name_variants": [
         {
-          "name": "unified real-time motion planning",
+          "name": "physically-consistent robotic motion estimation",
           "n_works": 0,
           "n_institutions": 0,
           "n_institutions_capped": false
@@ -1866,7 +2146,88 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "Unified Real-Time Low-Level Motion Planning for Collaborative Arms",
+      "quote": "Physically-consistent Robotic Inertial and Motion Estimation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "роботизированная рука со спектральным сенсором",
+      "name_en": "spectral sensing robotic arm",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "spectral sensing robotic arm",
+      "name_variants": [
+        {
+          "name": "spectral sensing robotic arm",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Robotic Arm-Based Spectral Sensing",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "телеуправляемое эндоваскулярное вмешательство",
+      "name_en": "teleoperated endovascular intervention",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "teleoperated endovascular intervention",
+      "name_variants": [
+        {
+          "name": "teleoperated endovascular intervention",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Remote Teleoperation of Endovascular Intervention Robots: A Systematic Review",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "калибровка роботизированной ультразвуковой системы без использования трекеров",
+      "name_en": "tracker-free robotic ultrasound calibration",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "tracker-free robotic ultrasound calibration",
+      "name_variants": [
+        {
+          "name": "tracker-free robotic ultrasound calibration",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Tracker-Free Robotic Ultrasound Calibration",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1893,7 +2254,7 @@
       "n_works": 0,
       "n_institutions": 0,
       "n_institutions_capped": false,
-      "quote": "a fully low-cost, modular robotic manipulation platform designed to support end-to-end vision-language-action (VLA) policy learning",
+      "quote": "vision-language-action (VLA) policy learning and deployment",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1902,25 +2263,160 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "распознавание места по точечному облаку",
-      "name_en": "point cloud place recognition",
+      "name_ru": "профессиональные экзоскелеты",
+      "name_en": "occupational exoskeletons",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "point cloud place recognition",
+      "name_raw": "occupational exoskeletons",
       "name_variants": [
         {
-          "name": "point cloud place recognition",
-          "n_works": 30,
-          "n_institutions": 59,
+          "name": "occupational exoskeletons",
+          "n_works": 368,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 368,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "occupational exoskeletons",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "пассивные экзоскелеты",
+      "name_en": "passive exoskeletons",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "passive exoskeletons",
+      "name_variants": [
+        {
+          "name": "passive exoskeletons",
+          "n_works": 986,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 986,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Passive exoskeletons in construction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "пассивное управление силой",
+      "name_en": "passive force control",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "passive force control",
+      "name_variants": [
+        {
+          "name": "passive force control",
+          "n_works": 65,
+          "n_institutions": 129,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 30,
-      "n_institutions": 59,
+      "n_works": 65,
+      "n_institutions": 129,
       "n_institutions_capped": false,
-      "quote": "LifelongPR: Lifelong Point Cloud Place Recognition Based on Sample Replay and Prompt Learning",
+      "quote": "Vibration Suppression in Collaborative Flexible Payload Manipulation Using Passive Force Control",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "планирование пути",
+      "name_en": "path planning",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "path planning",
+      "name_variants": [
+        {
+          "name": "path planning",
+          "n_works": 51408,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 51408,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "mobile robot path planning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "алгоритм планирования пути",
+      "name_en": "path planning algorithm",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "path planning algorithm",
+      "name_variants": [
+        {
+          "name": "path planning algorithm",
+          "n_works": 10059,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10059,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "integrated path planning algorithm for autonomous mobile robots",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "физические ассистивные роботы",
+      "name_en": "physical assistant robots",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "physical assistant robots",
+      "name_variants": [
+        {
+          "name": "physical assistant robots",
+          "n_works": 78,
+          "n_institutions": 152,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 78,
+      "n_institutions": 152,
+      "n_institutions_capped": false,
+      "quote": "Definitional ambiguities in physical assistant robots",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1947,7 +2443,7 @@
       "n_works": 2,
       "n_institutions": 5,
       "n_institutions_capped": false,
-      "quote": "rapid instrument exchange system for humanoid robots",
+      "quote": "A Rapid Instrument Exchange System for Humanoid Robots",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1965,16 +2461,70 @@
       "name_variants": [
         {
           "name": "reinforcement learning",
-          "n_works": 211488,
+          "n_works": 211528,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 211488,
+      "n_works": 211528,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Demonstration Generation for High-Quality Robot Learning via Reinforcement Learning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "алгоритмы обучения с подкреплением",
+      "name_en": "reinforcement learning algorithms",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "reinforcement learning algorithms",
+      "name_variants": [
+        {
+          "name": "reinforcement learning algorithms",
+          "n_works": 21240,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 21240,
       "n_institutions": 200,
       "n_institutions_capped": true,
       "quote": "development and application of reinforcement learning algorithms",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "управление роботами",
+      "name_en": "robot control",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "robot control",
+      "name_variants": [
+        {
+          "name": "robot control",
+          "n_works": 22244,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 22244,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "PointAction: 3D Points as Universal Action Representations for Robot Control",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -1992,13 +2542,13 @@
       "name_variants": [
         {
           "name": "robot operating system",
-          "n_works": 7727,
+          "n_works": 7735,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 7727,
+      "n_works": 7735,
       "n_institutions": 200,
       "n_institutions_capped": true,
       "quote": "Robot Operating System (ROS) 2",
@@ -2010,25 +2560,52 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "производство с использованием роя роботов",
-      "name_en": "robot swarm manufacturing",
+      "name_ru": "роботизированная лапароскопическая хирургия",
+      "name_en": "robot-assisted laparoscopic surgery",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robot swarm manufacturing",
+      "name_raw": "robot-assisted laparoscopic surgery",
       "name_variants": [
         {
-          "name": "robot swarm manufacturing",
-          "n_works": 2,
-          "n_institutions": 2,
+          "name": "robot-assisted laparoscopic surgery",
+          "n_works": 1663,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1663,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Comparison of robot-assisted and laparoscopic pyeloplasty for primary pediatric ureteropelvic junction obstruction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "улучшение политики робота",
+      "name_en": "robot-policy improvement",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "robot-policy improvement",
+      "name_variants": [
+        {
+          "name": "robot-policy improvement",
+          "n_works": 14,
+          "n_institutions": 24,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 2,
-      "n_institutions": 2,
+      "n_works": 14,
+      "n_institutions": 24,
       "n_institutions_capped": false,
-      "quote": "A Non-Sorted Metaheuristic Method for the Multi-Objective Job-Flow-Shop Scheduling Problem in Conflict-Free Robot Swarm Manufacturing",
+      "quote": "Robot-Policy Improvement",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2046,16 +2623,16 @@
       "name_variants": [
         {
           "name": "robotic arms",
-          "n_works": 15233,
+          "n_works": 15236,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 15233,
+      "n_works": 15236,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "robotic arm",
+      "quote": "Desktop Collaborative Robotic Arms in Education: Examining the Gaps Between Manufacturer Promises and Classroom Reality",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2064,25 +2641,25 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "роботизированная сборка",
-      "name_en": "robotic assembly",
+      "name_ru": "роботизированная автоматизация",
+      "name_en": "robotic automation",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotic assembly",
+      "name_raw": "robotic automation",
       "name_variants": [
         {
-          "name": "robotic assembly",
-          "n_works": 3227,
+          "name": "robotic automation",
+          "n_works": 11611,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 3227,
+      "n_works": 11611,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Robotic Assembly",
+      "quote": "Learning-augmented robotic automation for real-world manufacturing",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2091,25 +2668,25 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "роботизация автоматизации на складах",
-      "name_en": "robotic automation in warehouses",
+      "name_ru": "роботизированное биоцементационное напыление",
+      "name_en": "robotic biocementation spraying",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotic automation in warehouses",
+      "name_raw": "robotic biocementation spraying",
       "name_variants": [
         {
-          "name": "robotic automation in warehouses",
-          "n_works": 14,
-          "n_institutions": 23,
+          "name": "robotic biocementation spraying",
+          "n_works": 2,
+          "n_institutions": 3,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 14,
-      "n_institutions": 23,
+      "n_works": 2,
+      "n_institutions": 3,
       "n_institutions_capped": false,
-      "quote": "FedEx has dabbled with both strategies. And the $84 billion company has landed on partnerships with robotics companies",
+      "quote": "Robotic Biocementation Spraying: a bioinspired fabrication method",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2118,106 +2695,106 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "роботизированное биопечать",
-      "name_en": "robotic bioprinting",
+      "name_ru": "роботизированная ячейка",
+      "name_en": "robotic cell",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotic bioprinting",
+      "name_raw": "robotic cell",
       "name_variants": [
         {
-          "name": "robotic bioprinting",
-          "n_works": 48,
-          "n_institutions": 116,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 48,
-      "n_institutions": 116,
-      "n_institutions_capped": false,
-      "quote": "robotic bioprinting and Direct Ink Writing (DIW)",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "name_ru_source": "extract",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "роботизированные системы складского хранения",
-      "name_en": "robotic cellular warehousing systems",
-      "score": null,
-      "skipped_reason": "cap",
-      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotic cellular warehousing systems",
-      "name_variants": [
-        {
-          "name": "robotic cellular warehousing systems",
-          "n_works": 9,
-          "n_institutions": 22,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 9,
-      "n_institutions": 22,
-      "n_institutions_capped": false,
-      "quote": "Robotic Cellular Warehousing Systems",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "name_ru_source": "extract",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "роботизированное приготовление пищи",
-      "name_en": "robotic cooking",
-      "score": null,
-      "skipped_reason": "cap",
-      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotic cooking",
-      "name_variants": [
-        {
-          "name": "robotic cooking",
-          "n_works": 74,
-          "n_institutions": 105,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 74,
-      "n_institutions": 105,
-      "n_institutions_capped": false,
-      "quote": "Chef Robotics CEO Rajat Bhageria likes to tell people — correctly — that his industry is a veritable startup graveyard",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "name_ru_source": "extract",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "роботизированная разборка",
-      "name_en": "robotic disassembly",
-      "score": null,
-      "skipped_reason": "cap",
-      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotic disassembly",
-      "name_variants": [
-        {
-          "name": "robotic disassembly",
-          "n_works": 552,
+          "name": "robotic cell",
+          "n_works": 2064,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 552,
+      "n_works": 2064,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "robotic disassembly of irregularly shaped products",
+      "quote": "a ROS-Based Robotic Cell",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "фундаментальные модели роботов",
+      "name_en": "robotic foundation models",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "robotic foundation models",
+      "name_variants": [
+        {
+          "name": "robotic foundation models",
+          "n_works": 70,
+          "n_institutions": 140,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 70,
+      "n_institutions": 140,
+      "n_institutions_capped": false,
+      "quote": "Artificial Foveated Perception for Mitigating Shortcut Learning in Robotic Foundation Models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "роботизированная шлифовка",
+      "name_en": "robotic grinding",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "robotic grinding",
+      "name_variants": [
+        {
+          "name": "robotic grinding",
+          "n_works": 597,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 597,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "robotic grinding technology",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "технология роботизированной шлифовки",
+      "name_en": "robotic grinding technology",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "robotic grinding technology",
+      "name_variants": [
+        {
+          "name": "robotic grinding technology",
+          "n_works": 19,
+          "n_institutions": 27,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 19,
+      "n_institutions": 27,
+      "n_institutions_capped": false,
+      "quote": "A Comprehensive Review of Robotic Grinding Technology",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2253,52 +2830,25 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "платформа роботизированного мониторинга",
-      "name_en": "robotic monitoring platform",
+      "name_ru": "роботизированный мониторинг влажности",
+      "name_en": "robotic moisture monitoring",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotic monitoring platform",
+      "name_raw": "robotic moisture monitoring",
       "name_variants": [
         {
-          "name": "robotic monitoring platform",
-          "n_works": 8,
-          "n_institutions": 22,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 8,
-      "n_institutions": 22,
-      "n_institutions_capped": false,
-      "quote": "Sustainable Automation of Monitoring and Production Accounting in Greenhouse Complexes Using Integrated AI, Robotics, and Data Systems",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "name_ru_source": "extract",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "роботизированный синтез наночастиц",
-      "name_en": "robotic nanoparticle synthesis",
-      "score": null,
-      "skipped_reason": "cap",
-      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotic nanoparticle synthesis",
-      "name_variants": [
-        {
-          "name": "robotic nanoparticle synthesis",
+          "name": "robotic moisture monitoring",
           "n_works": 2,
-          "n_institutions": 2,
+          "n_institutions": 8,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
       "n_works": 2,
-      "n_institutions": 2,
+      "n_institutions": 8,
       "n_institutions_capped": false,
-      "quote": "robotic nanoparticle synthesis",
+      "quote": "Automated Robotic Moisture Monitoring",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2307,25 +2857,52 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "роботизированная швейная система",
-      "name_en": "robotic sewing system",
+      "name_ru": "позиционирование роботов",
+      "name_en": "robotic positioning",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotic sewing system",
+      "name_raw": "robotic positioning",
       "name_variants": [
         {
-          "name": "robotic sewing system",
-          "n_works": 10,
-          "n_institutions": 17,
+          "name": "robotic positioning",
+          "n_works": 4696,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4696,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "robotic positioning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "роботизированная герметизация",
+      "name_en": "robotic sealing",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "robotic sealing",
+      "name_variants": [
+        {
+          "name": "robotic sealing",
+          "n_works": 30,
+          "n_institutions": 36,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 10,
-      "n_institutions": 17,
+      "n_works": 30,
+      "n_institutions": 36,
       "n_institutions_capped": false,
-      "quote": "robotic sewing system",
+      "quote": "data analysis and digital technologies related to intelligent robotic sealing process",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2334,7 +2911,61 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "калибровка роботизированного ультразвукового оборудования",
+      "name_ru": "роботизированная хирургия",
+      "name_en": "robotic surgery",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "robotic surgery",
+      "name_variants": [
+        {
+          "name": "robotic surgery",
+          "n_works": 28888,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 28888,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Robotic versus Open Pancreatoduodenectomy",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "роботизированное ультразвуковое исследование",
+      "name_en": "robotic ultrasound",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "robotic ultrasound",
+      "name_variants": [
+        {
+          "name": "robotic ultrasound",
+          "n_works": 648,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 648,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "robotic ultrasound acquisition system",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "калибровка роботизированного ультразвука",
       "name_en": "robotic ultrasound calibration",
       "score": null,
       "skipped_reason": "cap",
@@ -2352,7 +2983,7 @@
       "n_works": 9,
       "n_institutions": 21,
       "n_institutions_capped": false,
-      "quote": "robotic ultrasound (US) calibration",
+      "quote": "Robotic Ultrasound Calibration",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2361,25 +2992,52 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "робототехника для рыбоводства",
-      "name_en": "robotics for fish farming",
+      "name_ru": "роботизированная прополка",
+      "name_en": "robotic weeding",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "robotics for fish farming",
+      "name_raw": "robotic weeding",
       "name_variants": [
         {
-          "name": "robotics for fish farming",
-          "n_works": 3,
-          "n_institutions": 3,
+          "name": "robotic weeding",
+          "n_works": 893,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 893,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "A Review of Robotic Weeding Modalities for Site-Specific Weed Management",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "роботизированная ячейка на базе ROS",
+      "name_en": "ros-based robotic cell",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "ros-based robotic cell",
+      "name_variants": [
+        {
+          "name": "ros-based robotic cell",
+          "n_works": 1,
+          "n_institutions": 2,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 3,
-      "n_institutions": 3,
+      "n_works": 1,
+      "n_institutions": 2,
       "n_institutions_capped": false,
-      "quote": "Shinkei Systems founder Saif Khawaja and Founders Fund partner Delian Asparouhov",
+      "quote": "ROS-Based Robotic Cell",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2388,7 +3046,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "моделирование рабочего пространства с учетом безопасности",
+      "name_ru": "моделирование рабочего пространства с учётом безопасности",
       "name_en": "safety-aware workspace modeling",
       "score": null,
       "skipped_reason": "cap",
@@ -2406,7 +3064,7 @@
       "n_works": 1,
       "n_institutions": 1,
       "n_institutions_capped": false,
-      "quote": "Safety-Aware Workspace Modeling in Collaborative Robotic Systems",
+      "quote": "A Late-Fusion Multimodal Approach for Safety-Aware Workspace Modeling in Collaborative Robotic Systems",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2415,25 +3073,25 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "самоконфигурируемые модульные роботизированные лодки",
-      "name_en": "self-reconfiguring modular robotic boats",
+      "name_ru": "самоконфигурируемый экзоскелет",
+      "name_en": "self-reconfigurable exoskeleton",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "self-reconfiguring modular robotic boats",
+      "name_raw": "self-reconfigurable exoskeleton",
       "name_variants": [
         {
-          "name": "self-reconfiguring modular robotic boats",
-          "n_works": 2,
-          "n_institutions": 4,
+          "name": "self-reconfigurable exoskeleton",
+          "n_works": 1,
+          "n_institutions": 1,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 2,
-      "n_institutions": 4,
+      "n_works": 1,
+      "n_institutions": 1,
       "n_institutions_capped": false,
-      "quote": "Self-reconfiguring modular robotic boats",
+      "quote": "self-reconfigurable parallel ankle rehabilitation",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2460,7 +3118,7 @@
       "n_works": 37,
       "n_institutions": 69,
       "n_institutions_capped": false,
-      "quote": "shared autonomy systems combine user input with autonomous assistance",
+      "quote": "Shared autonomy systems combine user input with autonomous assistance",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2469,7 +3127,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "экзоскелет для поддержки плеч",
+      "name_ru": "плечевой вспомогательный экзоскелет",
       "name_en": "shoulder assistive exoskeleton",
       "score": null,
       "skipped_reason": "cap",
@@ -2487,7 +3145,7 @@
       "n_works": 24,
       "n_institutions": 50,
       "n_institutions_capped": false,
-      "quote": "Shoulder Assistive Exoskeleton for Insulator Replacement",
+      "quote": "upper-limb exoskeleton",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2496,52 +3154,25 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "одновременная локализация и построение карты",
-      "name_en": "simultaneous localization and mapping",
+      "name_ru": "мягкие коллоидные роботы",
+      "name_en": "soft colloidal robots",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "simultaneous localization and mapping",
+      "name_raw": "soft colloidal robots",
       "name_variants": [
         {
-          "name": "simultaneous localization and mapping",
-          "n_works": 10979,
-          "n_institutions": 200,
-          "n_institutions_capped": true
+          "name": "soft colloidal robots",
+          "n_works": 2,
+          "n_institutions": 10,
+          "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 10979,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "Event-based Simultaneous Localization and Mapping",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "name_ru_source": "extract",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "небольшие языковые модели",
-      "name_en": "small language models",
-      "score": null,
-      "skipped_reason": "cap",
-      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "small language models",
-      "name_variants": [
-        {
-          "name": "small language models",
-          "n_works": 2353,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 2353,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "deploying fine-tuned small language models (SLMs)",
+      "n_works": 2,
+      "n_institutions": 10,
+      "n_institutions_capped": false,
+      "quote": "Soft Colloidal Robots: Magnetically Guided Liquid Crystal Torons",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2577,25 +3208,25 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "мягкая роботизированная перчатка",
-      "name_en": "soft robotic glove",
+      "name_ru": "хирургический роботизированный инструмент",
+      "name_en": "surgical robotic instrument",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "soft robotic glove",
+      "name_raw": "surgical robotic instrument",
       "name_variants": [
         {
-          "name": "soft robotic glove",
-          "n_works": 778,
-          "n_institutions": 200,
-          "n_institutions_capped": true
+          "name": "surgical robotic instrument",
+          "n_works": 59,
+          "n_institutions": 116,
+          "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 778,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "A Portable Soft Robotic Glove",
+      "n_works": 59,
+      "n_institutions": 116,
+      "n_institutions_capped": false,
+      "quote": "Control Architecture and experimental validation of a Novel Surgical Robotic Instrument",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2604,52 +3235,25 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "стерео восприятие",
-      "name_en": "stereo perception",
+      "name_ru": "управление экзоскелетом на основе синтетических данных",
+      "name_en": "synthetic data-driven exoskeleton control",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "stereo perception",
+      "name_raw": "synthetic data-driven exoskeleton control",
       "name_variants": [
         {
-          "name": "stereo perception",
-          "n_works": 113,
-          "n_institutions": 200,
-          "n_institutions_capped": true
+          "name": "synthetic data-driven exoskeleton control",
+          "n_works": 1,
+          "n_institutions": 3,
+          "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 113,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "Improving Robotic Manipulation Policies via Stereo Perception",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "name_ru_source": "extract",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "хирургические роботизированные системы",
-      "name_en": "surgical robotic systems",
-      "score": null,
-      "skipped_reason": "cap",
-      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "surgical robotic systems",
-      "name_variants": [
-        {
-          "name": "surgical robotic systems",
-          "n_works": 1786,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 1786,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "Evolving surgical teams in the age of artificial intelligence and robotics",
+      "n_works": 1,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "synthetic data-driven exoskeleton control",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2667,16 +3271,16 @@
       "name_variants": [
         {
           "name": "terrestrial laser scanning",
-          "n_works": 9624,
+          "n_works": 9626,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 9624,
+      "n_works": 9626,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "terrestrial laser scanning (TLS) in plant breeding trials",
+      "quote": "terrestrial laser scanning (TLS)",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2685,25 +3289,25 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "экзоскелет верхних конечностей",
-      "name_en": "upper limb exoskeleton",
+      "name_ru": "планирование траектории",
+      "name_en": "trajectory planning",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "upper limb exoskeleton",
+      "name_raw": "trajectory planning",
       "name_variants": [
         {
-          "name": "upper limb exoskeleton",
-          "n_works": 1852,
+          "name": "trajectory planning",
+          "n_works": 21587,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 1852,
+      "n_works": 21587,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "design of an upper-limb exoskeleton",
+      "quote": "A novel hybrid intelligent optimization strategy for multi-objective trajectory planning of robotic arms in precision assembly scenarios",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2712,7 +3316,7 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "подавление вибрации",
+      "name_ru": "подавление вибраций",
       "name_en": "vibration suppression",
       "score": null,
       "skipped_reason": "cap",
@@ -2721,16 +3325,16 @@
       "name_variants": [
         {
           "name": "vibration suppression",
-          "n_works": 8433,
+          "n_works": 8438,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 8433,
+      "n_works": 8438,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "vibration suppression in physical robot interaction",
+      "quote": "vibration suppression",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2739,25 +3343,25 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "визуальное восприятие",
-      "name_en": "visual perception",
+      "name_ru": "визуальный искусственный интеллект",
+      "name_en": "visual AI",
       "score": null,
       "skipped_reason": "cap",
       "reason_ru": "Не оценён: превышен лимит числа кандидатов",
-      "name_raw": "visual perception",
+      "name_raw": "visual AI",
       "name_variants": [
         {
-          "name": "visual perception",
-          "n_works": 62177,
+          "name": "visual ai",
+          "n_works": 868,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 62177,
+      "n_works": 868,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Intelligent robot systems: a survey from the perspective of visual intelligence",
+      "quote": "Ex-Meta scientists want to bring visual AI to the factory floor",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2766,156 +3370,58 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "экзоскелеты на основе данных",
-      "name_en": "data-driven exoskeletons",
-      "score": 0.8414004022665733,
-      "skipped_reason": "duplicate_of",
-      "reason_ru": "Дубль: тот же класс технологий, что «data driven exoskeleton control», — показан вариантом названия",
-      "name_raw": "data-driven exoskeletons",
+      "name_ru": "визуальная локализация контакта",
+      "name_en": "visual contact localization",
+      "score": null,
+      "skipped_reason": "cap",
+      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
+      "name_raw": "visual contact localization",
       "name_variants": [
         {
-          "name": "data-driven exoskeletons",
-          "n_works": 4,
-          "n_institutions": 13,
+          "name": "visual contact localization",
+          "n_works": 1,
+          "n_institutions": 1,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 4,
-      "n_institutions": 13,
+      "n_works": 1,
+      "n_institutions": 1,
       "n_institutions_capped": false,
-      "quote": "data-driven exoskeletons offer the potential for adaptive augmentation",
+      "quote": "Visual Contact Localization and Force Sensing System",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
-      "duplicate_of": "data driven exoskeleton control",
-      "variants": [],
-      "n_pat": 0,
-      "share_patent": 0.0,
-      "rospatent_failed": false,
       "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Управление на основе глубокого обучения",
-      "name_en": "deep learning based control",
-      "score": 0.7456604725842706,
+      "name_ru": "Роботы-помощники для дома",
+      "name_en": "home assistance robot",
+      "score": 0.7185099224580108,
       "skipped_reason": "beyond_top",
       "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "deep learning based control",
+      "name_raw": "home assistance robot",
       "name_variants": [
         {
-          "name": "deep learning based control",
-          "n_works": 146,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 146,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "Deep Learning-Based Control Framework for Exoskeleton Robots",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 10,
-      "share_patent": 0.06097560975609756,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Сельскохозяйственные роботизированные данные",
-      "name_en": "agricultural robotic data",
-      "score": 0.7417153780344958,
-      "skipped_reason": "beyond_top",
-      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "agricultural robotic data",
-      "name_variants": [
-        {
-          "name": "agricultural robotic data",
-          "n_works": 10,
-          "n_institutions": 21,
+          "name": "home assistance robot",
+          "n_works": 16,
+          "n_institutions": 35,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 10,
-      "n_institutions": 21,
+      "n_works": 16,
+      "n_institutions": 35,
       "n_institutions_capped": false,
-      "quote": "agricultural robotic data",
+      "quote": "Hello Robot designed its home-assistance robot, Stretch",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "variants": [],
-      "n_pat": 0,
-      "share_patent": 0.0,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Система телеуправления с использованием VR",
-      "name_en": "VR teleoperation system",
-      "score": 0.7341951717594484,
-      "skipped_reason": "beyond_top",
-      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "VR teleoperation system",
-      "name_variants": [
-        {
-          "name": "vr teleoperation system",
-          "n_works": 12,
-          "n_institutions": 14,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 12,
-      "n_institutions": 14,
-      "n_institutions_capped": false,
-      "quote": "an open-source VR teleoperation system",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 0,
-      "share_patent": 0.0,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Автономный роботизированный сбор урожая",
-      "name_en": "autonomous robotic harvesting",
-      "score": 0.7235309391816446,
-      "skipped_reason": "beyond_top",
-      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "autonomous robotic harvesting",
-      "name_variants": [
-        {
-          "name": "autonomous robotic harvesting",
-          "n_works": 24,
-          "n_institutions": 37,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 24,
-      "n_institutions": 37,
-      "n_institutions_capped": false,
-      "quote": "Autonomous Tomato Harvesting System Integrating AI-Controlled Robotics in Greenhouses",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 0,
-      "share_patent": 0.0,
+      "n_pat": 3,
+      "share_patent": 0.08571428571428572,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -2940,13 +3446,44 @@
       "n_works": 37,
       "n_institutions": 49,
       "n_institutions_capped": false,
-      "quote": "humanoid robot prototype designed as a flexible testbed",
+      "quote": "a humanoid robot prototype designed as a flexible testbed",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "variants": [],
       "n_pat": 0,
       "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Роботы общего назначения",
+      "name_en": "general-purpose robots",
+      "score": 0.7122288211681376,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "general-purpose robots",
+      "name_variants": [
+        {
+          "name": "general-purpose robots",
+          "n_works": 311,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 311,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "training general-purpose robots",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 63,
+      "share_patent": 0.11909262759924386,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -2962,16 +3499,16 @@
       "name_variants": [
         {
           "name": "digital twin",
-          "n_works": 114978,
+          "n_works": 115045,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 114978,
+      "n_works": 115045,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Digital Twin of Coal Mine Rescue Robot",
+      "quote": "Physics informed digital twin approach for real time predictive maintenance of collaborative robotic arms",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -2984,104 +3521,93 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Профессиональные экзоскелеты",
-      "name_en": "occupational exoskeletons",
-      "score": 0.6863750610323363,
+      "name_ru": "Автономная роботизированная система сбора урожая",
+      "name_en": "autonomous robotic harvesting system",
+      "score": 0.7063417793754582,
       "skipped_reason": "beyond_top",
       "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "occupational exoskeletons",
+      "name_raw": "autonomous robotic harvesting system",
       "name_variants": [
         {
-          "name": "occupational exoskeletons",
-          "n_works": 368,
-          "n_institutions": 200,
-          "n_institutions_capped": true
+          "name": "autonomous robotic harvesting system",
+          "n_works": 2,
+          "n_institutions": 3,
+          "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 368,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "Occupational Exoskeletons as a Technological Solution",
+      "n_works": 2,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "Autonomous Tomato Harvesting System Integrating AI-Controlled Robotics in Greenhouses",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
-      "variants": [
-        {
-          "term_en": "exoskeleton robot",
-          "score": 0.25815692003447727
-        }
-      ],
-      "n_pat": 4,
-      "share_patent": 0.010638297872340425,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "роботы с ногами и колёсами",
-      "name_en": "legged-wheeled robots",
-      "score": 0.6726193375566084,
-      "skipped_reason": "duplicate_of",
-      "reason_ru": "Дубль: тот же класс технологий, что «hexapod wheel-legged mobile platform», — показан вариантом названия",
-      "name_raw": "legged-wheeled robots",
+      "name_ru": "Ловкое манипулирование роботами",
+      "name_en": "dexterous robotic manipulation",
+      "score": 0.7017727938797556,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "dexterous robotic manipulation",
       "name_variants": [
         {
-          "name": "legged-wheeled robots",
-          "n_works": 51,
-          "n_institutions": 77,
-          "n_institutions_capped": false
+          "name": "dexterous robotic manipulation",
+          "n_works": 246,
+          "n_institutions": 200,
+          "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 51,
-      "n_institutions": 77,
-      "n_institutions_capped": false,
-      "quote": "legged-wheeled robot Go2-W",
+      "n_works": 246,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Pushing the Frontier of Dexterous Robotic Manipulation",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
-      "duplicate_of": "hexapod wheel-legged mobile platform",
       "variants": [],
-      "n_pat": 0,
-      "share_patent": 0.0,
+      "n_pat": 1,
+      "share_patent": 0.003289473684210526,
       "rospatent_failed": false,
-      "name_ru_source": "extract",
+      "name_ru_source": "translate",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Роботы-помощники",
-      "name_en": "physical assistant robots",
-      "score": 0.660656526605775,
+      "name_ru": "Роботизированное обучение имитацией",
+      "name_en": "robotic imitation learning",
+      "score": 0.6910753690020656,
       "skipped_reason": "beyond_top",
       "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "physical assistant robots",
+      "name_raw": "robotic imitation learning",
       "name_variants": [
         {
-          "name": "physical assistant robots",
-          "n_works": 78,
-          "n_institutions": 152,
-          "n_institutions_capped": false
+          "name": "robotic imitation learning",
+          "n_works": 193,
+          "n_institutions": 200,
+          "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 78,
-      "n_institutions": 152,
-      "n_institutions_capped": false,
-      "quote": "Physical Assistant Robots",
-      "n_docs": 1,
+      "n_works": 193,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Distortion-Resilient Robotic Imitation Learning for Autonomous Cable Routing",
+      "n_docs": 2,
       "n_sources": 1,
       "known_training_label": null,
-      "variants": [
-        {
-          "term_en": "assistive robot",
-          "score": 0.40650317489008964
-        }
-      ],
-      "n_pat": 2,
-      "share_patent": 0.022727272727272728,
+      "variants": [],
+      "n_pat": 1,
+      "share_patent": 0.003472222222222222,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -3106,11 +3632,20 @@
       "n_works": 2832,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Recent Developments and Applications of Drone Swarm: Techniques, Strategies, and Challenges",
+      "quote": "UAV swarms",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
-      "variants": [],
+      "variants": [
+        {
+          "term_en": "uav swarms",
+          "score": 0.6483090074352604
+        },
+        {
+          "term_en": "aerial robotic swarm",
+          "score": 0.3901547033981737
+        }
+      ],
       "n_pat": 214,
       "share_patent": 0.06759317751105495,
       "rospatent_failed": false,
@@ -3119,31 +3654,95 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Системы управления на основе PID-регуляторов",
-      "name_en": "PID-based control systems",
-      "score": 0.6547266035225139,
-      "skipped_reason": "beyond_top",
-      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "PID-based control systems",
+      "name_ru": "рои беспилотных летательных аппаратов",
+      "name_en": "uav swarms",
+      "score": 0.6483090074352604,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «drone swarm», — показан вариантом названия",
+      "name_raw": "uav swarms",
       "name_variants": [
         {
-          "name": "pid-based control systems",
-          "n_works": 94,
-          "n_institutions": 145,
+          "name": "uav swarms",
+          "n_works": 6167,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6167,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "UAV Swarms",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "drone swarm",
+      "variants": [],
+      "n_pat": 27,
+      "share_patent": 0.004202988792029888,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "робот с ногами и колёсами",
+      "name_en": "legged-wheeled robot",
+      "score": 0.6288744861867697,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «hexapod wheel-legged mobile platform», — показан вариантом названия",
+      "name_raw": "legged-wheeled robot",
+      "name_variants": [
+        {
+          "name": "legged-wheeled robot",
+          "n_works": 51,
+          "n_institutions": 77,
           "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 94,
-      "n_institutions": 145,
+      "n_works": 51,
+      "n_institutions": 77,
       "n_institutions_capped": false,
-      "quote": "Intelligent PID-based control systems for adaptive and sustainable manufacturing",
+      "quote": "Legged-Wheeled Robot Go2-W",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "hexapod wheel-legged mobile platform",
+      "variants": [],
+      "n_pat": 4,
+      "share_patent": 0.06896551724137931,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Роботы-прополочники",
+      "name_en": "mechanical weeding robots",
+      "score": 0.6112460420176786,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "mechanical weeding robots",
+      "name_variants": [
+        {
+          "name": "mechanical weeding robots",
+          "n_works": 31,
+          "n_institutions": 79,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 31,
+      "n_institutions": 79,
+      "n_institutions_capped": false,
+      "quote": "small mobile robots for mechanical weeding",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "variants": [],
-      "n_pat": 3,
-      "share_patent": 0.030612244897959183,
+      "n_pat": 0,
+      "share_patent": 0.0,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -3168,7 +3767,7 @@
       "n_works": 101,
       "n_institutions": 169,
       "n_institutions_capped": false,
-      "quote": "Adaptive Robotic Tool Gripper",
+      "quote": "Adaptive Robotic Gripper for Enhanced Tool Manipulation",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -3199,13 +3798,49 @@
       "n_works": 133,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "real-time low-level motion planning of collaborative robotic arms",
-      "n_docs": 2,
+      "quote": "Unified Real-Time Low-Level Motion Planning for Collaborative Arms",
+      "n_docs": 3,
       "n_sources": 2,
       "known_training_label": null,
-      "variants": [],
+      "variants": [
+        {
+          "term_en": "collaborative robot",
+          "score": 0.4262396055992666
+        }
+      ],
       "n_pat": 11,
       "share_patent": 0.06321839080459771,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Автоматизированное роботизированное производство",
+      "name_en": "automated robotic manufacturing",
+      "score": 0.5867363851384259,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "automated robotic manufacturing",
+      "name_variants": [
+        {
+          "name": "automated robotic manufacturing",
+          "n_works": 10,
+          "n_institutions": 16,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10,
+      "n_institutions": 16,
+      "n_institutions_capped": false,
+      "quote": "automated robotic manufacturing system",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 23,
+      "share_patent": 0.6764705882352942,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -3243,6 +3878,37 @@
       "model_version": "s2a2-v1"
     },
     {
+      "name_ru": "Низкоуровневое планирование движения",
+      "name_en": "low-level motion planning",
+      "score": 0.5488221806164573,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "low-level motion planning",
+      "name_variants": [
+        {
+          "name": "low-level motion planning",
+          "n_works": 55,
+          "n_institutions": 106,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 55,
+      "n_institutions": 106,
+      "n_institutions_capped": false,
+      "quote": "Unified Real-Time Low-Level Motion Planning for Collaborative Arms",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 3,
+      "share_patent": 0.04285714285714286,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
       "name_ru": "Роботизация процессов",
       "name_en": "robotic process automation",
       "score": 0.5437693757764858,
@@ -3252,18 +3918,18 @@
       "name_variants": [
         {
           "name": "robotic process automation",
-          "n_works": 11732,
+          "n_works": 11736,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 11732,
+      "n_works": 11736,
       "n_institutions": 200,
       "n_institutions_capped": true,
       "quote": "Robotic Process Automation (RPA)",
       "n_docs": 9,
-      "n_sources": 2,
+      "n_sources": 1,
       "known_training_label": {
         "id": "n29",
         "label": "mainstream"
@@ -3277,33 +3943,65 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Ловкие роботы",
-      "name_en": "dexterous robot",
-      "score": 0.5239500067756399,
+      "name_ru": "Многоагентные системы доставки и забора грузов",
+      "name_en": "multi-agent pickup and delivery",
+      "score": 0.541296965921654,
       "skipped_reason": "beyond_top",
       "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "dexterous robot",
+      "name_raw": "multi-agent pickup and delivery",
       "name_variants": [
         {
-          "name": "dexterous robot",
-          "n_works": 1010,
+          "name": "multi-agent pickup and delivery",
+          "n_works": 126,
+          "n_institutions": 183,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 126,
+      "n_institutions": 183,
+      "n_institutions_capped": false,
+      "quote": "Dynamic Multi-Agent Pickup and Delivery",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "управление на основе глубокого обучения",
+      "name_en": "deep learning control",
+      "score": 0.5251405610875551,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «learning-based robotic control», — показан вариантом названия",
+      "name_raw": "deep learning control",
+      "name_variants": [
+        {
+          "name": "deep learning control",
+          "n_works": 299,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 1010,
+      "n_works": 299,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Interaction-aware dexterous robot for minimally invasive transcanal inner ear interventions",
+      "quote": "deep learning-based control framework",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
+      "duplicate_of": "learning-based robotic control",
       "variants": [],
-      "n_pat": 39,
-      "share_patent": 0.03168155970755483,
+      "n_pat": 45,
+      "share_patent": 0.12857142857142856,
       "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -3317,13 +4015,13 @@
       "name_variants": [
         {
           "name": "agricultural robotics",
-          "n_works": 6618,
+          "n_works": 6620,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 6618,
+      "n_works": 6620,
       "n_institutions": 200,
       "n_institutions_capped": true,
       "quote": "Food’s future: sustainability and agricultural robotics",
@@ -3339,127 +4037,96 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Сотрудничество человека и робота",
-      "name_en": "human robot collaboration",
-      "score": 0.5057279552082211,
+      "name_ru": "Монокулярное компьютерное зрение",
+      "name_en": "monocular computer vision",
+      "score": 0.43308870527950977,
       "skipped_reason": "beyond_top",
       "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "human robot collaboration",
+      "name_raw": "monocular computer vision",
       "name_variants": [
         {
-          "name": "human robot collaboration",
-          "n_works": 9609,
-          "n_institutions": 200,
-          "n_institutions_capped": true
+          "name": "monocular computer vision",
+          "n_works": 36,
+          "n_institutions": 66,
+          "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 9609,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "Human–Robot Collaboration (HRC)",
+      "n_works": 36,
+      "n_institutions": 66,
+      "n_institutions_capped": false,
+      "quote": "Retrofitting a Legacy Industrial Robot Through Monocular Computer Vision-Based Human-Arm Posture Tracking",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "variants": [],
-      "n_pat": 194,
-      "share_patent": 0.018566369987558617,
+      "n_pat": 8,
+      "share_patent": 0.17777777777777778,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Метаэвристические алгоритмы",
-      "name_en": "metaheuristic algorithms",
-      "score": 0.4729411468635416,
-      "skipped_reason": "beyond_top",
-      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "metaheuristic algorithms",
-      "name_variants": [
-        {
-          "name": "metaheuristic algorithms",
-          "n_works": 35033,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 35033,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "A comprehensive review of metaheuristic algorithms for mobile robot path planning",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 63,
-      "share_patent": 0.0017847531091532338,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Обучение имитацией",
-      "name_en": "imitation learning",
-      "score": 0.4637275884658511,
-      "skipped_reason": "beyond_top",
-      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
-      "name_raw": "imitation learning",
-      "name_variants": [
-        {
-          "name": "imitation learning",
-          "n_works": 7239,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 7239,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "general-purpose imitation learning for surgeon-robot collaborative assistance",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 875,
-      "share_patent": 0.079923273657289,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "помогающий робот",
-      "name_en": "assistive robot",
-      "score": 0.40650317489008964,
+      "name_ru": "коллаборативный робот",
+      "name_en": "collaborative robot",
+      "score": 0.4262396055992666,
       "skipped_reason": "duplicate_of",
-      "reason_ru": "Дубль: тот же класс технологий, что «physical assistant robots», — показан вариантом названия",
-      "name_raw": "assistive robot",
+      "reason_ru": "Дубль: тот же класс технологий, что «collaborative robotic arms», — показан вариантом названия",
+      "name_raw": "collaborative robot",
       "name_variants": [
         {
-          "name": "assistive robot",
-          "n_works": 10347,
+          "name": "collaborative robot",
+          "n_works": 11605,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 10347,
+      "n_works": 11605,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Homeyx: A Low-Cost Distributed Physical AI Framework for Multimodal Assistive Robotics",
+      "quote": "Novel Robotic Test Rig for Camshaft Geometry Measurement with a Collaborative Robot",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
-      "duplicate_of": "physical assistant robots",
+      "duplicate_of": "collaborative robotic arms",
       "variants": [],
-      "n_pat": 67,
-      "share_patent": 0.0061768230847238864,
+      "n_pat": 925,
+      "share_patent": 0.07167209050054238,
       "rospatent_failed": false,
       "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Модульные робототехнические системы",
+      "name_en": "modular robotic systems",
+      "score": 0.4063618751419034,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "modular robotic systems",
+      "name_variants": [
+        {
+          "name": "modular robotic systems",
+          "n_works": 544,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 544,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "modular robotic systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 27,
+      "share_patent": 0.0453781512605042,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -3473,16 +4140,16 @@
       "name_variants": [
         {
           "name": "soft robots",
-          "n_works": 27619,
+          "n_works": 27625,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 27619,
+      "n_works": 27625,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Soft robots",
+      "quote": "Soft Robotics: Enabling Technologies, Applications, and Future Perspectives",
       "n_docs": 2,
       "n_sources": 1,
       "known_training_label": null,
@@ -3504,16 +4171,16 @@
       "name_variants": [
         {
           "name": "intelligent robot systems",
-          "n_works": 5087,
+          "n_works": 5088,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 5087,
+      "n_works": 5088,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Intelligent robot systems: a survey from the perspective of visual intelligence",
+      "quote": "intelligent robot systems",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -3526,94 +4193,346 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "многороботные системы",
-      "name_en": "multi-robot systems",
-      "score": 0.38546020255888275,
+      "name_ru": "многороботизированные системы",
+      "name_en": "multi-robotic systems",
+      "score": 0.39297545934621614,
       "skipped_reason": "duplicate_of",
       "reason_ru": "Дубль: тот же класс технологий, что «multi-tool robotics», — показан вариантом названия",
-      "name_raw": "multi-robot systems",
+      "name_raw": "multi-robotic systems",
       "name_variants": [
         {
-          "name": "multi-robot systems",
-          "n_works": 5214,
+          "name": "multi-robotic systems",
+          "n_works": 5213,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 5214,
+      "n_works": 5213,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Large language models for multi-robot systems: a survey",
-      "n_docs": 1,
-      "n_sources": 1,
+      "quote": "intelligent, flexible multi-robotic systems",
+      "n_docs": 4,
+      "n_sources": 2,
       "known_training_label": null,
       "duplicate_of": "multi-tool robotics",
       "variants": [],
-      "n_pat": 67,
-      "share_patent": 0.011392620302669614,
+      "n_pat": 3,
+      "share_patent": 0.0005161734342739161,
       "rospatent_failed": false,
       "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Алгоритмы планирования пути",
-      "name_en": "path planning algorithm",
-      "score": 0.3635892121826418,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 10273 публикаций — технология уже хорошо изучена",
-      "name_raw": "path planning algorithm",
+      "name_ru": "воздушный робототехнический рой",
+      "name_en": "aerial robotic swarm",
+      "score": 0.3901547033981737,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «drone swarm», — показан вариантом названия",
+      "name_raw": "aerial robotic swarm",
       "name_variants": [
         {
-          "name": "path planning algorithm",
-          "n_works": 10052,
-          "n_institutions": 200,
-          "n_institutions_capped": true
+          "name": "aerial robotic swarm",
+          "n_works": 81,
+          "n_institutions": 135,
+          "n_institutions_capped": false
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 10052,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "an integrated path planning algorithm for autonomous mobile robots",
+      "n_works": 81,
+      "n_institutions": 135,
+      "n_institutions_capped": false,
+      "quote": "an aerial robotic swarm",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "drone swarm",
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Роботы-дождевые черви",
+      "name_en": "earthworm-like robots",
+      "score": 0.3886487300568051,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 87 публикаций — технология уже хорошо изучена",
+      "name_raw": "earthworm-like robots",
+      "name_variants": [
+        {
+          "name": "earthworm-like robots",
+          "n_works": 86,
+          "n_institutions": 107,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 86,
+      "n_institutions": 107,
+      "n_institutions_capped": false,
+      "quote": "earthworm-like robots",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "variants": [],
-      "n_pat": 1145,
-      "share_patent": 0.10028025923979682,
+      "n_pat": 2,
+      "share_patent": 0.02247191011235955,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Пассивные экзоскелеты",
-      "name_en": "passive exoskeletons",
-      "score": 0.3613968104026911,
+      "name_ru": "Модульная система оснастки",
+      "name_en": "modular fixturing system",
+      "score": 0.38743484285291446,
       "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 990 публикаций — технология уже хорошо изучена",
-      "name_raw": "passive exoskeletons",
+      "reason_ru": "Большой объём научной литературы: 22 публикаций — технология уже хорошо изучена",
+      "name_raw": "modular fixturing system",
       "name_variants": [
         {
-          "name": "passive exoskeletons",
-          "n_works": 986,
+          "name": "modular fixturing system",
+          "n_works": 22,
+          "n_institutions": 33,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 22,
+      "n_institutions": 33,
+      "n_institutions_capped": false,
+      "quote": "Planning a Shared Modular Fixture Layout",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Взаимодействие человека и робота",
+      "name_en": "human-robot interaction",
+      "score": 0.3796879963655089,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 27979 публикаций — технология уже хорошо изучена",
+      "name_raw": "human-robot interaction",
+      "name_variants": [
+        {
+          "name": "human-robot interaction",
+          "n_works": 26142,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 986,
+      "n_works": 26142,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Passive exoskeletons in construction",
+      "quote": "Safe, Fluent and Acceptable Motion Generation and Execution for Human--Robot Interaction",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "variants": [],
-      "n_pat": 26,
-      "share_patent": 0.025590551181102362,
+      "n_pat": 619,
+      "share_patent": 0.021644870270648296,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Континуальные роботы",
+      "name_en": "continuum robots",
+      "score": 0.3789969068911241,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 3159 публикаций — технология уже хорошо изучена",
+      "name_raw": "continuum robots",
+      "name_variants": [
+        {
+          "name": "continuum robots",
+          "n_works": 2969,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2969,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Contact-Aware Planning and Control of Continuum Robots",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 154,
+      "share_patent": 0.04648354965288258,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Планирование траектории мобильного робота",
+      "name_en": "mobile robot path planning",
+      "score": 0.3789765658334665,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 2738 публикаций — технология уже хорошо изучена",
+      "name_raw": "mobile robot path planning",
+      "name_variants": [
+        {
+          "name": "mobile robot path planning",
+          "n_works": 2724,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2724,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Kinematic-Aware Improved Hippo Optimization algorithm (KA-IHO) for mobile robot path planning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 48,
+      "share_patent": 0.01722900215362527,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Многоагентное управление роботами",
+      "name_en": "multi-agent robotic control",
+      "score": 0.377741268527501,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 14 публикаций — технология уже хорошо изучена",
+      "name_raw": "multi-agent robotic control",
+      "name_variants": [
+        {
+          "name": "multi-agent robotic control",
+          "n_works": 12,
+          "n_institutions": 18,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 12,
+      "n_institutions": 18,
+      "n_institutions_capped": false,
+      "quote": "Multi-Agent Robotic Control with Onboard Vision-Language Models",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Робототехника роя",
+      "name_en": "swarm robotics",
+      "score": 0.3752393472536422,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 4099 публикаций — технология уже хорошо изучена",
+      "name_raw": "swarm robotics",
+      "name_variants": [
+        {
+          "name": "swarm robotics",
+          "n_works": 3876,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3876,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Occlusion-Based Object Transportation Around Obstacles With a Swarm of Miniature Robots",
+      "n_docs": 8,
+      "n_sources": 2,
+      "known_training_label": {
+        "id": "s37",
+        "label": "signal"
+      },
+      "variants": [],
+      "n_pat": 44,
+      "share_patent": 0.010620323437122858,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "6-DoF захват (шестистепенный захват)",
+      "name_en": "6-DoF grasping",
+      "score": 0.36028118813554955,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 178 публикаций — технология уже хорошо изучена",
+      "name_raw": "6-DoF grasping",
+      "name_variants": [
+        {
+          "name": "6-dof grasping",
+          "n_works": 92,
+          "n_institutions": 161,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 92,
+      "n_institutions": 161,
+      "n_institutions_capped": false,
+      "quote": "enhanced 6-DoF grasping",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 5,
+      "share_patent": 0.0273224043715847,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Технология автономных транспортных средств",
+      "name_en": "autonomous vehicle technology",
+      "score": 0.3578990317402528,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 1 039 патентов на 2 370 публикаций",
+      "name_raw": "autonomous vehicle technology",
+      "name_variants": [
+        {
+          "name": "autonomous vehicle technology",
+          "n_works": 2317,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2317,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "autonomous vehicle technology is not yet ubiquitous or mainstream",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 1039,
+      "share_patent": 0.3047814608389557,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -3638,44 +4557,13 @@
       "n_works": 15907,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Human Activity Recognition (HAR)",
+      "quote": "Human Activity Recognition",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "variants": [],
       "n_pat": 418,
       "share_patent": 0.024395937901248978,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Гибкие роботизированные захваты",
-      "name_en": "compliant robotic grippers",
-      "score": 0.34972931425298176,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 138 публикаций — технология уже хорошо изучена",
-      "name_raw": "compliant robotic grippers",
-      "name_variants": [
-        {
-          "name": "compliant robotic grippers",
-          "n_works": 133,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 133,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "compliant robotic grippers",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 7,
-      "share_patent": 0.04827586206896552,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -3691,16 +4579,16 @@
       "name_variants": [
         {
           "name": "extended reality",
-          "n_works": 16812,
+          "n_works": 16815,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 16812,
+      "n_works": 16815,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Extended Reality (XR) is increasingly used in human-robot interaction",
+      "quote": "Extended Reality",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -3708,7 +4596,7 @@
       "n_pat": 16188,
       "share_patent": 0.48154207692536516,
       "rospatent_failed": false,
-      "name_ru_source": "extract",
+      "name_ru_source": "translate",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -3722,18 +4610,18 @@
       "name_variants": [
         {
           "name": "autonomous mobile robots",
-          "n_works": 8448,
+          "n_works": 8446,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 8448,
+      "n_works": 8446,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "autonomous mobile robots",
-      "n_docs": 6,
-      "n_sources": 3,
+      "quote": "Autonomous Mobile Robot Selection in Smart Warehouses",
+      "n_docs": 2,
+      "n_sources": 2,
       "known_training_label": null,
       "variants": [],
       "n_pat": 1330,
@@ -3744,124 +4632,31 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Роботизированные манипуляторы",
-      "name_en": "robotic manipulators",
-      "score": 0.32328533636260914,
+      "name_ru": "Технологии экзоскелетов",
+      "name_en": "exoskeleton technologies",
+      "score": 0.3313588418062742,
       "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 23496 публикаций — технология уже хорошо изучена",
-      "name_raw": "robotic manipulators",
+      "reason_ru": "Большой объём научной литературы: 758 публикаций — технология уже хорошо изучена",
+      "name_raw": "exoskeleton technologies",
       "name_variants": [
         {
-          "name": "robotic manipulators",
-          "n_works": 19624,
+          "name": "exoskeleton technologies",
+          "n_works": 754,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 19624,
+      "n_works": 754,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Fault detection for serial robotic manipulators",
-      "n_docs": 2,
-      "n_sources": 2,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 1856,
-      "share_patent": 0.0732092142631745,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Экзоскелеты нижних конечностей",
-      "name_en": "lower limb exoskeleton",
-      "score": 0.31926401935741605,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 3696 публикаций — технология уже хорошо изучена",
-      "name_raw": "lower limb exoskeleton",
-      "name_variants": [
-        {
-          "name": "lower limb exoskeleton",
-          "n_works": 3641,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 3641,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "Lower limb exoskeleton technology",
+      "quote": "Exoskeleton Technologies and Prospects—A Review",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "variants": [],
-      "n_pat": 243,
-      "share_patent": 0.06169078446306169,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Бионические роботы",
-      "name_en": "bionic robots",
-      "score": 0.31579820367893147,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 1550 публикаций — технология уже хорошо изучена",
-      "name_raw": "bionic robots",
-      "name_variants": [
-        {
-          "name": "bionic robots",
-          "n_works": 1540,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 1540,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "Hierarchical laser-programmed soft actuators for designing bionic robots with freeform morphing shapes",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 134,
-      "share_patent": 0.07957244655581948,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Роботы для спасения в угольных шахтах",
-      "name_en": "coal mine rescue robot",
-      "score": 0.3137497807938857,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 101 публикаций — технология уже хорошо изучена",
-      "name_raw": "coal mine rescue robot",
-      "name_variants": [
-        {
-          "name": "coal mine rescue robot",
-          "n_works": 101,
-          "n_institutions": 117,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 101,
-      "n_institutions": 117,
-      "n_institutions_capped": false,
-      "quote": "Digital Twin of Coal Mine Rescue Robot",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 1,
-      "share_patent": 0.00980392156862745,
+      "n_pat": 35,
+      "share_patent": 0.044136191677175286,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -3877,16 +4672,16 @@
       "name_variants": [
         {
           "name": "humanoid robot",
-          "n_works": 17709,
+          "n_works": 17713,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 17709,
+      "n_works": 17713,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "development of a humanoid robot prototype for multimodal human-robot interaction",
+      "quote": "humanoid robot prototype",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": {
@@ -3902,96 +4697,33 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Пассивное управление силой",
-      "name_en": "passive force control",
-      "score": 0.2876339709765511,
+      "name_ru": "Экзоскелетные роботы",
+      "name_en": "exoskeleton robots",
+      "score": 0.2892831953501772,
       "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 66 публикаций — технология уже хорошо изучена",
-      "name_raw": "passive force control",
+      "reason_ru": "Большой объём научной литературы: 3700 публикаций — технология уже хорошо изучена",
+      "name_raw": "exoskeleton robots",
       "name_variants": [
         {
-          "name": "passive force control",
-          "n_works": 65,
-          "n_institutions": 129,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 65,
-      "n_institutions": 129,
-      "n_institutions_capped": false,
-      "quote": "vibration suppression in collaborative flexible payload manipulation using passive force control",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 14,
-      "share_patent": 0.175,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Регистрация 2D-облаков точек",
-      "name_en": "2D point cloud registration",
-      "score": 0.27603520485223854,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 3 публикаций — технология уже хорошо изучена",
-      "name_raw": "2D point cloud registration",
-      "name_variants": [
-        {
-          "name": "2d point cloud registration",
-          "n_works": 3,
-          "n_institutions": 6,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 3,
-      "n_institutions": 6,
-      "n_institutions_capped": false,
-      "quote": "2D point cloud registration",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 0,
-      "share_patent": 0.0,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "робот-экзоскелет",
-      "name_en": "exoskeleton robot",
-      "score": 0.25815692003447727,
-      "skipped_reason": "duplicate_of",
-      "reason_ru": "Дубль: тот же класс технологий, что «occupational exoskeletons», — показан вариантом названия",
-      "name_raw": "exoskeleton robot",
-      "name_variants": [
-        {
-          "name": "exoskeleton robot",
-          "n_works": 3674,
+          "name": "exoskeleton robots",
+          "n_works": 3678,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 3674,
+      "n_works": 3678,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "deep learning-based control framework for exoskeleton robots",
+      "quote": "exoskeleton technologies",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
-      "duplicate_of": "occupational exoskeletons",
       "variants": [],
-      "n_pat": 399,
-      "share_patent": 0.09743589743589744,
+      "n_pat": 159,
+      "share_patent": 0.04120238403731537,
       "rospatent_failed": false,
-      "name_ru_source": "extract",
+      "name_ru_source": "translate",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
@@ -4005,84 +4737,22 @@
       "name_variants": [
         {
           "name": "fuzzy control",
-          "n_works": 21746,
+          "n_works": 21760,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 21746,
+      "n_works": 21760,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "path planning and trajectory tracking using type-2/type-3 fuzzy control",
+      "quote": "type-2/type-3 fuzzy control",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
       "variants": [],
       "n_pat": 1171,
       "share_patent": 0.05095070269329505,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Гибридный модуль управления",
-      "name_en": "hybrid control module",
-      "score": 0.2032645093161528,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Технология активно патентуется: 139 патентов на 16 публикаций",
-      "name_raw": "hybrid control module",
-      "name_variants": [
-        {
-          "name": "hybrid control module",
-          "n_works": 16,
-          "n_institutions": 21,
-          "n_institutions_capped": false
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 16,
-      "n_institutions": 21,
-      "n_institutions_capped": false,
-      "quote": "Hybrid Control Module",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 139,
-      "share_patent": 0.896774193548387,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Мобильные роботы",
-      "name_en": "mobile robot",
-      "score": 0.19912116974756264,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 50202 публикаций — технология уже хорошо изучена",
-      "name_raw": "mobile robot",
-      "name_variants": [
-        {
-          "name": "mobile robot",
-          "n_works": 47844,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 47844,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "ROS2-Based Low-Cost Mobile Robot for Educational Assistance",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 13446,
-      "share_patent": 0.21125565610859728,
       "rospatent_failed": false,
       "name_ru_source": "translate",
       "name_ru_auto": true,
@@ -4098,16 +4768,16 @@
       "name_variants": [
         {
           "name": "uwb localization",
-          "n_works": 891,
+          "n_works": 890,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 891,
+      "n_works": 890,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "deployment-ready UWB localization for industrial ground robots",
+      "quote": "UWB localization for industrial ground robots",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
@@ -4120,167 +4790,148 @@
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Данные точечных облаков",
-      "name_en": "point cloud data",
-      "score": 0.16232847797819666,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Технология активно патентуется: 17 589 патентов на 19 446 публикаций",
-      "name_raw": "point cloud data",
+      "name_ru": "сотрудничество человека и робота",
+      "name_en": "human–robot collaboration",
+      "score": null,
+      "skipped_reason": "no_counters",
+      "reason_ru": "Не оценён: счётчики источников получены не полностью",
+      "name_raw": "human–robot collaboration",
       "name_variants": [
         {
-          "name": "point cloud data",
-          "n_works": 18677,
+          "name": "human–robot collaboration",
+          "n_works": 9611,
           "n_institutions": 200,
           "n_institutions_capped": true
         }
       ],
       "name_choice_rule": "direct",
-      "n_works": 18677,
+      "n_works": 9611,
       "n_institutions": 200,
       "n_institutions_capped": true,
-      "quote": "Self-Supervised Learning for Pre-Training 3D Point Clouds",
+      "quote": "human–robot collaboration",
       "n_docs": 1,
       "n_sources": 1,
       "known_training_label": null,
-      "variants": [],
-      "n_pat": 17589,
-      "share_patent": 0.4749291211016606,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "model_version": "s2a2-v1"
-    },
-    {
-      "name_ru": "Обнаружение сбоев",
-      "name_en": "failure detection",
-      "score": 0.09758794046681366,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Технология активно патентуется: 18 988 патентов на 9 318 публикаций",
-      "name_raw": "failure detection",
-      "name_variants": [
-        {
-          "name": "failure detection",
-          "n_works": 9055,
-          "n_institutions": 200,
-          "n_institutions_capped": true
-        }
-      ],
-      "name_choice_rule": "direct",
-      "n_works": 9055,
-      "n_institutions": 200,
-      "n_institutions_capped": true,
-      "quote": "Relationship-Aware Failure Detection",
-      "n_docs": 1,
-      "n_sources": 1,
-      "known_training_label": null,
-      "variants": [],
-      "n_pat": 18988,
-      "share_patent": 0.6708118420122943,
-      "rospatent_failed": false,
-      "name_ru_source": "translate",
+      "name_ru_source": "extract",
       "name_ru_auto": true,
       "model_version": "s2a2-v1"
     }
   ],
   "timings": {
     "subqueries": 0.0,
-    "search": 0.0,
-    "candidates": 0.05,
-    "naming": 13.99,
-    "counters": 0.31,
-    "ranking": 1.41,
+    "search": 26.42,
+    "candidates": 46.38,
+    "naming": 16.89,
+    "counters": 93.02,
+    "ranking": 1.19,
     "queues": [
       {
         "source": "openalex",
         "candidates": 60,
-        "requests": 0,
-        "cache_hits": 60,
+        "requests": 29,
+        "cache_hits": 31,
         "retries": null,
         "n429": null,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 0.05,
-        "duration_s": 0.05
+        "finished_s": 93.01,
+        "duration_s": 93.01
       },
       {
         "source": "arxiv",
         "candidates": 60,
-        "requests": 0,
-        "cache_hits": 60,
-        "retries": null,
-        "n429": null,
+        "requests": 29,
+        "cache_hits": 31,
+        "retries": 0,
+        "n429": 0,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 0.05,
-        "duration_s": 0.05
+        "finished_s": 92.07,
+        "duration_s": 92.07
       },
       {
         "source": "techcrunch",
         "candidates": 60,
-        "requests": 0,
-        "cache_hits": 60,
-        "retries": null,
-        "n429": null,
-        "failures": 0,
+        "requests": 30,
+        "cache_hits": 30,
+        "retries": 0,
+        "n429": 0,
+        "failures": 1,
         "started_s": 0.0,
-        "finished_s": 0.05,
-        "duration_s": 0.05
+        "finished_s": 68.7,
+        "duration_s": 68.69
       },
       {
         "source": "rospatent",
         "candidates": 60,
         "parallel": 4,
-        "requests": 0,
-        "cache_hits": 60,
+        "requests": 29,
+        "cache_hits": 31,
         "retries": 0,
         "n429": 0,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 0.26,
-        "duration_s": 0.25
+        "finished_s": 7.96,
+        "duration_s": 7.95
       }
     ],
-    "dedup": 47.91,
-    "translate": 0.94,
-    "total": 64.59
+    "dedup": 81.14,
+    "translate": 4.12,
+    "total": 269.16
   },
   "warnings": [
-    "отброшен (ru): «роботы для обработки композитных материалов» — слов 5, нужно 2-4",
-    "отброшен (en): «machine learning for industrial robots» — слов 5, нужно 2-4",
-    "отброшен: term_en «vision-language-action platform»: quote не найден в документе 16",
-    "отброшен после повтора: term_en «local gaussian process regression»: quote не найден в документе 18",
-    "отброшен: term_en «robotic assembly»: quote не найден в документе 81",
-    "отброшен: term_en «autonomous robots»: quote не найден в документе 122",
-    "отброшен: term_en «wire harnesses»: quote не найден в документе 126",
-    "отброшен: term_en «multi-purpose factory robots»: quote не найден в документе 130",
+    "отброшен: term_en «extended reality in human-robot interaction»: слов 5, нужно 2–4",
+    "отброшен: term_en «imitation learning for robot assistance»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «vision-language-action»: слов 1, нужно 2–4",
+    "отброшен: term_en «digital twin integration»: последнее слово integration",
+    "отброшен после повтора: term_en «reinforcement learning for robot demonstration»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «visual prediction for robot control»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «robot control using 3D points»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «optimization-guided diffusion for robot control»: слов 5, нужно 2–4",
+    "отброшен: term_en «automated closed-loop framework for evolving robot manipulation»: слов 7, нужно 2–4",
+    "отброшен: term_en «multi-agent pickup and delivery in robotic cellular warehousing systems»: слов 9, нужно 2–4",
+    "отброшен: term_en «visual contact localization and force sensing system for compliant robotic grippers»: слов 11, нужно 2–4",
+    "отброшен: term_en «learning-based strategy for composite robot assembly skill adaptation»: слов 8, нужно 2–4",
+    "отброшен: term_en «adaptive robotic gripper for enhanced tool manipulation»: слов 7, нужно 2–4",
+    "отброшен: term_en «multi-tool robotics for in-situ sample manipulation»: слов 6, нужно 2–4",
+    "отброшен: term_en «autonomous dual-arm robotic manipulation and coordination»: слов 6, нужно 2–4",
+    "отброшен после повтора: term_en «automated closed-loop framework»: последнее слово framework",
+    "отброшен: term_en «collecting real-world teleoperation data»: quote не найден в документе 152",
+    "отброшен: term_en «robotics»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «robotics»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «robotaxi»: слов 1, нужно 2–4",
+    "отброшен: term_en «autonomous robots»: quote не найден в документе 161",
+    "отброшен: term_en «AI robotics»: quote не найден в документе 169",
     "отброшен: term_en «robotic manipulation of deformable objects»: слов 5, нужно 2–4",
     "отброшен: term_en «trajectory planning of robotic arms»: слов 5, нужно 2–4",
-    "отброшен: term_en «predictive fault diagnosis in robotic arms»: слов 6, нужно 2–4",
-    "отброшен: term_en «remote teleoperation of endovascular intervention robots»: слов 6, нужно 2–4",
-    "отброшен после повтора: term_en «multi-purpose factory robots»: quote не найден в документе 130",
-    "отброшен после повтора: term_en «collaborative robotic arms»: quote не найден в документе 152",
-    "отброшен: term_en «path planning algorithm»: quote не найден в документе 170",
-    "отброшен: term_en «exoskeleton»: слов 1, нужно 2–4",
-    "отброшен: term_en «self reconfigurable parallel ankle rehabilitation exoskeleton»: слов 6, нужно 2–4",
-    "отброшен: term_en «quasi direct drive upper limb exoskeleton»: слов 6, нужно 2–4",
-    "отброшен: term_en «real time ai driven prognostics»: слов 5, нужно 2–4",
-    "отброшен: term_en «cloud platform for broiler inspection robots»: слов 6, нужно 2–4",
-    "отброшен: term_en «point cloud based robot welding»: слов 5, нужно 2–4",
-    "отброшен после повтора: term_en «exoskeleton»: слов 1, нужно 2–4",
-    "отброшен после повтора: term_en «self reconfigurable parallel ankle rehabilitation exoskeleton»: слов 6, нужно 2–4",
-    "отброшен после повтора: term_en «quasi direct drive upper limb exoskeleton»: слов 6, нужно 2–4",
-    "отброшен после повтора: term_en «cloud platform for broiler inspection robots»: слов 6, нужно 2–4",
-    "отброшен после повтора: term_en «point cloud based robot welding»: слов 5, нужно 2–4",
-    "отброшен: term_en «visual simultaneous localization and mapping»: слов 5, нужно 2–4",
-    "отброшен после повтора: term_en «robotic monitoring»: quote не найден в документе 252"
+    "отброшен: term_en «surgical AI and robotic systems»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «autonomous robots»: quote не найден в документе 161",
+    "отброшен после повтора: term_en «surgical AI and robotic systems»: слов 5, нужно 2–4",
+    "отброшен: term_en «soft robots powered by sustainable energy»: слов 6, нужно 2–4",
+    "отброшен: term_en «deep learning-based control framework for exoskeleton robots»: слов 7, нужно 2–4",
+    "отброшен: term_en «human activity recognition on edge devices»: слов 6, нужно 2–4",
+    "отброшен: term_en «self-reconfigurable parallel ankle rehabilitation exoskeleton»: слов 5, нужно 2–4",
+    "отброшен: term_en «hybrid control of industrial robots»: слов 5, нужно 2–4",
+    "отброшен: term_en «collaborative robot integration»: последнее слово integration",
+    "отброшен: term_en «vibration suppression in physical robot interaction»: слов 6, нужно 2–4",
+    "отброшен: term_en «AI-driven prognostics and health management in robotics»: слов 7, нужно 2–4",
+    "отброшен после повтора: term_en «lower limb exoskeletons»: quote не найден в документе 248",
+    "отброшен после повтора: term_en «hybrid control of industrial robots»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «collaborative robot integration»: последнее слово integration",
+    "отброшен после повтора: term_en «vibration suppression»: quote не найден в документе 260",
+    "отброшен: term_en «swarm robotics»: quote не найден в документе 300",
+    "отброшен: term_en «robot-based single point incremental forming»: слов 5, нужно 2–4",
+    "отброшен: term_en «robotic biocementation spraying»: quote не найден в документе 328",
+    "отброшен после повтора: term_en «robot-based single point incremental forming»: слов 5, нужно 2–4",
+    "human–robot collaboration: нет счётчиков [('techcrunch', '2020'), ('techcrunch', '2021'), ('techcrunch', '2022'), ('techcrunch', '2023'), ('techcrunch', '2024'), ('techcrunch', '2025'), ('techcrunch', 'prev6')], кандидат не оценён"
   ],
   "meta": {
     "query": "роботы для промышленности",
     "area": "Роботы",
-    "run_date": "2026-09-27T00:09:04",
+    "run_date": "2026-09-27T20:46:32",
     "model_version": "s2a2-v1",
     "candidates_version": "v3",
-    "seconds": 64.59,
-    "counters_cache_share": 1.0
+    "seconds": 269.16,
+    "counters_cache_share": 0.512
   }
 }

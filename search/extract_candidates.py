@@ -4,7 +4,7 @@
 Вход: title + первые ~500 знаков text (пачками).
 Выход: до 30 уникальных кандидатов с terms / context_terms.
 LLM: search.llm_yandex_gpt.ask_llm (YandexGPT Pro через .env).
-Фрагменты, промпт с нумерацией, кэш и дедуп использует и search/extract_terms.py (extract-v2).
+Фрагменты, промпт с нумерацией, кэш и дедуп использует и search/extract_terms.py (extract-v4).
 """
 
 from __future__ import annotations

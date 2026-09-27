@@ -98,7 +98,7 @@ def named_candidates(raw: Sequence[dict], area: str, openalex, progress: Progres
 
 
 def direct_candidates(raw: Sequence[dict], openalex, progress: Progress) -> tuple[list[dict], list[dict]]:
-    """Без нормализатора (extract-v2): name_en = термин шага 4, след и организации — тем же вызовом."""
+    """Без нормализатора (extract-v4): name_en = термин шага 4, след и организации — тем же вызовом."""
     phrases, done, lock = [tech_key(item["name_en"]) for item in raw], [0], threading.Lock()
 
     def traced(phrase: str) -> dict:
@@ -400,7 +400,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
               progress: Progress | None = None, adapters: Sequence[SourceAdapter] | None = None,
               settings: Settings | None = None, candidate_sources: set[str] | None = None,
               extract_model: str | None = "yandexgpt-5-pro", naming_mode: str = "direct",
-              counters_cache: bool | None = None, extract_version: str = "v2",
+              counters_cache: bool | None = None, extract_version: str = "v4",
               rospatent: bool | None = None, on_progress: Callable[[dict], None] | None = None,
               dedup: bool = True) -> dict:
     """Тема -> JSON с ТОП-15, исключёнными, статистикой и временем по шагам.
@@ -408,13 +408,12 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     candidate_sources — из документов каких источников извлекать кандидатов (openalex,
     openalex_ru, arxiv, techcrunch). None — из всех, как раньше. Поиск №1 и его статистика
     при этом по всем источникам; doc_ids кандидатов нумеруют только отобранные документы.
-    extract_model — модель шага 4 (extract-v2);
+    extract_model — модель шага 4 (extract-v4);
     naming_mode — normalizer (нормализатор обучения) или direct (name_en = термин шага 4).
     counters_cache — файловый кэш счётчиков отдельно от остальных кэшей; None — как use_cache.
-    extract_version — v2 (search/extract_terms.py) или v1 (прежний шаг 4, search/extract_candidates.py;
-    модель берётся из .env, extract_model не используется; в паре с naming_mode="normalizer");
-    v4 — extract-v4 (задача О2: тема в промпте шага 4), до принятия только по флагу.
-    По умолчанию — рука R1 задачи К: extract-v2 на yandexgpt-5-pro, без нормализатора.
+    extract_version — v4 (search/extract_terms.py, extract-v4: тема в промпте, задача О2) или v1 (прежний шаг 4,
+    search/extract_candidates.py; модель берётся из .env, extract_model не используется; в паре с naming_mode="normalizer").
+    По умолчанию — рука R1 задачи К с промптом extract-v4: yandexgpt-5-pro, без нормализатора.
     rospatent — очередь Роспатента в этапе счётчиков; None — как collector.rospatent.ROSPATENT_ENABLED.
     n_pat идёт в признак share_patent модели s2a2-v1; у кандидатов с оценкой — n_pat, share_patent,
     rospatent_failed (при сбое ещё note_ru). Выключенный при s2a2-v1 — предупреждение в warnings.
@@ -422,8 +421,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     on_progress(event) — прогресс в процентах (pipeline/progress.py, задача И1); None — выход не меняется.
     dedup — склейка дублей перед отбором ТОП-15 (pipeline/dedup.py; решение команды — evidence/dedup_check.md).
     """
-    if extract_version not in ("v1", "v2", "v4"):
-        raise ValueError(f"extract_version {extract_version!r}: ожидалось v1, v2 или v4")
+    if extract_version not in ("v1", "v4"):
+        raise ValueError(f"extract_version {extract_version!r}: ожидалось v1 или v4")
     progress_warnings: list[str] = []
     report, finish = tracker(on_progress, progress_warnings.append) if on_progress else (None, None)
     progress = both_progress(progress, report)
@@ -445,8 +444,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     if extract_version == "v1":
         extract = lambda: extract_candidates(documents, topic, query_id, use_cache=use_cache)
     else:
-        extract = lambda: extract_terms(documents, topic, query_id, model=extract_model, use_cache=use_cache,
-                                         version=f"extract-{extract_version}")
+        extract = lambda: extract_terms(documents, topic, query_id, model=extract_model, use_cache=use_cache)
     found = staged("candidates", timings, progress, extract)
     warnings += found["warnings"] + ([EMPTY_AREA_WARNING] if not area else [])
 

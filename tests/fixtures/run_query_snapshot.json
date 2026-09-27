@@ -170,7 +170,7 @@
   }
  ],
  "extract_model": "yandexgpt-5-pro",
- "extract_version": "v2",
+ "extract_version": "v4",
  "model_version": "s2a2-v1",
  "naming_mode": "normalizer",
  "normalizer_deviations": [

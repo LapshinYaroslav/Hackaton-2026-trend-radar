@@ -57,16 +57,13 @@ def main(argv: list[str] | None = None) -> int:
                         help="без Роспатента (отладка): share_patent у всех кандидатов недоступен")
     parser.add_argument("--quiet", action="store_true", help="без строки прогресса")
     parser.add_argument("--no-dedup", action="store_true", help="без склейки дублей (для сравнения)")
-    parser.add_argument("--extract-version", choices=("v2", "v4"), default="v2",
-                        help="промпт шага 4: v2 (по умолчанию) или v4 — тема в промпте (задача О2)")
     args = parser.parse_args(argv)
     load_dotenv(ROOT / ".env")
     from pipeline.run_query import run_query  # после .env: модули читают настройки при вызове
 
     result = run_query(args.topic, args.area, use_cache=not args.no_cache,
                        rospatent=False if args.no_rospatent else None,
-                       on_progress=None if args.quiet else printer(sys.stdout), dedup=not args.no_dedup,
-                       extract_version=args.extract_version)
+                       on_progress=None if args.quiet else printer(sys.stdout), dedup=not args.no_dedup)
     out = Path(args.out) if args.out else RUNS_DIR / f"{result['query_id']}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
