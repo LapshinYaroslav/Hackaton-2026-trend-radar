@@ -1,5 +1,6 @@
 """Оркестратор без сети: заглушки LLM и трёх источников, настоящий артефакт модели."""
 import json
+import sys
 from datetime import date, timedelta
 from unittest.mock import patch
 
@@ -82,9 +83,17 @@ def adapters() -> list[QueryFake]:
             QueryFake("techcrunch", "news", documents=docs("techcrunch", "news"))]
 
 
+# Подзапросы раунда добора (Х2): на промпт с «Уже использованы» заглушка отвечает этими списками.
+RU_R1 = ["голографическая память", "плазмонные волноводы", "фотонные нейросети"]
+EN_R1 = ["holographic storage media", "plasmonic waveguides", "optical tensor cores",
+         "thin film lithium niobate", "microring resonator arrays", "photonic neural networks"]
+
+
 def fake_subqueries(system_prompt, user_prompt, **kwargs):
     lang = "ru" if '"ru"' in system_prompt else "en"
-    return {"text": json.dumps({lang: RU if lang == "ru" else EN}, ensure_ascii=False),
+    extra = "Уже использованы подзапросы" in user_prompt
+    items = (RU_R1 if extra else RU) if lang == "ru" else (EN_R1 if extra else EN)
+    return {"text": json.dumps({lang: items}, ensure_ascii=False),
             "model_uri": "gpt://t/yandexgpt-5-pro", "model_version": "t", "usage": {}, "elapsed_s": 0, "error": None}
 
 
@@ -125,6 +134,7 @@ def run(tmp_path, extract=fake_extract, patents=None, **options):
          patch.object(et, "CACHE_DIR", tmp_path / "extract"), \
          patch.object(search_cache, "CACHE_DIR", tmp_path / "search"), \
          patch.object(fetch_module, "COUNTERS_CACHE_DIR", tmp_path / "counters"), \
+         patch.object(fetch_module, "openalex_quota", lambda: None), \
          patch.object(rp, "count_all", patents or fake_patents({})), \
          patch.object(translate, "CACHE_DIR", tmp_path / "translate"), \
          patch.object(dedup_module, "CACHE_DIR", tmp_path / "dedup"), \
@@ -175,7 +185,10 @@ def test_output_matches_schema(result) -> None:
                                  "documents_for_candidates_by_source",
                                  "candidates_found", "candidates_named",
                                  "candidates_scored", "above_threshold", "above_075",
-                                 "rospatent_enabled", "rospatent_failures", "translation"}
+                                 "rospatent_enabled", "rospatent_failures", "translation",
+                                 "time_budget_s", "elapsed_s", "stopped_at", "counters_schedule",
+                                 "rounds", "documents_topped_up"}
+    assert out["stats"]["time_budget_s"] == rq.TIME_BUDGET_S and out["stats"]["stopped_at"] is None
     assert out["model_version"] == "s2a2-v1"
     assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup",
                                    "translate", "total", "queues"}
@@ -354,6 +367,27 @@ def test_cli_has_no_extract_version_flag(tmp_path) -> None:
     assert runner.call_count == 1 and "extract_version" not in runner.call_args.kwargs
 
 
+@pytest.mark.parametrize("arg, env, expected", [(None, None, 900.0), (None, "300", 300.0), (120, "300", 120.0),
+                                                (0, None, 0.0), (-5, None, 0.0)])
+def test_budget_seconds_argument_then_env_then_default(arg, env, expected, monkeypatch) -> None:
+    """Бюджет: аргумент важнее env TIME_BUDGET_S, без обоих — 900; отрицательный — ноль."""
+    if env is None:
+        monkeypatch.delenv("TIME_BUDGET_S", raising=False)
+    else:
+        monkeypatch.setenv("TIME_BUDGET_S", env)
+    assert rq.budget_seconds(arg) == expected
+
+
+def test_cli_passes_time_budget(tmp_path) -> None:
+    """--time-budget доходит до run_query; без флага — None (решает env или значение по умолчанию)."""
+    from pipeline import __main__ as cli
+    fake = {"query_id": "q1", "top": [], "excluded": [], "timings": {"total": 0}}
+    with patch("pipeline.run_query.run_query", return_value=fake) as runner:
+        cli.main(["тема", "--quiet", "--out", str(tmp_path / "a.json"), "--time-budget", "0"])
+        cli.main(["тема", "--quiet", "--out", str(tmp_path / "b.json")])
+    assert [call.kwargs["time_budget"] for call in runner.call_args_list] == [0.0, None]
+
+
 def test_counters_file_cache_shared_between_runs(tmp_path) -> None:
     """Второй запрос той же фразы берёт счётчики из файла, источник не опрашивается."""
     from collector.api import DocumentCollector
@@ -508,3 +542,204 @@ def test_queue_stats_show_transport_retries() -> None:
             self.adapters = [Adapter(source, Transport())]
     assert retry_counts(Collector("arxiv")) == {"retries": 2, "n429": 1}
     assert retry_counts(Collector("techcrunch")) == {} and retry_counts(Collector("openalex")) == {}
+
+
+class ClockFetch:
+    """Заглушка fetch для расписания: кандидат без кэша сдвигает часы на seconds (с номера slow_from — на slow).
+
+    timeout — дедлайн пачки: кандидаты, не успевшие к нему, не возвращаются, часы встают на дедлайн.
+    """
+
+    def __init__(self, start: float = 100.0, seconds: float = 10.0, cached: set | None = None,
+                 slow_from: int = 10**6, slow: float = 50.0):
+        self.now, self.seconds, self.cached, self.batches = start, seconds, cached or set(), []
+        self.slow_from, self.slow = slow_from, slow
+
+    def is_cached(self, phrase: str) -> bool:
+        return phrase in self.cached
+
+    def prefetch(self, batch, timeout=None) -> list[str]:
+        self.batches.append(list(batch))
+        deadline, done = (self.now + timeout if timeout is not None else float("inf")), []
+        for phrase in batch:
+            cost = 0 if phrase in self.cached else self.slow if int(phrase[1:]) >= self.slow_from else self.seconds
+            if self.now + cost > deadline:
+                self.now = deadline
+                break
+            self.now += cost
+            done.append(phrase)
+        return done
+
+
+def schedule(fetch: ClockFetch, n: int, budget: float, quota=lambda: None):
+    warnings = []
+    got = rq.schedule_counters(fetch, [f"p{i}" for i in range(n)], lambda: fetch.now, budget, warnings, quota)
+    return got, warnings
+
+
+def test_schedule_stops_when_forecast_exceeds_budget_without_reserve() -> None:
+    """10 с на кандидата с 300-й секунды: пачки до 800-й, следующая (800 + 100 > 900 − 90) не берётся."""
+    fetch = ClockFetch(start=300.0)
+    (scored, stop, info), _ = schedule(fetch, 60, 900)
+    assert (len(scored), stop, fetch.now) == (50, "time_budget", 800.0)
+    assert scored == [f"p{i}" for i in range(50)] and info["per_candidate_s"] == 10.0
+
+
+def test_schedule_ceiling_is_60() -> None:
+    """Быстро и времени много: оценивается не больше 60, остальные — cap."""
+    (scored, stop, _), _ = schedule(ClockFetch(seconds=1.0), 150, 900)
+    assert (len(scored), stop) == (rq.MAX_SCORED_HARD, "cap") and rq.MAX_SCORED_HARD == 60
+
+
+def test_schedule_hard_deadline_inside_batch() -> None:
+    """С p30 источник замедлился до 50 с: пачка p30–p39 обрывается на 810-й секунде, успели 8 из 10."""
+    fetch = ClockFetch(slow_from=30)
+    (scored, stop, _), _ = schedule(fetch, 60, 900)
+    assert (len(scored), stop, fetch.now) == (38, "time_budget", 810.0)
+    assert len(fetch.batches) == 4
+
+
+def test_schedule_zero_budget_scores_nothing() -> None:
+    fetch = ClockFetch(start=0.0)
+    (scored, stop, _), _ = schedule(fetch, 30, 0)
+    assert (scored, stop, fetch.batches) == ([], "time_budget", [])
+
+
+def test_schedule_cache_hits_cost_nothing_up_to_hard_limit() -> None:
+    """Все счётчики в кэше: время не растёт, берутся все до 60, остальные — cap."""
+    fetch = ClockFetch(cached={f"p{i}" for i in range(250)})
+    (scored, stop, _), _ = schedule(fetch, 250, 900)
+    assert (len(scored), stop) == (rq.MAX_SCORED_HARD, "cap")
+
+
+def test_schedule_first_estimate_is_twelve_seconds() -> None:
+    """До первых 5 оценённых прогноз 12 с: пачка 10 × 12 = 120 с при остатке 20 до 810 не берётся."""
+    (scored, stop, _), _ = schedule(ClockFetch(start=790.0), 20, 900)
+    assert (scored, stop) == ([], "time_budget")
+
+
+def test_schedule_quota_limits_with_margin() -> None:
+    """Первая пачка потратила 300 запросов квоты на 10 кандидатов: остаток 700 / (30 × 1.2) = 19 ещё — всего 29."""
+    answers = iter([1000, 700])
+    (scored, stop, info), warnings = schedule(ClockFetch(seconds=0.1), 150, 900, quota=lambda: next(answers))
+    assert (len(scored), stop, info["quota_limit"]) == (29, "cap", 29)
+    assert len(warnings) == 1 and "29" in warnings[0]
+
+def test_zero_budget_run_does_not_fail(tmp_path) -> None:
+    """--time-budget 0: прогон не падает, оценённых нет, названные — time_budget с текстом причины."""
+    out, _, _ = run(tmp_path, time_budget=0)
+    assert out["top"] == [] and out["stats"]["candidates_scored"] == 0
+    assert out["stats"]["stopped_at"] == "counters" and out["stats"]["time_budget_s"] == 0
+    budget = [item for item in out["excluded"] if item["skipped_reason"] == "time_budget"]
+    assert budget and all(item["reason_ru"] == "Не хватило времени на проверку" for item in budget)
+
+
+def test_merge_queues_sums_batches() -> None:
+    """Две пачки: суммы запросов и кэша, конец — последней; повторы arXiv копятся в транспорте — последнее."""
+    first = [{"source": "arxiv", "candidates": 10, "requests": 8, "cache_hits": 2, "failures": 0, "retries": 1,
+              "n429": 0, "started_s": 0.0, "finished_s": 5.0, "duration_s": 5.0},
+             {"source": "rospatent", "candidates": 10, "requests": 10, "cache_hits": 0, "failures": 1, "retries": 2,
+              "n429": 0, "started_s": 0.0, "finished_s": 4.0, "duration_s": 4.0}]
+    second = [{**first[0], "requests": 10, "cache_hits": 0, "retries": 3, "started_s": 5.0, "finished_s": 9.0,
+               "duration_s": 4.0}, {**first[1], "started_s": 5.0, "finished_s": 8.0, "duration_s": 3.0}]
+    merged = {q["source"]: q for q in fetch_module.merge_queues(fetch_module.merge_queues([], first), second)}
+    assert (merged["arxiv"]["requests"], merged["arxiv"]["cache_hits"], merged["arxiv"]["retries"]) == (18, 2, 3)
+    assert (merged["arxiv"]["started_s"], merged["arxiv"]["finished_s"], merged["arxiv"]["duration_s"]) == (0.0, 9.0, 9.0)
+    assert (merged["rospatent"]["retries"], merged["rospatent"]["failures"]) == (4, 2)
+
+
+def test_prefetch_deadline_returns_ready_and_does_not_wait(tmp_path) -> None:
+    """arXiv завис на второй фразе: prefetch(timeout=0.3) отдаёт первую и не ждёт зависший запрос;
+    поздний ответ в сводку очереди не попадает."""
+    import threading
+    import time as clock
+    from collector.models import SearchTerms
+
+    release = threading.Event()
+    sources = adapters()
+    original = sources[1].count_windows_one_call
+
+    def stuck(search, windows):
+        if search.terms[0] == MAINSTREAM:
+            release.wait(5)
+        return original(search, windows)
+    sources[1].count_windows_one_call = stuck
+    with patch.object(fetch_module, "COUNTERS_CACHE_DIR", tmp_path):
+        fetch = fetch_module.parallel_fetch(sources, Settings(), [])
+        begin = clock.monotonic()
+        ready = fetch.prefetch([SIGNAL, MAINSTREAM], timeout=0.3)
+        waited = clock.monotonic() - begin
+        release.set()
+        frame = fetch(SearchTerms(terms=[SIGNAL], context_terms=[], query=""))
+    assert ready == [SIGNAL] and waited < 2
+    assert not frame.empty
+    arxiv = next(q for q in fetch.queues if q["source"] == "arxiv")
+    assert arxiv["candidates"] == 1
+
+
+HOLO = "holographic memory chips"
+
+
+class RoundArxiv(QueryFake):
+    """arXiv, у которого подзапрос раунда добора находит три новых документа."""
+
+    def search(self, query, date_from, date_to_exclusive, *, limit, **options):
+        if "holographic" not in query:
+            return super().search(query, date_from, date_to_exclusive, limit=limit, **options)
+        fresh = (date.today() - timedelta(days=5)).isoformat()
+        return [doc(source="arxiv", source_type="preprint", published_at=fresh, url=f"https://arxiv/r{i}",
+                    title=f"arxiv round doc {i}") for i in range(1, 4)]
+
+
+def round_extract(system_prompt, user_prompt, **kwargs):
+    """Шаг 4: на документы раунда — новый термин (док. 1) и уже известный сигнал (док. 2)."""
+    if "round doc" not in user_prompt:
+        return fake_extract(system_prompt, user_prompt, **kwargs)
+    items = [{"doc": 1, "term_ru": "голографические чипы", "term_en": HOLO, "quote": "doc"},
+             {"doc": 2, "term_ru": "данные телеуправления", "term_en": SIGNAL, "quote": "doc"}]
+    return {"text": json.dumps(items, ensure_ascii=False), "model_uri": "m", "model_version": "t", "usage": {},
+            "elapsed_s": 0, "error": None}
+
+
+PLAIN_ADAPTERS = adapters  # до подмены в тесте раунда: иначе рекурсия
+
+
+def round_adapters():
+    plain = PLAIN_ADAPTERS()
+    return [plain[0], RoundArxiv("arxiv", "preprint", documents=plain[1].documents), plain[2]]
+
+
+def test_one_round_adds_new_term_and_shifts_doc_ids(tmp_path, monkeypatch) -> None:
+    """Раунд 1: новые подзапросы, только новые документы в шаг 4, doc_ids сдвинуты на 9 прежних документов;
+    названных по-прежнему меньше 60, но второго раунда нет (MAX_ROUNDS = 1)."""
+    monkeypatch.setitem(TRACE, HOLO, 7)
+    monkeypatch.setattr(sys.modules[__name__], "adapters", round_adapters)
+    out, _, prompts = run(tmp_path, extract=round_extract)
+    rounds = out["stats"]["rounds"]
+    assert rq.MAX_ROUNDS == 1 and rq.TARGET_NAMED == 60
+    assert [r["round"] for r in rounds] == [0, 1] and rounds[1]["subqueries"][:3] == RU_R1
+    assert (rounds[1]["documents_new"], rounds[1]["documents_for_candidates"], rounds[1]["named_gain"]) == (3, 3, 1)
+    assert sum("round doc" in prompt and "openalex doc" in prompt for prompt in prompts) == 0
+    assert out["stats"]["documents_total"] == 12 and out["stats"]["candidates_named"] == 4
+    assert any(s["subquery_id"].startswith(f"{out['query_id']}-r1-en-") for s in out["subqueries"])
+    holo = next(item for item in out["top"] + out["excluded"] if item["name_en"] == HOLO)
+    assert holo["n_docs"] == 1 and holo["n_works"] == 7
+    signal = next(item for item in out["top"] if tech_key(item["name_en"]) == SIGNAL)
+    assert "https://arxiv/r2" in {s["url"] for s in signal["sources"]}  # док. 2 раунда -> №11
+
+
+def test_no_round_when_enough_named_or_no_time(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(rq, "TARGET_NAMED", 3)
+    out, _, _ = run(tmp_path / "enough")
+    assert len(out["stats"]["rounds"]) == 1
+    monkeypatch.setattr(rq, "TARGET_NAMED", 60)
+    out, _, _ = run(tmp_path / "late", time_budget=0)
+    assert len(out["stats"]["rounds"]) == 1
+
+
+def test_round_without_new_subqueries_is_a_warning(tmp_path, monkeypatch) -> None:
+    """Два раунда разрешены: раунд 2 повторяет подзапросы раунда 1 — все отброшены, добор кончается."""
+    monkeypatch.setattr(rq, "MAX_ROUNDS", 2)
+    out, _, _ = run(tmp_path)
+    assert len(out["stats"]["rounds"]) == 2
+    assert any(w.startswith("раунд добора 2 не выполнен") for w in out["warnings"])

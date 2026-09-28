@@ -155,3 +155,38 @@ def test_dedupe_merges_near_duplicates() -> None:
     photonic = next(m for m in merged if "photonic" in m["name_en"].casefold())
     assert photonic["doc_count"] >= 2
     assert "optical AI accelerator" in photonic["terms"]
+
+
+def text_reply(text: str) -> dict:
+    return {**reply([]), "text": text}
+
+
+def test_first_array_parsed_and_tail_ignored() -> None:
+    """Ответ «[…]\n\nПояснение…» и в обёртке ```json с хвостом: берётся первый массив."""
+    body = json.dumps([GOOD], ensure_ascii=False)
+    assert et.parse_items(body + "\n\nПояснение: выбран термин [1].") == [GOOD]
+    assert et.parse_items("Вот ответ:\n```json\n" + body + "\n```\nГотово") == [GOOD]
+    assert et.parse_items(json.dumps({"items": [GOOD]}, ensure_ascii=False) + "\nхвост") == [GOOD]
+    with pytest.raises(ValueError):
+        et.parse_items("Не могу ответить")
+
+
+def test_tail_does_not_trigger_retry() -> None:
+    with patch.object(et, "ask_llm", return_value=text_reply(json.dumps([GOOD]) + "\n\nПояснение")) as model:
+        good, warnings = et.extract_batch("роботы", list(SNIPPETS.items()), None, True)
+    assert model.call_count == 1 and [c["name_en"] for c in good] == ["soft growing robot"] and warnings == []
+
+
+def test_broken_answer_retried_once_at_03_same_prompt() -> None:
+    with patch.object(et, "ask_llm", side_effect=[text_reply("[{\"term_en\": "), reply([GOOD])]) as model:
+        good, warnings = et.extract_batch("роботы", list(SNIPPETS.items()), None, True)
+    calls = model.call_args_list
+    assert [c.kwargs["temperature"] for c in calls] == [0.2, 0.3] and calls[0].args == calls[1].args
+    assert [c["name_en"] for c in good] == ["soft growing robot"]
+    assert warnings[0].startswith("разбор ответа не удался") and "удался" in warnings[1]
+
+
+def test_broken_twice_gives_up_without_third_call() -> None:
+    with patch.object(et, "ask_llm", return_value=text_reply("нет массива")) as model:
+        good, warnings = et.extract_batch("роботы", list(SNIPPETS.items()), None, True)
+    assert model.call_count == 2 and good == [] and len(warnings) == 2

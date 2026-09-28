@@ -285,3 +285,47 @@ class GenerateManyTest(IsolatedTest):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+ROUND_PHRASE = ("Уже использованы подзапросы: {}. Составь новые подзапросы по той же теме, "
+                "не повторяющие и не перефразирующие уже использованные.")
+RU2 = ["голографическая память", "плазмонные волноводы", "фотонные нейросети"]
+EN2 = ["holographic storage media", "plasmonic waveguides", "photonic neural networks", "optical tensor cores",
+       "thin film lithium niobate", "microring resonator arrays"]
+
+
+class RoundTest(IsolatedTest):
+    """Раунд добора (задача Х2): тот же subq-v4, дописка в пользовательском промпте, ключ кэша по раунду."""
+
+    def _round(self, round_: int, used: list[dict]):
+        prompts = []
+
+        def fake_ask_llm(system_prompt, user_prompt, **kwargs):
+            prompts.append((system_prompt, user_prompt, kwargs["temperature"]))
+            lang = language_of(system_prompt)
+            items = (RU[:1] + RU2) if lang == "ru" else (EN[:2] + EN2)  # первые — повтор прошлого раунда
+            return answer(payload(lang, items))
+
+        with patch.object(sq, "ask_llm", side_effect=fake_ask_llm):
+            return sq.generate_subqueries("оптика", "q7", round_=round_, used=used), prompts
+
+    def test_round_prompt_ids_and_used_dropped(self):
+        used = [{"language": "ru", "text": RU[0]}, {"language": "en", "text": EN[0]}, {"language": "en", "text": EN[1]}]
+        result, prompts = self._round(1, used)
+        phrase = ROUND_PHRASE.format(", ".join([RU[0], EN[0], EN[1]]))
+        self.assertTrue(all(user.endswith(phrase) and temperature == 0 for _, user, temperature in prompts))
+        self.assertTrue(all(system == sq.build_system_prompt(language_of(system)) for system, _, _ in prompts))
+        self.assertEqual((texts(result, "ru"), texts(result, "en")), (RU2, EN2))
+        self.assertEqual(result["subqueries"][0]["subquery_id"], "q7-r1-ru-1")
+
+    def test_round_zero_prompt_has_no_addition(self):
+        self.assertNotIn("Уже использованы", sq.build_user_prompt("оптика"))
+        self.assertEqual(sq.build_user_prompt("оптика", []), sq.build_user_prompt("оптика"))
+
+    def test_cache_key_by_topic_and_round(self):
+        keys = {sq.cache_key("оптика", MODEL_URI, round_=n) for n in (0, 1, 2)}
+        self.assertEqual(len(keys), 3)
+        used = [{"language": "en", "text": EN[0]}]
+        first, prompts = self._round(1, used)
+        again, more = self._round(1, used)  # второй раз — из кэша (тема, раунд), без вызовов LLM
+        self.assertEqual((len(more), again["subqueries"]), (0, first["subqueries"]))

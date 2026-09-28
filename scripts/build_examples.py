@@ -10,12 +10,10 @@ examples/README.md — таблица примеров, без оценок ка
 from __future__ import annotations
 
 import json
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
-import httpx
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,10 +26,12 @@ QUERIES = {"ai": ("технологии в ИИ", "Инфраструктура 
 
 
 def quota() -> int:
-    """Остаток суточной квоты OpenAlex из заголовка x-ratelimit-remaining (один дешёвый запрос)."""
-    key = os.getenv("OPENALEX_API_KEY") or os.getenv("OPEN_ALEX") or ""
-    response = httpx.get("https://api.openalex.org/works", params={"per_page": 1, "api_key": key}, timeout=30)
-    return int(response.headers["x-ratelimit-remaining"])
+    """Остаток суточной квоты OpenAlex (pipeline.fetch.openalex_quota); не получен — стоп."""
+    from pipeline.fetch import openalex_quota
+    left = openalex_quota()
+    if left is None:
+        raise SystemExit("квота OpenAlex не получена: прогоны остановлены")
+    return left
 
 
 def cache_share(result: dict) -> float:

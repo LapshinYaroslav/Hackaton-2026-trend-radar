@@ -152,7 +152,9 @@ def test_cyrillic_abbreviations_and_mixed_alphabets_rejected(name, term) -> None
                                         ("ЦОД на базе ИИ", "AI data centers"),
                                         ("3D-моделирование молекул", "3D molecular generation"),
                                         ("ДНК-кодируемая библиотека", "DNA-encoded library"),
-                                        ("РНК-интерференция на базе ИИ", "AI RNA interference")])
+                                        ("РНК-интерференция на базе ИИ", "AI RNA interference"),
+                                        ("Перевод изображений последовательностей МРТ",
+                                         "MRI sequence image-to-image translation")])
 def test_whitelist_and_homogeneous_parts_pass(name, term) -> None:
     assert tr.passes(name, term)
 
@@ -174,3 +176,36 @@ def test_cached_name_failing_new_checks_is_translated_again() -> None:
     llm, calls = fake(["Глубокие нейронные трансформеры"])
     got = tr.translate_one("deep neural transformer", "q", None, llm)
     assert got["name_ru"] == "Глубокие нейронные трансформеры" and got["attempts"] == 1 and len(calls) == 1
+
+
+def test_latin_word_in_singular_or_plural_form_of_term() -> None:
+    """API из «APIs» и наоборот — то же слово термина; чужое слово — нет."""
+    assert tr.passes("API генерации аутентификационных ссылок", "authentication link generation APIs")
+    assert tr.passes("LLM-агенты для кода", "LLMs coding agents")
+    assert not tr.passes("SDK генерации ссылок", "authentication link generation APIs")
+
+
+def test_retry_gets_rejected_answer_and_reason() -> None:
+    """Второй попытке сообщается прошлый ответ и причина отказа; первая — чистый промпт."""
+    llm, calls = fake(["ДНТ-модели", "Глубокие нейронные трансформеры"])
+    got = tr.translate_one("deep neural transformer", "q", None, llm)
+    assert got["name_ru"] == "Глубокие нейронные трансформеры"
+    assert got["attempts"] == 2 and [c["temperature"] for c in calls] == [0.0, 0.3]
+    assert "Прошлый ответ" not in calls[0]["system"]
+    assert calls[1]["system"].startswith(calls[0]["system"])
+    assert "Прошлый ответ «ДНТ-модели» отклонён: кириллическая аббревиатура" in calls[1]["system"]
+
+
+def test_retry_after_api_error_has_no_reason() -> None:
+    """Первая попытка — ошибка API: отклонять нечего, повтор с тем же промптом."""
+    llm, calls = fake(["ERR 500", "федеративное обучение"])
+    tr.translate_one("federated learning", "q", None, llm)
+    assert calls[0]["system"] == calls[1]["system"]
+
+
+@pytest.mark.parametrize("name, fragment", [(None, "нет русского"), ("Перевод: обучение", "отказ"),
+                                            ("federated learning", "нет русского"),
+                                            ("Batch-OF справедливость", "латинские слова OF"),
+                                            ("ДНТ-модели", "кириллическая аббревиатура")])
+def test_problem_names_first_failed_check(name, fragment) -> None:
+    assert fragment in tr.problem(name, "batch order fairness" if "OF" in fragment else "federated learning")

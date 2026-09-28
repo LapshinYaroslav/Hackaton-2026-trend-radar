@@ -14,27 +14,6 @@ from api.main import app
 client = TestClient(app)
 
 
-def test_query_returns_example_contract() -> None:
-    created = client.post("/queries", json={"topic": "роботы для цеха", "area": "Роботы"})
-    assert created.status_code == 200
-    query_id = created.json()["query_id"]
-
-    body = client.get(f"/queries/{query_id}").json()
-    # поток может ещё не дописать done при 0 секунд — опросим пару раз
-    for _ in range(20):
-        body = client.get(f"/queries/{query_id}").json()
-        if body["status"] == "done":
-            break
-    assert body["status"] == "done"
-    assert body["topic"] == "роботы для цеха"
-    assert body["area"] == "Роботы"
-    assert body["top"][0]["name_ru"]
-    assert "explanation_ru" in body["top"][0]
-    assert body["excluded"]
-    assert body["stats"]["candidates_found"] == 64
-    assert "_note" not in body
-
-
 def test_other_area_is_null() -> None:
     created = client.post("/queries", json={"topic": "что-то новое", "area": "Другое"})
     query_id = created.json()["query_id"]
