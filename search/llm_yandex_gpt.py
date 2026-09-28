@@ -1,4 +1,6 @@
 """Единая точка вызова YandexGPT: запрос к REST API и лог всех обращений."""
+from __future__ import annotations
+
 import json
 import os
 import threading

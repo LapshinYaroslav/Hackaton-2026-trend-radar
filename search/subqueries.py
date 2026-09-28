@@ -1,4 +1,6 @@
 """Шаг 2 режима «Запрос»: тема пользователя -> подзапросы на русском и английском."""
+from __future__ import annotations
+
 import argparse
 import hashlib
 import json
