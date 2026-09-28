@@ -107,3 +107,40 @@ def explanation_top(features: Mapping, contributions: Mapping[str, float], count
         if len(texts) == count:
             break
     return texts or [GENERIC_ABOVE]
+
+
+WHY_FALLBACK = "Профиль публикаций похож на ранние технологии, на которых обучалась модель."
+
+
+def _why_phrase(name: str, value: float, n_pat: int | None) -> str | None:
+    """Фраза без чисел для признака с положительным вкладом; уровень значения выбирает оттенок."""
+    if name == "recency":
+        return ("Почти всё, что о ней написано, появилось за последние два года." if value >= 0.9 else
+                "Большая часть публикаций о ней вышла за последние два года." if value >= 0.7 else
+                "Интерес к теме заметно оживился в последние два года.")
+    if name == "age_first_arxiv":
+        return ("Сам термин совсем молодой: первые научные препринты о нём вышли недавно." if value <= 2 else
+                "Термин появился в науке лишь несколько лет назад." if value <= 5 else
+                "По меркам науки термин ещё сравнительно новый.")
+    if name == "share_patent":
+        return ("Патентов пока нет: исследования уже идут, а до коммерческого применения дело не дошло." if n_pat == 0
+                else "Патентов пока мало по сравнению с научными работами — коммерциализация только начинается."
+                if value <= 0.1 else "Доля патентов ниже, чем обычно бывает у зрелых технологий.")
+    if name == "share_prev6":
+        return ("До 2020 года о технологии почти не писали." if value <= 0.1 else
+                "Основная часть публикаций появилась после 2020 года.")
+    if name == "share_news_wordmatch":
+        return ("Научных работ пока немного, а технологическая пресса уже обращает на неё внимание." if value >= 0.5
+                else "Технология начинает появляться в новостях технологических компаний.")
+    if name == "growth_research":
+        return "Число научных работ о ней растёт быстрее, чем в среднем по науке."
+    return None
+
+
+def why_words(features: Mapping, contributions: Mapping[str, float], n_pat: int | None = None,
+              count: int = 3) -> str:
+    """«Почему это слабый сигнал» словами: до count признаков с самыми положительными вкладами, без чисел."""
+    positive = sorted(((value, name) for name, value in contributions.items()
+                       if value > 0 and _usable(name, features, n_pat)), reverse=True)
+    phrases = [phrase for _, name in positive if (phrase := _why_phrase(name, float(features[name]), n_pat))]
+    return " ".join(phrases[:count]) or WHY_FALLBACK

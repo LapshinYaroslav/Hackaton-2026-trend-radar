@@ -1,18 +1,15 @@
 """
 API запросов: POST запускает pipeline.run_query, GET отдаёт контракт выдачи.
 
-QUERY_MOCK=1 — пример из файла (тесты). Без флага тема пользователя идёт в оркестратор.
+Ответ — только результат run_query: мок-режима и файла-примера нет.
 Если задан DATABASE_URL — схема, посев и история пишутся в Postgres.
 """
 
 from __future__ import annotations
 
 import copy
-import json
 import logging
-import os
 import threading
-import time
 import uuid
 from pathlib import Path
 from typing import Optional
@@ -27,25 +24,9 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 logger = logging.getLogger(__name__)
 
-STAGES = (
-    "Подзапросы",
-    "Поиск документов",
-    "Извлечение кандидатов",
-    "Проверка",
-    "Сбор статистики",
-    "Оценка",
-)
-
-STAGE_RU = {
-    "subqueries": "Подзапросы",
-    "search": "Поиск документов",
-    "candidates": "Извлечение кандидатов",
-    "naming": "Проверка",
-    "counters": "Сбор статистики",
-    "ranking": "Оценка",
-    "dedup": "Оценка",
-    "translate": "Оценка",
-}
+# Прогресс — события pipeline.progress (on_progress): pct от бюджета времени, не убывает, 100 — только в конце.
+# Хранится в progress_done при progress_total = 100 (схема queries не меняется); eta_s — оценка остатка, в памяти.
+START_STAGE = "Запуск"
 
 AREAS = {
     "Edge",
@@ -55,37 +36,6 @@ AREAS = {
     "Роботы",
     "Финтех",
 }
-
-
-def contract_path() -> Path:
-    here = Path(__file__).resolve().parent
-    candidates = (
-        here / "docs" / "contracts" / "query_result.example.json",
-        here.parent / "docs" / "contracts" / "query_result.example.json",
-    )
-    for path in candidates:
-        if path.is_file():
-            return path
-    raise FileNotFoundError("нет docs/contracts/query_result.example.json")
-
-
-def load_example() -> dict:
-    data = json.loads(contract_path().read_text(encoding="utf-8"))
-    data.pop("_note", None)
-    return data
-
-
-def mock_seconds() -> float:
-    raw = os.getenv("QUERY_MOCK_SECONDS", "3").strip()
-    try:
-        return max(0.0, float(raw))
-    except ValueError:
-        return 3.0
-
-
-def use_mock() -> bool:
-    """Тесты и явный мок. Без QUERY_MOCK запрос идёт в run_query."""
-    return os.getenv("QUERY_MOCK", "").strip().lower() in {"1", "true", "yes"}
 
 
 class CreateQuery(BaseModel):
@@ -103,13 +53,12 @@ def _startup() -> None:
         store.ensure_ready()
     except Exception:  # noqa: BLE001
         pass
-    if not use_mock():
-        try:
-            from model.bootstrap import ensure_artifact
+    try:
+        from model.bootstrap import ensure_artifact
 
-            ensure_artifact()
-        except Exception as exc:
-            logger.warning("model artifact: %s", exc)
+        ensure_artifact()
+    except Exception as exc:
+        logger.warning("model artifact: %s", exc)
 
 
 def _public(job: dict) -> dict:
@@ -121,6 +70,7 @@ def _public(job: dict) -> dict:
         "progress_stage": job["progress_stage"],
         "progress_done": job["progress_done"],
         "progress_total": job["progress_total"],
+        "eta_s": job.get("eta_s"),
     }
     if job["status"] == "done" and job.get("result"):
         payload.update(store.public_result(job["result"]) or {})
@@ -134,37 +84,20 @@ def _public(job: dict) -> dict:
     return payload
 
 
-def _progress(query_id: str):
-    def on_progress(stage: str, done: int, total: int) -> None:
+def _on_progress(query_id: str):
+    """Событие pipeline.progress -> этап по-русски, проценты и оценка остатка в записи запроса."""
+    def on_progress(event: dict) -> None:
         with _lock:
             store.update_progress(
                 query_id,
                 status="running",
-                progress_stage=STAGE_RU.get(stage, stage),
-                progress_done=done,
-                progress_total=max(int(total or 1), 1),
+                progress_stage=event["stage_ru"],
+                progress_done=int(event["pct"]),
+                progress_total=100,
+                eta_s=event.get("eta_s"),
             )
 
     return on_progress
-
-
-def _enrich_later(query_id: str) -> None:
-    with _lock:
-        job = store.get_query(query_id)
-        result = (job or {}).get("result")
-    if not result:
-        return
-    try:
-        from pipeline.enrich import enrich_top
-
-        updated = enrich_top(result)
-        with _lock:
-            store.patch_result(query_id, updated)
-    except Exception as exc:
-        logger.warning("enrich %s: %s", query_id, exc)
-        result["enrichment"] = "error"
-        with _lock:
-            store.patch_result(query_id, result)
 
 
 def _run_live(query_id: str) -> None:
@@ -179,60 +112,22 @@ def _run_live(query_id: str) -> None:
         store.update_progress(
             query_id,
             status="running",
-            progress_stage=STAGES[0],
+            progress_stage=START_STAGE,
             progress_done=0,
-            progress_total=len(STAGES),
+            progress_total=100,
         )
-    result = run_query(topic, area=area, query_id=query_id, progress=_progress(query_id))
+    result = run_query(topic, area=area, query_id=query_id, on_progress=_on_progress(query_id))
     result["query_id"] = query_id
     result["topic"] = topic
     result["area"] = area
-    result.setdefault("enrichment", "pending")
     with _lock:
-        store.finish_query(query_id, result)
-    threading.Thread(target=_enrich_later, args=(query_id,), daemon=True).start()
-
-
-def _run_mock(query_id: str) -> None:
-    seconds = mock_seconds()
-    step = seconds / len(STAGES) if STAGES else 0
-    for index, stage in enumerate(STAGES, start=1):
-        with _lock:
-            store.update_progress(
-                query_id,
-                progress_stage=stage,
-                progress_done=index,
-                progress_total=len(STAGES),
-                status="running",
-            )
-        if step:
-            time.sleep(step)
-    example = load_example()
-    with _lock:
-        job = store.get_query(query_id) or {}
-        example["query_id"] = query_id
-        example["topic"] = job.get("topic")
-        example["area"] = job.get("area")
-        example.setdefault("enrichment", "done")
-        store.update_progress(
-            query_id,
-            progress_stage=STAGES[-1],
-            progress_done=len(STAGES),
-            progress_total=len(STAGES),
-            status="done",
-            model_version=example.get("model_version"),
-            threshold=example.get("threshold"),
-            cutoff_date=example.get("cutoff_date"),
-        )
-        store.finish_query(query_id, example)
+        # копия: после done ответ не меняется, даже если кто-то держит ссылку на result
+        store.finish_query(query_id, copy.deepcopy(result))
 
 
 def _run(query_id: str) -> None:
     try:
-        if use_mock():
-            _run_mock(query_id)
-        else:
-            _run_live(query_id)
+        _run_live(query_id)
     except Exception as exc:  # noqa: BLE001
         with _lock:
             store.update_progress(query_id, status="error", error=str(exc))
@@ -241,7 +136,7 @@ def _run(query_id: str) -> None:
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok", "database": bool(store.database_url()), "mock": use_mock()}
+    return {"status": "ok", "database": bool(store.database_url())}
 
 
 @app.post("/queries")
@@ -260,9 +155,9 @@ def create_query(body: CreateQuery) -> dict:
         "topic": topic,
         "area": area,
         "status": "running",
-        "progress_stage": STAGES[0],
+        "progress_stage": START_STAGE,
         "progress_done": 0,
-        "progress_total": len(STAGES),
+        "progress_total": 100,
         "result": None,
         "error": None,
         "created_at": None,

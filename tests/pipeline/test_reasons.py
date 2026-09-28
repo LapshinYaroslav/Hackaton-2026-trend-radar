@@ -1,5 +1,6 @@
 """Шаблоны причин и объяснений: по тесту на каждый."""
 import math
+import re
 
 import pytest
 
@@ -116,3 +117,43 @@ def test_every_s2a2_feature_has_templates_and_volume_is_not_among_them() -> None
     from model.config import FEATURES_S2A2
     assert "volume" not in FEATURES_S2A2
     assert set(FEATURES_S2A2) <= set(reasons.POSITIVE) and set(FEATURES_S2A2) <= set(reasons.NEGATIVE)
+
+
+WHY_FEATURES = {"recency": 1.0, "age_first_arxiv": 1.0, "share_patent": 0.0, "share_prev6": 0.0,
+            "share_news_wordmatch": 0.81, "growth_research": 0.3}
+
+
+def test_why_words_has_no_digits_and_top_three() -> None:
+    contributions = {"recency": 2.5, "age_first_arxiv": 0.7, "share_patent": 0.4, "share_prev6": 0.15,
+                     "share_news_wordmatch": -1.3, "growth_research": 0.0}
+    text = reasons.why_words(WHY_FEATURES, contributions, n_pat=0)
+    assert not re.search(r"\d", text)
+    assert text == ("Почти всё, что о ней написано, появилось за последние два года. "
+                    "Сам термин совсем молодой: первые научные препринты о нём вышли недавно. "
+                    "Патентов пока нет: исследования уже идут, а до коммерческого применения дело не дошло.")
+
+
+@pytest.mark.parametrize("name, value, n_pat, fragment", [
+    ("recency", 0.75, None, "Большая часть"),
+    ("recency", 0.62, None, "оживился"),
+    ("age_first_arxiv", 5.0, None, "несколько лет назад"),
+    ("age_first_arxiv", 9.0, None, "сравнительно новый"),
+    ("share_patent", 0.03, 7, "Патентов пока мало"),
+    ("share_patent", 0.3, 50, "ниже, чем обычно"),
+    ("share_prev6", 0.3, None, "после 2020"),
+    ("share_news_wordmatch", 0.81, None, "пресса уже обращает"),
+    ("growth_research", 1.2, None, "растёт быстрее"),
+])
+def test_why_words_levels(name, value, n_pat, fragment) -> None:
+    assert fragment in reasons.why_words({name: value}, {name: 1.0}, n_pat=n_pat)
+
+
+def test_why_words_skips_unknown_and_patent_without_count() -> None:
+    features = {"recency": None, "share_patent": 0.0, "share_prev6": 0.0}
+    text = reasons.why_words(features, {"recency": 3.0, "share_patent": 2.0, "share_prev6": 0.1}, n_pat=None)
+    assert text == "До 2020 года о технологии почти не писали."
+
+
+@pytest.mark.parametrize("contributions", [{}, {"recency": -1.0}, {"volume": 2.0}])
+def test_why_words_fallback(contributions) -> None:
+    assert reasons.why_words({"recency": 0.5, "volume": 3.0}, contributions) == reasons.WHY_FALLBACK

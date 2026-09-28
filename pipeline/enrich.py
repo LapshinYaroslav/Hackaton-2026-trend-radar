@@ -1,9 +1,9 @@
-"""Догрузка документов по ТОП-15 после того, как дашборд уже можно показать."""
+"""Догрузка документов по ТОП-15: последний этап run_query перед done, в пределах бюджета времени."""
 
 from __future__ import annotations
 
 import logging
-from typing import Mapping
+from typing import Callable, Mapping
 
 from collector.api import DocumentCollector, default_adapters
 from collector.db import build_cache
@@ -44,8 +44,15 @@ def merge_sources(existing: list[dict], extra: list[dict], limit: int = MAX_EXTR
     return merged
 
 
-def enrich_top(result: dict, collector: DocumentCollector | None = None) -> dict:
-    """Ищет дополнительные документы по английскому имени каждого пункта ТОП."""
+def enrich_top(result: dict, collector: DocumentCollector | None = None, *,
+               time_left: Callable[[], float] | None = None,
+               progress: Callable[[str, int, int], None] | None = None, source_limit: int = MAX_EXTRA) -> dict:
+    """Ищет дополнительные документы по английскому имени каждого пункта ТОП.
+
+    time_left() <= 0 перед очередным пунктом — остановка, enrichment = "partial"; progress("enrich", i, n).
+    В sources не больше source_limit; все найденные документы — в _documents (из них строится инсайт).
+    n_docs и n_sources не меняются: это след поиска №1, по нему уже решён отсев слабых источников.
+    """
     settings = Settings.from_env()
     own = collector is None
     collector = collector or DocumentCollector(
@@ -54,8 +61,14 @@ def enrich_top(result: dict, collector: DocumentCollector | None = None) -> dict
         settings=settings,
     )
     extras: list[dict] = []
+    top, stopped = list(result.get("top") or []), False
     try:
-        for item in result.get("top") or []:
+        for index, item in enumerate(top):
+            if time_left is not None and time_left() <= 0:
+                stopped = True
+                break
+            if progress:
+                progress("enrich", index, len(top))
             name = item.get("name_en")
             if not name:
                 continue
@@ -75,9 +88,8 @@ def enrich_top(result: dict, collector: DocumentCollector | None = None) -> dict
                 continue
             docs = found.to_dict()["documents"]
             extras.extend(docs)
-            item["sources"] = merge_sources(list(item.get("sources") or []), [_as_source(doc) for doc in docs])
-            item["n_docs"] = max(int(item.get("n_docs") or 0), len(item["sources"]))
-            item["n_sources"] = len({source.get("source") for source in item["sources"] if source.get("source")})
+            item["sources"] = merge_sources(list(item.get("sources") or []), [_as_source(doc) for doc in docs],
+                                            limit=source_limit)
     finally:
         if own:
             close = getattr(collector, "close", None)
@@ -93,5 +105,7 @@ def enrich_top(result: dict, collector: DocumentCollector | None = None) -> dict
             documents.append(doc)
             seen.add(doc["url"])
     result["_documents"] = documents
-    result["enrichment"] = "done"
+    result["enrichment"] = "partial" if stopped else "done"
+    if progress:
+        progress("enrich", len(top), len(top))
     return result

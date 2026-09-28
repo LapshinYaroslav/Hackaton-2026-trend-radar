@@ -182,6 +182,7 @@ def test_output_matches_schema(result) -> None:
                         "timings", "warnings"}
     assert out["normalizer_deviations"] == ["company_stoplist_off"]
     assert set(out["stats"]) == {"documents_by_source", "documents_total", "documents_for_candidates",
+                                 "documents_analyzed",
                                  "documents_for_candidates_by_source",
                                  "candidates_found", "candidates_named",
                                  "candidates_scored", "above_threshold", "above_075",
@@ -191,11 +192,13 @@ def test_output_matches_schema(result) -> None:
     assert out["stats"]["time_budget_s"] == rq.TIME_BUDGET_S and out["stats"]["stopped_at"] is None
     assert out["model_version"] == "s2a2-v1"
     assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup",
-                                   "translate", "total", "queues"}
-    assert {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup", "translate"} <= set(stages)
+                                   "translate", "enrich", "total", "queues"}
+    assert out["enrichment"] == "done"
+    assert {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup", "translate",
+            "enrich"} <= set(stages)
     patent_keys = {"n_pat", "share_patent", "rospatent_failed", "note_ru"}
     for item in out["top"]:
-        assert set(item) == {"rank", "name_ru", "name_en", "score", "explanation_ru", "contributions",
+        assert set(item) == {"rank", "name_ru", "name_en", "score", "explanation_ru", "why_ru", "contributions",
                              "counters", "sources", "model_version", "name_ru_source", "name_ru_auto",
                              "variants"} | DETAIL_KEYS | patent_keys | SCORED_KEYS
         assert item["name_ru"] == f"Русское {item['name_en']}" and item["name_ru_source"] == "translate"
@@ -233,7 +236,7 @@ def test_same_term_merged_with_doc_ids(result) -> None:
     assert max(v["n_works"] for v in top["name_variants"]) == 5
     assert top["n_docs"] == 2 and top["n_sources"] == 1
     # v3 (по умолчанию) ставит arXiv первым на шаге 4: документы 1 и 2 — arXiv
-    assert {s["url"] for s in top["sources"]} == {"https://arxiv/3", "https://arxiv/4"}
+    assert {s["url"] for s in top["sources"][:2]} == {"https://arxiv/3", "https://arxiv/4"}  # дальше — догрузка
 
 
 def test_humanoid_robot_is_known_training_mainstream(result) -> None:
@@ -743,3 +746,17 @@ def test_round_without_new_subqueries_is_a_warning(tmp_path, monkeypatch) -> Non
     out, _, _ = run(tmp_path)
     assert len(out["stats"]["rounds"]) == 2
     assert any(w.startswith("раунд добора 2 не выполнен") for w in out["warnings"])
+
+
+def test_documents_analyzed_sums_search_counters_and_patents() -> None:
+    ranked = [{"name": "a", "score": 0.9, "counters": {"prev6": {"arxiv": 5, "openalex": 10}, "2025": {"techcrunch": 2}}},
+              {"name": "b", "score": 0.1, "counters": {"2024": {"openalex": 100}}},
+              {"name": "c", "score": None, "counters": {"2024": {"openalex": 1000}}},  # не оценён — не считается
+              {"name": "d", "score": 0.5}]
+    assert rq.documents_analyzed([{"url": "u1"}, {"url": "u2"}], ranked, {"a": 3, "b": 0}) == 2 + 17 + 100 + 3
+    assert rq.documents_analyzed([], [], {}) == 0
+
+
+def test_documents_analyzed_in_run_covers_search_documents(result) -> None:
+    out, _ = result
+    assert out["stats"]["documents_analyzed"] >= out["stats"]["documents_total"] > 0

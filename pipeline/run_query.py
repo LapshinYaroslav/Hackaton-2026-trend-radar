@@ -2,7 +2,7 @@
 
 Шаги: подзапросы -> поиск №1 -> кандидаты (шаг 4, extract-v4: name_en = термин) -> след названия
 в OpenAlex (pipeline/naming.py, no_trace) -> слияние по tech_key -> страховочная проверка названия -> лимит
--> счётчики и признаки -> ранжирование -> склейка дублей -> перевод названий.
+-> счётчики и признаки -> ранжирование -> склейка дублей -> перевод названий -> догрузка источников ТОП.
 
 Запрос кандидата для счётчиков строится так же, как у 160 обучающих технологий: один
 термин — tech_key названия, без context_terms (CLAUDE.md, правила ML, п. 2).
@@ -29,6 +29,7 @@ from collector.constants import AGGREGATE_WINDOWS
 from collector.db import build_cache
 from collector.settings import Settings
 from pipeline.catalog import catalog_candidates
+from pipeline.enrich import enrich_top
 from pipeline.persist import persist_features_and_scores, persist_search_documents
 from pipeline.weak_sources import move_weak_only
 from model.config import ROSPATENT_DATASETS
@@ -39,7 +40,7 @@ from pipeline import dedup as dedup_module, fetch as fetch_module, naming, trans
 from pipeline.progress import Report, tracker
 from pipeline.fetch import parallel_fetch
 from pipeline.search_cache import CachedSearch
-from pipeline.reasons import SPECIAL, explanation_top, reason_below
+from pipeline.reasons import SPECIAL, explanation_top, reason_below, why_words
 from search.extract_terms import extract_terms
 from search.subqueries import generate_subqueries
 
@@ -72,6 +73,7 @@ CYRILLIC_RE = re.compile(r"[а-яёА-ЯЁ]")
 EMPTY_AREA_WARNING = "область не выбрана: нормализатор получил пустую область, такое поведение не проверялось"
 ROSPATENT_OFF_WARNING = ("Роспатент выключен: патентный признак share_patent недоступен у всех кандидатов, "
                          "модель подставила медиану обучения")
+ENRICH_STOPPED_WARNING = "Догрузка источников остановлена по бюджету времени: у части ТОП только источники поиска №1"
 PATENT_FAILED_NOTE = "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения"
 ROSPATENT_NO_KEY_WARNING = ("Нет ключа ROSPATENT в .env: патентный признак share_patent недоступен у всех кандидатов, "
                             "модель подставила медиану обучения")
@@ -294,6 +296,15 @@ def step4_topped_up(documents: Sequence[dict], subqueries: Sequence[dict], picke
     return len(picked) - len(step4_documents(documents, subqueries, minimum=0))
 
 
+def documents_analyzed(documents: Sequence[dict], ranked: Sequence[dict], n_pats: dict[str, int]) -> int:
+    """Документы, учтённые прогоном: поиск №1 с догрузкой + публикации в счётчиках оценённых кандидатов
+    (все окна 2014–2026, все источники) + патенты Роспатента. Повторы между кандидатами не вычитаются:
+    у счётчиков нет идентификаторов документов."""
+    counted = sum(int(value) for item in ranked if item.get("score") is not None
+                  for window in (item.get("counters") or {}).values() for value in window.values())
+    return len(documents) + counted + sum(int(value) for value in n_pats.values())
+
+
 def document_stats(documents: Sequence[dict], subqueries: Sequence[dict]) -> dict[str, int]:
     """Документы по источникам происхождения (openalex, openalex_ru, arxiv, techcrunch)."""
     counts = {"openalex": 0, "arxiv": 0, "techcrunch": 0, "openalex_ru": 0}
@@ -345,6 +356,7 @@ def split_ranked(ranked: list[dict], by_key: dict[str, dict], documents: Sequenc
                         "features": item.get("features") or {},
                         "explanation_ru": explanation_top(item["features"], item["contributions"], item["counters"],
                                                           n_pat=n_pat),
+                        "why_ru": why_words(item["features"], item["contributions"], n_pat=n_pat),
                         "contributions": item["contributions"], "counters": item["counters"],
                         "model_version": item.get("model_version"),
                         "threshold": item.get("threshold"),
@@ -638,6 +650,11 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
         warnings.append(ROSPATENT_OFF_WARNING)
     translation = staged("translate", timings, progress,
                          lambda: name_in_russian(top, dropped + capped + below, use_cache, progress))
+    mark, enriched = time.monotonic(), {"query_id": query_id, "top": top, "_documents": all_documents}
+    enrich_top(enriched, collector, time_left=lambda: budget - (time.monotonic() - started), progress=progress,
+               source_limit=MAX_SOURCES)
+    timings["enrich"], all_documents = round(time.monotonic() - mark, 2), enriched["_documents"]
+    warnings += [ENRICH_STOPPED_WARNING] if enriched["enrichment"] == "partial" else []
     for entry in top + dropped + capped + below:
         entry["model_version"] = meta["model_version"]
     scores = [item["score"] for item in ranked if item["score"] is not None]
@@ -661,6 +678,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
         "stats": {"documents_by_source": document_stats(all_documents, subq["subqueries"]),
                   "documents_for_candidates_by_source": document_stats(documents, subq["subqueries"]),
                   "documents_total": len(all_documents), "documents_for_candidates": len(documents),
+                  "documents_analyzed": documents_analyzed(all_documents, ranked, n_pats),
                   "candidates_found": len(found["candidates"]),
                   "candidates_named": len(merged),
                   "candidates_scored": len(scores),
@@ -674,7 +692,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
                   "documents_topped_up": sum(item["step4_topped_up"] for item in rounds)},
         "normalizer_deviations": list(naming.DEVIATIONS),
         "top": top, "excluded": excluded_items, "candidates": candidates,
-        "enrichment": "pending",
+        "enrichment": enriched["enrichment"],
         "_documents": all_documents,
         "timings": timings, "warnings": warnings,
     }

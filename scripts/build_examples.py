@@ -55,7 +55,7 @@ def readme(examples: dict[str, dict]) -> str:
     rows = [f"| `{slug}.json` | {e['meta']['query']} ({e['meta']['area']}) | {e['meta']['run_date']} | "
             f"{e['stats']['candidates_scored']} | {e['stats']['above_threshold']} | {len(e['top'])} |"
             for slug, e in examples.items()]
-    return ("# Готовые примеры для стенда\n\nПолный ответ пайплайна по контракту `docs/contracts/query_result.example.json` "
+    return ("# Готовые примеры для стенда\n\nПолный ответ пайплайна (`pipeline.run_query`) "
             "плюс `meta`. Открываются без сети.\n\n| пример | запрос (область) | дата прогона | кандидатов оценено | "
             "выше порога | ТОП-15 |\n|---|---|---|---|---|---|\n" + "\n".join(rows) + "\n")
 

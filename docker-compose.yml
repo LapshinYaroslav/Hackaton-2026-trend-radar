@@ -29,7 +29,6 @@ services:
     container_name: trend-radar-api
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://trend:trend@db:5432/trend_radar}
-      QUERY_MOCK: ${QUERY_MOCK:-}
       YANDEX_API_KEY: ${YANDEX_API_KEY:-}
       YANDEX_FOLDER_ID: ${YANDEX_FOLDER_ID:-}
       YANDEX_GPT_MODEL: ${YANDEX_GPT_MODEL:-}

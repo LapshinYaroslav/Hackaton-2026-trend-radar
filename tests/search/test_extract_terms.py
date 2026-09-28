@@ -111,6 +111,32 @@ def test_topic_is_in_prompt_purpose_and_cache_key() -> None:
     assert first["stats"]["prompt_version"] == "extract-v4"
 
 
+def test_two_spellings_of_topic_share_cache_but_prompt_keeps_original() -> None:
+    docs = [{"title": SNIPPETS[1]}]
+    with patch.object(et, "ask_llm", return_value=reply([GOOD])) as model:
+        first = et.extract_terms(docs, "Квантовые  технологии ")
+        second = et.extract_terms(docs, "квантовые технологии")
+    assert model.call_count == 1
+    assert model.call_args_list[0].args[0].startswith("Тема запроса пользователя: «Квантовые  технологии».")
+    assert first["candidates"] == second["candidates"]
+
+
+def test_normalized_topic_keeps_old_cache_key(tmp_path) -> None:
+    """Уже нормализованная тема — ключ по старой формуле: прежний кэш не теряется."""
+    batch = [(1, SNIPPETS[1])]
+    with patch.object(et, "ask_llm", return_value=reply([GOOD])):
+        et.ask_batch("роботы для промышленности", batch, None, True, 0.2)
+    system = et.system_prompt("роботы для промышленности")
+    user = et.build_user_prompt("роботы для промышленности", batch)
+    old = et._cache_key(f"{system}\n---\n{user}\n---\n0.2", et.build_model_uri(None))
+    assert [path.stem for path in tmp_path.glob("*.json")] == [old]
+
+
+@pytest.mark.parametrize("topic", ["", "   "])
+def test_blank_topic_normalizes_without_error(topic) -> None:
+    assert et.normalize_topic(topic) == ""
+
+
 def test_without_documents_calls_nothing() -> None:
     with patch.object(et, "ask_llm") as model:
         result = et.extract_terms([], "роботы")

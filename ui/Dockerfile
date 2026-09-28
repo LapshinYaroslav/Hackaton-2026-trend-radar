@@ -5,9 +5,9 @@ WORKDIR /app
 COPY ui/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Структура как в репо: ui/app.py и docs/contracts/...
-COPY ui/app.py /app/ui/app.py
-COPY docs/contracts /app/docs/contracts
+# Структура как в репо: ui/ (app.py, view.py, logo.svg) и тема .streamlit/
+COPY ui /app/ui
+COPY .streamlit /app/.streamlit
 
 EXPOSE 8501
 
