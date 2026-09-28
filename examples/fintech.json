@@ -1,0 +1,2129 @@
+{
+  "query_id": "q20260927204110",
+  "topic": "перспективные решения в финтехе",
+  "area": "Финтех",
+  "model_version": "s2a2-v1",
+  "threshold": 0.4,
+  "cutoff_date": "2026-09-01",
+  "subqueries": [
+    {
+      "subquery_id": "q20260927204110-ru-1",
+      "language": "ru",
+      "text": "децентрализованные финансовые протоколы"
+    },
+    {
+      "subquery_id": "q20260927204110-ru-2",
+      "language": "ru",
+      "text": "биометрическая аутентификация в банках"
+    },
+    {
+      "subquery_id": "q20260927204110-ru-3",
+      "language": "ru",
+      "text": "блокчейн для микроплатежей"
+    },
+    {
+      "subquery_id": "q20260927204110-en-1",
+      "language": "en",
+      "text": "decentralized finance protocols"
+    },
+    {
+      "subquery_id": "q20260927204110-en-2",
+      "language": "en",
+      "text": "biometric authentication methods"
+    },
+    {
+      "subquery_id": "q20260927204110-en-3",
+      "language": "en",
+      "text": "cryptoasset risk management"
+    },
+    {
+      "subquery_id": "q20260927204110-en-4",
+      "language": "en",
+      "text": "AI-driven fraud detection"
+    },
+    {
+      "subquery_id": "q20260927204110-en-5",
+      "language": "en",
+      "text": "cross-border payment solutions"
+    },
+    {
+      "subquery_id": "q20260927204110-en-6",
+      "language": "en",
+      "text": "digital identity verification"
+    },
+    {
+      "subquery_id": "q20260927204110-en-7",
+      "language": "en",
+      "text": "blockchain-based lending platforms"
+    }
+  ],
+  "candidate_sources": null,
+  "extract_version": "v4",
+  "extract_model": "yandexgpt-5-pro",
+  "naming_mode": "direct",
+  "candidates_version": "v3",
+  "stats": {
+    "documents_by_source": {
+      "openalex": 167,
+      "arxiv": 77,
+      "techcrunch": 6,
+      "openalex_ru": 2
+    },
+    "documents_for_candidates_by_source": {
+      "openalex": 83,
+      "arxiv": 77,
+      "techcrunch": 6,
+      "openalex_ru": 0
+    },
+    "documents_total": 252,
+    "documents_for_candidates": 166,
+    "candidates_found": 35,
+    "candidates_named": 26,
+    "candidates_scored": 26,
+    "above_threshold": 20,
+    "above_075": 12,
+    "rospatent_enabled": true,
+    "rospatent_failures": 0,
+    "translation": {
+      "переведено": 24,
+      "из кэша": 11,
+      "с первого раза": 9,
+      "с повтором": 0,
+      "откат на term_ru": 4,
+      "без названия": 0
+    }
+  },
+  "normalizer_deviations": [
+    "company_stoplist_off"
+  ],
+  "top": [
+    {
+      "rank": 1,
+      "name_ru": "Децентрализованные ИИ-агенты",
+      "name_en": "decentralized AI agents",
+      "score": 0.9611842234835091,
+      "explanation_ru": [
+        "Упоминания свежие: 76% за последние два года",
+        "Молодой термин: первый препринт 2 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.006655620102858793,
+        "recency": 1.4254582916283622,
+        "share_news_wordmatch": 0.14495037206157935,
+        "share_prev6": 0.017747703079881053,
+        "age_first_arxiv": 0.7642914094936978
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 16
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 1
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 5
+        },
+        "2024": {
+          "arxiv": 4,
+          "openalex": 4,
+          "techcrunch": 7
+        },
+        "2025": {
+          "arxiv": 3,
+          "openalex": 15,
+          "techcrunch": 9
+        }
+      },
+      "name_raw": "decentralized AI agents",
+      "name_variants": [
+        {
+          "name": "decentralized ai agents",
+          "n_works": 20,
+          "n_institutions": 24,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 20,
+      "n_institutions": 24,
+      "n_institutions_capped": false,
+      "quote": "Autonomous AI agents capable of holding digital assets, signing transactions, and executing smart contracts",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Decentralized AI Agents and Blockchain: Architectures, Coordination Mechanisms, and Governance Frameworks",
+          "url": "https://doi.org/10.3390/fi18070352",
+          "published_at": "2026-07-06",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 2,
+      "name_ru": "Обнаружение финансовых мошенничеств с помощью ИИ",
+      "name_en": "AI-driven financial fraud detection",
+      "score": 0.9509281950450218,
+      "explanation_ru": [
+        "Упоминания свежие: 82% за последние два года",
+        "Молодой термин: первый препринт 1 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.008202422620754731,
+        "recency": 1.6846322576956454,
+        "share_news_wordmatch": -0.5831515623932165,
+        "share_prev6": 0.0966388368480756,
+        "age_first_arxiv": 0.9075960487737661
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 4
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 1
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 2
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 21,
+          "techcrunch": 2
+        }
+      },
+      "name_raw": "AI-driven financial fraud detection",
+      "name_variants": [
+        {
+          "name": "ai-driven financial fraud detection",
+          "n_works": 23,
+          "n_institutions": 20,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 23,
+      "n_institutions": 20,
+      "n_institutions_capped": false,
+      "quote": "Regulatory Governance Framework for AI-Driven Financial Fraud Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "A Regulatory Governance Framework for AI-Driven Financial Fraud Detection in U.S. Banking: Integrating OCC, SR 11-7, CFPB, and FinCEN Compliance Requirements for Model Development, Validation, and Monitoring Lifecycles",
+          "url": "http://arxiv.org/abs/2605.04076v1",
+          "published_at": "2026-04-14",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [
+        {
+          "term_en": "AI-driven fraud detection",
+          "score": 0.847261148421462
+        }
+      ],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 3,
+      "name_ru": "Встроенное соответствие протоколам",
+      "name_en": "protocol-embedded compliance",
+      "score": 0.9420732640657071,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Молодой термин: первый препринт 1 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.002008799731021037,
+        "recency": 2.4482698362867485,
+        "share_news_wordmatch": -1.5793109254532605,
+        "share_prev6": 0.16010432993533827,
+        "age_first_arxiv": 0.9075960487737661
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 3,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "protocol-embedded compliance",
+      "name_variants": [
+        {
+          "name": "protocol-embedded compliance",
+          "n_works": 3,
+          "n_institutions": 4,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3,
+      "n_institutions": 4,
+      "n_institutions_capped": false,
+      "quote": "Protocol-Embedded Compliance for Privacy-Preserving, Non-Custodial Digital Payments",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Protocol-Embedded Compliance for Privacy-Preserving, Non-Custodial Digital Payments",
+          "url": "http://arxiv.org/abs/2608.17145v1",
+          "published_at": "2026-08-17",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 4,
+      "name_ru": "Амортизируемые бессрочные опционы",
+      "name_en": "amortizing perpetual options",
+      "score": 0.9420242006083511,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Молодой термин: первый препринт 1 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.0011100849947531613,
+        "recency": 2.4482698362867485,
+        "share_news_wordmatch": -1.5793109254532605,
+        "share_prev6": 0.16010432993533827,
+        "age_first_arxiv": 0.9075960487737661
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 2,
+          "openalex": 1,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "amortizing perpetual options",
+      "name_variants": [
+        {
+          "name": "amortizing perpetual options",
+          "n_works": 1,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "a design for amortizing perpetual options",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Designing On-Chain Options: Amortizing Perpetual Options",
+          "url": "http://arxiv.org/abs/2605.19146v1",
+          "published_at": "2026-05-18",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 5,
+      "name_ru": "Криптографическое хеширование с привязкой к блокчейну",
+      "name_en": "blockchain-anchored cryptographic hashing",
+      "score": 0.9419731899919855,
+      "explanation_ru": [
+        "Упоминания свежие: 100% за последние два года",
+        "Молодой термин: первый препринт 1 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.00017645986362643478,
+        "recency": 2.4482698362867485,
+        "share_news_wordmatch": -1.5793109254532605,
+        "share_prev6": 0.16010432993533827,
+        "age_first_arxiv": 0.9075960487737661
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 1,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "blockchain-anchored cryptographic hashing",
+      "name_variants": [
+        {
+          "name": "blockchain-anchored cryptographic hashing",
+          "n_works": 1,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "Decentralized File Integrity Verification Using Blockchain-Anchored Cryptographic Hashing",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "snaproot: Decentralized File Integrity Verification Using Blockchain-Anchored Cryptographic Hashing",
+          "url": "http://arxiv.org/abs/2606.10625v1",
+          "published_at": "2026-06-09",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 6,
+      "name_ru": "Агентские финансы",
+      "name_en": "agent-to-agent finance",
+      "score": 0.9102646448909577,
+      "explanation_ru": [
+        "Молодой термин: первый препринт 1 лет назад",
+        "Патентов мало относительно научных работ: 0 патентов на 3 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.000144216503272829,
+        "recency": 0.2846300302786233,
+        "share_news_wordmatch": 0.11415999174881453,
+        "share_prev6": 0.16010432993533827,
+        "age_first_arxiv": 0.9075960487737661
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 1
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 1
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 0,
+          "techcrunch": 1
+        }
+      },
+      "name_raw": "agent-to-agent finance",
+      "name_variants": [
+        {
+          "name": "agent-to-agent finance",
+          "n_works": 2,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "Autonomous artificial intelligence (AI) agents are beginning to occupy a position between analytical tools and transacting counterparties",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Agent-to-Agent Finance: Blockchain Payments and Trust Infrastructure for Autonomous AI Agents",
+          "url": "https://arxiv.org/abs/2607.00245",
+          "published_at": "2026-06-30",
+          "source": "openalex",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 7,
+      "name_ru": "Гибридная архитектура «край-облако»",
+      "name_en": "hybrid edge-cloud architecture",
+      "score": 0.8880769351579426,
+      "explanation_ru": [
+        "Упоминания свежие: 87% за последние два года",
+        "Молодой термин: первый препринт 2 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.006403025911906139,
+        "recency": 1.8931669122963257,
+        "share_news_wordmatch": -1.5793109254532605,
+        "share_prev6": 0.1364603227067502,
+        "age_first_arxiv": 0.7642914094936978
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 14,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 8,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 11,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 10,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 15,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 1,
+          "openalex": 106,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 2,
+          "openalex": 190,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "hybrid edge-cloud architecture",
+      "name_variants": [
+        {
+          "name": "hybrid edge-cloud architecture",
+          "n_works": 340,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 340,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Hybrid Edge-Cloud Architecture",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "A Hybrid Edge-Cloud Architecture for Low-Latency Entitlement Verification in Resource-Constrained Devices",
+          "url": "http://arxiv.org/abs/2606.10536v1",
+          "published_at": "2026-06-09",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 8,
+      "name_ru": "Протоколы деривативов децентрализованных финансов",
+      "name_en": "decentralized finance derivatives protocols",
+      "score": 0.8558831659956998,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 2",
+        "Молодой термин: первый препринт 1 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.00017645986362643478,
+        "recency": -1.3699180566687668,
+        "share_news_wordmatch": 1.4091671637268717,
+        "share_prev6": -0.015747973827285367,
+        "age_first_arxiv": 0.9075960487737661
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 7
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 6
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 5
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 1,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "decentralized finance derivatives protocols",
+      "name_variants": [
+        {
+          "name": "decentralized finance derivatives protocols",
+          "n_works": 1,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "DeFi derivatives protocols enable the creation and trading of decentralized derivative instruments",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "A unified framework and comparative study of decentralized finance derivatives protocols",
+          "url": "https://doi.org/10.1007/s12525-026-00925-9",
+          "published_at": "2026-08-06",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 9,
+      "name_ru": "Справедливый порядок транзакций",
+      "name_en": "transaction fair ordering",
+      "score": 0.7768961969065075,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 3",
+        "Молодой термин: первый препринт 4 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.000144216503272829,
+        "recency": -1.7271754033780544,
+        "share_news_wordmatch": 1.7482108767683604,
+        "share_prev6": -0.10142814075041796,
+        "age_first_arxiv": 0.4776821309335611
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 131
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 54
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 48
+        },
+        "2022": {
+          "arxiv": 1,
+          "openalex": 1,
+          "techcrunch": 34
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 27
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2025": {
+          "arxiv": 1,
+          "openalex": 0,
+          "techcrunch": 2
+        }
+      },
+      "name_raw": "transaction fair ordering",
+      "name_variants": [
+        {
+          "name": "transaction fair ordering",
+          "n_works": 1,
+          "n_institutions": 1,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 1,
+      "n_institutions_capped": false,
+      "quote": "Transaction Fair Ordering on a DAG",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Tilikum: Transaction Fair Ordering on a DAG without Weak Edges",
+          "url": "http://arxiv.org/abs/2606.27250v1",
+          "published_at": "2026-06-25",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 10,
+      "name_ru": "Глобальная передача рисков стейблкоинов",
+      "name_en": "global stablecoin risk transmission",
+      "score": 0.7636789809196035,
+      "explanation_ru": [
+        "Патентов мало относительно научных работ: 0 патентов на 1 публикацию",
+        "Упоминания свежие: 50% за последние два года"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.00020870322398004054,
+        "recency": 0.2846300302786233,
+        "share_news_wordmatch": 0.11415999174881453,
+        "share_prev6": 0.16010432993533827,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 1
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "global stablecoin risk transmission",
+      "name_variants": [
+        {
+          "name": "global stablecoin risk transmission",
+          "n_works": 1,
+          "n_institutions": 3,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 3,
+      "n_institutions_capped": false,
+      "quote": "risk transmission–institutional constraints–compliance response–dynamic monitoring",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "The Conduit, Constraint, and Containment: A Framework for Analyzing Global Stablecoin Risk Transmission and China’s Regulatory Response",
+          "url": "https://doi.org/10.3390/ijfs14050124",
+          "published_at": "2026-05-07",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 11,
+      "name_ru": "Верификация цифровых удостоверений личности",
+      "name_en": "digital identity document verification",
+      "score": 0.7615004865393324,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 1",
+        "Патентов мало относительно научных работ: 0 патентов на 1 публикацию"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": -0.004634545275267425,
+        "recency": -1.186645037806902,
+        "share_news_wordmatch": 1.7624716844921675,
+        "share_prev6": -0.02412189305407697,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 33
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 12
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 15
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 24
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 11
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 7
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 5
+        }
+      },
+      "name_raw": "digital identity document verification",
+      "name_variants": [
+        {
+          "name": "digital identity document verification",
+          "n_works": 1,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Field-Localized Forgery Detection for Digital Identity Documents",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Field-Localized Forgery Detection for Digital Identity Documents",
+          "url": "http://arxiv.org/abs/2605.09089v2",
+          "published_at": "2026-05-09",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 12,
+      "name_ru": "Batch Order Fairness (справедливость пакетного заказа)",
+      "name_en": "batch order fairness",
+      "score": 0.7332004269000867,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 12",
+        "Молодой термин: первый препринт 4 лет назад"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 0.003377672994464574,
+        "recency": -1.142451543896949,
+        "share_news_wordmatch": 0.942879802294511,
+        "share_prev6": -0.12080259685430725,
+        "age_first_arxiv": 0.4776821309335611
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 41
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 12
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 9
+        },
+        "2022": {
+          "arxiv": 2,
+          "openalex": 2,
+          "techcrunch": 12
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 4,
+          "openalex": 4,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "batch order fairness",
+      "name_variants": [
+        {
+          "name": "batch order fairness",
+          "n_works": 6,
+          "n_institutions": 13,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 6,
+      "n_institutions": 13,
+      "n_institutions_capped": false,
+      "quote": "Batch-order-fairness",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Herring: Parallel Batch-Order-Fairness on DAG-based Blockchain Consensus",
+          "url": "http://arxiv.org/abs/2605.23648v1",
+          "published_at": "2026-05-22",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 13,
+      "name_ru": "Метавселенские финансы",
+      "name_en": "metaverse finance",
+      "score": 0.6480851390452218,
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 40",
+        "Патентов мало относительно научных работ: 0 патентов на 40 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.46898703212695536,
+        "growth_research": 9.010857182802108e-06,
+        "recency": -1.186645037806902,
+        "share_news_wordmatch": 1.0334727753727981,
+        "share_prev6": 0.14994272008709678,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 3
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 6
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 81
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 5,
+          "techcrunch": 40
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 8,
+          "techcrunch": 7
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 11,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 16,
+          "techcrunch": 1
+        }
+      },
+      "name_raw": "metaverse finance",
+      "name_variants": [
+        {
+          "name": "metaverse finance",
+          "n_works": 40,
+          "n_institutions": 57,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 40,
+      "n_institutions": 57,
+      "n_institutions_capped": false,
+      "quote": "This literature review aims to provide a comprehensive synthesis of Metaverse Finance (MetaFi)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "MetaFi: reimagining finance in the metaverse",
+          "url": "https://doi.org/10.1108/jeas-07-2025-0473",
+          "published_at": "2026-04-18",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 14,
+      "name_ru": "Многомодальное обнаружение мошенничества",
+      "name_en": "multi-modal fraud detection",
+      "score": 0.6069699749561593,
+      "explanation_ru": [
+        "Упоминания свежие: 85% за последние два года",
+        "Почти нет публикаций до 2020 года"
+      ],
+      "contributions": {
+        "share_patent": -0.07434815376264531,
+        "growth_research": 0.0007472541044209213,
+        "recency": 1.7825345113611715,
+        "share_news_wordmatch": -1.5793109254532605,
+        "share_prev6": 0.16010432993533827,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 5,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 6,
+          "techcrunch": 0
+        }
+      },
+      "name_raw": "multi-modal fraud detection",
+      "name_variants": [
+        {
+          "name": "multi-modal fraud detection",
+          "n_works": 13,
+          "n_institutions": 14,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 13,
+      "n_institutions": 14,
+      "n_institutions_capped": false,
+      "quote": "Multi-Modal Web Platform for Real-Time Digital Fraud Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "GuardSec: A Multi-Modal Web Platform for Real-Time Digital Fraud Detection, Entity Verification, and Connection Security Analysis in the African Context",
+          "url": "http://arxiv.org/abs/2605.02502v4",
+          "published_at": "2026-05-04",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 2,
+      "share_patent": 0.13333333333333333,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "rank": 15,
+      "name_ru": "Цифровая верификация личности",
+      "name_en": "digital identity verification",
+      "score": 0.5341561749983039,
+      "explanation_ru": [
+        "Упоминания свежие: 62% за последние два года",
+        "Почти нет публикаций до 2020 года"
+      ],
+      "contributions": {
+        "share_patent": 0.04136211730643632,
+        "growth_research": 0.0009611957007470124,
+        "recency": 0.8202884288534502,
+        "share_news_wordmatch": -0.9737169566803503,
+        "share_prev6": 0.10553521391439166,
+        "age_first_arxiv": -0.2388410654667806
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 1,
+          "openalex": 27,
+          "techcrunch": 95
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 20,
+          "techcrunch": 32
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 32,
+          "techcrunch": 60
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 65,
+          "techcrunch": 61
+        },
+        "2023": {
+          "arxiv": 2,
+          "openalex": 162,
+          "techcrunch": 31
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 326,
+          "techcrunch": 21
+        },
+        "2025": {
+          "arxiv": 2,
+          "openalex": 406,
+          "techcrunch": 16
+        }
+      },
+      "name_raw": "digital identity verification",
+      "name_variants": [
+        {
+          "name": "digital identity verification",
+          "n_works": 1009,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1009,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "IDSPACE: A Novel Document Generator for Reliable Evaluation of Digital Identity Verification Systems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "IDSPACE: A Novel Document Generator for Reliable Evaluation of Digital Identity Verification Systems [Extended Technical Report]",
+          "url": "http://arxiv.org/abs/2609.03052v1",
+          "published_at": "2026-09-02",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "n_pat": 119,
+      "share_patent": 0.10493827160493827,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    }
+  ],
+  "excluded": [
+    {
+      "name_ru": "универсальное обнаружение мошенничества на основе больших языковых моделей",
+      "name_en": "LLM-driven universal fraud detection",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "LLM-driven universal fraud detection",
+      "name_variants": [
+        {
+          "name": "llm-driven universal fraud detection",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "LLM-Driven Universal Fraud Detection across Heterogeneous Blockchains",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "верификация личности на основе MPC",
+      "name_en": "MPC-based identity verification",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "MPC-based identity verification",
+      "name_variants": [
+        {
+          "name": "mpc-based identity verification",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Transparent Identity Verification Approach Using MPC",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "предоставление биометрической идентификации",
+      "name_en": "biometric identity provisioning",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "biometric identity provisioning",
+      "name_variants": [
+        {
+          "name": "biometric identity provisioning",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Biometric Identity Provisioning",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обучение с учётом инвариантных атрибутов и топологии",
+      "name_en": "coupled attribute-topology invariance learning",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "coupled attribute-topology invariance learning",
+      "name_variants": [
+        {
+          "name": "coupled attribute-topology invariance learning",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Coupled Attribute-Topology Invariance Learning for Voucher Abuse Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "анализ рынка криптоактивов",
+      "name_en": "cryptoasset market analysis",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "cryptoasset market analysis",
+      "name_variants": [
+        {
+          "name": "cryptoasset market analysis",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "evolution of tail risk in Bitcoin (BTC) and Ethereum (ETH)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "модель казначейства цифровых активов",
+      "name_en": "digital asset treasury model",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "digital asset treasury model",
+      "name_variants": [
+        {
+          "name": "digital asset treasury model",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "digital-asset treasury companies",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "бенчмарк для Ethereum DeFi",
+      "name_en": "ethereum defi benchmark",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "ethereum defi benchmark",
+      "name_variants": [
+        {
+          "name": "ethereum defi benchmark",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "ETH-TraceBench",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "подробный набор данных с экспертными метками",
+      "name_en": "fine-grained expert-labeled dataset",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "fine-grained expert-labeled dataset",
+      "name_variants": [
+        {
+          "name": "fine-grained expert-labeled dataset",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "A Fine-Grained Expert-Labeled Dataset for DeFi Smart Contract Vulnerability Detection",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "обнаружение мошенничества с помощью ИИ",
+      "name_en": "AI-driven fraud detection",
+      "score": 0.847261148421462,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «AI-driven financial fraud detection», — показан вариантом названия",
+      "name_raw": "AI-driven fraud detection",
+      "name_variants": [
+        {
+          "name": "ai-driven fraud detection",
+          "n_works": 1447,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1447,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "AI-Driven Financial Fraud Detection",
+      "n_docs": 7,
+      "n_sources": 2,
+      "known_training_label": null,
+      "duplicate_of": "AI-driven financial fraud detection",
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Автоматизированный маркетмейкер",
+      "name_en": "automated market maker",
+      "score": 0.5277060934004493,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "automated market maker",
+      "name_variants": [
+        {
+          "name": "automated market maker",
+          "n_works": 549,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 549,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "on-chain automated market maker (AMM) pool",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 41,
+      "share_patent": 0.05236270753512133,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Децентрализованные финансы",
+      "name_en": "decentralized finance",
+      "score": 0.5058880900845233,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "decentralized finance",
+      "name_variants": [
+        {
+          "name": "decentralized finance",
+          "n_works": 7585,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 7585,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "core infrastructure of decentralized finance (DeFi)",
+      "n_docs": 2,
+      "n_sources": 2,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 270,
+      "share_patent": 0.0327431481930633,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "State Twin — технология «State Twin» («близнец состояния»)",
+      "name_en": "state twin",
+      "score": 0.45972830690860406,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "state twin",
+      "name_variants": [
+        {
+          "name": "state twin",
+          "n_works": 108,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 108,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "We introduce the State Twin: a typed, in-memory, replayable replica of an on-chain automated market maker (AMM) pool",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Аналитика поведения",
+      "name_en": "behavioral analytics",
+      "score": 0.41036074564141123,
+      "skipped_reason": "beyond_top",
+      "reason_ru": "Выше порога модели, но не вошёл в ТОП-15",
+      "name_raw": "behavioral analytics",
+      "name_variants": [
+        {
+          "name": "behavioral analytics",
+          "n_works": 11006,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 11006,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Data Science Foundations for AI-Driven Fraud Detection and Behavioral Analytics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 798,
+      "share_patent": 0.06722264341672984,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Децентрализованные автономные организации",
+      "name_en": "decentralized autonomous organizations",
+      "score": 0.302499649772781,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 3220 публикаций — технология уже хорошо изучена",
+      "name_raw": "decentralized autonomous organizations",
+      "name_variants": [
+        {
+          "name": "decentralized autonomous organizations",
+          "n_works": 3120,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3120,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "This chapter examines the decentralized autonomous organizations (DAOs)",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 180,
+      "share_patent": 0.052941176470588235,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Технология блокчейн",
+      "name_en": "blockchain technology",
+      "score": 0.26783739101890325,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 100013 публикаций — технология уже хорошо изучена",
+      "name_raw": "blockchain technology",
+      "name_variants": [
+        {
+          "name": "blockchain technology",
+          "n_works": 99021,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 99021,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "blockchain technology establishes a decentralized digital framework",
+      "n_docs": 3,
+      "n_sources": 2,
+      "known_training_label": null,
+      "variants": [
+        {
+          "term_en": "blockchain and distributed-ledger infrastructure",
+          "score": 0.05973290475091234
+        }
+      ],
+      "n_pat": 10600,
+      "share_patent": 0.09582960411524866,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Цифровые активы",
+      "name_en": "digital assets",
+      "score": 0.24891953520576662,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 27201 публикаций — технология уже хорошо изучена",
+      "name_raw": "digital assets",
+      "name_variants": [
+        {
+          "name": "digital assets",
+          "n_works": 26875,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 26875,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "digital asset ecosystem",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 7086,
+      "share_patent": 0.20666724997812583,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Биометрическая верификация личности",
+      "name_en": "biometric identity verification",
+      "score": 0.2243591732122487,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 117 патентов на 192 публикации",
+      "name_raw": "biometric identity verification",
+      "name_variants": [
+        {
+          "name": "biometric identity verification",
+          "n_works": 192,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 192,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "finger vein verification",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 117,
+      "share_patent": 0.3786407766990291,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Доказательство владения (Proof of Stake)",
+      "name_en": "Proof of Stake",
+      "score": 0.07914290456787638,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 8310 публикаций — технология уже хорошо изучена",
+      "name_raw": "Proof of Stake",
+      "name_variants": [
+        {
+          "name": "proof of stake",
+          "n_works": 8091,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 8091,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "the interaction between centralized trading and decentralized Proof of Stake (PoS) blockchain ecosystems",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "variants": [],
+      "n_pat": 5647,
+      "share_patent": 0.4045998423730028,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "инфраструктура блокчейна и распределённого реестра",
+      "name_en": "blockchain and distributed-ledger infrastructure",
+      "score": 0.05973290475091234,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «blockchain technology», — показан вариантом названия",
+      "name_raw": "blockchain and distributed-ledger infrastructure",
+      "name_variants": [
+        {
+          "name": "blockchain and distributed-ledger infrastructure",
+          "n_works": 3,
+          "n_institutions": 7,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 3,
+      "n_institutions": 7,
+      "n_institutions_capped": false,
+      "quote": "blockchain and distributed-ledger infrastructure",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "blockchain technology",
+      "variants": [],
+      "n_pat": 8,
+      "share_patent": 0.7272727272727273,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
+    }
+  ],
+  "timings": {
+    "subqueries": 0.0,
+    "search": 5.67,
+    "candidates": 19.11,
+    "naming": 4.67,
+    "counters": 30.94,
+    "ranking": 0.52,
+    "queues": [
+      {
+        "source": "openalex",
+        "candidates": 26,
+        "requests": 9,
+        "cache_hits": 17,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 29.22,
+        "duration_s": 29.22
+      },
+      {
+        "source": "arxiv",
+        "candidates": 26,
+        "requests": 9,
+        "cache_hits": 17,
+        "retries": 0,
+        "n429": 0,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 26.63,
+        "duration_s": 26.63
+      },
+      {
+        "source": "techcrunch",
+        "candidates": 26,
+        "requests": 9,
+        "cache_hits": 17,
+        "retries": 0,
+        "n429": 0,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 30.94,
+        "duration_s": 30.94
+      },
+      {
+        "source": "rospatent",
+        "candidates": 26,
+        "parallel": 4,
+        "requests": 9,
+        "cache_hits": 17,
+        "retries": 0,
+        "n429": 0,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 4.37,
+        "duration_s": 4.37
+      }
+    ],
+    "dedup": 2.39,
+    "translate": 2.64,
+    "total": 65.94
+  },
+  "warnings": [
+    "отброшен (ru): «алгоритмическая торговля на основе ИИ» — слов 5, нужно 2-4",
+    "отброшен (ru): «цифровые кошельки с мультивалютной поддержкой» — слов 5, нужно 2-4",
+    "отброшен (en): «regulatory tech compliance» — слово зрелой области regulatory",
+    "отброшен: term_en «agentic reasoning over DeFi protocols»: слов 5, нужно 2–4",
+    "отброшен: term_en «Reverse Kelly Automated Market Maker»: слов 5, нужно 2–4",
+    "отброшен: term_en «on-chain automated market maker»: quote не найден в документе 3",
+    "отброшен: term_en «reward attribution framework»: последнее слово framework",
+    "отброшен: term_en «decentralized exchange»: quote не найден в документе 6",
+    "отброшен: term_en «ETH-TraceBench»: слов 1, нужно 2–4",
+    "отброшен: term_en «zero-knowledge-based auditable cross-chain framework»: последнее слово framework",
+    "отброшен: term_en «transaction fair ordering on a DAG»: слов 6, нужно 2–4",
+    "отброшен: term_en «batch-order-fairness»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «reverse kelly automated market maker»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «reward attribution framework»: последнее слово framework",
+    "отброшен после повтора: term_en «decentralized exchange»: quote не найден в документе 6",
+    "отброшен после повтора: term_en «zero knowledge cross chain framework»: слов 5, нужно 2–4",
+    "отброшен: term_en «transparent identity verification using MPC»: слов 5, нужно 2–4",
+    "отброшен: term_en «hybrid edge-cloud architecture for low-latency entitlement verification»: слов 7, нужно 2–4",
+    "отброшен: term_en «multi-modal web platform for real-time digital fraud detection»: слов 8, нужно 2–4",
+    "отброшен: term_en «biometric identity online authentication framework»: слов 5, нужно 2–4",
+    "отброшен: term_en «decentralized file integrity verification using blockchain-anchored cryptographic hashing»: слов 8, нужно 2–4",
+    "отброшен: term_en «protocol-embedded compliance for privacy-preserving, non-custodial digital payments»: слов 7, нужно 2–4",
+    "отброшен: term_en «quantile connectedness approach»: последнее слово approach",
+    "отброшен после повтора: term_en «stablecoin»: слов 1, нужно 2–4",
+    "отброшен после повтора: term_en «quantile connectedness approach»: последнее слово approach",
+    "отброшен: term_en «cryptoassets»: слов 1, нужно 2–4",
+    "отброшен: term_en «stablecoins»: слов 1, нужно 2–4",
+    "отброшен: term_en «cryptocurrency market analysis»: quote не найден в документе 157",
+    "отброшен после повтора: term_en «cryptographic key recovery for cryptoasset custody»: слов 6, нужно 2–4",
+    "отброшен после повтора: term_en «exchange-traded products for digital assets»: слов 5, нужно 2–4",
+    "отброшен после повтора: term_en «AI-driven fraud detection in online transactions»: слов 6, нужно 2–4",
+    "отброшен: term_en «AI-driven fraud detection in digital banking»: слов 6, нужно 2–4",
+    "отброшен: term_en «AI-driven fraud detection and behavioral analytics»: слов 6, нужно 2–4",
+    "отброшен: term_en «AI-driven fraud detection in healthcare»: слов 5, нужно 2–4"
+  ],
+  "meta": {
+    "query": "перспективные решения в финтехе",
+    "area": "Финтех",
+    "run_date": "2026-09-27T20:41:10",
+    "model_version": "s2a2-v1",
+    "candidates_version": "v3",
+    "seconds": 65.94,
+    "counters_cache_share": 0.654
+  }
+}

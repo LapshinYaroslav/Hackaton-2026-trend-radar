@@ -1,0 +1,238 @@
+36zero vision
+a16z speedrun
+acpid copilot
+agentic commerce
+agility robotics и интеграторы с raas-подпиской
+ai supply chain provenance explorer
+ai-разбор инженерных документов
+akamai firewall for ai
+allus ai
+ample fintech
+anab аккредитованные лаборатории
+andes technology
+apeiron labs
+apollo research
+applied computing
+applied materials
+arcee ai
+arm + 128 тб lpddr6
+artimus robotics
+aspirare semi
+astrall dynamics
+astrasync ai
+axelera ai
+axon npu
+banking circle
+bertha 500
+bionaut labs
+bosch ventures
+boston dynamics
+bubble robotics
+canton network
+capa + brl1
+capalo ai
+catena labs
+certified unlearning
+check point
+cherry ventures
+cisco как инвесторы
+cmu sei
+coinbase payments mcp
+confidential ai api
+confidential edge ai
+corsound ai
+cortex 2.0 c world model
+cortex ai
+cred protocol
+cs-4 → cs-5 → cs-6
+cyclonedx ai
+daimon robotics
+dbs + open government products
+deployment safety hub
+digift + theoriq
+digital asset
+diligent ai
+duckduckgoose ai
+duke kunshan university + hku
+dyna robotics
+earth ai
+edge ai orchestration
+edgeai inc
+encharge ai
+endeavor 1.0
+eta research factory
+eth zurich
+eth zurich soft robotics lab + ibec
+europol ec3
+fabrix security
+federated rl + digital twin
+fine-tuning st-моделей
+fl для химических процессов
+flash camera
+flower labs
+forgis ag
+foundry local
+gates frontier
+genesis ai
+gke + managed lustre
+gm cruise
+google + fido alliance
+google cloud
+google deepmind synthid text
+gray swan ai
+grupo braza
+halos ai systems inspection lab
+hexagon npu
+honda motors
+honor как тестовые платформы
+hp inc
+iclr 2026 workshop
+ietf-рабочая группа
+igx thor
+intel + softbank + univ. of tokyo
+invariant labs
+j.p. morgan kinexys
+j.p. morgan kinexys tcn
+jetson orin
+jpm coin
+jpmd на base и canton
+k2 integrity
+kalysta actuation
+kepler communications
+lakera guard
+lasso security
+leo ai
+liquid ai
+live multi-market
+lloyds + aberdeen + archax
+local-first agents
+lockheed martin
+lunar energy
+machine payments protocol
+mandel ai
+mariana minerals
+mas project orchid
+memory-controlled benchmark
+memory-persistent information-flow control
+mento protocol
+meta + разработчики smr
+micro-insurance для роботов
+microsoft security research
+microsoft sovereign cloud
+model hq
+mostly ai
+mtj-based pip
+multiverse computing
+munich re
+neupro tinyml npu
+neural concept
+next-gen constitutional classifiers
+nexus industrial
+nexus intelligence
+nordic semiconductor
+norrsken evolve
+noumenal labs
+npu + windows ml
+nvidia ai grids + akamai
+nvidia flare
+nvidia research
+olix computing
+orange ventures
+palo alto
+path robotics
+pear vc
+phala cloud
+physical intelligence
+polyn technology
+prohand 1.0
+project lightning
+prompt security
+protect ai
+proven finance
+psv tech
+quantum safe financial forum
+radware llm firewall
+rl на gpu-ускоренном control hardware
+rockfish data
+rsc materials horizons авторы
+salience labs
+samsung research
+scania invest
+securiti context-aware llm firewall
+seed €2.1m
+sensei robotics
+sera protocol
+siemens technology
+sigstore model-transparency
+slsa для моделей
+snapdragon x series
+snowcap compute
+snyk labs
+sophia space
+sovereign ai
+space capital
+space-1 vera rubin
+stream analyze
+stripe + openai
+stripe + tempo
+swarmfarm robotics
+swift + google cloud + 13 глобальных банков
+tacta systems
+tetragen robotics
+tu darmstadt
+turboquant ip
+uk aisi
+unbox robotics
+unconventional ai
+vanguard + wellington + nasdaq calypso + digital asset
+vecodi на trustzone-m
+visa + chainlink в e-hkd+
+volvo trucks
+windows ml
+xylo labs
+y combinator
+yc p26
+yc spring 2026
+yrikka ai
+yuejia dynamics
+zededa + edge impulse
+«god's eye»
+«when agents trade»
+авторы traderbench
+академические бенчмарки xpu
+академические биогибридные группы
+академические группы
+академические консорциумы
+академические подходы sisa
+в e-hkd+
+датасет daimon-infinity
+датасет factorynet
+доклад aiche 2026
+европейские операторы стека ес
+инвестиция abb motion ventures
+индустриальные группы
+исследователи bypass-техник на hugging face
+исследователи ehr-агентов
+исследовательские группы
+исследовательские группы uni stuttgart
+исследовательские фреймворки
+китайские страховщики гуманоидов
+комитет по стандартам гуманоидов при миит кнр
+консорциум с bitso
+куплен amd
+куплена redstone
+лаборатории e-skin
+метрики оценки
+модель orbital
+мульти-lora one-for-all llm на galaxy s24
+мультиагентный пайплайн
+партнёры по oem-стеку
+патентная активность
+поглощена nordic
+пользователи flower
+проект agents4plc
+сети из deai dashboard
+синдикаты lloyd's
+стартап prometheus
+устройства oneplus
+участники прикладных swarm-программ

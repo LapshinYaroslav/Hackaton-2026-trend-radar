@@ -1,31 +1,28 @@
 """
-API запросов на новом контракте docs/contracts/query_result.example.json.
+API запросов: POST запускает pipeline.run_query, GET отдаёт контракт выдачи.
 
-Пока оркестратора нет: POST создаёт запрос и через несколько секунд
-кладёт в память пример из контракта (без PostgreSQL и без Docker).
-Когда появится оркестратор Ярослава и save/load Славы — меняется только
-место, откуда берётся готовый JSON.
+QUERY_MOCK=1 — пример из файла (тесты). Без флага тема пользователя идёт в оркестратор.
+Если задан DATABASE_URL — схема, посев и история пишутся в Postgres.
 """
 
 from __future__ import annotations
 
 import copy
 import json
+import logging
 import os
-import sys
 import threading
 import time
 import uuid
 from pathlib import Path
 from typing import Optional
 
-from api import history
-
-from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-load_dotenv()
+from api import store
+
+logger = logging.getLogger(__name__)
 
 STAGES = (
     "Подзапросы",
@@ -35,6 +32,17 @@ STAGES = (
     "Сбор статистики",
     "Оценка",
 )
+
+STAGE_RU = {
+    "subqueries": "Подзапросы",
+    "search": "Поиск документов",
+    "candidates": "Извлечение кандидатов",
+    "naming": "Проверка",
+    "counters": "Сбор статистики",
+    "ranking": "Оценка",
+    "dedup": "Оценка",
+    "translate": "Оценка",
+}
 
 AREAS = {
     "Edge",
@@ -72,14 +80,33 @@ def mock_seconds() -> float:
         return 3.0
 
 
+def use_mock() -> bool:
+    """Тесты и явный мок. Без QUERY_MOCK запрос идёт в run_query."""
+    return os.getenv("QUERY_MOCK", "").strip().lower() in {"1", "true", "yes"}
+
+
 class CreateQuery(BaseModel):
     topic: str = Field(min_length=1)
     area: Optional[str] = None
 
 
 app = FastAPI(title="Trend Radar API", version="0.2.0")
-_jobs: dict[str, dict] = {}
 _lock = threading.Lock()
+
+
+@app.on_event("startup")
+def _startup() -> None:
+    try:
+        store.ensure_ready()
+    except Exception:  # noqa: BLE001
+        pass
+    if not use_mock():
+        try:
+            from model.bootstrap import ensure_artifact
+
+            ensure_artifact()
+        except Exception as exc:
+            logger.warning("model artifact: %s", exc)
 
 
 def _public(job: dict) -> dict:
@@ -93,7 +120,8 @@ def _public(job: dict) -> dict:
         "progress_total": job["progress_total"],
     }
     if job["status"] == "done" and job.get("result"):
-        payload.update(job["result"])
+        payload.update(store.public_result(job["result"]) or {})
+        payload.pop("_documents", None)
         payload["query_id"] = job["query_id"]
         payload["topic"] = job["topic"]
         payload["area"] = job["area"]
@@ -103,119 +131,114 @@ def _public(job: dict) -> dict:
     return payload
 
 
-def _ensure_area(query_id: str, *, use_llm: bool) -> None:
-    """Пустую область заполняем по теме. Явное значение с клиента не трогаем."""
-    from search.area import detect_area
-
-    with _lock:
-        job = _jobs[query_id]
-        topic, area = job["topic"], job["area"]
-        if not area:
-            job["progress_stage"] = "Область"
-    if area:
-        return
-    found = detect_area(topic, use_llm=use_llm)
-    with _lock:
-        _jobs[query_id]["area"] = found
-    _persist(query_id)
-
-
-def _live(query_id: str) -> None:
-    from pipeline.query import run_query
-
-    with _lock:
-        job = _jobs[query_id]
-        topic = job["topic"]
-        area = job["area"]
-
+def _progress(query_id: str):
     def on_progress(stage: str, done: int, total: int) -> None:
         with _lock:
-            current = _jobs[query_id]
-            current["progress_stage"] = stage
-            current["progress_done"] = done
-            current["progress_total"] = total
-            current["status"] = "running"
-        _persist(query_id)
+            store.update_progress(
+                query_id,
+                status="running",
+                progress_stage=STAGE_RU.get(stage, stage),
+                progress_done=done,
+                progress_total=max(int(total or 1), 1),
+            )
 
-    result = run_query(topic, area, query_id, on_progress=on_progress)
+    return on_progress
+
+
+def _enrich_later(query_id: str) -> None:
     with _lock:
-        job = _jobs[query_id]
-        job["result"] = result
-        job["status"] = "done"
-        job["progress_stage"] = STAGES[-1]
-        job["progress_done"] = len(STAGES)
-        job["progress_total"] = len(STAGES)
-    _persist(query_id)
+        job = store.get_query(query_id)
+        result = (job or {}).get("result")
+    if not result:
+        return
+    try:
+        from pipeline.enrich import enrich_top
+
+        updated = enrich_top(result)
+        with _lock:
+            store.patch_result(query_id, updated)
+    except Exception as exc:
+        logger.warning("enrich %s: %s", query_id, exc)
+        result["enrichment"] = "error"
+        with _lock:
+            store.patch_result(query_id, result)
+
+
+def _run_live(query_id: str) -> None:
+    from model.bootstrap import ensure_artifact
+    from pipeline.run_query import run_query
+
+    ensure_artifact()
+    with _lock:
+        job = store.get_query(query_id) or {}
+        topic = job.get("topic") or ""
+        area = job.get("area")
+        store.update_progress(
+            query_id,
+            status="running",
+            progress_stage=STAGES[0],
+            progress_done=0,
+            progress_total=len(STAGES),
+        )
+    result = run_query(topic, area=area, query_id=query_id, progress=_progress(query_id))
+    result["query_id"] = query_id
+    result["topic"] = topic
+    result["area"] = area
+    result.setdefault("enrichment", "pending")
+    with _lock:
+        store.finish_query(query_id, result)
+    threading.Thread(target=_enrich_later, args=(query_id,), daemon=True).start()
+
+
+def _run_mock(query_id: str) -> None:
+    seconds = mock_seconds()
+    step = seconds / len(STAGES) if STAGES else 0
+    for index, stage in enumerate(STAGES, start=1):
+        with _lock:
+            store.update_progress(
+                query_id,
+                progress_stage=stage,
+                progress_done=index,
+                progress_total=len(STAGES),
+                status="running",
+            )
+        if step:
+            time.sleep(step)
+    example = load_example()
+    with _lock:
+        job = store.get_query(query_id) or {}
+        example["query_id"] = query_id
+        example["topic"] = job.get("topic")
+        example["area"] = job.get("area")
+        example.setdefault("enrichment", "done")
+        store.update_progress(
+            query_id,
+            progress_stage=STAGES[-1],
+            progress_done=len(STAGES),
+            progress_total=len(STAGES),
+            status="done",
+            model_version=example.get("model_version"),
+            threshold=example.get("threshold"),
+            cutoff_date=example.get("cutoff_date"),
+        )
+        store.finish_query(query_id, example)
 
 
 def _run(query_id: str) -> None:
-    live = os.getenv("QUERY_MODE", "mock").strip().lower() == "live"
     try:
-        _ensure_area(query_id, use_llm=live)
+        if use_mock():
+            _run_mock(query_id)
+        else:
+            _run_live(query_id)
     except Exception as exc:  # noqa: BLE001
         with _lock:
-            job = _jobs[query_id]
-            job["status"] = "error"
-            job["error"] = str(exc)
-        _persist(query_id)
-        return
-    if live:
-        try:
-            _live(query_id)
-        except Exception as exc:  # noqa: BLE001
-            with _lock:
-                job = _jobs[query_id]
-                job["status"] = "error"
-                job["error"] = str(exc)
-            _persist(query_id)
-        return
-    seconds = mock_seconds()
-    step = seconds / len(STAGES) if STAGES else 0
-    try:
-        for index, stage in enumerate(STAGES, start=1):
-            with _lock:
-                job = _jobs[query_id]
-                job["progress_stage"] = stage
-                job["progress_done"] = index
-                job["progress_total"] = len(STAGES)
-                job["status"] = "running"
-            _persist(query_id)
-            if step:
-                time.sleep(step)
-        example = load_example()
-        with _lock:
-            job = _jobs[query_id]
-            example["query_id"] = query_id
-            example["topic"] = job["topic"]
-            example["area"] = job["area"]
-            job["result"] = example
-            job["status"] = "done"
-            job["progress_stage"] = STAGES[-1]
-            job["progress_done"] = len(STAGES)
-            job["progress_total"] = len(STAGES)
-        _persist(query_id)
-    except Exception as exc:  # noqa: BLE001
-        with _lock:
-            job = _jobs[query_id]
-            job["status"] = "error"
-            job["error"] = str(exc)
-        _persist(query_id)
-
-
-def _persist(query_id: str) -> None:
-    with _lock:
-        job = copy.deepcopy(_jobs.get(query_id) or {})
-    if not job:
-        return
-    try:
-        history.sync(job)
-    except Exception as exc:  # noqa: BLE001
-        print(f"история запросов: {exc}", file=sys.stderr)
+            store.update_progress(query_id, status="error", error=str(exc))
+            store.finish_query(query_id, None, error=str(exc))
 
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok"}
+    return {"status": "ok", "database": bool(store.database_url()), "mock": use_mock()}
 
 
 @app.post("/queries")
@@ -229,103 +252,62 @@ def create_query(body: CreateQuery) -> dict:
     elif area not in AREAS:
         raise HTTPException(status_code=422, detail="неизвестная область")
     query_id = f"q-{uuid.uuid4().hex[:8]}"
+    job = {
+        "query_id": query_id,
+        "topic": topic,
+        "area": area,
+        "status": "running",
+        "progress_stage": STAGES[0],
+        "progress_done": 0,
+        "progress_total": len(STAGES),
+        "result": None,
+        "error": None,
+        "created_at": None,
+    }
     with _lock:
-        _jobs[query_id] = {
-            "query_id": query_id,
-            "topic": topic,
-            "area": area,
-            "status": "running",
-            "progress_stage": STAGES[0],
-            "progress_done": 0,
-            "progress_total": len(STAGES),
-            "result": None,
-            "error": None,
-        }
-    _persist(query_id)
+        store.create_query(job)
     threading.Thread(target=_run, args=(query_id,), daemon=True).start()
     return {"query_id": query_id}
 
 
 @app.get("/queries")
 def list_queries(limit: int = 30) -> dict:
-    with _lock:
-        memory = copy.deepcopy(_jobs)
-    return {"items": history.list_queries(memory, limit=limit)}
+    return {"items": store.list_queries(limit=max(1, min(limit, 100)))}
 
 
 @app.get("/queries/{query_id}")
 def get_query(query_id: str) -> dict:
     with _lock:
-        job = _jobs.get(query_id)
-    if job is None:
-        try:
-            job = history.load(query_id)
-        except Exception as exc:  # noqa: BLE001
-            print(f"история запросов: {exc}", file=sys.stderr)
-            job = None
+        job = store.get_query(query_id)
         if job is None:
             raise HTTPException(status_code=404, detail="запрос не найден")
-        with _lock:
-            _jobs.setdefault(query_id, job)
-            job = _jobs[query_id]
-    with _lock:
         return _public(copy.deepcopy(job))
-
-
-def _find_card(job: dict, rank: int) -> Optional[dict]:
-    result = job.get("result") or {}
-    for item in result.get("top") or []:
-        if item.get("rank") == rank:
-            return item
-    return None
-
-
-def _fill_insight(query_id: str, rank: int) -> None:
-    from search.insights import generate_insight
-
-    with _lock:
-        job = _jobs.get(query_id)
-        card = _find_card(job, rank) if job else None
-        slot = (job or {}).get("insights", {}).get(rank)
-    if card is None or slot is None:
-        return
-    try:
-        content = generate_insight(card)
-        with _lock:
-            _jobs[query_id]["insights"][rank] = {"status": "ready", "content": content, "error": None}
-    except Exception as exc:  # noqa: BLE001
-        with _lock:
-            _jobs[query_id]["insights"][rank] = {"status": "error", "content": None, "error": str(exc)}
 
 
 @app.get("/queries/{query_id}/insights/{rank}")
 def get_insight(query_id: str, rank: int) -> dict:
-    """Готовый отчёт, либо pending, пока модель пишет текст по документам."""
     with _lock:
-        job = _jobs.get(query_id)
-    if job is None:
-        try:
-            job = history.load(query_id)
-        except Exception as exc:  # noqa: BLE001
-            print(f"история запросов: {exc}", file=sys.stderr)
-            job = None
-        if job is not None:
-            with _lock:
-                _jobs.setdefault(query_id, job)
-                job = _jobs[query_id]
+        job = store.get_query(query_id)
     if job is None:
         raise HTTPException(status_code=404, detail="запрос не найден")
-    with _lock:
-        job = _jobs.get(query_id) or job
-        if job["status"] != "done":
-            return {"query_id": query_id, "rank": rank, "status": "pending"}
-        if _find_card(job, rank) is None:
-            raise HTTPException(status_code=404, detail="в ТОП нет карточки с таким номером")
-        insights = job.setdefault("insights", {})
-        slot = insights.get(rank)
-        if slot and slot["status"] in {"ready", "error"}:
-            return {"query_id": query_id, "rank": rank, **slot}
-        if slot is None or not slot.get("started"):
-            insights[rank] = {"status": "pending", "content": None, "error": None, "started": True}
-            threading.Thread(target=_fill_insight, args=(query_id, rank), daemon=True).start()
-        return {"query_id": query_id, "rank": rank, "status": "pending"}
+    if job.get("status") != "done" or not job.get("result"):
+        raise HTTPException(status_code=409, detail="запрос ещё считается")
+    result = job["result"]
+    item = next((row for row in (result.get("top") or []) if row.get("rank") == rank), None)
+    if item is None:
+        raise HTTPException(status_code=404, detail="карточка не найдена")
+    stored = store.get_insight(query_id, rank)
+    if stored and stored.get("status") == "done" and stored.get("description_ru"):
+        return {**stored, "query_id": query_id, "rank": rank}
+    from pipeline.insights import build_insight
+
+    payload = build_insight(item, result.get("_documents") or [])
+    payload["query_id"] = query_id
+    payload["rank"] = rank
+    store.save_insight(query_id, rank, payload)
+    return payload
+
+
+@app.get("/catalog/balance")
+def catalog_balance() -> dict:
+    return {"areas": store.training_balance()}

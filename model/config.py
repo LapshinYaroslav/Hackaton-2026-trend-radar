@@ -26,9 +26,16 @@ NEWS_SHARE = "share_news_wordmatch"
 # Старое имя -> новое. Читается при загрузке любой таблицы признаков.
 ALIASES = {"share_market": NEWS_SHARE}
 
-# Шесть признаков итоговой модели. Порядок фиксирован: в нём лежат коэффициенты.
+# Шесть признаков модели s2a1-v1. Порядок фиксирован: в нём лежат коэффициенты.
 FEATURES = ["volume", "growth_research", "recency", NEWS_SHARE, "share_prev6",
             "age_first_arxiv"]
+# s2a2-v1 (задача П, набор PB): как s2a1-v1, но volume -> share_patent на том же месте.
+FEATURES_S2A2 = ["share_patent" if name == "volume" else name for name in FEATURES]
+# Версии модели и их признаки. Боевая — DEFAULT_VERSION; s2a1-v1 остаётся для
+# воспроизводимости прошлых отчётов (Г6/Д5/И2, М, П). MODEL_VERSION — имя s2a1-v1,
+# под ним его знают отчёты scripts/release_report.py и scripts/fallback_report.py.
+VERSIONS = {MODEL_VERSION: FEATURES, "s2a2-v1": FEATURES_S2A2}
+DEFAULT_VERSION = "s2a2-v1"
 
 # Нормировка: центр и масштаб считаются внутри области по обучающей части.
 # Область, которой в обучении не было, нормируется общими центром и масштабом.
@@ -55,6 +62,7 @@ EXPLANATIONS = {
     NEWS_SHARE: "доля новостей, найденных по словам названия, среди всех документов",
     "share_prev6": "доля документов предыдущей шестилетки",
     "age_first_arxiv": "годы от первого препринта arXiv до даты среза",
+    "share_patent": "доля патентов Роспатента среди патентов и научных работ",
 }
 
 
@@ -68,3 +76,9 @@ def canonical(frame: pd.DataFrame) -> pd.DataFrame:
     present = {old: new for old, new in ALIASES.items()
                if old in frame.columns and new not in frame.columns}
     return frame.rename(columns=present) if present else frame
+
+# Задача П. Датасеты Роспатента для share_patent — «мировой фонд»: все патентные датасеты
+# из /datasets/tree (24.09.2026), кроме промышленных образцов dsgn_* (не изобретения) и
+# ru_till_1994 (целиком вне окна сбора). Один набор для всех технологий, входит в ключ кэша.
+ROSPATENT_DATASETS = ["ru_since_1994", "cis", "ap", "cn", "ch", "au", "gb", "kr", "ca", "at",
+                      "jp", "ep", "de", "fr", "pct", "us", "others"]

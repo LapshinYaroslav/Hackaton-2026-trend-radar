@@ -20,30 +20,7 @@ NEGATIVES_CSV = ROOT / "labels" / "negatives.csv"
 # (scripts/build_company_stoplist.py). Лежит в git: у жюри датасета организаторов нет.
 COMPANY_STOPLIST_TXT = ROOT / "labels" / "company_stoplist.txt"
 
-# Хвостовые скобки: только в самом конце строки и без вложенных скобок внутри.
-TAIL_PARENS = re.compile(r"\s*\(([^()]*)\)\s*$")
-# Скобки в любой другой позиции. Их содержимое тоже снимается: у сигналов внутри
-# почти всегда глосса или примеры — (OCS), (brain-inspired), (метро, геотермия, НПЗ).
-# На s8 именно внутренняя скобка ломала нормализатор: английское слово посреди русской
-# фразы, и модель отвечала смесью алфавитов пять попыток подряд.
-INLINE_PARENS = re.compile(r"\s*\(([^()]*)\)")
 MIN_COMPANY_LEN = 4
-
-
-def split_tail_parens(name: str) -> tuple[str, str]:
-    """Название без хвостовых скобок и содержимое скобок. Скобок нет — вторая строка пустая."""
-    text = " ".join(str(name).split())
-    match = TAIL_PARENS.search(text)
-    if not match:
-        return text, ""
-    return text[: match.start()].strip(), match.group(1).strip()
-
-
-def strip_inline_parens(name: str) -> tuple[str, str]:
-    """Название без внутренних скобок и всё, что в них было, через точку с запятой."""
-    inside = [item.strip() for item in INLINE_PARENS.findall(name) if item.strip()]
-    text = " ".join(INLINE_PARENS.sub(" ", name).split())
-    return text, "; ".join(inside)
 
 
 def load_signals() -> pd.DataFrame:
@@ -71,27 +48,6 @@ def load_negatives() -> pd.DataFrame:
     table["label"] = 0
     table["negative_type"] = raw["negative_type"].str.strip()
     table["search_terms_manual"] = raw["search_terms"].str.strip()
-    return table
-
-
-def load_all() -> pd.DataFrame:
-    """Сигналы и негативы в одной таблице, с отделёнными хвостовыми скобками.
-
-    name_en_manual — рукописное английское название негатива; в пайплайн не идёт,
-    служит эталоном для проверки нормализатора. name_gloss — то же место у сигнала,
-    но там лежит пояснение, а не название. name_inline_gloss — содержимое скобок из
-    середины строки, тоже только для разбора.
-    """
-    table = pd.concat([load_signals(), load_negatives()], ignore_index=True)
-    split = [split_tail_parens(name) for name in table["name"]]
-    tails = [item[1] for item in split]
-    inline = [strip_inline_parens(item[0]) for item in split]
-    table["name_ru"] = [item[0] for item in inline]
-    table["name_inline_gloss"] = [item[1] for item in inline]
-    table["name_en_manual"] = [tail if label == 0 else ""
-                               for tail, label in zip(tails, table["label"])]
-    table["name_gloss"] = [tail if label == 1 else ""
-                           for tail, label in zip(tails, table["label"])]
     return table
 
 

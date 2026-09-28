@@ -71,3 +71,40 @@ def _check(frame: pd.DataFrame, path: Path) -> None:
             f"В {path.name} нулевой корпус у пар {empty}. Ноль в знаменателе поправки "
             f"означает «источник не ответил», а не «документов не было»."
         )
+
+
+# Патентные счётчики обучения (s2a2-v1): n_pat 160 технологий, зафиксированные на дату
+# обучения. Роспатент индексирует непрерывно, поэтому признак share_patent обучающей
+# таблицы читается только из этого файла — отсутствие или неполнота означает отказ.
+TRAINING_PATENTS = ROOT / "evidence" / "rospatent_training_counts.json"
+EXPECTED_PATENT_ROWS = 160
+
+
+class PatentSnapshotError(RuntimeError):
+    """Снимок патентных счётчиков обучения недоступен или неполон: share_patent не считается."""
+
+
+def load_training_patents(datasets: list[str], path: Path | None = None) -> pd.DataFrame:
+    """n_pat обучающих технологий: колонки tech_id, phrase, n_pat.
+
+    datasets — определение признака (model.config.ROSPATENT_DATASETS); снимок, собранный
+    по другому набору датасетов, отвергается.
+    """
+    path = path or TRAINING_PATENTS
+    if not path.exists():
+        raise PatentSnapshotError(f"Нет снимка патентных счётчиков {path}. Считать share_patent "
+                                  f"обучения по живому кэшу нельзя: Роспатент растёт.")
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except ValueError as error:
+        raise PatentSnapshotError(f"Снимок {path} не читается: {error}") from error
+    if payload.get("datasets") != list(datasets):
+        raise PatentSnapshotError(f"В {path.name} другой набор датасетов: {payload.get('datasets')}")
+    frame = pd.DataFrame(payload.get("items") or [], columns=["tech_id", "phrase", "n_pat"])
+    bad = frame["n_pat"].isna() | (pd.to_numeric(frame["n_pat"], errors="coerce") < 0)
+    if len(frame) != EXPECTED_PATENT_ROWS or frame["tech_id"].duplicated().any() or bad.any():
+        raise PatentSnapshotError(
+            f"В {path.name} {len(frame)} строк (ожидается {EXPECTED_PATENT_ROWS}), "
+            f"повторов tech_id {int(frame['tech_id'].duplicated().sum())}, "
+            f"пустых или отрицательных n_pat {int(bad.sum())}")
+    return frame.astype({"tech_id": str, "n_pat": int})

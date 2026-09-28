@@ -34,30 +34,44 @@ def rounded(value: float | None, digits: int = 3) -> float | None:
     return round(float(value), digits) if value is not None and math.isfinite(value) else None
 
 
-def auc_by_cross_validation(frame: pd.DataFrame, mode: str = NORMALIZATION) -> float:
-    """AUC вне обучения: среднее по фолдам внутри повтора, затем по повторам."""
-    features, labels, groups = frame[FEATURES + ["area"]], frame["label"], frame["group"]
+def auc_per_repeat(frame: pd.DataFrame, mode: str = NORMALIZATION,
+                   columns: list[str] = FEATURES) -> list[float]:
+    """AUC вне обучения по каждому повтору: среднее по фолдам внутри повтора."""
+    features, labels, groups = frame[columns + ["area"]], frame["label"], frame["group"]
     per_repeat = []
     for repeat in range(N_REPEATS):
         splitter = StratifiedGroupKFold(n_splits=N_SPLITS, shuffle=True,
                                         random_state=SEED + repeat)
         folds = [roc_auc_score(labels.iloc[test],
-                               build_pipeline(mode).fit(features.iloc[train],
-                                                        labels.iloc[train])
+                               build_pipeline(mode, columns).fit(features.iloc[train],
+                                                                 labels.iloc[train])
                                .predict_proba(features.iloc[test])[:, 1])
                  for train, test in splitter.split(features, labels, groups)]
         per_repeat.append(float(np.mean(folds)))
-    return float(np.mean(per_repeat))
+    return per_repeat
 
 
-def auc_by_area(frame: pd.DataFrame, mode: str = NORMALIZATION) -> float:
-    """AUC на области, исключённой из обучения, усреднённая по шести областям."""
-    features, labels = frame[FEATURES + ["area"]], frame["label"]
-    scores = []
+def auc_by_cross_validation(frame: pd.DataFrame, mode: str = NORMALIZATION,
+                            columns: list[str] = FEATURES) -> float:
+    """AUC вне обучения: среднее по фолдам внутри повтора, затем по повторам."""
+    return float(np.mean(auc_per_repeat(frame, mode, columns)))
+
+
+def auc_per_area(frame: pd.DataFrame, mode: str = NORMALIZATION,
+                 columns: list[str] = FEATURES) -> dict[str, float]:
+    """AUC на каждой области, исключённой из обучения."""
+    features, labels = frame[columns + ["area"]], frame["label"]
+    scores = {}
     for area in sorted(frame["area"].astype(str).unique()):
         test = np.flatnonzero((frame["area"].astype(str) == area).to_numpy())
         train = np.flatnonzero((frame["area"].astype(str) != area).to_numpy())
-        fitted = build_pipeline(mode).fit(features.iloc[train], labels.iloc[train])
-        scores.append(roc_auc_score(labels.iloc[test],
-                                    fitted.predict_proba(features.iloc[test])[:, 1]))
-    return float(np.mean(scores))
+        fitted = build_pipeline(mode, columns).fit(features.iloc[train], labels.iloc[train])
+        scores[area] = float(roc_auc_score(labels.iloc[test],
+                                           fitted.predict_proba(features.iloc[test])[:, 1]))
+    return scores
+
+
+def auc_by_area(frame: pd.DataFrame, mode: str = NORMALIZATION,
+                columns: list[str] = FEATURES) -> float:
+    """AUC на области, исключённой из обучения, усреднённая по шести областям."""
+    return float(np.mean(list(auc_per_area(frame, mode, columns).values())))

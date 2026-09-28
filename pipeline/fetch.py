@@ -1,0 +1,316 @@
+"""Счётчики кандидата для model.candidate.candidate_features: живой сборщик, источники параллельно.
+
+Путь счёта не новый: DocumentCollector.count_history, тот же, что дал счётчики обучения.
+Меняется только расписание: у каждого источника свой коллектор, и три источника
+опрашиваются одновременно — arXiv со своей паузой не ждёт OpenAlex и TechCrunch.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
+from datetime import date
+from pathlib import Path
+from typing import Callable, Sequence
+
+import httpx
+import pandas as pd
+
+from collector.adapters.arxiv import ARXIV_ONE_CALL_COUNTS
+from collector.adapters.techcrunch import TECHCRUNCH_ONE_CALL_COUNTS
+from collector.adapters.base import SourceAdapter
+from collector import rospatent as rospatent_source
+from collector.api import DocumentCollector, tech_key
+from collector.constants import COUNTER_WINDOWS
+from collector.db import PostgresCache, build_cache
+from collector.models import Candidate, Counter, SearchTerms, build_search_terms
+from collector.settings import Settings
+
+COLUMNS = ["source", "window", "n"]
+ROOT = Path(__file__).resolve().parents[1]
+# Файловый кэш счётчиков оркестратора: общий для прогонов, одинаковый tech_key не пересчитывается.
+# Ключ — фраза, источник и способ опроса arXiv (одним вызовом или семью): числа разных способов
+# могут не совпадать (сверка В: 6 пар из 1029).
+COUNTERS_CACHE_DIR = ROOT / "data" / "interim" / "cache" / "counters_pipeline"
+# Источники с повторами транспорта (collector/http.py, RETRY_HOSTS) и их хосты.
+RETRY_SOURCE_HOSTS = {"arxiv": "export.arxiv.org", "techcrunch": "techcrunch.com"}
+
+
+def missing_pairs(frame: pd.DataFrame, sources: set[str]) -> list[tuple[str, str]]:
+    """Пары (источник, окно), по которым счётчика нет: признаки по ним не считаются."""
+    have = set(zip(frame["source"], frame["window"]))
+    return sorted((source, window) for source in sources for window in COUNTER_WINDOWS
+                  if (source, window) not in have)
+
+
+class _Counted:
+    """Минимальный заменитель CounterResult: fetch читает только поле counters."""
+
+    def __init__(self, counters: list[Counter]):
+        self.counters = counters
+
+
+def one_call(source: str) -> bool:
+    """Считается ли источник одним вызовом с раскладкой по окнам (флаги задач В и Л)."""
+    return (source == "arxiv" and ARXIV_ONE_CALL_COUNTS) or (source == "techcrunch" and TECHCRUNCH_ONE_CALL_COUNTS)
+
+
+def count_source(collector: DocumentCollector, candidate: Candidate):
+    """Счётчики одного источника. arXiv и TechCrunch при включённых флагах — одним вызовом с откатом на семь.
+
+    Откат (None от count_windows_one_call): больше 2000 записей, 429, неполный ответ, —
+    тогда прежний путь count_history, семь вызовов.
+    """
+    adapter = collector.adapters[0]
+    if one_call(adapter.source):
+        search = build_search_terms(candidate.terms, candidate.context_terms)
+        counts = adapter.count_windows_one_call(search, COUNTER_WINDOWS)
+        if counts is not None:
+            key = tech_key(candidate.name_en)
+            return _Counted([Counter(tech_key=key, source=adapter.source, window=window,
+                                     date_from=COUNTER_WINDOWS[window][0], date_to=COUNTER_WINDOWS[window][1],
+                                     n=n, type_filter=adapter.type_filter, query_variant=adapter.query_variant)
+                             for window, n in counts.items()])
+    return collector.count_history(candidate)
+
+
+def counters_cache_path(key: str, source: str) -> Path:
+    """Файл кэша для (фраза, источник, способ опроса arXiv)."""
+    mode = "one_call" if one_call(source) else "per_window"
+    raw = json.dumps([key, source, mode], ensure_ascii=False)
+    return COUNTERS_CACHE_DIR / f"{hashlib.sha256(raw.encode('utf-8')).hexdigest()}.json"
+
+
+def cached_count_source(collector: DocumentCollector, candidate: Candidate, use_cache: bool = True):
+    """Счётчик: Postgres на пути запроса, файлы — только если общей базы нет."""
+    source = collector.adapters[0].source
+    if isinstance(getattr(collector, "cache", None), PostgresCache):
+        return count_source(collector, candidate)
+    path = counters_cache_path(tech_key(candidate.name_en), source)
+    if use_cache and path.exists():
+        rows = json.loads(path.read_text(encoding="utf-8"))
+        return _Counted([Counter(**{**row, "date_from": date.fromisoformat(row["date_from"]),
+                                    "date_to": date.fromisoformat(row["date_to"])}) for row in rows])
+    result = count_source(collector, candidate)
+    if {row.window for row in result.counters} >= set(COUNTER_WINDOWS):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps([row.to_dict() for row in result.counters], ensure_ascii=False), encoding="utf-8")
+    return result
+
+
+def complete(result) -> bool:
+    """Пришли ли счётчики по всем окнам: ошибка или неполный ответ — сбой очереди."""
+    return not isinstance(result, Exception) and         {row.window for row in result.counters} >= set(COUNTER_WINDOWS)
+
+
+def transport_of(collector: DocumentCollector):
+    """HTTP-транспорт адаптера (collector/http.py); у заглушек его нет."""
+    return getattr(collector.adapters[0], "_transport", None)
+
+
+def retry_counts(collector: DocumentCollector) -> dict:
+    """Повторы источника из транспорта (задача И3, только arXiv и TechCrunch); у остальных — None, как раньше."""
+    host = RETRY_SOURCE_HOSTS.get(collector.adapters[0].source)
+    stats = getattr(transport_of(collector), "retry_stats", {}).get(host) if host else None
+    return {"retries": stats["retries"], "n429": stats["n429"]} if stats else {}
+
+
+def openalex_quota() -> int | None:
+    """Остаток суточной квоты OpenAlex из заголовка x-ratelimit-remaining (один дешёвый запрос); сбой — None."""
+    key = os.getenv("OPENALEX_API_KEY") or os.getenv("OPEN_ALEX") or ""
+    try:
+        response = httpx.get("https://api.openalex.org/works", params={"per_page": 1, "api_key": key}, timeout=30)
+        return int(response.headers["x-ratelimit-remaining"])
+    except (httpx.HTTPError, KeyError, ValueError):
+        return None
+
+
+def wait_threads(jobs: dict[str, tuple], timeout: float | None) -> dict[str, object]:
+    """Задания {имя: (функция, *аргументы)} в фоновых потоках; ждёт не дольше timeout, отдаёт результаты завершившихся.
+
+    Потоки daemon: зависший запрос не держит процесс при выходе. Ошибка задания пробрасывается, как из future.result().
+    """
+    results, errors = {}, []
+
+    def body(name: str, target: Callable, *args) -> None:
+        try:
+            results[name] = target(*args)
+        except Exception as exc:  # noqa: BLE001 — пробрасывается ниже в вызывающем потоке
+            errors.append(exc)
+
+    threads = [threading.Thread(target=body, args=(name, *job), daemon=True) for name, job in jobs.items()]
+    for thread in threads:
+        thread.start()
+    end = None if timeout is None else time.monotonic() + max(0.0, timeout)
+    for thread in threads:
+        thread.join(None if end is None else max(0.0, end - time.monotonic()))
+    if errors:
+        raise errors[0]
+    return dict(results)
+
+
+def merge_queues(old: list[dict], new: list[dict]) -> list[dict]:
+    """Сводка очередей по пачкам (задача Х3): суммы по источнику, начало первой пачки, конец последней.
+
+    Повторы arXiv и TechCrunch в транспорте копятся за весь прогон — берётся последнее значение, остальные суммируются.
+    """
+    merged = {queue["source"]: dict(queue) for queue in old}
+    for queue in new:
+        total = merged.setdefault(queue["source"], {**queue, "duration_s": 0.0, "candidates": 0, "requests": 0,
+                                                    "cache_hits": 0, "failures": 0, "retries": None, "n429": None})
+        for key in ("candidates", "requests", "cache_hits", "failures", "duration_s"):
+            total[key] = round((total.get(key) or 0) + (queue.get(key) or 0), 2)
+        for key in ("retries", "n429"):
+            cumulative = queue["source"] in RETRY_SOURCE_HOSTS or queue.get(key) is None
+            total[key] = queue.get(key) if cumulative else (total.get(key) or 0) + queue[key]
+        total["finished_s"] = queue["finished_s"]
+    return list(merged.values())
+
+
+def relative(stats: dict, origin: float) -> dict:
+    """Начало и конец очереди в секундах от старта этапа счётчиков."""
+    started, finished = stats.pop("started"), stats.pop("finished")
+    return {**stats, "started_s": round(started - origin, 2), "finished_s": round(finished - origin, 2),
+            "duration_s": round(finished - started, 2)}
+
+
+def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None = None,
+                   warnings: list[str] | None = None,
+                   on_done: Callable[[], None] | None = None,
+                   use_cache: bool = True,
+                   rospatent: dict | None = None,
+                   on_request: Callable[[int], None] | None = None) -> Callable[[SearchTerms], pd.DataFrame]:
+    """Fetch для candidate_features. Неполное покрытие -> пустая таблица и запись в warnings.
+
+    Пустая таблица значит «кандидат не оценён» (model.ranking.NO_COUNTERS), а не падение
+    всего запроса: compute_features отказывается считать по неполным данным, и это верно.
+
+    fetch.prefetch(phrases) — очереди по источникам (задача Л5.2): каждый источник в своём
+    потоке проходит всех кандидатов подряд, не дожидаясь остальных источников; fetch потом
+    отдаёт собранное. Без prefetch — прежний путь: три источника параллельно на одного
+    кандидата. Числа в обоих режимах одни и те же: меняется только расписание вызовов.
+
+    rospatent — параметры collector.rospatent.count_all (datasets, token, parallel) или None.
+    Если задан, prefetch запускает ещё одну очередь — n_pat по фразам — параллельно остальным;
+    результаты в fetch.patents. Сводка каждой очереди (начало и конец от старта этапа, запросы,
+    кэш, повторы, сбои) — в fetch.queues. Повторы внутри сборщика снаружи не видны: у трёх
+    основных источников retries и n429 — None.
+
+    on_request(n) — для прогресса (задача И1): после каждой пары «кандидат × источник» (n = 1, попадание
+    в кэш тоже) и пачкой n = число фраз по завершении очереди Роспатента.
+    """
+    settings = settings or Settings()
+    collectors = [DocumentCollector(adapters=[adapter], cache=build_cache(settings.database_url),
+                                    settings=settings) for adapter in adapters]
+    sources = {adapter.source for adapter in adapters}
+    ready: dict[tuple[str, str], object] = {}
+    queues: list[dict] = []
+    patents: dict[str, dict] = {}
+    origins: dict[str, float] = {}
+
+    def one(collector: DocumentCollector, phrase: str, terms: list[str], context: list[str]):
+        candidate = Candidate(candidate_id=phrase, name_en=phrase, terms=terms, context_terms=context)
+        try:
+            return cached_count_source(collector, candidate, use_cache)
+        except ValueError as exc:  # запрос не собрался из названия
+            return exc
+
+    def is_cached(phrase: str) -> bool:
+        """Счётчики фразы по всем источникам уже в файловом кэше (при Postgres неизвестно — False)."""
+        return use_cache and all(not isinstance(c.cache, PostgresCache)
+                                 and counters_cache_path(tech_key(phrase), c.adapters[0].source).exists()
+                                 for c in collectors)
+
+    def prefetch(phrases: Sequence[str], timeout: float | None = None) -> list[str]:
+        """Очередь на источник: кандидат готов, когда пришли все источники. Повторный вызов — следующая пачка.
+
+        timeout — жёсткий дедлайн пачки в секундах (задача Х3): после него очереди не ждут, зависшие
+        запросы дорабатывают в фоновых потоках, но в результат и прогресс не попадают.
+        Возвращает фразы, по которым к дедлайну пришли все источники.
+        """
+        left, lock, stop = {phrase: len(collectors) for phrase in phrases}, threading.Lock(), threading.Event()
+        origin = origins.setdefault("counters", time.time())
+        live: dict[str, dict] = {}
+
+        def run(collector: DocumentCollector) -> dict:
+            source = collector.adapters[0].source
+            stats = live[source] = {"source": source, "started": time.time(), "candidates": 0, "requests": 0,
+                                    "cache_hits": 0, "retries": None, "n429": None, "failures": 0}
+            for phrase in phrases:
+                hit = (
+                    use_cache
+                    and not isinstance(collector.cache, PostgresCache)
+                    and counters_cache_path(tech_key(phrase), source).exists()
+                )
+                result = one(collector, phrase, [phrase], [])
+                with lock:
+                    if stop.is_set():  # дедлайн прошёл: поздний ответ не учитывается
+                        break
+                    stats["candidates"] += 1
+                    stats["cache_hits" if hit else "requests"] += 1
+                    stats["failures"] += not complete(result)
+                    ready[(phrase, source)] = result
+                    left[phrase] -= 1
+                    if on_request:
+                        on_request(1)
+                    if left[phrase] == 0 and on_done:
+                        on_done()
+            return {**stats, **retry_counts(collector), "finished": time.time()}
+
+        def run_patents() -> dict:
+            results, stats = rospatent_source.count_all(phrases, use_cache=use_cache, **rospatent)
+            with lock:
+                if not stop.is_set():
+                    patents.update(results)
+                    if on_request:
+                        on_request(len(phrases))
+            return stats
+
+        jobs = {collector.adapters[0].source: (run, collector) for collector in collectors}
+        if rospatent is not None:
+            jobs["rospatent"] = (run_patents,)
+        outcome = wait_threads(jobs, timeout)
+        with lock:
+            stop.set()
+            done = [phrase for phrase in phrases if left[phrase] == 0]
+        late = [{**live[source], "finished": time.time()} for source in jobs if source not in outcome and source in live]
+        stats = [outcome[source] for source in jobs if source in outcome] + late
+        queues[:] = merge_queues(queues, [relative(item, origin) for item in stats])
+        if warnings is not None:
+            notes = {note for collector in collectors for note in getattr(transport_of(collector), "notes", [])}
+            warnings.extend(note for note in sorted(notes) if note not in warnings)
+        return done
+
+    def fetch(search: SearchTerms) -> pd.DataFrame:
+        phrase = search.terms[0]
+        keys = [(phrase, collector.adapters[0].source) for collector in collectors]
+        if all(key in ready for key in keys) and not search.context_terms and len(search.terms) == 1:
+            results = [ready[key] for key in keys]
+        else:
+            with ThreadPoolExecutor(max_workers=len(collectors)) as pool:
+                results = list(pool.map(lambda c: one(c, phrase, list(search.terms), list(search.context_terms)),
+                                        collectors))
+            if on_done:
+                on_done()
+        errors = [r for r in results if isinstance(r, Exception)]
+        if errors:
+            if warnings is not None:
+                warnings.append(f"{phrase}: {errors[0]}")
+            results = []
+        frame = pd.DataFrame([{"source": row.source, "window": row.window, "n": row.n}
+                              for result in results for row in result.counters], columns=COLUMNS)
+        gaps = missing_pairs(frame, sources)
+        if gaps:
+            if warnings is not None:
+                warnings.append(f"{phrase}: нет счётчиков {gaps}, кандидат не оценён")
+            return pd.DataFrame(columns=COLUMNS)
+        return frame
+
+    fetch.prefetch = prefetch
+    fetch.is_cached = is_cached
+    fetch.queues = queues
+    fetch.patents = patents
+    return fetch

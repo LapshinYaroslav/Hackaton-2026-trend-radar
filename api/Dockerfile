@@ -2,17 +2,20 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY api/requirements.txt /tmp/api-requirements.txt
-RUN pip install --no-cache-dir -r /tmp/api-requirements.txt \
-    pandas==2.2.3 numpy==2.1.3 scikit-learn==1.5.2 joblib==1.4.2 httpx==0.28.1
+COPY requirements.txt /app/requirements.txt
+COPY api/requirements.txt /app/api/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt -r /app/api/requirements.txt
 
+COPY api /app/api
+COPY db /app/db
+COPY labels /app/labels
+COPY data/interim /app/data/interim
+COPY evidence /app/evidence
+COPY docs /app/docs
 COPY collector /app/collector
 COPY model /app/model
-COPY search /app/search
 COPY pipeline /app/pipeline
-COPY evidence/source_totals_training.json /app/evidence/source_totals_training.json
-COPY api /app/api
-COPY docs/contracts /app/docs/contracts
+COPY search /app/search
 
 EXPOSE 8000
 

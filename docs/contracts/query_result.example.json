@@ -1,145 +1,754 @@
 {
-  "_note": "ПРИМЕР контракта для разработки БД и UI. Числа и названия условные, не результат модели.",
-  "query_id": "q-example-001",
-  "topic": "роботы для промышленности",
-  "area": "Роботы",
-  "model_version": "s2a1-v1",
-  "threshold": 0.325,
+  "_note": "ПРИМЕР контракта для разработки БД и UI, ОБРЕЗАННЫЙ: прогон python -m pipeline \"высотное строительство\" 28.09.2026 (область не выбрана — общая нормировка). Оставлены 2 первых элемента top и первый добранный ниже порога (ранги сохранены), по одному исключённому каждой причины, 6 строк candidates и 3 warnings; stats — полного ответа. Отличия от ответа run_query: убрано _documents (API его вырезает), enrichment выставлен done для мока. name_ru — перевод (name_ru_auto: true), name_ru_source — translate, extract или null; name_en — оригинальное название. variants — склеенные дубли [{term_en, score}]; у дубля skipped_reason = duplicate_of и поле duplicate_of. У каждого элемента top поле below_threshold: если выше порога меньше 15, ТОП добирается лучшими ниже порога — у них below_threshold: true, reason_ru «ниже порога модели — под наблюдением», explanation_ru — главная причина отсева. skipped_reason time_budget — «Не хватило времени на проверку». stats: time_budget_s, elapsed_s, stopped_at, counters_schedule, documents_topped_up.",
+  "query_id": "q20260928201327",
+  "topic": "высотное строительство",
+  "area": null,
+  "model_version": "s2a2-v1",
+  "threshold": 0.4,
   "cutoff_date": "2026-09-01",
   "subqueries": [
-    {"subquery_id": "q-example-001-en-1", "language": "en", "text": "robotic teleoperation data"},
-    {"subquery_id": "q-example-001-en-2", "language": "en", "text": "dexterous robotic manipulation"},
-    {"subquery_id": "q-example-001-ru-1", "language": "ru", "text": "коллаборативные промышленные роботы"}
+    {
+      "subquery_id": "q20260928201327-ru-1",
+      "language": "ru",
+      "text": "умные строительные материалы"
+    },
+    {
+      "subquery_id": "q20260928201327-ru-2",
+      "language": "ru",
+      "text": "роботизированные системы монтажа"
+    },
+    {
+      "subquery_id": "q20260928201327-ru-3",
+      "language": "ru",
+      "text": "цифровые двойники зданий"
+    },
+    {
+      "subquery_id": "q20260928201327-ru-4",
+      "language": "ru",
+      "text": "технологии 3D-печати в строительстве"
+    },
+    {
+      "subquery_id": "q20260928201327-en-1",
+      "language": "en",
+      "text": "advanced construction drones"
+    },
+    {
+      "subquery_id": "q20260928201327-en-2",
+      "language": "en",
+      "text": "vertical construction 3D printing"
+    },
+    {
+      "subquery_id": "q20260928201327-en-3",
+      "language": "en",
+      "text": "automated skyscraper assembly"
+    },
+    {
+      "subquery_id": "q20260928201327-en-4",
+      "language": "en",
+      "text": "high-rise modular construction"
+    },
+    {
+      "subquery_id": "q20260928201327-en-5",
+      "language": "en",
+      "text": "robotic exoskeletons for construction"
+    },
+    {
+      "subquery_id": "q20260928201327-en-6",
+      "language": "en",
+      "text": "smart glass for skyscrapers"
+    },
+    {
+      "subquery_id": "q20260928201327-en-7",
+      "language": "en",
+      "text": "wind-resistant building materials"
+    },
+    {
+      "subquery_id": "q20260928201327-en-8",
+      "language": "en",
+      "text": "integrated building information modeling"
+    }
   ],
+  "candidate_sources": null,
+  "extract_version": "v4",
+  "extract_model": "yandexgpt-5-pro",
+  "naming_mode": "direct",
+  "candidates_version": "v3",
   "stats": {
-    "documents_by_source": {"openalex": 175, "arxiv": 105, "techcrunch": 70, "openalex_ru": 1},
-    "documents_total": 287,
-    "candidates_found": 64,
-    "candidates_scored": 52,
-    "above_threshold": 21,
-    "above_075": 9
+    "documents_by_source": {
+      "openalex": 195,
+      "arxiv": 27,
+      "techcrunch": 26,
+      "openalex_ru": 38
+    },
+    "documents_for_candidates_by_source": {
+      "openalex": 147,
+      "arxiv": 27,
+      "techcrunch": 26,
+      "openalex_ru": 0
+    },
+    "documents_total": 286,
+    "documents_for_candidates": 200,
+    "candidates_found": 24,
+    "candidates_named": 22,
+    "candidates_scored": 22,
+    "above_threshold": 12,
+    "above_075": 4,
+    "rospatent_enabled": true,
+    "rospatent_failures": 0,
+    "translation": {
+      "переведено": 20,
+      "из кэша": 18,
+      "с первого раза": 0,
+      "с повтором": 0,
+      "откат на term_ru": 2,
+      "без названия": 0
+    },
+    "time_budget_s": 900.0,
+    "elapsed_s": 7.72,
+    "stopped_at": null,
+    "counters_schedule": {
+      "quota_before": 3403,
+      "quota_after_first": null,
+      "quota_limit": null,
+      "per_candidate_s": 12.0
+    },
+    "documents_topped_up": 94
   },
+  "normalizer_deviations": [
+    "company_stoplist_off"
+  ],
   "top": [
     {
       "rank": 1,
-      "name_ru": "Данные телеуправления роботами как отдельная индустрия",
-      "name_en": "robotic teleoperation data",
-      "score": 0.9525,
+      "name_ru": "Дронная городская воздушная мобильность",
+      "name_en": "drone-based urban air mobility",
+      "tech_key": "drone-based urban air mobility",
+      "score": 0.8464080790828388,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.0,
+        "growth_research": 0.35398034771322456,
+        "recency": 1.0,
+        "share_news_wordmatch": 0.0,
+        "share_prev6": 0.3333333333333333,
+        "age_first_arxiv": null
+      },
       "explanation_ru": [
-        "Про технологию пока мало научных публикаций: 14",
-        "Упоминания свежие: 86% за последние два года"
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 2 публикации"
       ],
       "contributions": {
-        "share_news_wordmatch": 1.62,
-        "recency": 0.94,
-        "age_first_arxiv": 0.41,
-        "share_prev6": 0.18,
-        "volume": 0.01,
-        "growth_research": -0.02
+        "share_patent": 0.4195952159723281,
+        "growth_research": -1.6511149464996147e-06,
+        "recency": 2.522096437732176,
+        "share_news_wordmatch": -1.3299179660841967,
+        "share_prev6": -0.04993595179668008,
+        "age_first_arxiv": -0.23638258619926467
       },
       "counters": {
-        "n_research": 14,
-        "n_market": 9,
-        "recency": 0.86,
-        "age_first_arxiv": 2.1,
-        "share_prev6": 0.0
-      },
-      "sources": [
-        {
-          "title": "Scaling teleoperation data collection for robot foundation models",
-          "url": "https://example.org/doc-1",
-          "published_at": "2026-07-02",
-          "source": "arxiv",
-          "source_type": "preprint",
-          "language": "en",
-          "trust_level": "medium"
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 1
         },
-        {
-          "title": "Startup raises seed round to sell robot training data",
-          "url": "https://example.org/doc-2",
-          "published_at": "2026-05-18",
-          "source": "techcrunch",
-          "source_type": "news",
-          "language": "en",
-          "trust_level": "medium"
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
         }
-      ]
-    },
-    {
-      "rank": 2,
-      "name_ru": "Кисти с высокой ловкостью для роботов",
-      "name_en": "dexterous robotic hand",
-      "score": 0.7812,
-      "explanation_ru": [
-        "Молодой термин: первый препринт 3 года назад",
-        "Упоминания свежие: 71% за последние два года"
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "drone-based urban air mobility",
+      "name_variants": [
+        {
+          "name": "drone-based urban air mobility",
+          "n_works": 2,
+          "n_institutions": 5,
+          "n_institutions_capped": false
+        }
       ],
-      "contributions": {
-        "share_news_wordmatch": 0.35,
-        "recency": 0.66,
-        "age_first_arxiv": 0.52,
-        "share_prev6": 0.09,
-        "volume": 0.0,
-        "growth_research": -0.01
-      },
-      "counters": {
-        "n_research": 212,
-        "n_market": 11,
-        "recency": 0.71,
-        "age_first_arxiv": 3.0,
-        "share_prev6": 0.04
-      },
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 5,
+      "n_institutions_capped": false,
+      "quote": "Drone-based Urban Air Mobility (UAM) shows immense potential in urban logistics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
       "sources": [
         {
-          "title": "A low-cost dexterous hand for industrial assembly",
-          "url": "https://example.org/doc-3",
-          "published_at": "2026-08-11",
+          "title": "Sustainability of Drone-Based Urban Air Mobility: A Systematic Review of Consensus and Controversies",
+          "url": "https://doi.org/10.3390/drones10050334",
+          "published_at": "2026-04-29",
           "source": "openalex",
           "source_type": "paper",
           "language": "en",
           "trust_level": "high"
         }
-      ]
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "below_threshold": false,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 2,
+      "name_ru": "Прогнозируемое производство",
+      "name_en": "predictive fabrication",
+      "tech_key": "predictive fabrication",
+      "score": 0.8207225993549035,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.0,
+        "growth_research": 1.4917926759309346,
+        "recency": 0.3898305084745763,
+        "share_news_wordmatch": 0.6694915254237288,
+        "share_prev6": 0.4187192118226601,
+        "age_first_arxiv": 6.0
+      },
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 39",
+        "Патентов мало относительно научных работ: 0 патентов на 39 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.4195952159723281,
+        "growth_research": 0.0034972001467979967,
+        "recency": -0.20986721225827754,
+        "share_news_wordmatch": 0.9735010147938653,
+        "share_prev6": -0.10136990079609373,
+        "age_first_arxiv": 0.054645635903750926
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 11,
+          "techcrunch": 74
+        },
+        "2020": {
+          "arxiv": 1,
+          "openalex": 2,
+          "techcrunch": 16
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 15
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 21
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 12
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 9,
+          "techcrunch": 6
+        },
+        "2025": {
+          "arxiv": 3,
+          "openalex": 19,
+          "techcrunch": 9
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "predictive fabrication",
+      "name_variants": [
+        {
+          "name": "predictive fabrication",
+          "n_works": 35,
+          "n_institutions": 88,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 35,
+      "n_institutions": 88,
+      "n_institutions_capped": false,
+      "quote": "PFAB: A Generic Software Framework for Predictive Fabrication in Construction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "PFAB: A Generic Software Framework for Predictive Fabrication in Construction",
+          "url": "https://doi.org/10.22260/isarc2026/0256",
+          "published_at": "2026-06-22",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "below_threshold": false,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "name_ru": "Модульные стальные конструкции",
+      "name_en": "modular steel construction",
+      "tech_key": "modular steel construction",
+      "score": 0.3897796974038912,
+      "name_raw": "modular steel construction",
+      "name_variants": [
+        {
+          "name": "modular steel construction",
+          "n_works": 151,
+          "n_institutions": 180,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 151,
+      "n_institutions": 180,
+      "n_institutions_capped": false,
+      "quote": "Structural systems and connection technologies of multi-storey and high-rise modular steel construction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "features": {
+        "share_patent": 0.006578947368421052,
+        "growth_research": 0.01365454177602171,
+        "recency": 0.4166666666666667,
+        "share_news_wordmatch": 0.10119047619047616,
+        "share_prev6": 0.12041884816753927,
+        "age_first_arxiv": null
+      },
+      "contributions": {
+        "share_patent": 0.4011045335071708,
+        "growth_research": -0.0010481764038513988,
+        "recency": -0.08971140357814181,
+        "share_news_wordmatch": -0.9817670863643811,
+        "share_prev6": 0.07831748969742768,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 19,
+          "techcrunch": 4
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 13,
+          "techcrunch": 2
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 17,
+          "techcrunch": 6
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 29,
+          "techcrunch": 3
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 25,
+          "techcrunch": 3
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 31,
+          "techcrunch": 1
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 36,
+          "techcrunch": 2
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "explanation_ru": [
+        "Слабый интерес рынка"
+      ],
+      "sources": [
+        {
+          "title": "Structural systems and connection technologies of multi-storey and high-rise modular steel construction: A review and case study",
+          "url": "https://doi.org/10.1016/j.jobe.2026.117403",
+          "published_at": "2026-09-01",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "below_threshold": true,
+      "reason_ru": "ниже порога модели — под наблюдением",
+      "weak_source_only": false,
+      "rank": 13,
+      "n_pat": 1,
+      "share_patent": 0.006578947368421052,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
     }
   ],
   "excluded": [
     {
-      "name_ru": "Гуманоидные роботы",
-      "name_en": "humanoid robot",
-      "score": 0.1562,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Термин давно в науке: первый препринт 12 лет назад"
-    },
-    {
-      "name_ru": "Промышленные роботы-манипуляторы",
-      "name_en": "industrial robotic manipulator",
-      "score": 0.0931,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 8 412 публикаций — технология уже хорошо изучена"
-    },
-    {
-      "name_ru": "Роботизированный цех будущего",
-      "name_en": "future robotic workshop",
+      "name_ru": "безопасность на строительных площадках с помощью ИИ",
+      "name_en": "construction site AI safety",
+      "tech_key": "construction site ai safety",
       "score": null,
       "skipped_reason": "no_trace",
-      "reason_ru": "Нет следа в научных источниках: фраза не встречается в OpenAlex"
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "construction site AI safety",
+      "name_variants": [
+        {
+          "name": "construction site ai safety",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Artificial Intelligence in improving construction site safety",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
+      "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Модульные захваты",
-      "name_en": "modular gripper",
-      "score": null,
-      "skipped_reason": "cap",
-      "reason_ru": "Не оценён: превышен лимит числа кандидатов"
+      "name_ru": "Робототехника в строительстве",
+      "name_en": "robotics in construction",
+      "tech_key": "robotics in construction",
+      "score": 0.2791097375134012,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Слабый интерес рынка",
+      "name_raw": "robotics in construction",
+      "name_variants": [
+        {
+          "name": "robotics in construction",
+          "n_works": 4068,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 4068,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "robotic technologies in building construction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "features": {
+        "share_patent": 0.008171112713290074,
+        "growth_research": -0.2932834647895718,
+        "recency": 0.35988462391834924,
+        "share_news_wordmatch": 0.0843132904370979,
+        "share_prev6": 0.24833222148098733,
+        "age_first_arxiv": 9.0
+      },
+      "contributions": {
+        "share_patent": 0.39662961948592274,
+        "growth_research": -0.0019920319105249744,
+        "recency": -0.34394646271358154,
+        "share_news_wordmatch": -1.0398338856170406,
+        "share_prev6": 0.0012662250650771153,
+        "age_first_arxiv": -0.342254245923493
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 13,
+          "openalex": 1202,
+          "techcrunch": 274
+        },
+        "2020": {
+          "arxiv": 7,
+          "openalex": 524,
+          "techcrunch": 83
+        },
+        "2021": {
+          "arxiv": 5,
+          "openalex": 595,
+          "techcrunch": 78
+        },
+        "2022": {
+          "arxiv": 10,
+          "openalex": 686,
+          "techcrunch": 85
+        },
+        "2023": {
+          "arxiv": 7,
+          "openalex": 746,
+          "techcrunch": 59
+        },
+        "2024": {
+          "arxiv": 17,
+          "openalex": 741,
+          "techcrunch": 37
+        },
+        "2025": {
+          "arxiv": 13,
+          "openalex": 776,
+          "techcrunch": 38
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "n_pat": 34,
+      "share_patent": 0.008171112713290074,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "name_ru": "3D-печать в строительстве",
+      "name_en": "3D printing in construction",
+      "tech_key": "3d printing in construction",
+      "score": 0.2719450170525393,
+      "skipped_reason": "duplicate_of",
+      "reason_ru": "Дубль: тот же класс технологий, что «3D concrete printing», — показан вариантом названия",
+      "name_raw": "3D printing in construction",
+      "name_variants": [
+        {
+          "name": "3d printing in construction",
+          "n_works": 1256,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 1256,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Additive manufacturing in construction",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "duplicate_of": "3D concrete printing",
+      "features": {
+        "share_patent": 0.08248175182481751,
+        "growth_research": -0.19088816049668494,
+        "recency": 0.4095022624434389,
+        "share_news_wordmatch": 0.05203619909502266,
+        "share_prev6": 0.14616870573084353,
+        "age_first_arxiv": 9.0
+      },
+      "contributions": {
+        "share_patent": 0.18777334588361178,
+        "growth_research": -0.0016771592986390815,
+        "recency": -0.12178919865564423,
+        "share_news_wordmatch": -1.1508848280435566,
+        "share_prev6": 0.0628065306947782,
+        "age_first_arxiv": -0.342254245923493
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 1,
+          "openalex": 148,
+          "techcrunch": 78
+        },
+        "2020": {
+          "arxiv": 1,
+          "openalex": 100,
+          "techcrunch": 24
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 147,
+          "techcrunch": 13
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 229,
+          "techcrunch": 15
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 243,
+          "techcrunch": 11
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 255,
+          "techcrunch": 4
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 282,
+          "techcrunch": 2
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "n_pat": 113,
+      "share_patent": 0.08248175182481751,
+      "rospatent_failed": false,
+      "name_ru_source": "extract",
+      "name_ru_auto": true
     }
   ],
+  "candidates": [
+    {
+      "name_ru": "Дронная городская воздушная мобильность",
+      "name_en": "drone-based urban air mobility",
+      "stage": "top",
+      "score": 0.8464080790828388,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Прогнозируемое производство",
+      "name_en": "predictive fabrication",
+      "stage": "top",
+      "score": 0.8207225993549035,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Иммерсивные цифровые технологии",
+      "name_en": "immersive digital technologies",
+      "stage": "top",
+      "score": 0.8083807652656688,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Вычислительное моделирование пожаров",
+      "name_en": "computational fire modeling",
+      "stage": "top",
+      "score": 0.8070812021077285,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Земное аддитивное производство",
+      "name_en": "earth-based additive manufacturing",
+      "stage": "top",
+      "score": 0.7016732421203501,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Многоматериальная 3D-печать полимеров",
+      "name_en": "multi-material polymer 3D printing",
+      "stage": "top",
+      "score": 0.6985907067937062,
+      "skipped_reason": null,
+      "reason_ru": null
+    }
+  ],
+  "enrichment": "done",
   "timings": {
-    "subqueries": 3.1,
-    "search": 23.7,
-    "candidates": 64.0,
-    "trace_check": 8.2,
-    "counters": 402.5,
-    "ranking": 0.4,
-    "total": 501.9
+    "subqueries": 0.0,
+    "search": 0.01,
+    "candidates": 0.03,
+    "naming": 3.31,
+    "counters": 1.75,
+    "ranking": 0.47,
+    "queues": [
+      {
+        "source": "openalex",
+        "candidates": 22,
+        "requests": 0,
+        "cache_hits": 22,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.41,
+        "duration_s": 0.02
+      },
+      {
+        "source": "arxiv",
+        "candidates": 22,
+        "requests": 0,
+        "cache_hits": 22,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.42,
+        "duration_s": 0.02
+      },
+      {
+        "source": "techcrunch",
+        "candidates": 22,
+        "requests": 0,
+        "cache_hits": 22,
+        "retries": null,
+        "n429": null,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.42,
+        "duration_s": 0.02
+      },
+      {
+        "source": "rospatent",
+        "candidates": 22,
+        "parallel": 4,
+        "requests": 0,
+        "cache_hits": 22,
+        "retries": 0,
+        "n429": 0,
+        "failures": 0,
+        "started_s": 0.0,
+        "finished_s": 0.61,
+        "duration_s": 0.61
+      }
+    ],
+    "dedup": 0.02,
+    "translate": 2.11,
+    "total": 7.72
   },
-  "warnings": []
+  "warnings": [
+    "отброшен (ru): «беспилотные летательные аппараты для мониторинга строительства» — слов 6, нужно 2-4",
+    "отброшен: term_en «drone in construction management»: quote не найден в документе 76",
+    "отброшен после повтора: term_en «YOLOv11»: слов 1, нужно 2–4"
+  ]
 }

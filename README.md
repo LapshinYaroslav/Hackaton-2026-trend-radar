@@ -5,19 +5,20 @@
 
 ## Сборщик
 
-Модуль `collector/`: режим обучения (шаг 3) и запрос (поиск №1 и поиск №2). Источники: OpenAlex, arXiv, TechCrunch.
+Модуль `collector/`: поиск №1 (свежие документы по подзапросам) и счётчики поиска №2; вызывается из оркестратора `python -m pipeline`. Источники: OpenAlex, arXiv, TechCrunch;
+для счётчика патентов боевой модели `s2a2-v1` — поисковая платформа Роспатента (`collector/rospatent.py`, только число
+патентных документов по фразе за 2020-09-01…2026-08-31, мировой фонд — список датасетов в `model/config.py`).
 
 ```bash
 pip install -r requirements-dev.txt
 pytest tests/collector
-python -m collector history --candidate candidate.json --output search2.json
 ```
 
 Командный план пайплайна: [`docs/pipeline.md`](docs/pipeline.md). Методология модели: [`docs/methodology.md`](docs/methodology.md).
 
 ## Что уже можно поднять
 
-Актуальный пример ответа оркестратора: [`docs/contracts/query_result.example.json`](docs/contracts/query_result.example.json). Старый `api_response.json` не используем. Пока оркестратора нет, API через несколько секунд отдаёт этот пример. PostgreSQL для этого мока не нужен.
+Актуальный пример ответа оркестратора: [`docs/contracts/query_result.example.json`](docs/contracts/query_result.example.json). Пока оркестратора нет, API через несколько секунд отдаёт этот пример. PostgreSQL для этого мока не нужен.
 
 Сервисы Docker Compose:
 
@@ -63,7 +64,14 @@ docker compose up --build -d
 docker compose down
 ```
 
-Если меняли `db/schema.sql` и нужно пересоздать БД с нуля (удалит данные volume):
+Схема — `db/schema.sql`: кэш сборщика, обучающая выборка (100 сигналов + 60 негативов), история запросов. Посев из `labels/`, `data/interim/technologies.csv` и при наличии — `data/raw/dataset.xlsx`.
+
+```bash
+# локально, когда Postgres уже запущен
+python -m db
+```
+
+API при старте с `DATABASE_URL` сам применяет схему и заливает справочники. Если меняли `db/schema.sql` и нужно пересоздать volume с нуля:
 
 ```bash
 docker compose down -v
@@ -109,3 +117,14 @@ streamlit run ui/app.py
 ## Секреты
 
 Ключи и пароли только в `.env` (в `.gitignore`). В репозитории — `.env.example` без боевых значений.
+
+Переменные, которые читает пайплайн:
+
+| переменная | зачем |
+|---|---|
+| `YANDEX_FOLDER_ID`, `YANDEX_API_KEY`, `YANDEX_GPT_MODEL` | YandexGPT: подзапросы и извлечение кандидатов |
+| `OPENALEX_API_KEY` (или `OPEN_ALEX`) | OpenAlex: поиск и счётчики научных работ |
+| `ROSPATENT` | Роспатент: число патентов по фразе, признак `share_patent` модели `s2a2-v1` |
+
+Без `ROSPATENT` пайплайн не падает: патентный признак у всех кандидатов недоступен, модель подставляет медиану
+обучения, в `warnings` прогона об этом запись. Для отладки Роспатент выключается флагом `--no-rospatent`.

@@ -27,11 +27,20 @@ services:
       context: .
       dockerfile: api/Dockerfile
     container_name: trend-radar-api
-    env_file:
-      - .env
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://trend:trend@db:5432/trend_radar}
-      QUERY_MODE: ${QUERY_MODE:-live}
+      QUERY_MOCK: ${QUERY_MOCK:-}
+      YANDEX_API_KEY: ${YANDEX_API_KEY:-}
+      YANDEX_FOLDER_ID: ${YANDEX_FOLDER_ID:-}
+      YANDEX_GPT_MODEL: ${YANDEX_GPT_MODEL:-}
+      ROSPATENT: ${ROSPATENT:-}
+      OPENALEX_API_KEY: ${OPENALEX_API_KEY:-}
+      OPEN_ALEX: ${OPEN_ALEX:-}
+      COLLECTOR_OPENALEX_MAILTO: ${COLLECTOR_OPENALEX_MAILTO:-}
+    volumes:
+      # датасет организаторов и negatives.xlsx — обогащают посев, если лежат локально
+      - ./data/raw:/app/data/raw:ro
+      - ./data/model:/app/data/model
     ports:
       - "8000:8000"
     depends_on:
