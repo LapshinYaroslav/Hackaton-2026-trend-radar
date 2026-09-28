@@ -5,6 +5,7 @@ import hashlib
 import pytest
 
 import search.subqueries as sq
+from pipeline import run_query as rq
 from pipeline.run_query import step4_documents
 from tests.collector.fakes import doc
 from tests.pipeline import test_run_query as base
@@ -57,7 +58,7 @@ def test_v4_prompt_has_examples_and_form(language, count):
 def test_v3_orders_sources_and_caps_openalex_at_half():
     documents = ([item("openalex", n) for n in range(10)] + [item("techcrunch", 20)]
                  + [item("arxiv", 30), item("arxiv", 31)] + [item("openalex", 40, "q-ru-1", "ru")])
-    picked = step4_documents(documents, SUBQUERIES)
+    picked = step4_documents(documents, SUBQUERIES, minimum=0)
     assert [doc["source"] for doc in picked] == ["arxiv", "arxiv", "techcrunch"] + ["openalex"] * 3
     assert [doc["url"] for doc in picked[3:]] == [f"https://openalex/{n}" for n in range(3)]
     assert sum(doc["source"] == "openalex" for doc in picked) <= len(picked) / 2
@@ -72,7 +73,29 @@ def test_v3_drops_russian_openalex_by_subquery_or_language():
 
 def test_v3_edge_cases():
     assert step4_documents([], SUBQUERIES) == []
-    assert step4_documents([item("openalex", 1)], SUBQUERIES) == []
+    assert step4_documents([item("openalex", 1)], SUBQUERIES, minimum=0) == []
+    assert step4_documents([item("openalex", 1)], SUBQUERIES) == [item("openalex", 1)]
+
+
+def test_x2b_rich_topic_unchanged():
+    """Богатая тема: по пропорции набирается 300 ≥ 200 — добора нет, английских OpenAlex не больше головы."""
+    documents = ([item("arxiv", n) for n in range(100)] + [item("techcrunch", 100 + n) for n in range(50)]
+                 + [item("openalex", 200 + n) for n in range(400)])
+    picked = step4_documents(documents, SUBQUERIES)
+    assert picked == step4_documents(documents, SUBQUERIES, minimum=0) and len(picked) == 300
+    assert rq.step4_topped_up(documents, SUBQUERIES, picked) == 0
+
+
+def test_x2b_poor_topic_topped_up_to_200_in_order():
+    """Бедная тема: 20 arXiv + 10 TechCrunch, по пропорции 60 — английские OpenAlex добираются до 200 по порядку;
+    русские не идут."""
+    documents = ([item("openalex", n) for n in range(250)] + [item("openalex", 999, "q-ru-1", "ru")]
+                 + [item("arxiv", 300 + n) for n in range(20)] + [item("techcrunch", 400 + n) for n in range(10)])
+    picked = step4_documents(documents, SUBQUERIES)
+    assert len(picked) == 200 and [doc["url"] for doc in picked[30:]] == [f"https://openalex/{n}" for n in range(170)]
+    assert rq.step4_topped_up(documents, SUBQUERIES, picked) == 140
+    few = [item("arxiv", 1)] + [item("openalex", n) for n in range(5)]
+    assert len(step4_documents(few, SUBQUERIES)) == 6  # меньше 200 всего — берётся всё, что есть
 
 
 class RuOpenAlex(base.QueryFake):

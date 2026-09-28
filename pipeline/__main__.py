@@ -1,5 +1,5 @@
 """CLI: python -m pipeline "тема" [--area Финтех] [--out result.json] [--no-cache] [--no-rospatent] [--quiet]
-[--no-dedup].
+[--no-dedup] [--time-budget 900] [--fresh].
 
 Прогресс — одна строка в stdout, перезаписывается: «[ 37%] Сбор счётчиков 812/2160 · осталось ~9 мин».
 Если stdout не терминал — новая строка не чаще раза в 10 с (и последняя, 100 %). --quiet — без прогресса.
@@ -57,13 +57,19 @@ def main(argv: list[str] | None = None) -> int:
                         help="без Роспатента (отладка): share_patent у всех кандидатов недоступен")
     parser.add_argument("--quiet", action="store_true", help="без строки прогресса")
     parser.add_argument("--no-dedup", action="store_true", help="без склейки дублей (для сравнения)")
+    parser.add_argument("--time-budget", type=float, default=None,
+                        help="бюджет прогона в секундах; по умолчанию env TIME_BUDGET_S или 900")
+    parser.add_argument("--fresh", action="store_true",
+                        help="шаг 4 и счётчики без кэша; подзапросы, поиск и перевод — из кэша")
     args = parser.parse_args(argv)
     load_dotenv(ROOT / ".env")
     from pipeline.run_query import run_query  # после .env: модули читают настройки при вызове
 
     result = run_query(args.topic, args.area, use_cache=not args.no_cache,
                        rospatent=False if args.no_rospatent else None,
-                       on_progress=None if args.quiet else printer(sys.stdout), dedup=not args.no_dedup)
+                       on_progress=None if args.quiet else printer(sys.stdout), dedup=not args.no_dedup,
+                       time_budget=args.time_budget,
+                       extract_cache=False if args.fresh else None, counters_cache=False if args.fresh else None)
     out = Path(args.out) if args.out else RUNS_DIR / f"{result['query_id']}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

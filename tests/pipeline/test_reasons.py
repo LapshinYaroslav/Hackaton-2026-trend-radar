@@ -71,7 +71,8 @@ def test_missing_value_is_not_put_into_text() -> None:
     assert reasons.reason_below(features, contributions, COUNTERS) == "Пик внимания позади"
 
 
-@pytest.mark.parametrize("reason", ["no_trace", "trace_unknown", "cap", "bad_name", "no_counters", "beyond_top"])
+@pytest.mark.parametrize("reason", ["no_trace", "trace_unknown", "cap", "time_budget", "bad_name",
+                                    "no_counters", "beyond_top"])
 def test_special_reasons_have_text(reason) -> None:
     assert reasons.SPECIAL[reason]
 

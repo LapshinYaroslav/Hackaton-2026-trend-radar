@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -15,6 +16,7 @@ from datetime import date
 from pathlib import Path
 from typing import Callable, Sequence
 
+import httpx
 import pandas as pd
 
 from collector.adapters.arxiv import ARXIV_ONE_CALL_COUNTS
@@ -116,6 +118,58 @@ def retry_counts(collector: DocumentCollector) -> dict:
     return {"retries": stats["retries"], "n429": stats["n429"]} if stats else {}
 
 
+def openalex_quota() -> int | None:
+    """Остаток суточной квоты OpenAlex из заголовка x-ratelimit-remaining (один дешёвый запрос); сбой — None."""
+    key = os.getenv("OPENALEX_API_KEY") or os.getenv("OPEN_ALEX") or ""
+    try:
+        response = httpx.get("https://api.openalex.org/works", params={"per_page": 1, "api_key": key}, timeout=30)
+        return int(response.headers["x-ratelimit-remaining"])
+    except (httpx.HTTPError, KeyError, ValueError):
+        return None
+
+
+def wait_threads(jobs: dict[str, tuple], timeout: float | None) -> dict[str, object]:
+    """Задания {имя: (функция, *аргументы)} в фоновых потоках; ждёт не дольше timeout, отдаёт результаты завершившихся.
+
+    Потоки daemon: зависший запрос не держит процесс при выходе. Ошибка задания пробрасывается, как из future.result().
+    """
+    results, errors = {}, []
+
+    def body(name: str, target: Callable, *args) -> None:
+        try:
+            results[name] = target(*args)
+        except Exception as exc:  # noqa: BLE001 — пробрасывается ниже в вызывающем потоке
+            errors.append(exc)
+
+    threads = [threading.Thread(target=body, args=(name, *job), daemon=True) for name, job in jobs.items()]
+    for thread in threads:
+        thread.start()
+    end = None if timeout is None else time.monotonic() + max(0.0, timeout)
+    for thread in threads:
+        thread.join(None if end is None else max(0.0, end - time.monotonic()))
+    if errors:
+        raise errors[0]
+    return dict(results)
+
+
+def merge_queues(old: list[dict], new: list[dict]) -> list[dict]:
+    """Сводка очередей по пачкам (задача Х3): суммы по источнику, начало первой пачки, конец последней.
+
+    Повторы arXiv и TechCrunch в транспорте копятся за весь прогон — берётся последнее значение, остальные суммируются.
+    """
+    merged = {queue["source"]: dict(queue) for queue in old}
+    for queue in new:
+        total = merged.setdefault(queue["source"], {**queue, "duration_s": 0.0, "candidates": 0, "requests": 0,
+                                                    "cache_hits": 0, "failures": 0, "retries": None, "n429": None})
+        for key in ("candidates", "requests", "cache_hits", "failures", "duration_s"):
+            total[key] = round((total.get(key) or 0) + (queue.get(key) or 0), 2)
+        for key in ("retries", "n429"):
+            cumulative = queue["source"] in RETRY_SOURCE_HOSTS or queue.get(key) is None
+            total[key] = queue.get(key) if cumulative else (total.get(key) or 0) + queue[key]
+        total["finished_s"] = queue["finished_s"]
+    return list(merged.values())
+
+
 def relative(stats: dict, origin: float) -> dict:
     """Начало и конец очереди в секундах от старта этапа счётчиков."""
     started, finished = stats.pop("started"), stats.pop("finished")
@@ -155,6 +209,7 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
     ready: dict[tuple[str, str], object] = {}
     queues: list[dict] = []
     patents: dict[str, dict] = {}
+    origins: dict[str, float] = {}
 
     def one(collector: DocumentCollector, phrase: str, terms: list[str], context: list[str]):
         candidate = Candidate(candidate_id=phrase, name_en=phrase, terms=terms, context_terms=context)
@@ -163,15 +218,27 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
         except ValueError as exc:  # запрос не собрался из названия
             return exc
 
-    def prefetch(phrases: Sequence[str]) -> None:
-        """Очередь на источник: кандидат готов, когда пришли все источники."""
-        left, lock = {phrase: len(collectors) for phrase in phrases}, threading.Lock()
-        origin = time.time()
+    def is_cached(phrase: str) -> bool:
+        """Счётчики фразы по всем источникам уже в файловом кэше (при Postgres неизвестно — False)."""
+        return use_cache and all(not isinstance(c.cache, PostgresCache)
+                                 and counters_cache_path(tech_key(phrase), c.adapters[0].source).exists()
+                                 for c in collectors)
+
+    def prefetch(phrases: Sequence[str], timeout: float | None = None) -> list[str]:
+        """Очередь на источник: кандидат готов, когда пришли все источники. Повторный вызов — следующая пачка.
+
+        timeout — жёсткий дедлайн пачки в секундах (задача Х3): после него очереди не ждут, зависшие
+        запросы дорабатывают в фоновых потоках, но в результат и прогресс не попадают.
+        Возвращает фразы, по которым к дедлайну пришли все источники.
+        """
+        left, lock, stop = {phrase: len(collectors) for phrase in phrases}, threading.Lock(), threading.Event()
+        origin = origins.setdefault("counters", time.time())
+        live: dict[str, dict] = {}
 
         def run(collector: DocumentCollector) -> dict:
             source = collector.adapters[0].source
-            stats = {"source": source, "started": time.time(), "candidates": len(phrases),
-                     "requests": 0, "cache_hits": 0, "retries": None, "n429": None, "failures": 0}
+            stats = live[source] = {"source": source, "started": time.time(), "candidates": 0, "requests": 0,
+                                    "cache_hits": 0, "retries": None, "n429": None, "failures": 0}
             for phrase in phrases:
                 hit = (
                     use_cache
@@ -179,9 +246,12 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
                     and counters_cache_path(tech_key(phrase), source).exists()
                 )
                 result = one(collector, phrase, [phrase], [])
-                stats["cache_hits" if hit else "requests"] += 1
-                stats["failures"] += not complete(result)
                 with lock:
+                    if stop.is_set():  # дедлайн прошёл: поздний ответ не учитывается
+                        break
+                    stats["candidates"] += 1
+                    stats["cache_hits" if hit else "requests"] += 1
+                    stats["failures"] += not complete(result)
                     ready[(phrase, source)] = result
                     left[phrase] -= 1
                     if on_request:
@@ -192,20 +262,27 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
 
         def run_patents() -> dict:
             results, stats = rospatent_source.count_all(phrases, use_cache=use_cache, **rospatent)
-            patents.update(results)
-            if on_request:
-                with lock:
-                    on_request(len(phrases))
+            with lock:
+                if not stop.is_set():
+                    patents.update(results)
+                    if on_request:
+                        on_request(len(phrases))
             return stats
 
-        with ThreadPoolExecutor(max_workers=len(collectors) + 1) as pool:
-            futures = [pool.submit(run, collector) for collector in collectors]
-            if rospatent is not None:
-                futures.append(pool.submit(run_patents))
-            queues[:] = [relative(future.result(), origin) for future in futures]
+        jobs = {collector.adapters[0].source: (run, collector) for collector in collectors}
+        if rospatent is not None:
+            jobs["rospatent"] = (run_patents,)
+        outcome = wait_threads(jobs, timeout)
+        with lock:
+            stop.set()
+            done = [phrase for phrase in phrases if left[phrase] == 0]
+        late = [{**live[source], "finished": time.time()} for source in jobs if source not in outcome and source in live]
+        stats = [outcome[source] for source in jobs if source in outcome] + late
+        queues[:] = merge_queues(queues, [relative(item, origin) for item in stats])
         if warnings is not None:
             notes = {note for collector in collectors for note in getattr(transport_of(collector), "notes", [])}
             warnings.extend(note for note in sorted(notes) if note not in warnings)
+        return done
 
     def fetch(search: SearchTerms) -> pd.DataFrame:
         phrase = search.terms[0]
@@ -233,6 +310,7 @@ def parallel_fetch(adapters: Sequence[SourceAdapter], settings: Settings | None 
         return frame
 
     fetch.prefetch = prefetch
+    fetch.is_cached = is_cached
     fetch.queues = queues
     fetch.patents = patents
     return fetch

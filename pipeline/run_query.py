@@ -35,7 +35,7 @@ from model.config import ROSPATENT_DATASETS
 from model.features import RESEARCH_SOURCES, share_patent
 from model.predict import load
 from model.ranking import rank_candidates
-from pipeline import dedup as dedup_module, naming, translate
+from pipeline import dedup as dedup_module, fetch as fetch_module, naming, translate
 from pipeline.progress import Report, tracker
 from pipeline.fetch import parallel_fetch
 from pipeline.search_cache import CachedSearch
@@ -48,6 +48,21 @@ TECHNOLOGIES = ROOT / "data" / "interim" / "technologies.csv"
 TOP_N = 15
 DUPLICATE_TEXT = "Дубль: тот же класс технологий, что «{}», — показан вариантом названия"
 MAX_SCORED = 60
+# Бюджет времени прогона от старта запроса (задача Х): переопределяется env TIME_BUDGET_S и флагом --time-budget.
+TIME_BUDGET_S = 900
+TIME_RESERVE_S = 90  # резерв на ранжирование, склейку и перевод после счётчиков
+# Потолок оценки (Х3): бюджет только уменьшает число оценённых. 200 на «ИИ аналитике» дало шум — редкие
+# составные «ИИ в X» из одного документа выглядят молодыми и вытесняют нормальные термины.
+MAX_SCORED_HARD = 60
+# Добор кандидатов (Х2): один раунд новых подзапросов, если названных меньше TARGET_NAMED и прошло
+# меньше 35 % бюджета. Выбор и проверки — evidence/rounds_choice.md.
+TARGET_NAMED, MAX_ROUNDS, ROUNDS_BEFORE_SHARE = 60, 1, 0.35
+STEP4_MIN_DOCUMENTS = 200  # Х2b: меньше — английские OpenAlex добираются сверх пропорции
+BATCH_SIZE = 10  # пачка кандидатов между пересчётами прогноза времени
+FIRST_ESTIMATE_S, FIRST_ESTIMATE_N, ESTIMATE_BATCHES = 12.0, 5, 3  # до 5 оценённых — 12 с; среднее по 3 пачкам
+QUOTA_MARGIN = 1.2
+QUOTA_WARNING = ("Квота OpenAlex: остатка {left} запросов хватит примерно на {limit} кандидатов "
+                 "с запасом 20 %, оценка ограничена")
 HIGH_SCORE = 0.75
 MAX_SOURCES = 5
 NAME_WORDS = (2, 5)
@@ -176,6 +191,63 @@ def excluded(candidate: dict, reason: str, documents: Sequence[dict], score: flo
             "skipped_reason": reason, "reason_ru": text or SPECIAL[reason], **details(candidate, documents)}
 
 
+def per_candidate_s(batches: Sequence[tuple[float, int]]) -> float:
+    """Скользящее среднее секунд на кандидата без кэша по последним пачкам; пока их меньше 5 — 12 с."""
+    recent = batches[-ESTIMATE_BATCHES:]
+    uncached = sum(n for _, n in recent)
+    if sum(n for _, n in batches) < FIRST_ESTIMATE_N or not uncached:
+        return FIRST_ESTIMATE_S
+    return sum(seconds for seconds, _ in recent) / uncached
+
+
+def fits(cost: int, elapsed: float, budget: float, estimate: float) -> bool:
+    """Брать ли пачку: прогноз помещается в бюджет без резерва (минимум совпал с потолком 60 — ветки нет)."""
+    limit = budget - TIME_RESERVE_S
+    return elapsed < limit and elapsed + estimate * cost <= limit
+
+
+def quota_limit(done: int, cost: int, before: int | None, after: int | None) -> int | None:
+    """Сколько всего кандидатов выдержит остаток квоты OpenAlex с запасом 20 %; расход — по первой пачке."""
+    if before is None or after is None or not cost or before <= after:
+        return None
+    return done + int(after / ((before - after) / cost * QUOTA_MARGIN))
+
+
+def schedule_counters(fetch, phrases: Sequence[str], elapsed: Callable[[], float], budget: float,
+                      warnings: list[str], quota: Callable[[], int | None]) -> tuple[list[str], str | None, dict]:
+    """Счётчики пачками в прежнем порядке, пока прогноз времени помещается (задача Х3).
+
+    Жёсткий дедлайн — бюджет без резерва: пачку, не успевшую к нему, prefetch перестаёт ждать, её
+    недособранные кандидаты не оцениваются. Возвращает оценённые фразы, причину для остальных
+    (time_budget, cap по квоте или None) и сводку расписания.
+    """
+    limit, done, batches, stop, scored = min(len(phrases), MAX_SCORED_HARD), 0, [], None, []
+    info = {"quota_before": quota(), "quota_after_first": None, "quota_limit": None}
+    while done < limit:
+        batch = phrases[done:min(done + BATCH_SIZE, limit)]
+        cost = sum(not fetch.is_cached(phrase) for phrase in batch)
+        if not fits(cost, elapsed(), budget, per_candidate_s(batches)):
+            stop = "time_budget"
+            break
+        mark = elapsed()
+        ready = fetch.prefetch(batch, timeout=budget - TIME_RESERVE_S - mark)
+        scored += [phrase for phrase in batch if phrase in ready]
+        batches.append((elapsed() - mark, cost))
+        done += len(batch)
+        if len(ready) < len(batch):  # дедлайн внутри пачки
+            stop = "time_budget"
+            break
+        if cost and info["quota_after_first"] is None and info["quota_before"] is not None:
+            info["quota_after_first"] = quota()
+            room = quota_limit(done, cost, info["quota_before"], info["quota_after_first"])
+            if room is not None and room < limit:
+                limit, info["quota_limit"] = max(done, room), room
+                warnings.append(QUOTA_WARNING.format(left=info["quota_after_first"], limit=limit))
+    if stop is None and done < len(phrases):
+        stop = "cap"
+    return scored, stop, {**info, "per_candidate_s": round(per_candidate_s(batches), 2)}
+
+
 def apply_cap(candidates: list[dict], documents: Sequence[dict],
               limit: int = MAX_SCORED) -> tuple[list[dict], list[dict]]:
     """Больше limit — остаются кандидаты с наибольшим числом документов, остальные — cap."""
@@ -204,13 +276,22 @@ def is_russian(doc: dict, subqueries: Sequence[dict]) -> bool:
     return doc["source"] == "openalex" and (origin(doc, subqueries) == "openalex_ru" or doc.get("language") == "ru")
 
 
-def step4_documents(documents: Sequence[dict], subqueries: Sequence[dict]) -> list[dict]:
+def step4_documents(documents: Sequence[dict], subqueries: Sequence[dict],
+                    minimum: int = STEP4_MIN_DOCUMENTS) -> list[dict]:
     """Документы для шага 4 (v3): все arXiv, затем TechCrunch, затем английские OpenAlex
-    в прежнем порядке, не больше половины переданных; русские OpenAlex не идут."""
+    в прежнем порядке, не больше, чем arXiv и TechCrunch вместе; русские OpenAlex не идут.
+
+    Х2b: если так набирается меньше minimum, английские OpenAlex добираются сверх пропорции до minimum.
+    """
     head = ([doc for doc in documents if doc["source"] == "arxiv"]
             + [doc for doc in documents if doc["source"] == "techcrunch"])
     english = [doc for doc in documents if doc["source"] == "openalex" and not is_russian(doc, subqueries)]
-    return head + english[:len(head)]
+    return head + english[:max(len(head), minimum - len(head))]
+
+
+def step4_topped_up(documents: Sequence[dict], subqueries: Sequence[dict], picked: Sequence[dict]) -> int:
+    """Сколько документов шага 4 добрано правилом Х2b сверх пропорции."""
+    return len(picked) - len(step4_documents(documents, subqueries, minimum=0))
 
 
 def document_stats(documents: Sequence[dict], subqueries: Sequence[dict]) -> dict[str, int]:
@@ -306,10 +387,13 @@ def rospatent_options(enabled: bool | None) -> dict | None:
 
 def score_pool(pool: list[dict], area: str | None, adapters: Sequence[SourceAdapter], settings: Settings,
                warnings: list[str], progress: Progress, timings: dict, use_cache: bool = True,
-               rospatent: dict | None = None, report: Report | None = None) -> tuple[list[dict], dict[str, dict]]:
-    """Счётчики (источники параллельно) и ранжирование; время счётчиков отдельно от ранжирования.
+               rospatent: dict | None = None, report: Report | None = None, budget: float = math.inf,
+               elapsed: Callable[[], float] = lambda: 0.0, quota: Callable[[], int | None] = lambda: None
+               ) -> tuple[list[dict], dict[str, dict], set[str], str | None, dict]:
+    """Счётчики (источники параллельно, пачками по бюджету времени) и ранжирование; время счётчиков отдельно.
 
-    Возвращает ранжирование и n_pat по фразам (пусто, если Роспатент выключен).
+    Возвращает ранжирование оценённых, n_pat по фразам (пусто, если Роспатент выключен), оценённые фразы
+    (tech_key), причину для остальных и сводку расписания (schedule_counters).
     """
     mark, fetch_time, done = time.monotonic(), [0.0], [0]
 
@@ -337,9 +421,11 @@ def score_pool(pool: list[dict], area: str | None, adapters: Sequence[SourceAdap
 
     items = [{"name": tech_key(c["name_en"]), "terms": [tech_key(c["name_en"])], "context_terms": [],
               "area": area or ""} for c in pool]
-    begin = time.monotonic()
-    fetch.prefetch([item["name"] for item in items])  # очереди по источникам, задача Л5.2
+    begin = time.monotonic()  # очереди по источникам (Л5.2), пачками по бюджету (Х3)
+    scored, stop, schedule = schedule_counters(fetch, [item["name"] for item in items], elapsed, budget,
+                                               warnings, quota)
     fetch_time[0] += time.monotonic() - begin
+    items = [item for item in items if item["name"] in set(scored)]
     for item in items:  # n_pat — в признак share_patent; сбой -> None -> медиана обучения
         found = fetch.patents.get(item["name"])
         item["n_pat"] = found["n_pat"] if found and not found["failed"] else None
@@ -348,7 +434,7 @@ def score_pool(pool: list[dict], area: str | None, adapters: Sequence[SourceAdap
     timings["ranking"] = round(time.monotonic() - mark - fetch_time[0], 2)
     timings["queues"] = list(fetch.queues)
     progress("ranking", 1, 1)
-    return ranked, dict(fetch.patents)
+    return ranked, dict(fetch.patents), set(scored), stop, schedule
 
 
 def name_in_russian(top: list[dict], excluded_entries: list[dict], use_cache: bool,
@@ -377,6 +463,13 @@ def both_progress(progress: Progress | None, report: Report | None) -> Progress:
     return call
 
 
+def budget_seconds(value: float | None = None) -> float:
+    """Бюджет прогона в секундах: аргумент, иначе env TIME_BUDGET_S, иначе TIME_BUDGET_S; не меньше нуля."""
+    if value is None:
+        value = os.environ.get("TIME_BUDGET_S") or TIME_BUDGET_S
+    return max(0.0, float(value))
+
+
 def staged(name: str, timings: dict, progress: Progress, action: Callable):
     """Выполняет шаг, пишет его время и прогресс 0/1 -> 1/1."""
     mark = time.monotonic()
@@ -387,12 +480,73 @@ def staged(name: str, timings: dict, progress: Progress, action: Callable):
     return value
 
 
+def named_count(named: Sequence[dict]) -> int:
+    """Названных кандидатов после слияния — как stats.candidates_named."""
+    return len(merge_subtopics(merge_candidates(named)))
+
+
+def extra_round(number: int, state: dict, collector: DocumentCollector, openalex, progress: Progress) -> dict:
+    """Раунд добора (Х2): новые подзапросы -> поиск -> шаг 4 по новым документам -> след новых терминов.
+
+    state — накопленное за прогон (subqueries, all_documents, documents шага 4, raw, named, unnamed, warnings)
+    и параметры (topic, query_id, sources, extract_model, subq_cache, extract_cache); дописывается на месте.
+    doc_ids новых кандидатов сдвигаются на число прежних документов шага 4. Возвращает строку stats.rounds.
+    """
+    mark = time.monotonic()
+    subq = generate_subqueries(state["topic"], state["query_id"], use_cache=state["subq_cache"],
+                               round_=number, used=state["subqueries"])
+    state["subqueries"] += subq["subqueries"]
+    seen = {doc["url"] for doc in state["all_documents"]}
+    fresh = [doc for doc in collector.search_recent(subq["subqueries"]).to_dict()["documents"]
+             if doc["url"] not in seen]
+    state["all_documents"] += fresh
+    usable = [doc for doc in fresh if state["sources"] is None or origin(doc, state["subqueries"]) in state["sources"]]
+    picked = step4_documents(usable, state["subqueries"])
+    found = (extract_terms(picked, state["topic"], state["query_id"], model=state["extract_model"],
+                           use_cache=state["extract_cache"]) if picked else {"candidates": [], "warnings": []})
+    offset = len(state["documents"])
+    state["documents"] += picked
+    raw = [{**item, "doc_ids": [i + offset for i in item.get("doc_ids") or []]} for item in found["candidates"]]
+    state["raw"] += raw
+    known = {tech_key(item["name_en"]) for item in state["named"] + state["unnamed"]}
+    by_key = {tech_key(item["name_en"]): item for item in state["named"]}
+    named, unnamed = direct_candidates([item for item in raw if tech_key(item["name_en"]) not in known],
+                                       openalex, progress)
+    again = [{**by_key[tech_key(item["name_en"])], "doc_ids": item["doc_ids"]} for item in raw
+             if tech_key(item["name_en"]) in by_key]  # известный термин: только документы к нему
+    before = named_count(state["named"])
+    state["named"] += named + again
+    state["unnamed"] += unnamed
+    state["warnings"] += subq.get("warnings", []) + found["warnings"]
+    return {"round": number, "subqueries": [item["text"] for item in subq["subqueries"]],
+            "documents_new": len(fresh), "documents_for_candidates": len(picked),
+            "step4_topped_up": step4_topped_up(usable, state["subqueries"], picked),
+            "candidates_found": len(raw), "named_gain": named_count(state["named"]) - before,
+            "seconds": round(time.monotonic() - mark, 2)}
+
+
+def add_rounds(rounds: list[dict], state: dict, collector: DocumentCollector, openalex, progress: Progress,
+               elapsed: Callable[[], float], budget: float) -> None:
+    """Раунды добора, пока их не больше MAX_ROUNDS, названных меньше TARGET_NAMED и прошло меньше 35 % бюджета.
+
+    Сбой подзапросов раунда — предупреждение и конец добора.
+    """
+    while (len(rounds) <= MAX_ROUNDS and named_count(state["named"]) < TARGET_NAMED
+           and elapsed() < ROUNDS_BEFORE_SHARE * budget):
+        try:
+            rounds.append(extra_round(len(rounds), state, collector, openalex, progress))
+        except ValueError as exc:
+            state["warnings"].append(f"раунд добора {len(rounds)} не выполнен: {exc}")
+            return
+
+
 def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
               progress: Progress | None = None, adapters: Sequence[SourceAdapter] | None = None,
               settings: Settings | None = None, candidate_sources: set[str] | None = None,
               extract_model: str | None = "yandexgpt-5-pro", counters_cache: bool | None = None,
               rospatent: bool | None = None, on_progress: Callable[[dict], None] | None = None,
-              dedup: bool = True, query_id: str | None = None) -> dict:
+              dedup: bool = True, query_id: str | None = None, time_budget: float | None = None,
+              extract_cache: bool | None = None) -> dict:
     """Тема -> JSON с ТОП-15, исключёнными, статистикой и временем по шагам.
 
     candidate_sources — из документов каких источников извлекать кандидатов (openalex,
@@ -406,9 +560,14 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     Генерация кандидатов — v3 (задача Г): промпт subq-v4 (задача О3) и состав шага 4 из step4_documents.
     on_progress(event) — прогресс в процентах (pipeline/progress.py, задача И1); None — выход не меняется.
     dedup — склейка дублей перед отбором ТОП-15 (pipeline/dedup.py; решение команды — evidence/dedup_check.md).
+    time_budget — бюджет прогона в секундах от старта (задача Х); None — env TIME_BUDGET_S или TIME_BUDGET_S (900).
+    extract_cache — кэш шага 4 отдельно от остальных кэшей; None — как use_cache.
+    Добор кандидатов (Х2): не больше MAX_ROUNDS раундов новых подзапросов, пока названных меньше TARGET_NAMED.
     """
+    budget, stopped_at = budget_seconds(time_budget), None
     progress_warnings: list[str] = []
-    report, finish = tracker(on_progress, progress_warnings.append) if on_progress else (None, None)
+    report, finish = (tracker(on_progress, progress_warnings.append, budget=budget, tail=TIME_RESERVE_S)
+                      if on_progress else (None, None))
     progress = both_progress(progress, report)
     settings = settings or Settings.from_env()
     adapters = list(adapters) if adapters is not None else default_adapters(settings)
@@ -428,25 +587,42 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     all_documents = documents
     if candidate_sources is not None:
         documents = [doc for doc in documents if origin(doc, subq["subqueries"]) in candidate_sources]
-    documents = step4_documents(documents, subq["subqueries"])
+    usable, documents = documents, step4_documents(documents, subq["subqueries"])
+    extract_cache = use_cache if extract_cache is None else extract_cache
     found = staged("candidates", timings, progress,
-                   lambda: extract_terms(documents, topic, query_id, model=extract_model, use_cache=use_cache))
+                   lambda: extract_terms(documents, topic, query_id, model=extract_model, use_cache=extract_cache))
     warnings += found["warnings"] + ([EMPTY_AREA_WARNING] if not area else [])
 
     mark = time.monotonic()
     openalex = next(a for a in adapters if a.source == "openalex")
     named, unnamed = direct_candidates(found["candidates"], openalex, progress)
     timings["naming"] = round(time.monotonic() - mark, 2)
+    rounds = [{"round": 0, "subqueries": [item["text"] for item in subq["subqueries"]],
+               "documents_new": len(all_documents), "documents_for_candidates": len(documents),
+               "step4_topped_up": step4_topped_up(usable, subq["subqueries"], documents),
+               "candidates_found": len(found["candidates"]), "named_gain": named_count(named),
+               "seconds": round(time.monotonic() - started, 2)}]
+    state = {"topic": topic, "query_id": query_id, "sources": candidate_sources, "extract_model": extract_model,
+             "subq_cache": use_cache, "extract_cache": extract_cache, "subqueries": list(subq["subqueries"]),
+             "all_documents": list(all_documents), "documents": list(documents), "raw": list(found["candidates"]),
+             "named": named, "unnamed": unnamed, "warnings": warnings}
+    add_rounds(rounds, state, collector, openalex, progress, lambda: time.monotonic() - started, budget)
+    subq["subqueries"], all_documents, documents = state["subqueries"], state["all_documents"], state["documents"]
+    found["candidates"], named, unnamed = state["raw"], state["named"], state["unnamed"]
     merged = merge_subtopics(merge_candidates(named))
     dropped = [excluded(item, item["skipped_reason"], documents) for item in unnamed]
     dropped += [excluded(item, "bad_name", documents) for item in merged if not good_name(item["name_en"])]
     good = [item for item in merged if good_name(item["name_en"])]
-    pool, capped = apply_cap(good, documents)
+    pool, capped = apply_cap(good, documents, limit=MAX_SCORED_HARD)
     options = rospatent_options(rospatent)
     if options is not None and not options["token"]:
         warnings.append(ROSPATENT_NO_KEY_WARNING)
-    ranked, patents = score_pool(pool, area, adapters, settings, warnings, progress, timings,
-                                 use_cache if counters_cache is None else counters_cache, options, report)
+    ranked, patents, scored, stop, schedule = score_pool(
+        pool, area, adapters, settings, warnings, progress, timings,
+        use_cache if counters_cache is None else counters_cache, options, report, budget=budget,
+        elapsed=lambda: time.monotonic() - started, quota=lambda: fetch_module.openalex_quota())
+    capped += [excluded(item, stop, documents) for item in pool if tech_key(item["name_en"]) not in scored]
+    stopped_at = "counters" if stop == "time_budget" else stopped_at
     n_pats = {name: result["n_pat"] for name, result in patents.items() if not result["failed"]}
     by_key = {tech_key(c["name_en"]): c for c in pool}
     duplicate_of = staged("dedup", timings, progress, lambda: find_duplicates(ranked, by_key, warnings)) if dedup else {}
@@ -492,7 +668,10 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
                   "above_075": sum(score >= HIGH_SCORE for score in scores),
                   "rospatent_enabled": options is not None,
                   "rospatent_failures": sum(result["failed"] for result in patents.values()),
-                  "translation": translation},
+                  "translation": translation,
+                  "time_budget_s": budget, "elapsed_s": timings["total"], "stopped_at": stopped_at,
+                  "counters_schedule": schedule, "rounds": rounds,
+                  "documents_topped_up": sum(item["step4_topped_up"] for item in rounds)},
         "normalizer_deviations": list(naming.DEVIATIONS),
         "top": top, "excluded": excluded_items, "candidates": candidates,
         "enrichment": "pending",

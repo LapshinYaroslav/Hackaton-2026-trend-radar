@@ -35,6 +35,8 @@ SPACE_RE = re.compile(r"\s+")
 PROMPT_VERSION = "extract-v4"
 PROMPT_PATH = Path(__file__).resolve().parent / "prompts" / "extract_candidates_v4.txt"
 FIRST_TEMPERATURE, RETRY_TEMPERATURE = 0.2, 0.8
+PARSE_RETRY_TEMPERATURE = 0.3  # ответ не разобрался — один повтор тем же промптом
+PARSE_FAILED = "разбор ответа не удался"
 MAX_PARALLEL_BATCHES = 10
 FORBIDDEN_CHARS = '"(),:;/'
 BAD_LAST_WORDS = {"integration", "optimization", "approach", "framework", "method", "methods",
@@ -193,8 +195,15 @@ def squash(text: str) -> str:
 
 
 def parse_items(text: str | None) -> list:
-    """JSON-массив из ответа; объект со списком внутри тоже принимается. Не разобрать — ValueError."""
-    data = json.loads(FENCE_RE.sub("", (text or "").strip()).strip())
+    """Первый JSON-массив из ответа (raw_decode с первой «[»), хвост после него игнорируется;
+    объект со списком внутри в начале ответа тоже принимается. Не разобрать — ValueError."""
+    body, decoder = FENCE_RE.sub("", (text or "").strip()).strip(), json.JSONDecoder()
+    if body.startswith("{"):
+        data = decoder.raw_decode(body)[0]
+    elif "[" in body:
+        data = decoder.raw_decode(body, body.index("["))[0]
+    else:
+        raise ValueError("в ответе нет JSON-массива")
     if isinstance(data, dict):
         data = next((value for value in data.values() if isinstance(value, list)), None)
     if not isinstance(data, list):
@@ -247,7 +256,7 @@ def ask_batch(topic: str, batch: list[tuple[int, str]], model: str | None, use_c
     try:
         items = parse_items(answer["text"])
     except (ValueError, json.JSONDecodeError) as exc:
-        return [], f"разбор ответа не удался: {exc}"
+        return [], f"{PARSE_FAILED}: {exc}"
     _cache_put(key, {"candidates": items, "model_uri": answer["model_uri"]})
     return items, ""
 
@@ -268,13 +277,17 @@ def check_batch(items: list, snippets: dict[int, str]) -> tuple[list[dict], list
 
 def extract_batch(topic: str, batch: list[tuple[int, str]], model: str | None,
                   use_cache: bool) -> tuple[list[dict], list[str]]:
-    """Одна пачка: вызов, проверка; при нарушениях — один повтор при 0.8 с их перечнем."""
+    """Одна пачка: вызов, проверка. Ответ не разобрался — один повтор при 0.3 тем же промптом;
+    при нарушениях — один повтор при 0.8 с их перечнем."""
     snippets = dict(batch)
     items, error = ask_batch(topic, batch, model, use_cache, FIRST_TEMPERATURE)
-    good, problems = check_batch(items, snippets)
     warnings = [error] if error else []
+    if error.startswith(PARSE_FAILED):
+        items, error = ask_batch(topic, batch, model, use_cache, PARSE_RETRY_TEMPERATURE)
+        warnings += [f"повтор после ошибки разбора: {error}" if error else "повтор после ошибки разбора удался"]
+    good, problems = check_batch(items, snippets)
     warnings += [f"отброшен: {p}" for p in problems]
-    if error or problems:
+    if (error and not error.startswith(PARSE_FAILED)) or problems:  # разбор уже повторяли — пачка пропускается
         note = "\n\nПрошлый ответ нарушил требования: " + "; ".join((problems or [error])[:15]) + \
                ". Исправь и верни JSON-массив заново."
         retry_items, retry_error = ask_batch(topic, batch, model, use_cache, RETRY_TEMPERATURE, note)

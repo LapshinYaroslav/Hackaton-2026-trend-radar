@@ -5,9 +5,10 @@
 промпт дословно — системное сообщение, термин — пользовательское), кэш по term_en.
 Проверки: есть кириллица; не больше 8 слов (слово латиницей — одно слово; 8 вместо 6 — решение Ярослава);
 не совпадает с term_en; нет признаков отказа (REFUSAL_RE); каждое латинское слово — из term_en или аббревиатура
-из первых букв его слов (latin_ok); нет кириллических аббревиатур кроме ИИ, ИТ, ЦОД, БПЛА, ДНК, РНК и смешения алфавитов
+из первых букв его слов (latin_ok); нет кириллических аббревиатур кроме ИИ, ИТ, ЦОД, БПЛА, ДНК, РНК, МРТ и смешения алфавитов
 в части слова (alphabet_ok, задача К3). Первая буква — заглавная.
-Не прошло — один повтор при 0.3; снова нет — name_ru = term_ru шага 4, если он проходит проверки, иначе None.
+Не прошло — один повтор при 0.3 с причиной отказа прошлого ответа (RETRY_NOTE: без неё модель повторяла тот же
+ответ); снова нет — name_ru = term_ru шага 4, если он проходит проверки, иначе None.
 term_en (name_en кандидата) не меняется: по нему идут источники и признаки.
 """
 from __future__ import annotations
@@ -34,7 +35,8 @@ MAX_ABBREVIATION = 5
 PART_SPLIT_RE = re.compile(r"[\s\-‐‑–—]+")
 PART_STRIP = "«»\"'“”„()[],.;!"
 CYR_ABBR_RE = re.compile(r"^(?=(?:.*[А-ЯЁ]){2})[А-ЯЁ0-9]+$")
-ABBR_WHITELIST = {"ИИ", "ИТ", "ЦОД", "БПЛА", "ДНК", "РНК"}  # ДНК, РНК — решение Ярослава (задача К)
+# ДНК, РНК — решение Ярослава (задача К); МРТ — 28.09: модель не заменяла её и во второй попытке.
+ABBR_WHITELIST = {"ИИ", "ИТ", "ЦОД", "БПЛА", "ДНК", "РНК", "МРТ"}
 REFUSAL_RE = re.compile(r"не могу|извините|к сожалению|не удалось|языковая модель|перевод:|название:|\?|:", re.IGNORECASE)
 WRAPS = {"«": "»", '"': '"', "“": "”", "„": "“", "'": "'"}
 PROMPT = ("Переведи на русский название класса технологий для аналитического отчёта: «{term_en}» (контекст: "
@@ -43,6 +45,9 @@ PROMPT = ("Переведи на русский название класса т
           "латиницей и поясни по-русски (например: vision-language-action model → VLA-модели «зрение–язык–действие»; "
           "MCP server → MCP-серверы); 3) это название класса, а не пересказ фразы; не больше 8 слов; без кавычек и "
           "точки. Ответ — только название.")
+
+
+RETRY_NOTE = " Прошлый ответ «{name}» отклонён: {reason}. Дай другой вариант по тем же правилам."
 
 
 def clean(text: str | None) -> str:
@@ -70,10 +75,26 @@ def wrapped(text: str) -> bool:
 
 def passes(name_ru: str | None, term_en: str) -> bool:
     """Проверки названия: кириллица, ≤ 8 слов, не совпадает с term_en, нет признаков отказа, латиница только из term_en."""
-    if not name_ru or not CYRILLIC_RE.search(name_ru) or REFUSAL_RE.search(name_ru):
-        return False
-    return (len(name_ru.split()) <= MAX_WORDS and name_ru.strip().lower() != term_en.strip().lower()
-            and all(latin_ok(word, term_en) for word in LATIN_RE.findall(name_ru)) and alphabet_ok(name_ru))
+    return problem(name_ru, term_en) is None
+
+
+def problem(name_ru: str | None, term_en: str) -> str | None:
+    """Первая непройденная проверка названия словами (для повтора) или None, если всё прошло."""
+    if not name_ru or not CYRILLIC_RE.search(name_ru):
+        return "нет русского названия"
+    if REFUSAL_RE.search(name_ru):
+        return "в ответе отказ, двоеточие или вопрос — нужно только название"
+    if len(name_ru.split()) > MAX_WORDS:
+        return f"больше {MAX_WORDS} слов"
+    if name_ru.strip().lower() == term_en.strip().lower():
+        return "название не переведено"
+    foreign = [word for word in LATIN_RE.findall(name_ru) if not latin_ok(word, term_en)]
+    if foreign:
+        return f"латинские слова {', '.join(foreign)} не из исходного названия"
+    if not alphabet_ok(name_ru):
+        return ("кириллическая аббревиатура (допустимы только " + ", ".join(sorted(ABBR_WHITELIST))
+                + ") или смешение кириллицы с латиницей в одном слове — напиши полностью")
+    return None
 
 
 def alphabet_ok(name_ru: str) -> bool:
@@ -91,7 +112,8 @@ def latin_ok(word: str, term_en: str) -> bool:
     """Латинское слово name_ru есть в term_en (без регистра) или это аббревиатура до 5 заглавных букв из первых
     букв подряд идущих слов term_en, начиная с первого: VLA из vision-language-action, но не OF из order fairness."""
     words = [w.lower() for w in LATIN_RE.findall(term_en)]
-    if word.lower() in words:
+    low = word.lower()
+    if low in words or low + "s" in words or (low.endswith("s") and low[:-1] in words):  # API из APIs
         return True
     initials = "".join(w[0] for w in words).upper()
     return word.isupper() and word.isalpha() and len(word) <= MAX_ABBREVIATION and initials.startswith(word)
@@ -117,12 +139,15 @@ def translate_one(term_en: str, quote: str | None, term_ru: str | None, llm: Cal
         cached = json.loads(path.read_text(encoding="utf-8"))["answer"]
         if passes(cached["name_ru"], term_en):  # кэш прежних проверок: не прошедшее новые переводится заново
             return {**cached, "name_ru": capitalized(cached["name_ru"]), "attempts": 0}
-    prompt = PROMPT.format(term_en=term_en, quote=(quote or "").strip())
+    prompt, note = PROMPT.format(term_en=term_en, quote=(quote or "").strip()), ""
     for attempt, temperature in enumerate(TEMPERATURES, start=1):
-        answer = llm(prompt, term_en, purpose="translate-name", temperature=temperature, json_object=False,
+        answer = llm(prompt + note, term_en, purpose="translate-name", temperature=temperature, json_object=False,
                      max_tokens=60, model=LLM_MODEL)
         name = clean(answer["text"]) if not answer["error"] else ""
-        if passes(name, term_en):
+        reason = problem(name, term_en)
+        if name and reason:  # повтор знает, что не так с прошлым ответом: тот же промпт дал бы тот же ответ
+            note = RETRY_NOTE.format(name=name, reason=reason)
+        if reason is None:
             result = {"name_ru": capitalized(name), "name_ru_source": "translate", "name_ru_auto": True}
             CACHE_DIR.mkdir(parents=True, exist_ok=True)
             path.write_text(json.dumps({"term_en": term_en, "answer": result}, ensure_ascii=False), encoding="utf-8")

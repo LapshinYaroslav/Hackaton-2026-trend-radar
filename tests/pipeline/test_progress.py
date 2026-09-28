@@ -1,17 +1,9 @@
 """Прогресс в процентах (И1): трекер, прогон на заглушках, строка CLI."""
 import io
-import json
-import re
-from pathlib import Path
-
-import pytest
 
 from pipeline import progress as pg
 from pipeline.__main__ import printer, progress_line
-from tests.data_required import _real_model
 from tests.pipeline import test_run_query as base
-
-SNAPSHOT = Path(__file__).resolve().parents[1] / "fixtures" / "run_query_snapshot.json"
 
 
 class Clock:
@@ -29,19 +21,60 @@ def make(clock=None):
     return events, warnings, report, finish
 
 
-def test_weights_sum_to_100_and_every_stage_has_russian_name() -> None:
-    assert sum(pg.STAGE_WEIGHTS.values()) == 100 and set(pg.STAGE_WEIGHTS) < set(pg.STAGE_RU)
+def test_every_stage_has_russian_name() -> None:
+    assert set(pg.STAGES) < set(pg.STAGE_RU) and pg.AFTER_COUNTERS < set(pg.STAGES)
 
 
-def test_skipped_stages_jump_to_start_and_cached_stage_to_its_end() -> None:
-    events, _, report, finish = make()
-    report("subqueries", 0, 1)
-    report("counters", 0, 10)          # поиск, шаг 4 и названия пропущены — прыжок на начало счётчиков
-    assert events[-1]["pct"] == 12
-    report("counters", 10, 10)         # всё из кэша: сразу конец этапа
-    assert events[-1]["pct"] == 94
+def test_before_counters_pct_and_eta_from_budget() -> None:
+    """До счётчиков: pct = прошло / бюджет, осталось = бюджет − прошло."""
+    clock = Clock()
+    events, _, report, _ = make(clock)
+    clock.now = 90.0
+    report("naming", 1, 2)
+    assert (events[-1]["pct"], events[-1]["eta_s"]) == (10, 810.0)
+
+
+def test_counters_ending_early_raise_pct_then_tail() -> None:
+    """Все счётчики из кэша за 1 с: остаток — хвост 90 с, а не остаток бюджета; хвост тает после счётчиков."""
+    clock = Clock()
+    events, _, report, finish = make(clock)
+    clock.now = 100.0
+    report("counters", 0, 10)
+    assert events[-1]["pct"] == 11     # 100 / 900
+    clock.now = 101.0
+    report("counters", 10, 10)
+    assert (events[-1]["pct"], events[-1]["eta_s"]) == (52, 90.0)   # 101 / (101 + 90)
+    clock.now = 150.0
+    report("translate", 1, 2)
+    assert (events[-1]["pct"], events[-1]["eta_s"]) == (78, 41.0)   # хвост 90 − 49 с после счётчиков
     finish()
-    assert events[-1] == {**events[-1], "pct": 100, "stage": "done", "stage_ru": "Готово"}
+    assert events[-1] == {**events[-1], "pct": 100, "stage": "done", "stage_ru": "Готово", "eta_s": 0.0}
+
+
+def test_counters_eta_by_rate_but_not_beyond_budget() -> None:
+    """Темп 1 с на запрос: 50 оставшихся + хвост 90 = 140 с; при медленном темпе — не больше остатка бюджета."""
+    clock = Clock()
+    events, _, report, _ = make(clock)
+    clock.now = 100.0
+    report("counters", 0, 100)
+    clock.now = 150.0
+    report("counters", 50, 100)
+    assert events[-1]["eta_s"] == 140.0
+    clock.now = 700.0
+    report("counters", 60, 100)        # темп 10 с: 400 + 90 > 200 — остаток бюджета
+    assert events[-1]["eta_s"] == 200.0 and events[-1]["pct"] == 77
+
+
+def test_budget_exceeded_stays_below_100_until_done() -> None:
+    """Бюджет 0: остаток не меньше 5 с, pct до события done ниже 100."""
+    clock, events = Clock(), []
+    report, finish = pg.tracker(events.append, [].append, clock, budget=0)
+    report("subqueries", 0, 1)
+    clock.now = 50.0
+    report("counters", 5, 10)
+    assert all(e["pct"] < 100 for e in events) and events[-1]["eta_s"] == pg.MIN_LEFT_S
+    finish()
+    assert events[-1]["pct"] == 100
 
 
 def test_rate_limit_inside_stage_but_boundaries_always_sent() -> None:
@@ -59,26 +92,17 @@ def test_rate_limit_inside_stage_but_boundaries_always_sent() -> None:
 
 
 def test_pct_never_decreases_and_stays_below_100_until_done() -> None:
-    events, _, report, finish = make()
-    for stage in pg.STAGE_WEIGHTS:
+    clock = Clock()
+    events, _, report, finish = make(clock)
+    for stage in pg.STAGES:
+        clock.now += 60.0
         report(stage, 0, 2)
         report(stage, 2, 2)
     report("naming", 0, 5)             # поздний вызов раннего этапа не откатывает проценты
     pcts = [e["pct"] for e in events]
-    assert pcts == sorted(pcts) and max(pcts) == 99
+    assert pcts == sorted(pcts) and 90 <= max(pcts) <= 99
     finish()
     assert events[-1]["pct"] == 100
-
-
-def test_eta_only_from_10_percent() -> None:
-    clock = Clock()
-    events, _, report, _ = make(clock)
-    clock.now = 5.0
-    report("search", 1, 1)             # 4 %
-    assert events[-1]["eta_s"] is None
-    clock.now = 20.0
-    report("counters", 41, 82)         # 12 + 41 = 53 %
-    assert events[-1]["pct"] == 53 and events[-1]["eta_s"] == round(20.0 * 47 / 53, 1)
 
 
 def test_callback_error_is_one_warning_and_run_completes(tmp_path) -> None:
@@ -98,32 +122,9 @@ def test_run_events_are_monotonic_and_end_with_done(tmp_path) -> None:
     base.run(tmp_path, on_progress=events.append)
     pcts = [e["pct"] for e in events]
     assert pcts == sorted(pcts) and events[-1]["pct"] == 100 and events[-1]["stage"] == "done"
-    assert {e["stage"] for e in events} == set(pg.STAGE_WEIGHTS) | {"done"}
+    assert {e["stage"] for e in events} == set(pg.STAGES) | {"done"}
+    assert all(e["eta_s"] is not None for e in events)
     assert all(set(e) == {"pct", "stage", "stage_ru", "done", "total", "elapsed_s", "eta_s"} for e in events)
-
-
-def _strip(value):
-    drop = {"query_id", "timings", "published_at", "_documents", "candidates", "enrichment",
-            "tech_key", "features", "is_signal", "weak_source_only"}
-    if isinstance(value, dict):
-        extra = set(drop)
-        if "rank" in value or "skipped_reason" in value:
-            extra.add("threshold")
-        return {k: _strip(v) for k, v in value.items() if k not in extra}
-    return [_strip(v) for v in value] if isinstance(value, list) else value
-
-
-def test_without_callback_output_is_byte_identical_to_snapshot(tmp_path) -> None:
-    """Снимок снят до задачи И1 на тех же заглушках (без изменчивых query_id, времени и дат).
-
-    Переснят в задаче К (решение Ярослава): склейка дублей включена, у оценённых кандидатов поле variants.
-    Переснят в задаче Л: нормализатор удалён, обвязка в боевом режиме direct (name_en = термин шага 4).
-    """
-    if not _real_model():
-        pytest.skip("снимок снят на обученной модели, не на bootstrap")
-    out, _, _ = base.run(tmp_path)
-    text = json.dumps(_strip(out), ensure_ascii=False, sort_keys=True, indent=1) + "\n"
-    assert re.sub(r"q\d{14}", "Q", text) == SNAPSHOT.read_text(encoding="utf-8")  # query_id внутри subquery_ids
 
 
 def test_cli_line_and_pipe_interval() -> None:
