@@ -1,263 +1,2039 @@
 {
-  "_note": "ПРИМЕР контракта для разработки БД и UI. Числа и названия условные, не результат модели. Задача З: name_ru — название на русском, переведённое автоматически (name_ru_auto: true); name_ru_source — translate (перевод YandexGPT), extract (название шага 4) или null; name_en — оригинальное название, по нему идут источники и признаки. Задача К: variants — склеенные дубли [{term_en, score}] у оценённых кандидатов (показывать под названием: «также: …»); у дубля skipped_reason = duplicate_of и поле duplicate_of (term_en принятого).",
-  "query_id": "q-example-001",
-  "topic": "роботы для промышленности",
-  "area": "Роботы",
+  "_note": "ПРИМЕР контракта для разработки БД и UI: живой прогон python -m pipeline \"высотное строительство\" 28.09.2026 (область не выбрана — общая нормировка). Отличия от ответа run_query: убрано _documents (API его вырезает), enrichment выставлен done для мока. Задача З: name_ru — название на русском, переведённое автоматически (name_ru_auto: true); name_ru_source — translate (перевод YandexGPT), extract (название шага 4) или null; name_en — оригинальное название, по нему идут источники и признаки. Задача К: variants — склеенные дубли [{term_en, score}] у оценённых кандидатов (показывать под названием: «также: …»); у дубля skipped_reason = duplicate_of и поле duplicate_of (term_en принятого).",
+  "query_id": "q20260928145127",
+  "topic": "высотное строительство",
+  "area": null,
   "model_version": "s2a2-v1",
   "threshold": 0.4,
   "cutoff_date": "2026-09-01",
   "subqueries": [
     {
-      "subquery_id": "q-example-001-en-1",
-      "language": "en",
-      "text": "robotic teleoperation data"
-    },
-    {
-      "subquery_id": "q-example-001-en-2",
-      "language": "en",
-      "text": "dexterous robotic manipulation"
-    },
-    {
-      "subquery_id": "q-example-001-ru-1",
+      "subquery_id": "q20260928145127-ru-1",
       "language": "ru",
-      "text": "коллаборативные промышленные роботы"
+      "text": "умные строительные материалы"
+    },
+    {
+      "subquery_id": "q20260928145127-ru-2",
+      "language": "ru",
+      "text": "роботизированные системы монтажа"
+    },
+    {
+      "subquery_id": "q20260928145127-ru-3",
+      "language": "ru",
+      "text": "цифровые двойники зданий"
+    },
+    {
+      "subquery_id": "q20260928145127-ru-4",
+      "language": "ru",
+      "text": "технологии 3D-печати в строительстве"
+    },
+    {
+      "subquery_id": "q20260928145127-en-1",
+      "language": "en",
+      "text": "advanced construction drones"
+    },
+    {
+      "subquery_id": "q20260928145127-en-2",
+      "language": "en",
+      "text": "vertical construction 3D printing"
+    },
+    {
+      "subquery_id": "q20260928145127-en-3",
+      "language": "en",
+      "text": "automated skyscraper assembly"
+    },
+    {
+      "subquery_id": "q20260928145127-en-4",
+      "language": "en",
+      "text": "high-rise modular construction"
+    },
+    {
+      "subquery_id": "q20260928145127-en-5",
+      "language": "en",
+      "text": "robotic exoskeletons for construction"
+    },
+    {
+      "subquery_id": "q20260928145127-en-6",
+      "language": "en",
+      "text": "smart glass for skyscrapers"
+    },
+    {
+      "subquery_id": "q20260928145127-en-7",
+      "language": "en",
+      "text": "wind-resistant building materials"
+    },
+    {
+      "subquery_id": "q20260928145127-en-8",
+      "language": "en",
+      "text": "integrated building information modeling"
     }
   ],
+  "candidate_sources": null,
+  "extract_version": "v4",
+  "extract_model": "yandexgpt-5-pro",
+  "naming_mode": "direct",
+  "candidates_version": "v3",
   "stats": {
     "documents_by_source": {
-      "openalex": 175,
-      "arxiv": 105,
-      "techcrunch": 70,
-      "openalex_ru": 1
+      "openalex": 195,
+      "arxiv": 27,
+      "techcrunch": 26,
+      "openalex_ru": 38
     },
-    "documents_total": 287,
-    "candidates_found": 64,
-    "candidates_scored": 52,
-    "above_threshold": 21,
-    "above_075": 9,
+    "documents_for_candidates_by_source": {
+      "openalex": 53,
+      "arxiv": 27,
+      "techcrunch": 26,
+      "openalex_ru": 0
+    },
+    "documents_total": 286,
+    "documents_for_candidates": 106,
+    "candidates_found": 19,
+    "candidates_named": 17,
+    "candidates_scored": 17,
+    "above_threshold": 10,
+    "above_075": 2,
     "rospatent_enabled": true,
-    "rospatent_failures": 1,
+    "rospatent_failures": 0,
     "translation": {
-      "переведено": 4,
-      "из кэша": 0,
-      "с первого раза": 4,
+      "переведено": 17,
+      "из кэша": 1,
+      "с первого раза": 16,
       "с повтором": 0,
       "откат на term_ru": 0,
       "без названия": 0
     }
   },
+  "normalizer_deviations": [
+    "company_stoplist_off"
+  ],
   "top": [
     {
       "rank": 1,
-      "name_ru": "Данные телеуправления роботами как отдельная индустрия",
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "name_en": "robotic teleoperation data",
-      "score": 0.9525,
-      "model_version": "s2a2-v1",
-      "n_pat": 3,
-      "share_patent": 0.1765,
-      "rospatent_failed": false,
+      "name_ru": "Дронная городская воздушная мобильность",
+      "name_en": "drone-based urban air mobility",
+      "tech_key": "drone-based urban air mobility",
+      "score": 0.8464080790828388,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.0,
+        "growth_research": 0.35398034771322456,
+        "recency": 1.0,
+        "share_news_wordmatch": 0.0,
+        "share_prev6": 0.3333333333333333,
+        "age_first_arxiv": null
+      },
       "explanation_ru": [
-        "Про технологию пока мало научных публикаций: 14",
-        "Упоминания свежие: 86% за последние два года"
+        "Упоминания свежие: 100% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 2 публикации"
       ],
       "contributions": {
-        "share_news_wordmatch": 1.62,
-        "recency": 0.94,
-        "age_first_arxiv": 0.41,
-        "share_prev6": 0.18,
-        "share_patent": 0.45,
-        "growth_research": -0.02
+        "share_patent": 0.4195952159723281,
+        "growth_research": -1.6511149464996147e-06,
+        "recency": 2.522096437732176,
+        "share_news_wordmatch": -1.3299179660841967,
+        "share_prev6": -0.04993595179668008,
+        "age_first_arxiv": -0.23638258619926467
       },
       "counters": {
-        "n_research": 14,
-        "n_market": 9,
-        "recency": 0.86,
-        "age_first_arxiv": 2.1,
-        "share_prev6": 0.0
-      },
-      "sources": [
-        {
-          "title": "Scaling teleoperation data collection for robot foundation models",
-          "url": "https://example.org/doc-1",
-          "published_at": "2026-07-02",
-          "source": "arxiv",
-          "source_type": "preprint",
-          "language": "en",
-          "trust_level": "medium"
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 1
         },
-        {
-          "title": "Startup raises seed round to sell robot training data",
-          "url": "https://example.org/doc-2",
-          "published_at": "2026-05-18",
-          "source": "techcrunch",
-          "source_type": "news",
-          "language": "en",
-          "trust_level": "medium"
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
         }
-      ],
-      "variants": [
-        {
-          "term_en": "robot teleoperation dataset",
-          "score": 0.81
-        }
-      ]
-    },
-    {
-      "rank": 2,
-      "name_ru": "Кисти с высокой ловкостью для роботов",
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "name_en": "dexterous robotic hand",
-      "score": 0.7812,
+      },
       "model_version": "s2a2-v1",
-      "n_pat": 5,
-      "share_patent": 0.023,
-      "rospatent_failed": false,
-      "explanation_ru": [
-        "Молодой термин: первый препринт 3 года назад",
-        "Упоминания свежие: 71% за последние два года"
+      "threshold": 0.4,
+      "name_raw": "drone-based urban air mobility",
+      "name_variants": [
+        {
+          "name": "drone-based urban air mobility",
+          "n_works": 2,
+          "n_institutions": 5,
+          "n_institutions_capped": false
+        }
       ],
-      "contributions": {
-        "share_news_wordmatch": 0.35,
-        "recency": 0.66,
-        "age_first_arxiv": 0.52,
-        "share_prev6": 0.09,
-        "share_patent": 0.12,
-        "growth_research": -0.01
-      },
-      "counters": {
-        "n_research": 212,
-        "n_market": 11,
-        "recency": 0.71,
-        "age_first_arxiv": 3.0,
-        "share_prev6": 0.04
-      },
+      "name_choice_rule": "direct",
+      "n_works": 2,
+      "n_institutions": 5,
+      "n_institutions_capped": false,
+      "quote": "Drone-based Urban Air Mobility (UAM) shows immense potential in urban logistics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
       "sources": [
         {
-          "title": "A low-cost dexterous hand for industrial assembly",
-          "url": "https://example.org/doc-3",
-          "published_at": "2026-08-11",
+          "title": "Sustainability of Drone-Based Urban Air Mobility: A Systematic Review of Consensus and Controversies",
+          "url": "https://doi.org/10.3390/drones10050334",
+          "published_at": "2026-04-29",
           "source": "openalex",
           "source_type": "paper",
           "language": "en",
           "trust_level": "high"
         }
       ],
-      "variants": []
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 2,
+      "name_ru": "Иммерсивные цифровые технологии",
+      "name_en": "immersive digital technologies",
+      "tech_key": "immersive digital technologies",
+      "score": 0.8083807652656688,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.016194331983805668,
+        "growth_research": 1.4305854359473391,
+        "recency": 0.4738095238095238,
+        "share_news_wordmatch": 0.4214285714285714,
+        "share_prev6": 0.34477379095163807,
+        "age_first_arxiv": 3.0
+      },
+      "explanation_ru": [
+        "Молодой термин: первый препринт 3 лет назад",
+        "Патентов мало относительно научных работ: 4 патента на 243 публикации"
+      ],
+      "contributions": {
+        "share_patent": 0.37407968990424867,
+        "growth_research": 0.0033089836689716777,
+        "recency": 0.16613916046858307,
+        "share_news_wordmatch": 0.12002805063127045,
+        "share_prev6": -0.056827347939467254,
+        "age_first_arxiv": 0.45154551773099494
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 11,
+          "techcrunch": 210
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 6,
+          "techcrunch": 42
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 8,
+          "techcrunch": 47
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 16,
+          "techcrunch": 54
+        },
+        "2023": {
+          "arxiv": 1,
+          "openalex": 23,
+          "techcrunch": 24
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 47,
+          "techcrunch": 7
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 142,
+          "techcrunch": 3
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "immersive digital technologies",
+      "name_variants": [
+        {
+          "name": "immersive digital technologies",
+          "n_works": 242,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 242,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Advancing Sustainable Building Construction Through Immersive Digital Technologies",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Advancing Sustainable Building Construction Through Immersive Digital Technologies: Towards Digital Transformation in the Nigerian Context",
+          "url": "https://doi.org/10.3390/buildings16071441",
+          "published_at": "2026-04-05",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 4,
+      "share_patent": 0.016194331983805668,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 3,
+      "name_ru": "Земное аддитивное производство",
+      "name_en": "earth-based additive manufacturing",
+      "tech_key": "earth-based additive manufacturing",
+      "score": 0.7016732421203501,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.0,
+        "growth_research": 0.47176338336960805,
+        "recency": 0.7222222222222222,
+        "share_news_wordmatch": 0.05555555555555558,
+        "share_prev6": 0.0,
+        "age_first_arxiv": null
+      },
+      "explanation_ru": [
+        "Упоминания свежие: 72% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 17 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.4195952159723281,
+        "growth_research": 0.00036053983051808654,
+        "recency": 1.2783784180605962,
+        "share_news_wordmatch": -1.1387763066301801,
+        "share_prev6": 0.15085427218180011,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 1
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 5,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 8,
+          "techcrunch": 0
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "earth-based additive manufacturing",
+      "name_variants": [
+        {
+          "name": "earth-based additive manufacturing",
+          "n_works": 17,
+          "n_institutions": 23,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 17,
+      "n_institutions": 23,
+      "n_institutions_capped": false,
+      "quote": "Earth-based additive manufacturing (AM) combines design flexibility and automation",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Fibre-Reinforced Earth-Based 3D Printing: A Review of Mechanical Performance and Environmental Sustainability",
+          "url": "https://doi.org/10.3390/app16083752",
+          "published_at": "2026-04-11",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 4,
+      "name_ru": "Многоматериальная 3D-печать полимеров",
+      "name_en": "multi-material polymer 3D printing",
+      "tech_key": "multi-material polymer 3d printing",
+      "score": 0.6985907067937062,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.0,
+        "growth_research": 0.5771238990274343,
+        "recency": 0.8,
+        "share_news_wordmatch": 0.0,
+        "share_prev6": 0.2857142857142857,
+        "age_first_arxiv": null
+      },
+      "explanation_ru": [
+        "Упоминания свежие: 80% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 5 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.4195952159723281,
+        "growth_research": 0.000684530671542706,
+        "recency": 1.6266194635686388,
+        "share_news_wordmatch": -1.3299179660841967,
+        "share_prev6": -0.021251634085468627,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 0
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "multi-material polymer 3D printing",
+      "name_variants": [
+        {
+          "name": "multi-material polymer 3d printing",
+          "n_works": 5,
+          "n_institutions": 10,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 5,
+      "n_institutions": 10,
+      "n_institutions_capped": false,
+      "quote": "Multi-material polymer additive manufacturing enables the fabrication of components",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Advances in multi-material polymer 3D printing depositions: techniques, materials combinations, challenges, and emerging applications",
+          "url": "https://doi.org/10.3389/fmech.2026.1802237",
+          "published_at": "2026-04-21",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 5,
+      "name_ru": "Дроны в управлении строительством",
+      "name_en": "drone in construction management",
+      "tech_key": "drone in construction management",
+      "score": 0.6235050351219503,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.09090909090909091,
+        "growth_research": 1.2702710795873795,
+        "recency": 0.16417910447761194,
+        "share_news_wordmatch": 0.8507462686567164,
+        "share_prev6": 0.5562913907284768,
+        "age_first_arxiv": null
+      },
+      "explanation_ru": [
+        "Про технологию пока мало научных публикаций: 10",
+        "Патентов мало относительно научных работ: 1 патент на 10 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.16408760372651843,
+        "growth_research": 0.002816005983535249,
+        "recency": -1.2201953945930555,
+        "share_news_wordmatch": 1.5971169980922337,
+        "share_prev6": -0.18423934664321318,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 83
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 2,
+          "techcrunch": 20
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 14
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 12
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 4
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 0,
+          "techcrunch": 2
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 5
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "drone in construction management",
+      "name_variants": [
+        {
+          "name": "drone in construction management",
+          "n_works": 10,
+          "n_institutions": 13,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 10,
+      "n_institutions": 13,
+      "n_institutions_capped": false,
+      "quote": "Among these technologies, drones or Unmanned Aerial Vehicles (UAVs) have emerged as powerful tools for modern construction management due to their ability to capture real-time aerial data, monitor project progress, and support intelligent decision-making",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Application of Drones in Construction Management",
+          "url": "https://doi.org/10.5281/zenodo.20659063",
+          "published_at": "2026-05-02",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        },
+        {
+          "title": "Application of Drones in Construction Management",
+          "url": "https://doi.org/10.5281/zenodo.20659062",
+          "published_at": "2026-05-02",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 1,
+      "share_patent": 0.09090909090909091,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 6,
+      "name_ru": "Технология роёв дронов",
+      "name_en": "drone swarm technology",
+      "tech_key": "drone swarm technology",
+      "score": 0.6218122032249942,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.10465116279069768,
+        "growth_research": 0.3867701705362156,
+        "recency": 0.6,
+        "share_news_wordmatch": 0.22999999999999998,
+        "share_prev6": 0.1935483870967742,
+        "age_first_arxiv": null
+      },
+      "explanation_ru": [
+        "Упоминания свежие: 60% за последние два года",
+        "Патентов мало относительно научных работ: 9 патентов на 77 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.12546436001494254,
+        "growth_research": 9.917984821972895e-05,
+        "recency": 0.731142489405101,
+        "share_news_wordmatch": -0.5385914959445688,
+        "share_prev6": 0.03426640019429548,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 20
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 1,
+          "techcrunch": 4
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 3,
+          "techcrunch": 9
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 5,
+          "techcrunch": 2
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 14,
+          "techcrunch": 2
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 24,
+          "techcrunch": 4
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 30,
+          "techcrunch": 2
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "drone swarm technology",
+      "name_variants": [
+        {
+          "name": "drone swarm technology",
+          "n_works": 77,
+          "n_institutions": 114,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 77,
+      "n_institutions": 114,
+      "n_institutions_capped": false,
+      "quote": "UAV swarms illustrate a revolutionary development in aerial robotics",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Recent Developments and Applications of Drone Swarm: Techniques, Strategies, and Challenges",
+          "url": "https://doi.org/10.3390/s26102943",
+          "published_at": "2026-05-08",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 9,
+      "share_patent": 0.10465116279069768,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 7,
+      "name_ru": "Технологии Construction 4.0",
+      "name_en": "construction 4.0 technologies",
+      "tech_key": "construction 4.0 technologies",
+      "score": 0.544101078429916,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.0,
+        "growth_research": 0.4937422900883832,
+        "recency": 0.608433734939759,
+        "share_news_wordmatch": 0.012048192771084376,
+        "share_prev6": 0.03206997084548105,
+        "age_first_arxiv": null
+      },
+      "explanation_ru": [
+        "Упоминания свежие: 61% за последние два года",
+        "Патентов мало относительно научных работ: 0 патентов на 328 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.4195952159723281,
+        "growth_research": 0.00042812648219834216,
+        "recency": 0.7689035666288647,
+        "share_news_wordmatch": -1.2884655580098314,
+        "share_prev6": 0.1315362622946577,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 5,
+          "techcrunch": 6
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 16,
+          "techcrunch": 2
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 30,
+          "techcrunch": 1
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 31,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 49,
+          "techcrunch": 1
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 88,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 114,
+          "techcrunch": 0
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "construction 4.0 technologies",
+      "name_variants": [
+        {
+          "name": "construction 4.0 technologies",
+          "n_works": 328,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 328,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Hybrid Construction 4.0 adoption pathways tailored to resource-constrained contexts",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Sustainable Roads for Sub-Saharan Africa: A Hybrid Construction 4.0 Approach",
+          "url": "https://doi.org/10.36615/jcpmi.v16i1.4735",
+          "published_at": "2026-06-23",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 0,
+      "share_patent": 0.0,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 8,
+      "name_ru": "Цифровой двойник",
+      "name_en": "digital twin",
+      "tech_key": "digital twin",
+      "score": 0.4900821520834262,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.06439429928741093,
+        "growth_research": 0.6772556559783037,
+        "recency": 0.6319425675675676,
+        "share_news_wordmatch": 0.001967905405405368,
+        "share_prev6": 0.03343782654127482,
+        "age_first_arxiv": 9.0
+      },
+      "explanation_ru": [
+        "Упоминания свежие: 63% за последние два года",
+        "Патентов мало относительно научных работ: 8 133 патента на 118 167 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.23860964578747562,
+        "growth_research": 0.0009924427194786176,
+        "recency": 0.8741616581671999,
+        "share_news_wordmatch": -1.323147289397118,
+        "share_prev6": 0.13071230614007168,
+        "age_first_arxiv": -0.342254245923493
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 77,
+          "openalex": 3919,
+          "techcrunch": 100
+        },
+        "2020": {
+          "arxiv": 110,
+          "openalex": 4703,
+          "techcrunch": 28
+        },
+        "2021": {
+          "arxiv": 180,
+          "openalex": 8028,
+          "techcrunch": 67
+        },
+        "2022": {
+          "arxiv": 350,
+          "openalex": 12778,
+          "techcrunch": 46
+        },
+        "2023": {
+          "arxiv": 507,
+          "openalex": 16745,
+          "techcrunch": 36
+        },
+        "2024": {
+          "arxiv": 824,
+          "openalex": 26249,
+          "techcrunch": 24
+        },
+        "2025": {
+          "arxiv": 1218,
+          "openalex": 46475,
+          "techcrunch": 32
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "digital twin",
+      "name_variants": [
+        {
+          "name": "digital twin",
+          "n_works": 115023,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 115023,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Digital twins require continuous maintenance",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Confidence-Driven Facade Refinement of 3D Building Models Using MLS Point Clouds",
+          "url": "http://arxiv.org/abs/2604.03797v1",
+          "published_at": "2026-04-04",
+          "source": "arxiv",
+          "source_type": "preprint",
+          "language": "en",
+          "trust_level": "medium"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 8133,
+      "share_patent": 0.06439429928741093,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 9,
+      "name_ru": "3D-печать бетоном",
+      "name_en": "3D concrete printing",
+      "tech_key": "3d concrete printing",
+      "score": 0.4381271419484135,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.03207096554077107,
+        "growth_research": 0.043022245764028605,
+        "recency": 0.48263767099263416,
+        "share_news_wordmatch": 0.004910557699052909,
+        "share_prev6": 0.09405783285668891,
+        "age_first_arxiv": 6.0
+      },
+      "explanation_ru": [
+        "Патентов мало относительно научных работ: 94 патента на 2 837 публикаций",
+        "Упоминания свежие: 48% за последние два года"
+      ],
+      "contributions": {
+        "share_patent": 0.3294570818671875,
+        "growth_research": -0.0009578686917580245,
+        "recency": 0.20566617310359323,
+        "share_news_wordmatch": -1.3130229474302466,
+        "share_prev6": 0.09419659220312505,
+        "age_first_arxiv": 0.054645635903750926
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 277,
+          "techcrunch": 19
+        },
+        "2020": {
+          "arxiv": 1,
+          "openalex": 204,
+          "techcrunch": 4
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 300,
+          "techcrunch": 3
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 414,
+          "techcrunch": 4
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 542,
+          "techcrunch": 3
+        },
+        "2024": {
+          "arxiv": 1,
+          "openalex": 579,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 3,
+          "openalex": 793,
+          "techcrunch": 0
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "3D concrete printing",
+      "name_variants": [
+        {
+          "name": "3d concrete printing",
+          "n_works": 2832,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 2832,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "A comprehensive review on 3D concrete printing: extruder design, material properties and reinforcement techniques",
+      "n_docs": 2,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "Concrete printing with textile reinforcement: Approaches, classification, and testing",
+          "url": "https://doi.org/10.1016/j.cemconres.2026.108340",
+          "published_at": "2026-07-23",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        },
+        {
+          "title": "A comprehensive review on 3D concrete printing: extruder design, material properties and reinforcement techniques",
+          "url": "https://doi.org/10.1108/rpj-05-2025-0169",
+          "published_at": "2026-05-15",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 94,
+      "share_patent": 0.03207096554077107,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "rank": 10,
+      "name_ru": "Световая 3D-печать",
+      "name_en": "light-based 3D printing",
+      "tech_key": "light-based 3d printing",
+      "score": 0.41080662484833386,
+      "is_signal": true,
+      "features": {
+        "share_patent": 0.07331975560081466,
+        "growth_research": -0.37276154943907025,
+        "recency": 0.42417582417582417,
+        "share_news_wordmatch": 0.0,
+        "share_prev6": 0.061855670103092786,
+        "age_first_arxiv": 4.0
+      },
+      "explanation_ru": [
+        "Молодой термин: первый препринт 4 лет назад",
+        "Патентов мало относительно научных работ: 36 патентов на 455 публикаций"
+      ],
+      "contributions": {
+        "share_patent": 0.21352390344821276,
+        "growth_research": -0.002236432493872956,
+        "recency": -0.05609001535405306,
+        "share_news_wordmatch": -1.3299179660841967,
+        "share_prev6": 0.11359423061878315,
+        "age_first_arxiv": 0.31924555712191355
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 29,
+          "techcrunch": 1
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 21,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 50,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 1,
+          "openalex": 89,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 1,
+          "openalex": 100,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 2,
+          "openalex": 94,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 97,
+          "techcrunch": 0
+        }
+      },
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "name_raw": "light-based 3D printing",
+      "name_variants": [
+        {
+          "name": "light-based 3d printing",
+          "n_works": 451,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 451,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Light-based 3D printing with photocurable resins enables the rapid fabrication",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "sources": [
+        {
+          "title": "High-efficiency multi-scale holographic volumetric 3D printing with a phase light modulator",
+          "url": "https://doi.org/10.1038/s41377-026-02331-4",
+          "published_at": "2026-05-19",
+          "source": "openalex",
+          "source_type": "paper",
+          "language": "en",
+          "trust_level": "high"
+        }
+      ],
+      "variants": [],
+      "weak_source_only": false,
+      "n_pat": 36,
+      "share_patent": 0.07331975560081466,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
     }
   ],
   "excluded": [
     {
-      "name_ru": "Гуманоидные роботы",
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "name_en": "humanoid robot",
-      "score": 0.1562,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Технология активно патентуется: 690 патентов на 1 200 публикаций",
-      "model_version": "s2a2-v1",
-      "n_pat": 690,
-      "share_patent": 0.3651,
-      "rospatent_failed": false,
-      "variants": []
-    },
-    {
-      "name_ru": "Промышленные роботы-манипуляторы",
-      "name_ru_source": "translate",
-      "name_ru_auto": true,
-      "name_en": "industrial robotic manipulator",
-      "score": 0.0931,
-      "skipped_reason": "below_threshold",
-      "reason_ru": "Большой объём научной литературы: 8 412 публикаций — технология уже хорошо изучена",
-      "model_version": "s2a2-v1",
-      "n_pat": null,
-      "share_patent": null,
-      "rospatent_failed": true,
-      "note_ru": "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения",
-      "variants": []
-    },
-    {
-      "name_ru": "Роботизированный цех будущего",
-      "name_ru_source": "extract",
-      "name_ru_auto": true,
-      "name_en": "future robotic workshop",
+      "name_ru": "3D-печать биоцементом",
+      "name_en": "biocement 3D printing",
+      "tech_key": "biocement 3d printing",
       "score": null,
       "skipped_reason": "no_trace",
-      "reason_ru": "Нет следа в научных источниках: фраза не встречается в OpenAlex",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "biocement 3D printing",
+      "name_variants": [
+        {
+          "name": "biocement 3d printing",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "3D biocement printing: scaling up living mineral structures",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "name_ru_source": "extract",
+      "name_ru_auto": true,
       "model_version": "s2a2-v1"
     },
     {
-      "name_ru": "Модульные захваты",
+      "name_ru": "распознавание отходов с помощью дронов",
+      "name_en": "drone-based waste recognition",
+      "tech_key": "drone-based waste recognition",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026",
+      "name_raw": "drone-based waste recognition",
+      "name_variants": [
+        {
+          "name": "drone-based waste recognition",
+          "n_works": 0,
+          "n_institutions": 0,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 0,
+      "n_institutions": 0,
+      "n_institutions_capped": false,
+      "quote": "Drone imagery enables law enforcement authorities to efficiently assess the environmental impact",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
       "name_ru_source": "extract",
       "name_ru_auto": true,
-      "name_en": "modular gripper",
-      "score": null,
-      "skipped_reason": "cap",
-      "reason_ru": "Не оценён: превышен лимит числа кандидатов",
       "model_version": "s2a2-v1"
+    },
+    {
+      "name_ru": "Доставка автоматических внешних дефибрилляторов дронами",
+      "name_en": "drone-delivered AED",
+      "tech_key": "drone-delivered aed",
+      "score": 0.3369297371851575,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 65 публикаций — технология уже хорошо изучена",
+      "name_raw": "drone-delivered AED",
+      "name_variants": [
+        {
+          "name": "drone-delivered aed",
+          "n_works": 65,
+          "n_institutions": 162,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 65,
+      "n_institutions": 162,
+      "n_institutions_capped": false,
+      "quote": "Drone-delivered automated external defibrillators (AEDs) have emerged as an innovative intervention strategy",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "features": {
+        "share_patent": 0.029850746268656716,
+        "growth_research": -0.46432997580072677,
+        "recency": 0.46153846153846156,
+        "share_news_wordmatch": 0.0,
+        "share_prev6": 0.14473684210526316,
+        "age_first_arxiv": null
+      },
+      "contributions": {
+        "share_patent": 0.33569719404086823,
+        "growth_research": -0.0025180117105556366,
+        "recency": 0.11119689190726732,
+        "share_news_wordmatch": -1.3299179660841967,
+        "share_prev6": 0.06366904334903896,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 11,
+          "techcrunch": 0
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 8,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 7,
+          "techcrunch": 0
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 16,
+          "techcrunch": 0
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 16,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 14,
+          "techcrunch": 0
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "n_pat": 2,
+      "share_patent": 0.029850746268656716,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "name_ru": "Информационное моделирование зданий (BIM)",
+      "name_en": "building information modeling",
+      "tech_key": "building information modeling",
+      "score": 0.33265088369407086,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 32837 публикаций — технология уже хорошо изучена",
+      "name_raw": "building information modeling",
+      "name_variants": [
+        {
+          "name": "building information modeling",
+          "n_works": 32715,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 32715,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Building Information Modeling (BIM)",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "features": {
+        "share_patent": 0.05311571844632198,
+        "growth_research": 0.09445033908997474,
+        "recency": 0.4491687261289598,
+        "share_news_wordmatch": 0.07781959110312286,
+        "share_prev6": 0.24771301206346524,
+        "age_first_arxiv": 9.0
+      },
+      "contributions": {
+        "share_patent": 0.27030904164998326,
+        "growth_research": -0.0007997237633193772,
+        "recency": 0.0558128257287463,
+        "share_news_wordmatch": -1.0621757820174862,
+        "share_prev6": 0.0016392186579786445,
+        "age_first_arxiv": -0.342254245923493
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 14,
+          "openalex": 9959,
+          "techcrunch": 1752
+        },
+        "2020": {
+          "arxiv": 11,
+          "openalex": 3175,
+          "techcrunch": 506
+        },
+        "2021": {
+          "arxiv": 14,
+          "openalex": 3792,
+          "techcrunch": 523
+        },
+        "2022": {
+          "arxiv": 16,
+          "openalex": 4941,
+          "techcrunch": 595
+        },
+        "2023": {
+          "arxiv": 23,
+          "openalex": 5442,
+          "techcrunch": 576
+        },
+        "2024": {
+          "arxiv": 27,
+          "openalex": 6963,
+          "techcrunch": 301
+        },
+        "2025": {
+          "arxiv": 31,
+          "openalex": 8402,
+          "techcrunch": 270
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "n_pat": 1842,
+      "share_patent": 0.05311571844632198,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "name_ru": "Совместная 3D-печать",
+      "name_en": "cooperative 3D printing",
+      "tech_key": "cooperative 3d printing",
+      "score": 0.24898653093419132,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 51 публикаций — технология уже хорошо изучена",
+      "name_raw": "cooperative 3D printing",
+      "name_variants": [
+        {
+          "name": "cooperative 3d printing",
+          "n_works": 51,
+          "n_institutions": 94,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 51,
+      "n_institutions": 94,
+      "n_institutions_capped": false,
+      "quote": "Cooperative 3D printing can accelerate fabrication of large-scale structures",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "features": {
+        "share_patent": 0.1774193548387097,
+        "growth_research": -0.482267676487394,
+        "recency": 0.3728813559322034,
+        "share_news_wordmatch": 0.13559322033898302,
+        "share_prev6": 0.2804878048780488,
+        "age_first_arxiv": null
+      },
+      "contributions": {
+        "share_patent": -0.07905673695901011,
+        "growth_research": -0.002573171375400059,
+        "recency": -0.2857550914246791,
+        "share_news_wordmatch": -0.8634027294506652,
+        "share_prev6": -0.01810335531228691,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 14,
+          "techcrunch": 9
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 6,
+          "techcrunch": 2
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 4,
+          "techcrunch": 1
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 5,
+          "techcrunch": 4
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 14,
+          "techcrunch": 1
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 10,
+          "techcrunch": 0
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 12,
+          "techcrunch": 0
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "n_pat": 11,
+      "share_patent": 0.1774193548387097,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "name_ru": "Модульное строительство",
+      "name_en": "modular building construction",
+      "tech_key": "modular building construction",
+      "score": 0.196961635660785,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 137 патентов на 125 публикаций",
+      "name_raw": "modular building construction",
+      "name_variants": [
+        {
+          "name": "modular building construction",
+          "n_works": 125,
+          "n_institutions": 151,
+          "n_institutions_capped": false
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 125,
+      "n_institutions": 151,
+      "n_institutions_capped": false,
+      "quote": "Defects in Modular Building Construction: A Systematic Lifecycle Review",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "features": {
+        "share_patent": 0.5229007633587787,
+        "growth_research": -0.22583814753971745,
+        "recency": 0.3434343434343434,
+        "share_news_wordmatch": 0.36868686868686873,
+        "share_prev6": 0.2826086956521739,
+        "age_first_arxiv": null
+      },
+      "contributions": {
+        "share_patent": -1.0500611643881115,
+        "growth_research": -0.0017846329155360061,
+        "recency": -0.4176006996733767,
+        "share_news_wordmatch": -0.061432407889360365,
+        "share_prev6": -0.01938091771299831,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 41,
+          "techcrunch": 37
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 13,
+          "techcrunch": 12
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 25,
+          "techcrunch": 12
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 23,
+          "techcrunch": 13
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 24,
+          "techcrunch": 8
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 13,
+          "techcrunch": 14
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 27,
+          "techcrunch": 14
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "n_pat": 137,
+      "share_patent": 0.5229007633587787,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "name_ru": "3D-печать песком",
+      "name_en": "3D sand printing",
+      "tech_key": "3d sand printing",
+      "score": 0.1941553803093834,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 156 публикаций — технология уже хорошо изучена",
+      "name_raw": "3D sand printing",
+      "name_variants": [
+        {
+          "name": "3d sand printing",
+          "n_works": 156,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 156,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Three-dimensional (3D) sand printing revolutionizes casting mold fabrication",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "features": {
+        "share_patent": 0.18324607329842932,
+        "growth_research": -0.3014265048638736,
+        "recency": 0.3652694610778443,
+        "share_news_wordmatch": 0.06586826347305386,
+        "share_prev6": 0.3293172690763052,
+        "age_first_arxiv": null
+      },
+      "contributions": {
+        "share_patent": -0.09543321708859709,
+        "growth_research": -0.002017072319502645,
+        "recency": -0.3198364742838415,
+        "share_news_wordmatch": -1.1032949207435068,
+        "share_prev6": -0.047516792471638154,
+        "age_first_arxiv": -0.23638258619926467
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 0,
+          "openalex": 56,
+          "techcrunch": 26
+        },
+        "2020": {
+          "arxiv": 0,
+          "openalex": 26,
+          "techcrunch": 0
+        },
+        "2021": {
+          "arxiv": 0,
+          "openalex": 17,
+          "techcrunch": 0
+        },
+        "2022": {
+          "arxiv": 0,
+          "openalex": 29,
+          "techcrunch": 5
+        },
+        "2023": {
+          "arxiv": 0,
+          "openalex": 25,
+          "techcrunch": 4
+        },
+        "2024": {
+          "arxiv": 0,
+          "openalex": 33,
+          "techcrunch": 1
+        },
+        "2025": {
+          "arxiv": 0,
+          "openalex": 26,
+          "techcrunch": 1
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "n_pat": 35,
+      "share_patent": 0.18324607329842932,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "name_ru": "Аддитивное производство",
+      "name_en": "additive manufacturing",
+      "tech_key": "additive manufacturing",
+      "score": 0.16549129166280757,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 142607 публикаций — технология уже хорошо изучена",
+      "name_raw": "additive manufacturing",
+      "name_variants": [
+        {
+          "name": "additive manufacturing",
+          "n_works": 141543,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 141543,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "Additive manufacturing in construction is expanding production possibilities",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "features": {
+        "share_patent": 0.26637583789039393,
+        "growth_research": -0.07205024844078065,
+        "recency": 0.4218962125619926,
+        "share_news_wordmatch": 0.012225362258609707,
+        "share_prev6": 0.20457951339915373,
+        "age_first_arxiv": 9.0
+      },
+      "contributions": {
+        "share_patent": -0.3290763813205375,
+        "growth_research": -0.0013117245356046602,
+        "recency": -0.06629671390516277,
+        "share_news_wordmatch": -1.2878559975525277,
+        "share_prev6": 0.027621573231326402,
+        "age_first_arxiv": -0.342254245923493
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 236,
+          "openalex": 35438,
+          "techcrunch": 1458
+        },
+        "2020": {
+          "arxiv": 113,
+          "openalex": 15143,
+          "techcrunch": 380
+        },
+        "2021": {
+          "arxiv": 122,
+          "openalex": 18319,
+          "techcrunch": 479
+        },
+        "2022": {
+          "arxiv": 179,
+          "openalex": 23090,
+          "techcrunch": 386
+        },
+        "2023": {
+          "arxiv": 211,
+          "openalex": 24774,
+          "techcrunch": 266
+        },
+        "2024": {
+          "arxiv": 183,
+          "openalex": 27833,
+          "techcrunch": 153
+        },
+        "2025": {
+          "arxiv": 236,
+          "openalex": 32404,
+          "techcrunch": 101
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "n_pat": 51780,
+      "share_patent": 0.26637583789039393,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
+    },
+    {
+      "name_ru": "3D-печать",
+      "name_en": "3D printing",
+      "tech_key": "3d printing",
+      "score": 0.14861247725549068,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 154995 публикаций — технология уже хорошо изучена",
+      "name_raw": "3D printing",
+      "name_variants": [
+        {
+          "name": "3d printing",
+          "n_works": 153701,
+          "n_institutions": 200,
+          "n_institutions_capped": true
+        }
+      ],
+      "name_choice_rule": "direct",
+      "n_works": 153701,
+      "n_institutions": 200,
+      "n_institutions_capped": true,
+      "quote": "3D printing has rapidly evolved into a versatile fabrication strategy",
+      "n_docs": 1,
+      "n_sources": 1,
+      "known_training_label": null,
+      "features": {
+        "share_patent": 0.2682805927590488,
+        "growth_research": -0.2503039656108541,
+        "recency": 0.404162751483479,
+        "share_news_wordmatch": 0.0024649564288380388,
+        "share_prev6": 0.21905298023230682,
+        "age_first_arxiv": 9.0
+      },
+      "contributions": {
+        "share_patent": -0.33442985437297695,
+        "growth_research": -0.0018598669908794305,
+        "recency": -0.14569624424533384,
+        "share_news_wordmatch": -1.3214371605629776,
+        "share_prev6": 0.01890318128980466,
+        "age_first_arxiv": -0.342254245923493
+      },
+      "counters": {
+        "prev6": {
+          "arxiv": 403,
+          "openalex": 42247,
+          "techcrunch": 933
+        },
+        "2020": {
+          "arxiv": 155,
+          "openalex": 16943,
+          "techcrunch": 110
+        },
+        "2021": {
+          "arxiv": 175,
+          "openalex": 20102,
+          "techcrunch": 93
+        },
+        "2022": {
+          "arxiv": 187,
+          "openalex": 26162,
+          "techcrunch": 79
+        },
+        "2023": {
+          "arxiv": 210,
+          "openalex": 28312,
+          "techcrunch": 52
+        },
+        "2024": {
+          "arxiv": 260,
+          "openalex": 31312,
+          "techcrunch": 27
+        },
+        "2025": {
+          "arxiv": 307,
+          "openalex": 30870,
+          "techcrunch": 22
+        }
+      },
+      "is_signal": false,
+      "model_version": "s2a2-v1",
+      "threshold": 0.4,
+      "variants": [],
+      "n_pat": 56828,
+      "share_patent": 0.2682805927590488,
+      "rospatent_failed": false,
+      "name_ru_source": "translate",
+      "name_ru_auto": true
     }
   ],
+  "candidates": [
+    {
+      "name_ru": "Дронная городская воздушная мобильность",
+      "name_en": "drone-based urban air mobility",
+      "stage": "top",
+      "score": 0.8464080790828388,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Иммерсивные цифровые технологии",
+      "name_en": "immersive digital technologies",
+      "stage": "top",
+      "score": 0.8083807652656688,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Земное аддитивное производство",
+      "name_en": "earth-based additive manufacturing",
+      "stage": "top",
+      "score": 0.7016732421203501,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Многоматериальная 3D-печать полимеров",
+      "name_en": "multi-material polymer 3D printing",
+      "stage": "top",
+      "score": 0.6985907067937062,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Дроны в управлении строительством",
+      "name_en": "drone in construction management",
+      "stage": "top",
+      "score": 0.6235050351219503,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Технология роёв дронов",
+      "name_en": "drone swarm technology",
+      "stage": "top",
+      "score": 0.6218122032249942,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Технологии Construction 4.0",
+      "name_en": "construction 4.0 technologies",
+      "stage": "top",
+      "score": 0.544101078429916,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Цифровой двойник",
+      "name_en": "digital twin",
+      "stage": "top",
+      "score": 0.4900821520834262,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "3D-печать бетоном",
+      "name_en": "3D concrete printing",
+      "stage": "top",
+      "score": 0.4381271419484135,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "Световая 3D-печать",
+      "name_en": "light-based 3D printing",
+      "stage": "top",
+      "score": 0.41080662484833386,
+      "skipped_reason": null,
+      "reason_ru": null
+    },
+    {
+      "name_ru": "3D-печать биоцементом",
+      "name_en": "biocement 3D printing",
+      "stage": "excluded",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026"
+    },
+    {
+      "name_ru": "распознавание отходов с помощью дронов",
+      "name_en": "drone-based waste recognition",
+      "stage": "excluded",
+      "score": null,
+      "skipped_reason": "no_trace",
+      "reason_ru": "Нет следа в научных источниках: ни один из трёх вариантов названия не встречается в OpenAlex за 2020–2026"
+    },
+    {
+      "name_ru": "Доставка автоматических внешних дефибрилляторов дронами",
+      "name_en": "drone-delivered AED",
+      "stage": "excluded",
+      "score": 0.3369297371851575,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 65 публикаций — технология уже хорошо изучена"
+    },
+    {
+      "name_ru": "Информационное моделирование зданий (BIM)",
+      "name_en": "building information modeling",
+      "stage": "excluded",
+      "score": 0.33265088369407086,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 32837 публикаций — технология уже хорошо изучена"
+    },
+    {
+      "name_ru": "Совместная 3D-печать",
+      "name_en": "cooperative 3D printing",
+      "stage": "excluded",
+      "score": 0.24898653093419132,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 51 публикаций — технология уже хорошо изучена"
+    },
+    {
+      "name_ru": "Модульное строительство",
+      "name_en": "modular building construction",
+      "stage": "excluded",
+      "score": 0.196961635660785,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Технология активно патентуется: 137 патентов на 125 публикаций"
+    },
+    {
+      "name_ru": "3D-печать песком",
+      "name_en": "3D sand printing",
+      "stage": "excluded",
+      "score": 0.1941553803093834,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 156 публикаций — технология уже хорошо изучена"
+    },
+    {
+      "name_ru": "Аддитивное производство",
+      "name_en": "additive manufacturing",
+      "stage": "excluded",
+      "score": 0.16549129166280757,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 142607 публикаций — технология уже хорошо изучена"
+    },
+    {
+      "name_ru": "3D-печать",
+      "name_en": "3D printing",
+      "stage": "excluded",
+      "score": 0.14861247725549068,
+      "skipped_reason": "below_threshold",
+      "reason_ru": "Большой объём научной литературы: 154995 публикаций — технология уже хорошо изучена"
+    }
+  ],
+  "enrichment": "done",
   "timings": {
-    "subqueries": 3.1,
-    "search": 23.7,
-    "candidates": 64.0,
-    "trace_check": 8.2,
-    "counters": 402.5,
-    "ranking": 0.4,
-    "translate": 3.6,
-    "total": 505.5,
+    "subqueries": 2.49,
+    "search": 28.11,
+    "candidates": 16.73,
+    "naming": 3.94,
+    "counters": 55.25,
+    "ranking": 0.56,
     "queues": [
       {
         "source": "openalex",
-        "candidates": 58,
-        "requests": 58,
-        "cache_hits": 0,
+        "candidates": 17,
+        "requests": 15,
+        "cache_hits": 2,
         "retries": null,
         "n429": null,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 395.1,
-        "duration_s": 395.1
+        "finished_s": 55.05,
+        "duration_s": 55.04
       },
       {
         "source": "arxiv",
-        "candidates": 58,
-        "requests": 58,
-        "cache_hits": 0,
-        "retries": null,
-        "n429": null,
+        "candidates": 17,
+        "requests": 15,
+        "cache_hits": 2,
+        "retries": 0,
+        "n429": 0,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 402.3,
-        "duration_s": 402.3
+        "finished_s": 55.21,
+        "duration_s": 55.21
       },
       {
         "source": "techcrunch",
-        "candidates": 58,
-        "requests": 58,
-        "cache_hits": 0,
-        "retries": null,
-        "n429": null,
+        "candidates": 17,
+        "requests": 15,
+        "cache_hits": 2,
+        "retries": 0,
+        "n429": 0,
         "failures": 0,
         "started_s": 0.0,
-        "finished_s": 120.4,
-        "duration_s": 120.4
+        "finished_s": 39.85,
+        "duration_s": 39.85
       },
       {
         "source": "rospatent",
-        "candidates": 58,
-        "requests": 55,
-        "cache_hits": 3,
-        "retries": 1,
+        "candidates": 17,
+        "parallel": 4,
+        "requests": 15,
+        "cache_hits": 2,
+        "retries": 0,
         "n429": 0,
-        "failures": 1,
+        "failures": 0,
         "started_s": 0.0,
-        "finished_s": 16.5,
-        "duration_s": 16.5
+        "finished_s": 7.19,
+        "duration_s": 7.18
       }
-    ]
+    ],
+    "dedup": 5.16,
+    "translate": 2.97,
+    "total": 116.55
   },
-  "warnings": []
+  "warnings": [
+    "отброшен (ru): «беспилотные летательные аппараты для мониторинга строительства» — слов 6, нужно 2-4",
+    "отброшен: term_en «drone in construction management»: quote не найден в документе 76",
+    "область не выбрана: нормализатор получил пустую область, такое поведение не проверялось"
+  ]
 }

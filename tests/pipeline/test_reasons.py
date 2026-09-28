@@ -20,15 +20,24 @@ def test_n_research_counts_openalex_and_arxiv_in_period() -> None:
 
 
 @pytest.mark.parametrize("name, expected", [
-    ("share_news_wordmatch", "Большой объём научной литературы: 155 публикаций — технология уже хорошо изучена"),
-    ("recency", "Интерес не нарастает: за последние два года 47% всех упоминаний"),
-    ("age_first_arxiv", "Термин давно в науке: первый препринт 9 лет назад"),
-    ("share_prev6", "Значительная часть публикаций вышла до 2020 года (62%)"),
+    ("share_news_wordmatch", "Слабый интерес рынка"),
+    ("recency", "Пик внимания позади"),
+    ("age_first_arxiv", "Термин давно известен в науке"),
+    ("share_prev6", "Технология не новая: много публикаций до 2020 года"),
     ("volume", reasons.GENERIC_BELOW),
-    ("growth_research", reasons.GENERIC_BELOW),
+    ("growth_research", "Научный интерес не растёт"),
 ])
 def test_reason_below_each_feature(name, expected) -> None:
     assert reasons.reason_below(FEATURES, only(name, -1.0), COUNTERS) == expected
+
+
+@pytest.mark.parametrize("name", list(reasons.NEGATIVE))
+def test_reason_below_has_no_digits(name) -> None:
+    """Причина отсева без чисел из данных, в том числе патентная с известным n_pat; год 2020 — часть формулировки."""
+    features = {**FEATURES, "share_patent": 0.9}
+    contributions = {key: (-1.0 if key == name else 0.0) for key in features}
+    text = reasons.reason_below(features, contributions, COUNTERS, n_pat=690)
+    assert not any(char.isdigit() for char in text.replace("2020", ""))
 
 
 @pytest.mark.parametrize("name, expected", [
@@ -45,7 +54,7 @@ def test_explanation_top_each_feature(name, expected) -> None:
 
 def test_reason_below_takes_most_negative() -> None:
     contributions = {**only("recency", -0.4), "share_prev6": -0.9}
-    assert reasons.reason_below(FEATURES, contributions, COUNTERS).startswith("Значительная часть")
+    assert reasons.reason_below(FEATURES, contributions, COUNTERS) == "Технология не новая: много публикаций до 2020 года"
 
 
 def test_explanation_top_two_largest_positive() -> None:
@@ -59,7 +68,7 @@ def test_missing_value_is_not_put_into_text() -> None:
     """Возраст пропущен (модель подставила медиану): в текст он не идёт, берётся следующий."""
     features = {**FEATURES, "age_first_arxiv": math.nan}
     contributions = {**only("age_first_arxiv", -2.0), "recency": -0.3}
-    assert reasons.reason_below(features, contributions, COUNTERS).startswith("Интерес не нарастает")
+    assert reasons.reason_below(features, contributions, COUNTERS) == "Пик внимания позади"
 
 
 @pytest.mark.parametrize("reason", ["no_trace", "trace_unknown", "cap", "bad_name", "no_counters", "beyond_top"])
@@ -85,11 +94,11 @@ def test_share_patent_for_signal_names_patents_and_publications() -> None:
     assert texts == ["Патентов мало относительно научных работ: 3 патента на 155 публикаций"]
 
 
-def test_share_patent_against_signal_names_patents_and_publications() -> None:
+def test_share_patent_against_signal_without_numbers() -> None:
     contributions = {key: (-0.9 if key == "share_patent" else 0.0) for key in S2A2}
     counters = {"2024": {"openalex": 1200, "arxiv": 1}}
     text = reasons.reason_below(S2A2, contributions, counters, n_pat=690)
-    assert text == "Технология активно патентуется: 690 патентов на 1 201 публикацию"
+    assert text == "Высокая доля патентов относительно научных работ"
 
 
 def test_share_patent_without_count_is_not_used() -> None:
@@ -98,7 +107,7 @@ def test_share_patent_without_count_is_not_used() -> None:
     contributions = {key: (-0.9 if key == "share_patent" else 0.0) for key in S2A2}
     contributions["recency"] = -0.1
     text = reasons.reason_below(features, contributions, COUNTERS, n_pat=None)
-    assert text.startswith("Интерес не нарастает")
+    assert text == "Пик внимания позади"
 
 
 def test_every_s2a2_feature_has_templates_and_volume_is_not_among_them() -> None:
