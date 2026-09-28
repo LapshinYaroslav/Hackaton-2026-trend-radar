@@ -6,6 +6,7 @@ import os
 
 os.environ["QUERY_MODE"] = "mock"
 os.environ["QUERY_MOCK_SECONDS"] = "0"
+os.environ["DATABASE_URL"] = ""
 
 from fastapi.testclient import TestClient
 
@@ -55,6 +56,16 @@ def test_other_area_is_null() -> None:
         if body["status"] == "done":
             break
     assert body["area"] is None
+
+
+def test_history_lists_the_query() -> None:
+    created = client.post("/queries", json={"topic": "история в сайдбаре", "area": "Финтех"})
+    query_id = created.json()["query_id"]
+    for _ in range(20):
+        if client.get(f"/queries/{query_id}").json()["status"] == "done":
+            break
+    items = client.get("/queries").json()["items"]
+    assert any(item["query_id"] == query_id and item["topic"] == "история в сайдбаре" for item in items)
 
 
 def test_insight_is_pending() -> None:

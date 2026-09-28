@@ -12,11 +12,14 @@ from __future__ import annotations
 import copy
 import json
 import os
+import sys
 import threading
 import time
 import uuid
 from pathlib import Path
 from typing import Optional
+
+from api import history
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
@@ -114,6 +117,7 @@ def _ensure_area(query_id: str, *, use_llm: bool) -> None:
     found = detect_area(topic, use_llm=use_llm)
     with _lock:
         _jobs[query_id]["area"] = found
+    _persist(query_id)
 
 
 def _live(query_id: str) -> None:
@@ -131,6 +135,7 @@ def _live(query_id: str) -> None:
             current["progress_done"] = done
             current["progress_total"] = total
             current["status"] = "running"
+        _persist(query_id)
 
     result = run_query(topic, area, query_id, on_progress=on_progress)
     with _lock:
@@ -140,6 +145,7 @@ def _live(query_id: str) -> None:
         job["progress_stage"] = STAGES[-1]
         job["progress_done"] = len(STAGES)
         job["progress_total"] = len(STAGES)
+    _persist(query_id)
 
 
 def _run(query_id: str) -> None:
@@ -151,6 +157,7 @@ def _run(query_id: str) -> None:
             job = _jobs[query_id]
             job["status"] = "error"
             job["error"] = str(exc)
+        _persist(query_id)
         return
     if live:
         try:
@@ -160,6 +167,7 @@ def _run(query_id: str) -> None:
                 job = _jobs[query_id]
                 job["status"] = "error"
                 job["error"] = str(exc)
+            _persist(query_id)
         return
     seconds = mock_seconds()
     step = seconds / len(STAGES) if STAGES else 0
@@ -171,6 +179,7 @@ def _run(query_id: str) -> None:
                 job["progress_done"] = index
                 job["progress_total"] = len(STAGES)
                 job["status"] = "running"
+            _persist(query_id)
             if step:
                 time.sleep(step)
         example = load_example()
@@ -184,11 +193,24 @@ def _run(query_id: str) -> None:
             job["progress_stage"] = STAGES[-1]
             job["progress_done"] = len(STAGES)
             job["progress_total"] = len(STAGES)
+        _persist(query_id)
     except Exception as exc:  # noqa: BLE001
         with _lock:
             job = _jobs[query_id]
             job["status"] = "error"
             job["error"] = str(exc)
+        _persist(query_id)
+
+
+def _persist(query_id: str) -> None:
+    with _lock:
+        job = copy.deepcopy(_jobs.get(query_id) or {})
+    if not job:
+        return
+    try:
+        history.sync(job)
+    except Exception as exc:  # noqa: BLE001
+        print(f"история запросов: {exc}", file=sys.stderr)
 
 
 @app.get("/health")
@@ -219,16 +241,34 @@ def create_query(body: CreateQuery) -> dict:
             "result": None,
             "error": None,
         }
+    _persist(query_id)
     threading.Thread(target=_run, args=(query_id,), daemon=True).start()
     return {"query_id": query_id}
+
+
+@app.get("/queries")
+def list_queries(limit: int = 30) -> dict:
+    with _lock:
+        memory = copy.deepcopy(_jobs)
+    return {"items": history.list_queries(memory, limit=limit)}
 
 
 @app.get("/queries/{query_id}")
 def get_query(query_id: str) -> dict:
     with _lock:
         job = _jobs.get(query_id)
+    if job is None:
+        try:
+            job = history.load(query_id)
+        except Exception as exc:  # noqa: BLE001
+            print(f"история запросов: {exc}", file=sys.stderr)
+            job = None
         if job is None:
             raise HTTPException(status_code=404, detail="запрос не найден")
+        with _lock:
+            _jobs.setdefault(query_id, job)
+            job = _jobs[query_id]
+    with _lock:
         return _public(copy.deepcopy(job))
 
 
@@ -263,8 +303,20 @@ def get_insight(query_id: str, rank: int) -> dict:
     """Готовый отчёт, либо pending, пока модель пишет текст по документам."""
     with _lock:
         job = _jobs.get(query_id)
-        if job is None:
-            raise HTTPException(status_code=404, detail="запрос не найден")
+    if job is None:
+        try:
+            job = history.load(query_id)
+        except Exception as exc:  # noqa: BLE001
+            print(f"история запросов: {exc}", file=sys.stderr)
+            job = None
+        if job is not None:
+            with _lock:
+                _jobs.setdefault(query_id, job)
+                job = _jobs[query_id]
+    if job is None:
+        raise HTTPException(status_code=404, detail="запрос не найден")
+    with _lock:
+        job = _jobs.get(query_id) or job
         if job["status"] != "done":
             return {"query_id": query_id, "rank": rank, "status": "pending"}
         if _find_card(job, rank) is None:

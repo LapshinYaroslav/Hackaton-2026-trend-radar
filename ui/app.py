@@ -8,7 +8,10 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from pathlib import Path
+import base64
+import html
 import json
 import os
 import sys
@@ -16,6 +19,7 @@ import time
 
 import requests
 import streamlit as st
+import streamlit.components.v1 as components
 
 ROOT = Path(__file__).resolve().parent.parent
 # streamlit run ui/app.py не кладёт корень репозитория в путь импорта
@@ -74,6 +78,8 @@ def init_state() -> None:
         "progress_done": 0,
         "progress_total": 6,
         "polling": False,
+        "owned": [],
+        "history_open": False,
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -92,6 +98,9 @@ def start_local(topic: str) -> None:
     st.session_state.error = None
     st.session_state.view = VIEW_TOP
     st.session_state.rank = None
+    st.session_state.history_open = False
+    st.session_state.topic_text = topic
+    _remember_local(data)
 
 
 def start_remote(topic: str) -> None:
@@ -107,6 +116,14 @@ def start_remote(topic: str) -> None:
     st.session_state.error = None
     st.session_state.view = VIEW_TOP
     st.session_state.rank = None
+    owned = list(st.session_state.owned)
+    if st.session_state.query_id not in owned:
+        owned.insert(0, st.session_state.query_id)
+    st.session_state.owned = owned
+    st.session_state.nav_token = st.session_state.query_id
+    st.session_state.history_open = False
+    st.session_state.topic_text = topic
+    st.query_params["open"] = st.session_state.query_id
 
 
 def poll_remote() -> None:
@@ -124,6 +141,210 @@ def poll_remote() -> None:
     elif status == "error":
         st.session_state.error = data.get("error") or "Ошибка расчёта"
         st.session_state.polling = False
+
+
+STATUS_RU = {
+    "done": "готово",
+    "running": "считается",
+    "queued": "в очереди",
+    "error": "ошибка",
+}
+
+
+def _when(value: str | None) -> str:
+    if not value:
+        return ""
+    try:
+        moment = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return ""
+    if moment.tzinfo is None:
+        return moment.strftime("%d.%m.%Y, %H:%M")
+    return moment.astimezone().strftime("%d.%m.%Y, %H:%M")
+
+
+def _remember_local(data: dict) -> None:
+    saved = st.session_state.setdefault("local_saved", {})
+    query_id = data.get("query_id")
+    if not query_id:
+        return
+    saved[query_id] = data
+    order = st.session_state.setdefault("local_order", [])
+    if query_id in order:
+        order.remove(query_id)
+    order.insert(0, query_id)
+
+
+def load_history() -> list[dict]:
+    if api_base():
+        try:
+            response = requests.get(f"{api_base()}/queries", params={"limit": 30}, timeout=5)
+            response.raise_for_status()
+            return list(response.json().get("items") or [])
+        except requests.RequestException:
+            return []
+    order = st.session_state.get("local_order") or []
+    saved = st.session_state.get("local_saved") or {}
+    items = []
+    for query_id in order:
+        data = saved.get(query_id) or {}
+        items.append(
+            {
+                "query_id": query_id,
+                "topic": data.get("topic") or query_id,
+                "area": data.get("area"),
+                "status": "done",
+                "created_at": None,
+                "candidates_found": (data.get("stats") or {}).get("candidates_found"),
+                "above_075": (data.get("stats") or {}).get("above_075"),
+            }
+        )
+    return items
+
+
+def open_saved(query_id: str) -> None:
+    st.session_state.insight_reports = {}
+    st.session_state.rank = None
+    st.session_state.view = VIEW_TOP
+    if not api_base():
+        data = (st.session_state.get("local_saved") or {}).get(query_id)
+        if not data:
+            st.session_state.error = "Этот запрос не сохранился в сессии."
+            return
+        st.session_state.result = data
+        st.session_state.query_id = query_id
+        st.session_state.polling = False
+        st.session_state.error = None
+        return
+    response = requests.get(f"{api_base()}/queries/{query_id}", timeout=30)
+    response.raise_for_status()
+    data = response.json()
+    status = (data.get("status") or "").lower()
+    st.session_state.query_id = query_id
+    st.session_state.progress_stage = data.get("progress_stage") or ""
+    st.session_state.progress_done = int(data.get("progress_done") or 0)
+    st.session_state.progress_total = int(data.get("progress_total") or 6)
+    if status == "done":
+        st.session_state.result = data
+        st.session_state.polling = False
+        st.session_state.error = None
+        return
+    st.session_state.result = None
+    st.session_state.polling = status == "running" and query_id in (st.session_state.owned or [])
+    if status == "error":
+        st.session_state.error = data.get("error") or "Ошибка расчёта"
+    elif st.session_state.polling:
+        st.session_state.error = None
+    else:
+        st.session_state.error = "Этот запрос не был завершён. Запустите тему ещё раз."
+
+
+def reset_query() -> None:
+    st.session_state.result = None
+    st.session_state.query_id = None
+    st.session_state.polling = False
+    st.session_state.error = None
+    st.session_state.view = VIEW_TOP
+    st.session_state.rank = None
+    st.session_state.insight_reports = {}
+    st.session_state.topic_text = ""
+
+
+def consume_nav() -> None:
+    """Клик по строке истории приходит как ?open=id и открывает сохранённый запрос."""
+    token = st.query_params.get("open")
+    if not token or token == st.session_state.get("nav_token"):
+        return
+    st.session_state.nav_token = token
+    st.session_state.history_open = False
+    st.session_state.collapse_sidebar = True
+    if token == "new":
+        reset_query()
+        return
+    try:
+        open_saved(str(token))
+    except requests.RequestException as exc:
+        st.session_state.error = f"Не удалось открыть запрос. ({exc})"
+
+
+def _history_row(item: dict, current: str | None) -> str:
+    query_id = str(item.get("query_id") or "")
+    topic = html.escape((item.get("topic") or "без темы").strip())
+    status = (item.get("status") or "").lower()
+    when = html.escape(_when(item.get("created_at")))
+    active = " active" if query_id and query_id == current else ""
+    dot = "run" if status == "running" else "err" if status == "error" else "done"
+    hint = STATUS_RU.get(status, status)
+    if when:
+        hint = f"{hint}, {when}" if hint else when
+    return (
+        f"<a class='hist-item{active}' href='?open={html.escape(query_id)}' title='{html.escape(hint)}'>"
+        f"<span class='dot {dot}'></span>"
+        "<span class='body'>"
+        f"<span class='title'>{topic}</span>"
+        f"<span class='when'>{when}</span>"
+        "</span>"
+        "</a>"
+    )
+
+
+def render_history() -> None:
+    items = load_history()
+    current = st.session_state.query_id
+    rows = "".join(_history_row(item, current) for item in items)
+    empty = "" if rows else "<p class='hist-empty'>Пока пусто. Первый поиск появится здесь.</p>"
+    with st.sidebar:
+        st.markdown(
+            "<nav class='side-nav'>"
+            "<a class='side-action' href='?open=new'>"
+            "<svg viewBox='0 0 16 16' aria-hidden='true'>"
+            "<path d='M8 3.2v9.6M3.2 8h9.6' fill='none' stroke='currentColor' "
+            "stroke-width='1.4' stroke-linecap='round'/></svg>"
+            "<span>Новый запрос</span>"
+            "</a>"
+            "<div class='side-label'>История</div>"
+            f"{rows}{empty}"
+            "</nav>",
+            unsafe_allow_html=True,
+        )
+
+
+def keep_sidebar_closed() -> None:
+    """Стрелка остаётся. После выбора запроса в истории панель сразу скрывается."""
+    collapse_now = "true" if st.session_state.pop("collapse_sidebar", False) else "false"
+    components.html(
+        f"""
+        <script>
+        (() => {{
+          const parent = window.parent;
+          const doc = parent.document;
+          if ({collapse_now}) {{
+            try {{ parent.sessionStorage.setItem("horizonShut", "1"); }} catch (e) {{}}
+          }}
+          let shut = false;
+          try {{ shut = parent.sessionStorage.getItem("horizonShut") === "1"; }} catch (e) {{}}
+          if (shut) doc.documentElement.setAttribute("data-horizon-shut", "1");
+          if (parent.__horizonSidebarWatch) return;
+          parent.__horizonSidebarWatch = true;
+          doc.addEventListener("click", (event) => {{
+            if (!doc.documentElement.hasAttribute("data-horizon-shut")) return;
+            const target = event.target;
+            if (!target || !target.closest) return;
+            const opener = target.closest(
+              '[data-testid="stExpandSidebarButton"], [data-testid="stSidebarCollapseButton"]'
+            );
+            if (!opener) return;
+            doc.documentElement.removeAttribute("data-horizon-shut");
+            try {{ parent.sessionStorage.removeItem("horizonShut"); }} catch (e) {{}}
+            event.preventDefault();
+            event.stopPropagation();
+          }}, true);
+        }})();
+        </script>
+        """,
+        height=0,
+        width=0,
+    )
 
 
 def score_bar(score) -> str:
@@ -180,12 +401,6 @@ def _show_report(content: dict) -> None:
     st.write(block.get("text") or "—")
     st.subheader("Преимущество")
     st.write((content.get("advantage") or {}).get("text") or "—")
-    st.subheader("Кейс-пример")
-    st.write((content.get("case") or {}).get("text") or "—")
-    st.subheader("Оценки в аналитических отчётах")
-    st.write((content.get("analyst_assessment") or {}).get("text") or "—")
-    st.subheader("Почему модель так уверена")
-    st.write(content.get("status_explanation") or "—")
     if content.get("low_trust_warning"):
         st.warning(content["low_trust_warning"])
     st.subheader("Источники")
@@ -212,9 +427,6 @@ def _local_report(item: dict) -> None:
         "YANDEX_FOLDER_ID, YANDEX_API_KEY и модель yandexgpt-5-pro. "
         f"({report.get('error')})"
     )
-    st.subheader("Почему модель так уверена")
-    for line in item.get("explanation_ru") or []:
-        st.write(f"- {line}")
     st.subheader("Источники")
     render_sources(item.get("sources") or [])
 
@@ -258,6 +470,25 @@ def render_card(item: dict) -> None:
         _local_report(item)
 
 
+def _technology_description(item: dict) -> str:
+    """Короткое описание технологии по документам, без долей и вкладов модели."""
+    explicit = str(item.get("description_ru") or "").strip()
+    if explicit:
+        return explicit
+    titles = []
+    for source in item.get("sources") or []:
+        title = str(source.get("title") or "").strip()
+        summary = str(source.get("summary_ru") or "").strip()
+        line = summary or title
+        if line and line not in titles:
+            titles.append(line)
+        if len(titles) == 2:
+            break
+    if not titles:
+        return "Описание по найденным документам появится в карточке."
+    return "По найденным документам: " + "; ".join(titles) + "."
+
+
 def render_top(items: list) -> None:
     if not items:
         st.info("В ТОП пока нет технологий выше порога.")
@@ -272,8 +503,7 @@ def render_top(items: list) -> None:
             )
             st.caption(item.get("name_en") or "")
             st.markdown(score_bar(item.get("score")), unsafe_allow_html=True)
-            preds = "; ".join(item.get("explanation_ru") or [])
-            st.write(preds or "—")
+            st.write(_technology_description(item))
         with right:
             rank = item.get("rank")
             if st.button("Смотреть", key=f"card_{rank}"):
@@ -339,6 +569,155 @@ def inject_style() -> None:
             #101614;
         }
         [data-testid="stHeader"] { background: transparent; }
+        [data-testid="stDecoration"],
+        #MainMenu,
+        [data-testid="stMainMenu"],
+        [data-testid="stToolbarActions"],
+        [data-testid="stAppDeployButton"],
+        .stDeployButton {
+          display: none !important;
+          visibility: hidden !important;
+        }
+        /* Вместо бегущего человечка Streamlit — спокойное зелёное кольцо. */
+        [data-testid="stStatusWidget"] svg,
+        [data-testid="stStatusWidget"] img {
+          display: none !important;
+        }
+        [data-testid="stStatusWidget"]:has(svg)::after,
+        [data-testid="stStatusWidget"]:has(img)::after {
+          content: "";
+          display: block;
+          width: 16px;
+          height: 16px;
+          margin: 8px 10px 0 0;
+          border-radius: 50%;
+          border: 2px solid rgba(61, 220, 151, 0.25);
+          border-top-color: #3DDC97;
+          animation: sweep 0.9s linear infinite;
+        }
+        [data-testid="stMain"] {
+          justify-content: flex-start !important;
+        }
+        [data-testid="stMain"] .block-container {
+          max-width: 1100px;
+          width: 100%;
+          margin-left: 0 !important;
+          margin-right: auto !important;
+          padding-top: 1.15rem !important;
+          padding-left: 3.25rem !important;
+          padding-right: 2rem !important;
+          padding-bottom: 2rem !important;
+        }
+        [data-testid="stCustomComponentV1"],
+        iframe[title="streamlit_components_v1.html"] {
+          position: absolute !important;
+          width: 0 !important;
+          height: 0 !important;
+          min-height: 0 !important;
+          border: 0 !important;
+          overflow: hidden !important;
+          pointer-events: none !important;
+        }
+        [data-testid="stSidebar"] {
+          background: #181818 !important;
+          border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        html[data-horizon-shut="1"] [data-testid="stSidebar"] {
+          width: 0 !important;
+          min-width: 0 !important;
+          max-width: 0 !important;
+          flex-basis: 0 !important;
+          border: 0 !important;
+          padding: 0 !important;
+          overflow: hidden !important;
+        }
+        html[data-horizon-shut="1"] [data-testid="stSidebar"] .side-nav {
+          display: none !important;
+        }
+        html[data-horizon-shut="1"] [data-testid="stSidebarCollapseButton"] {
+          position: fixed !important;
+          left: 12px !important;
+          top: 14px !important;
+          z-index: 1000001 !important;
+          display: inline-flex !important;
+          visibility: visible !important;
+          transform: scaleX(-1);
+        }
+        html[data-horizon-shut="1"] [data-testid="stSidebarCollapseButton"] button {
+          visibility: visible !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stSidebarContent"] {
+          padding: 12px 10px 18px;
+        }
+        [data-testid="stSidebarCollapsedControl"] button,
+        [data-testid="collapsedControl"] button,
+        [data-testid="stSidebarCollapseButton"] {
+          color: #d7e6de;
+        }
+        .side-nav { display: flex; flex-direction: column; gap: 2px; }
+        [data-testid="stSidebar"] a.side-action,
+        [data-testid="stSidebar"] a.hist-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+          min-height: 28px;
+          padding: 6px 8px;
+          border-radius: 8px;
+          color: #e6e6e6 !important;
+          text-decoration: none !important;
+          font-size: 13.5px;
+          line-height: 1.3;
+        }
+        [data-testid="stSidebar"] a.side-action { margin: 2px 0 6px; color: #f3f3f3 !important; }
+        .side-action svg { width: 15px; height: 15px; flex: none; margin-top: 2px; opacity: 0.9; }
+        [data-testid="stSidebar"] a.side-action:hover,
+        [data-testid="stSidebar"] a.hist-item:hover {
+          background: rgba(255, 255, 255, 0.06);
+          color: #fff !important;
+        }
+        .side-label {
+          margin: 10px 8px 4px;
+          color: #8d8d8d;
+          font-size: 12px;
+        }
+        .hist-item .body {
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+          flex: 1;
+          gap: 1px;
+        }
+        .hist-item .title {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        [data-testid="stSidebar"] a.hist-item .when {
+          color: #8d8d8d !important;
+          font-size: 12px;
+        }
+        .hist-item .dot { margin-top: 5px; }
+        [data-testid="stSidebar"] a.hist-item.active {
+          background: #2a2a2a;
+          color: #fff !important;
+        }
+        .dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          flex: none;
+          background: #5c5c5c;
+        }
+        .dot.run { background: #4c8dff; box-shadow: 0 0 0 3px rgba(76, 141, 255, 0.16); }
+        .dot.err { background: #ff8b7a; }
+        .dot.done { background: #6f6f6f; }
+        .hist-item.active .dot { background: #4c8dff; }
+        .hist-empty {
+          margin: 6px 8px 0;
+          color: #8d8d8d;
+          font-size: 12.5px;
+          line-height: 1.4;
+        }
         h1 { letter-spacing: -0.03em; }
         div[data-testid="stMetric"] {
           background: rgba(255, 255, 255, 0.03);
@@ -366,37 +745,22 @@ def inject_style() -> None:
           font-size: 0.95rem;
           line-height: 1.45;
         }
-        .radar {
-          width: 14px;
-          height: 14px;
-          border-radius: 50%;
-          border: 2px solid #3DDC97;
-          box-shadow: 0 0 0 4px rgba(61, 220, 151, 0.15);
-          position: relative;
-        }
-        .radar::after {
-          content: "";
-          position: absolute;
-          inset: 1px;
-          border-radius: 50%;
-          background: conic-gradient(from 0deg, transparent 0 68%, #3DDC97 80%, transparent 81%);
-          animation: sweep 2.8s linear infinite;
-        }
+        .logo { width: 92px; height: 92px; flex: none; display: block; }
         @keyframes sweep { to { transform: rotate(360deg); } }
-        .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: stretch; }
+        .team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
         .person {
           background: rgba(255, 255, 255, 0.03);
           border: 1px solid rgba(61, 220, 151, 0.22);
           border-radius: 16px;
-          padding: 14px 14px 12px;
-          min-height: 132px;
+          padding: 16px 16px 14px;
+          min-width: 0;
           display: flex;
           flex-direction: column;
         }
-        .who { display: flex; align-items: center; gap: 12px; }
+        .who { display: flex; align-items: flex-start; gap: 12px; min-height: 4.6rem; }
         .mark {
-          width: 38px;
-          height: 38px;
+          width: 36px;
+          height: 36px;
           border-radius: 12px;
           display: grid;
           place-items: center;
@@ -405,8 +769,17 @@ def inject_style() -> None:
           background: rgba(61, 220, 151, 0.12);
           font-weight: 650;
         }
-        .person b { display: block; font-size: 1.05rem; font-weight: 650; }
-        .person span { color: #9FB3A9; font-size: 0.85rem; }
+        .person b { display: block; font-size: 1.05rem; font-weight: 650; line-height: 1.2; }
+        .person span { display: block; margin-top: 3px; color: #9FB3A9; font-size: 0.82rem; line-height: 1.35; }
+        .person ul {
+          margin: 14px 0 0;
+          padding-left: 1.05rem;
+          color: #C9DAD2;
+          font-size: 0.86rem;
+          line-height: 1.4;
+        }
+        .person li { margin: 0 0 8px; }
+        .person li:last-child { margin-bottom: 0; }
         .person .links { margin-top: auto; padding-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
         .person a {
           color: #C9DAD2;
@@ -423,9 +796,8 @@ def inject_style() -> None:
           gap: 16px;
           margin: 0.2rem 0 1rem;
         }
-        .hero h1 { margin: 0; font-size: 2.4rem; }
+        .hero h1 { margin: -8px 0 0; font-size: 2.4rem; line-height: 1.05; }
         .kicker { color: #8EE7BE; letter-spacing: 0.14em; font-size: 0.75rem; text-transform: uppercase; }
-        .radar.lg { width: 42px; height: 42px; border-width: 2px; }
         .score {
           height: 8px;
           border-radius: 99px;
@@ -468,38 +840,61 @@ def render_footer() -> None:
     people = (
         (
             "Ярослав",
-            "модель и оркестратор",
+            "руководитель проекта, данные, скоринговая модель, работа с LLM",
+            (
+                "Архитектура решения, координация команды",
+                "Подготовка данных и разработка признаков с проверкой на смещения выборки",
+                "Скоринговая модель на логистической регрессии: валидация, калибровка вероятностей, подбор порога с приоритетом precision, интерпретируемость решений",
+                "Открытый поиск: оценка кандидатов, отсечение зрелых технологий и хайпа с обоснованием",
+            ),
             "+79219708813",
             "Yaroslvlapshin",
             "https://github.com/LapshinYaroslav",
         ),
         (
             "Слава",
-            "сбор документов и API",
+            "сбор данных, база и бэкенд",
+            (
+                "Парсеры пяти открытых источников: научные публикации, препринты, новости",
+                "Свежие документы по подтемам и счётчики публикаций по годам с 2020-го",
+                "Итоги корпуса источников по окнам, чтобы числа технологий было с чем сравнить",
+                "Схема PostgreSQL: документы, признаки, результаты скоринга, кэш счётчиков",
+                "FastAPI: обработка запроса и фоновые задачи",
+            ),
             "+79248216440",
             "Vyacheslav_1282",
             "https://github.com/slavachlystov",
         ),
         (
             "Егор",
-            "интерфейс и отчёты",
+            "интерфейс и поставка",
+            (
+                "Веб-интерфейс: дашборд ТОП-15, карточки сигналов, страницы инсайтов",
+                "Источники на карточке: ссылка, дата, тип, язык, уровень доверия",
+                "Прогресс запроса, ошибки на экране и история прошлых поисков",
+                "ETL: единая схема документа, дедупликация, уровни доверия источников",
+                "Отказоустойчивость: таймауты, повторы, изоляция сбоев, параллельный сбор",
+                "Docker Compose, демо-стенд, README и техническая документация",
+            ),
             "+79113833519",
             "Cbeezy0",
             "https://github.com/sboevegor7-spec",
         ),
     )
     cards = []
-    for name, role, phone, telegram, github in people:
+    for name, role, points, phone, telegram, github in people:
         pretty = phone
         digits = phone.removeprefix("+")
         if len(digits) == 11:
             pretty = f"+{digits[0]} {digits[1:4]} {digits[4:7]}-{digits[7:9]}-{digits[9:11]}"
+        items = "".join(f"<li>{html.escape(point)}</li>" for point in points)
         cards.append(
             "<div class='person'>"
             "<div class='who'>"
             f"<div class='mark'>{name[:1]}</div>"
-            f"<div><b>{name}</b><span>{role}</span></div>"
+            f"<div><b>{html.escape(name)}</b><span>{html.escape(role)}</span></div>"
             "</div>"
+            f"<ul>{items}</ul>"
             "<div class='links'>"
             f"<a href='tel:{phone}'>{pretty}</a>"
             f"<a href='https://t.me/{telegram}' target='_blank'>Telegram</a>"
@@ -510,7 +905,11 @@ def render_footer() -> None:
         "<div class='team-wrap'>"
         "<div class='team-head'>"
         "<div class='kicker'>команда</div>"
-        "<p>Trend Radar для Газпромбанк.Tech: модель, сбор документов и экран, на котором сигнал становится понятным.</p>"
+        "<p>Наша команда собирает сервис для Газпромбанк. "
+        "По введённой теме мы ищем статьи и новости, выделяем из них ранние технологии "
+        "и оцениваем, насколько это ещё слабый сигнал. "
+        "На экране остаётся список таких технологий и карточка с описанием и преимуществом, "
+        "а прошлые запросы сохраняются в истории.</p>"
         "</div>"
         f"<div class='team-grid'>{''.join(cards)}</div>"
         "</div>",
@@ -536,9 +935,12 @@ def render_stats(data: dict) -> None:
         st.rerun()
 
 
-st.set_page_config(page_title="Радар слабых сигналов", layout="wide")
+st.set_page_config(page_title="Горизонт", layout="wide", initial_sidebar_state="collapsed")
 inject_style()
 init_state()
+consume_nav()
+render_history()
+keep_sidebar_closed()
 
 if st.session_state.polling and st.session_state.query_id and api_base():
     try:
@@ -562,28 +964,33 @@ if (
         render_footer()
         st.stop()
 
+logo_src = base64.b64encode(Path(__file__).with_name("logo.svg").read_bytes()).decode("ascii")
 st.markdown(
-    """
-    <div class="hero">
-      <div class="radar lg"></div>
-      <div>
-        <div class="kicker">поиск слабых сигналов</div>
-        <h1>Радар</h1>
-      </div>
-    </div>
-    """,
+    "<div class='hero'>"
+    f"<img class='logo' alt='' src='data:image/svg+xml;base64,{logo_src}'/>"
+    "<div>"
+    "<div class='kicker'>поиск слабых сигналов</div>"
+    "<h1>Горизонт</h1>"
+    "</div></div>",
     unsafe_allow_html=True,
 )
-mode = "живой API" if api_base() else "пример контракта, без Docker"
-st.caption(mode)
 
 st.subheader("Поисковый запрос")
+locked = bool(st.session_state.polling or data)
+shown_topic = (
+    (data or {}).get("topic")
+    or st.session_state.get("topic_text")
+    or ""
+)
 topic = st.text_input(
     "Технологическое направление",
-    value=(data or {}).get("topic") or "роботы для промышленности",
+    value=shown_topic,
+    placeholder="Введите свою тему",
+    key=f"topic-{st.session_state.query_id or 'new'}",
+    disabled=locked,
 )
 
-if st.button("Найти сигналы", type="primary"):
+if not locked and st.button("Найти сигналы", type="primary"):
     st.session_state.error = None
     if not topic.strip():
         st.session_state.error = "Введите тему."
@@ -616,7 +1023,6 @@ if st.session_state.polling:
     st.rerun()
 
 if data is None:
-    st.info("Введите тему и нажмите «Найти сигналы». Область определится по теме.")
     render_footer()
     st.stop()
 
