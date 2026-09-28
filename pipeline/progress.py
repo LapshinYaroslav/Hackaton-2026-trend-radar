@@ -13,13 +13,13 @@ from __future__ import annotations
 import time
 from typing import Callable
 
-# Этапы в порядке прогона; после счётчиков — хвост (ранжирование, склейка, перевод).
-STAGES = ("subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup", "translate")
-AFTER_COUNTERS = frozenset({"ranking", "dedup", "translate"})
+# Этапы в порядке прогона; после счётчиков — хвост (ранжирование, склейка, перевод, догрузка источников).
+STAGES = ("subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup", "translate", "enrich")
+AFTER_COUNTERS = frozenset({"ranking", "dedup", "translate", "enrich"})
 STAGE_RU = {"subqueries": "Подзапросы", "search": "Поиск документов", "candidates": "Извлечение технологий",
             "naming": "Проверка названий",
             "counters": "Сбор счётчиков (arXiv, OpenAlex, TechCrunch, Роспатент)", "ranking": "Оценка моделью", "dedup": "Склейка дублей",
-            "translate": "Перевод названий", "done": "Готово"}
+            "translate": "Перевод названий", "enrich": "Догрузка источников", "done": "Готово"}
 MIN_INTERVAL_S = 1.0
 MIN_LEFT_S = 5.0  # оценка остатка не меньше: до события done pct не доходит до 100
 CALLBACK_FAILED = "прогресс отключён: ошибка в on_progress ({})"

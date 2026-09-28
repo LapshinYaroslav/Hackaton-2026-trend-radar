@@ -19,6 +19,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from search.llm_yandex_gpt import ask_llm, build_model_uri
+from search.subqueries import normalize_topic
 
 ROOT = Path(__file__).resolve().parents[1]
 # Кэш ответов шага 4 — прежний каталог extract-v1: ключи те же, старые ответы остаются в силе.
@@ -242,10 +243,16 @@ def system_prompt(topic: str) -> str:
 
 def ask_batch(topic: str, batch: list[tuple[int, str]], model: str | None, use_cache: bool,
               temperature: float, note: str = "") -> tuple[list, str]:
-    """Сырые объекты ответа на одну пачку и ошибка разбора (пустая строка — без ошибки)."""
+    """Сырые объекты ответа на одну пачку и ошибка разбора (пустая строка — без ошибки).
+
+    В LLM уходит тема как есть, ключ кэша — по нормализованной (normalize_topic, как у подзапросов):
+    «Квантовые технологии» и «квантовые  технологии» — один кэш; у уже нормализованной темы ключ прежний.
+    """
     system = system_prompt(topic) + note
     user = build_user_prompt(topic, batch)
-    key = _cache_key(f"{system}\n---\n{user}\n---\n{temperature}", build_model_uri(model))
+    same = normalize_topic(topic)
+    key = _cache_key(f"{system_prompt(same) + note}\n---\n{build_user_prompt(same, batch)}\n---\n{temperature}",
+                     build_model_uri(model))
     cached = _cache_get(key) if use_cache else None
     if cached is not None:
         return list(cached.get("candidates") or []), ""

@@ -18,14 +18,14 @@ pytest tests/collector
 
 ## Что уже можно поднять
 
-Актуальный пример ответа оркестратора: [`docs/contracts/query_result.example.json`](docs/contracts/query_result.example.json). Пока оркестратора нет, API через несколько секунд отдаёт этот пример. PostgreSQL для этого мока не нужен.
+API запускает пайплайн (`pipeline.run_query`) и отдаёт только его ответ, мок-режима нет.
 
 Сервисы Docker Compose:
 
 | Сервис | Роль | Порт на хосте |
 |--------|------|----------------|
 | `db` | PostgreSQL 16 | 5432 |
-| `api` | FastAPI (пока заглушка на моке) | 8000 |
+| `api` | FastAPI: запускает пайплайн | 8000 |
 | `ui` | Streamlit | 8501 |
 
 **Важно:** внутри Docker сервисы ходят друг к другу по **имени сервиса** (`http://api:8000`), не по `localhost`.
@@ -86,13 +86,13 @@ source .venv/bin/activate
 pip install -r ui/requirements.txt -r api/requirements.txt
 ```
 
-Только интерфейс (читает файл примера):
+Только интерфейс: без `API_URL` поиск выдаёт ошибку «Нет связи с пайплайном»:
 
 ```bash
 streamlit run ui/app.py
 ```
 
-Интерфейс через API (прогресс по стадиям, тот же пример):
+Интерфейс через API (живой прогон пайплайна, прогресс по стадиям):
 
 ```bash
 .venv/bin/python -m uvicorn api.main:app --app-dir . --host 127.0.0.1 --port 8000
@@ -108,7 +108,7 @@ streamlit run ui/app.py
 ## Структура (зоны ответственности)
 
 - `ui/` — интерфейс (Егор)
-- `api/` — FastAPI (Слава; сейчас заглушка)
+- `api/` — FastAPI (Слава)
 - `db/` — схема Postgres
 - `collector/`, `search/` — сбор документов
 - `model/` — признаки и скоринг

@@ -1,9 +1,7 @@
 """
-Дашборд по контракту docs/contracts/query_result.example.json.
+Дашборд «Горизонт»: живой запрос идёт в API (POST /queries, опрос GET), ответ проверяет ui.view.check_result.
 
-Без Docker: если API_URL не задан, читаем файл примера локально.
-Если API_URL задан — POST /queries и опрос GET, пока status != done.
-Старый api_response.json больше не используем.
+Без API_URL поиск не работает — явная ошибка, никаких подставных данных.
 """
 
 from __future__ import annotations
@@ -12,7 +10,6 @@ from datetime import datetime
 from pathlib import Path
 import base64
 import html
-import json
 import os
 import sys
 import time
@@ -25,9 +22,12 @@ ROOT = Path(__file__).resolve().parent.parent
 # streamlit run ui/app.py не кладёт корень репозитория в путь импорта
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-EXAMPLE_PATH = ROOT / "docs" / "contracts" / "query_result.example.json"
+
+from ui import view  # noqa: E402
 
 SCORE_HIGH = 0.75
+INSIGHT_WAIT_S = 60
+POLL_EVERY_S = 2  # опрос API во время расчёта: перерисовывается только полоса прогресса
 
 SOURCE_TYPE_RU = {
     "paper": "статья",
@@ -49,22 +49,21 @@ VIEW_EXCLUDED = "Исключённые"
 VIEW_CARD = "Карточка"
 
 
-def load_example() -> dict:
-    data = json.loads(EXAMPLE_PATH.read_text(encoding="utf-8"))
-    data.pop("_note", None)
-    data["status"] = "done"
-    return data
-
-
 def api_base() -> str:
-    """Адрес API. Внутри Docker это http://api:8000. На Mac такого имени нет."""
+    """Адрес API или пустая строка, если связи с пайплайном нет (см. api_problem)."""
+    url = (os.getenv("API_URL") or "").strip().rstrip("/")
+    return "" if api_problem() else url
+
+
+def api_problem() -> str | None:
+    """Почему нет связи с пайплайном; None — API_URL годится."""
     url = (os.getenv("API_URL") or "").strip().rstrip("/")
     if not url:
-        return ""
+        return "Нет связи с пайплайном: не задан API_URL (например, http://127.0.0.1:8000)."
     host = url.split("://", 1)[-1].split("/")[0].split(":")[0]
     if host == "api" and not Path("/.dockerenv").exists():
-        return ""
-    return url
+        return f"Нет связи с пайплайном: API_URL={url} работает только внутри Docker."
+    return None
 
 
 def init_state() -> None:
@@ -74,9 +73,7 @@ def init_state() -> None:
         "view": VIEW_TOP,
         "rank": None,
         "query_id": None,
-        "progress_stage": "",
-        "progress_done": 0,
-        "progress_total": 6,
+        "progress": view.progress_view({}),
         "polling": False,
         "owned": [],
         "history_open": False,
@@ -86,21 +83,15 @@ def init_state() -> None:
             st.session_state[key] = value
 
 
-def start_local(topic: str) -> None:
-    from search.area import detect_area
-
-    data = load_example()
-    data["topic"] = topic
-    data["area"] = detect_area(topic, use_llm=False)
-    st.session_state.result = data
-    st.session_state.query_id = data.get("query_id")
+def accept_result(data: dict, query_id: str) -> None:
+    """Ответ API на экран только после check_result; иначе явная ошибка и пустой экран."""
     st.session_state.polling = False
-    st.session_state.error = None
-    st.session_state.view = VIEW_TOP
-    st.session_state.rank = None
-    st.session_state.history_open = False
-    st.session_state.topic_text = topic
-    _remember_local(data)
+    try:
+        st.session_state.result = view.check_result(data, query_id)
+        st.session_state.error = None
+    except ValueError as exc:
+        st.session_state.result = None
+        st.session_state.error = str(exc)
 
 
 def start_remote(topic: str) -> None:
@@ -131,13 +122,10 @@ def poll_remote() -> None:
     response = requests.get(f"{api_base()}/queries/{query_id}", timeout=30)
     response.raise_for_status()
     data = response.json()
-    st.session_state.progress_stage = data.get("progress_stage") or ""
-    st.session_state.progress_done = int(data.get("progress_done") or 0)
-    st.session_state.progress_total = int(data.get("progress_total") or 6)
+    st.session_state.progress = view.progress_view(data)
     status = (data.get("status") or "").lower()
     if status == "done":
-        st.session_state.result = data
-        st.session_state.polling = False
+        accept_result(data, query_id)
     elif status == "error":
         st.session_state.error = data.get("error") or "Ошибка расчёта"
         st.session_state.polling = False
@@ -163,18 +151,6 @@ def _when(value: str | None) -> str:
     return moment.astimezone().strftime("%d.%m.%Y, %H:%M")
 
 
-def _remember_local(data: dict) -> None:
-    saved = st.session_state.setdefault("local_saved", {})
-    query_id = data.get("query_id")
-    if not query_id:
-        return
-    saved[query_id] = data
-    order = st.session_state.setdefault("local_order", [])
-    if query_id in order:
-        order.remove(query_id)
-    order.insert(0, query_id)
-
-
 def load_history() -> list[dict]:
     if api_base():
         try:
@@ -183,23 +159,7 @@ def load_history() -> list[dict]:
             return list(response.json().get("items") or [])
         except requests.RequestException:
             return []
-    order = st.session_state.get("local_order") or []
-    saved = st.session_state.get("local_saved") or {}
-    items = []
-    for query_id in order:
-        data = saved.get(query_id) or {}
-        items.append(
-            {
-                "query_id": query_id,
-                "topic": data.get("topic") or query_id,
-                "area": data.get("area"),
-                "status": "done",
-                "created_at": None,
-                "candidates_found": (data.get("stats") or {}).get("candidates_found"),
-                "above_075": (data.get("stats") or {}).get("above_075"),
-            }
-        )
-    return items
+    return []
 
 
 def open_saved(query_id: str) -> None:
@@ -207,27 +167,16 @@ def open_saved(query_id: str) -> None:
     st.session_state.rank = None
     st.session_state.view = VIEW_TOP
     if not api_base():
-        data = (st.session_state.get("local_saved") or {}).get(query_id)
-        if not data:
-            st.session_state.error = "Этот запрос не сохранился в сессии."
-            return
-        st.session_state.result = data
-        st.session_state.query_id = query_id
-        st.session_state.polling = False
-        st.session_state.error = None
+        st.session_state.error = api_problem()
         return
     response = requests.get(f"{api_base()}/queries/{query_id}", timeout=30)
     response.raise_for_status()
     data = response.json()
     status = (data.get("status") or "").lower()
     st.session_state.query_id = query_id
-    st.session_state.progress_stage = data.get("progress_stage") or ""
-    st.session_state.progress_done = int(data.get("progress_done") or 0)
-    st.session_state.progress_total = int(data.get("progress_total") or 6)
+    st.session_state.progress = view.progress_view(data)
     if status == "done":
-        st.session_state.result = data
-        st.session_state.polling = False
-        st.session_state.error = None
+        accept_result(data, query_id)
         return
     st.session_state.result = None
     st.session_state.polling = status == "running" and query_id in (st.session_state.owned or [])
@@ -347,14 +296,16 @@ def keep_sidebar_closed() -> None:
     )
 
 
-def score_bar(score) -> str:
+def score_bar(score, rank_score=None) -> str:
+    """Полоса по score модели, число — балл ранжирования (методология 9.9); без балла — score."""
     if not isinstance(score, (int, float)):
         return "<span>скоринг не посчитан</span>"
     step = max(0, min(10, int(round(score * 10))))
     hot = " hot" if score >= SCORE_HIGH else ""
+    shown = rank_score if isinstance(rank_score, (int, float)) else score
     return (
         f"<div class='score{hot}'><i class='w{step}'></i></div>"
-        f"<span>уверенность {score:.0%}</span>"
+        f"<span>балл {view.score_text(shown)}</span>"
     )
 
 
@@ -375,13 +326,7 @@ def render_sources(sources: list) -> None:
                 st.warning("Источник с низким уровнем доверия")
             st.markdown(f"**{'⚠️ ' if low else ''}{title}**")
             url = source.get("url") or ""
-            placeholder = "example.org" in url or "example.com" in url
-            if placeholder:
-                st.warning(
-                    "Это учебная ссылка из файла-примера, не настоящая статья. "
-                    "По ней нет текста: оркестратор ещё не подставил реальные документы."
-                )
-            elif url:
+            if url:
                 st.markdown(f"Ссылка: [{url}]({url})")
             st.write(f"Дата: {source.get('published_at', '—')}")
             raw_type = source.get("source_type") or "—"
@@ -395,61 +340,37 @@ def render_sources(sources: list) -> None:
                 st.write(f"Резюме ({note}): {source['summary_ru']}")
 
 
-def _show_report(content: dict) -> None:
+def _show_insight(shown: dict) -> None:
     st.subheader("Описание технологии")
-    block = content.get("description") or {}
-    st.write(block.get("text") or "—")
-    st.subheader("Преимущество")
-    st.write((content.get("advantage") or {}).get("text") or "—")
-    if content.get("low_trust_warning"):
-        st.warning(content["low_trust_warning"])
+    st.write(shown["description"] or "—")
+    st.subheader("Преимущества")
+    for line in shown["advantages"] or ["—"]:
+        st.write(f"• {line}")
+    for case in shown["cases"]:
+        st.write(f"**{case.get('title') or 'Кейс'}.** {case.get('text') or ''}")
+    if shown.get("weak_source_note"):
+        st.warning(shown["weak_source_note"])
     st.subheader("Источники")
-    render_sources(content.get("sources") or [])
-
-
-def _local_report(item: dict) -> None:
-    from search.insights import generate_insight
-
-    rank = item.get("rank")
-    store = st.session_state.setdefault("insight_reports", {})
-    if rank not in store:
-        with st.spinner("Готовим отчёт по найденным документам…"):
-            try:
-                store[rank] = {"status": "ready", "content": generate_insight(item)}
-            except Exception as exc:  # noqa: BLE001
-                store[rank] = {"status": "error", "error": str(exc)}
-    report = store[rank]
-    if report.get("status") == "ready":
-        _show_report(report["content"])
-        return
-    st.error(
-        "Отчёт не собрался. Для живого текста в .env нужны "
-        "YANDEX_FOLDER_ID, YANDEX_API_KEY и модель yandexgpt-5-pro. "
-        f"({report.get('error')})"
-    )
-    st.subheader("Источники")
-    render_sources(item.get("sources") or [])
+    render_sources(shown["sources"])
 
 
 def _remote_report(item: dict) -> None:
+    """Инсайт из API; ждём не дольше INSIGHT_WAIT_S, затем явное сообщение."""
     query_id = st.session_state.query_id
     rank = item.get("rank")
+    started = st.session_state.setdefault("insight_started", {}).setdefault((query_id, rank), time.monotonic())
     try:
-        response = requests.get(
-            f"{api_base()}/queries/{query_id}/insights/{rank}",
-            timeout=30,
-        )
+        response = requests.get(f"{api_base()}/queries/{query_id}/insights/{rank}", timeout=30)
         response.raise_for_status()
-        payload = response.json()
-    except requests.RequestException as exc:
-        st.error(f"Не удалось запросить инсайт. ({exc})")
+        shown = view.insight_view(response.json())
+    except (requests.RequestException, ValueError) as exc:
+        st.error(f"Не удалось получить описание. ({exc})")
         return
-    status = payload.get("status")
-    if status == "ready" and payload.get("content"):
-        _show_report(payload["content"])
+    if shown is not None:
+        _show_insight(shown)
         return
-    if status == "error":
-        st.error(payload.get("error") or "Ошибка генерации отчёта")
+    if time.monotonic() - started > INSIGHT_WAIT_S:
+        st.error(f"Не удалось получить описание: API не ответил за {INSIGHT_WAIT_S} с.")
         return
     st.info("Готовим отчёт…")
     time.sleep(2)
@@ -463,11 +384,14 @@ def render_card(item: dict) -> None:
         st.rerun()
     st.title(item.get("name_ru") or "Инсайт")
     st.write(f"**Английское название:** {item.get('name_en', '—')}")
-    st.markdown(score_bar(item.get("score")), unsafe_allow_html=True)
+    st.markdown(score_bar(item.get("score"), item.get("rank_score")), unsafe_allow_html=True)
+    if item.get("why_ru"):
+        st.subheader("Почему это слабый сигнал")
+        st.write(item["why_ru"])
     if api_base():
         _remote_report(item)
     else:
-        _local_report(item)
+        st.error(api_problem())
 
 
 def _technology_description(item: dict) -> str:
@@ -489,73 +413,55 @@ def _technology_description(item: dict) -> str:
     return "По найденным документам: " + "; ".join(titles) + "."
 
 
-def render_top(items: list) -> None:
-    if not items:
+def render_top(data: dict) -> None:
+    rows = view.top_rows(data)
+    if not rows:
         st.info("В ТОП пока нет технологий выше порога.")
         return
-    st.caption(f"Показано {len(items)}. Если меньше 15 — столько прошло порог модели.")
-    for item in items:
+    st.caption(f"Показано {len(rows)}. Если меньше 15 — столько прошло порог модели.")
+    for row, item in zip(rows, data["top"]):
         left, right = st.columns([4, 1])
         with left:
             st.markdown(
-                f"<div class='signal-name'>{item.get('rank', '—')}. {item.get('name_ru', '')}</div>",
+                f"<div class='signal-name'>{row['rank']}. {html.escape(row['name_ru'] or '')}</div>",
                 unsafe_allow_html=True,
             )
-            st.caption(item.get("name_en") or "")
-            st.markdown(score_bar(item.get("score")), unsafe_allow_html=True)
+            st.caption(row["name_en"] or "")
+            st.markdown(score_bar(row["score"], row["rank_score"]), unsafe_allow_html=True)
             st.write(_technology_description(item))
         with right:
-            rank = item.get("rank")
-            if st.button("Смотреть", key=f"card_{rank}"):
-                st.session_state.rank = rank
+            if st.button("Смотреть", key=f"card_{row['rank']}"):
+                st.session_state.rank = row["rank"]
                 st.session_state.view = VIEW_CARD
                 st.rerun()
         st.divider()
 
 
-def render_excluded(items: list) -> None:
-    if not items:
+def render_excluded(data: dict) -> None:
+    rows = view.excluded_rows(data)
+    if not rows:
         st.info("Исключённых кандидатов нет.")
         return
-    for item in items:
+    for row in rows:
         with st.container(border=True):
-            st.markdown(f"**{item.get('name_ru', 'Без названия')}**")
-            st.write(item.get("name_en") or "")
-            score = item.get("score")
-            if score is None:
-                st.write("Скоринг: не оценён")
-            else:
-                st.write(f"Скоринг: {score:.2f}")
-            st.write(f"Причина исключения: {item.get('reason_ru', '—')}")
+            st.markdown(f"**{row['name_ru'] or 'Без названия'}**")
+            st.write(row["name_en"] or "")
+            st.write(f"Скоринг: {view.score_text(row['score'])}")
+            st.write(f"Причина исключения: {row['reason_ru'] or '—'}")
 
 
 def render_candidates(data: dict) -> None:
-    top = data.get("top") or []
-    excluded = data.get("excluded") or []
-    st.caption(
-        "В контракте пока нет полного списка из 64 имён. "
-        "Показываем тех, кто попал в ТОП, и тех, кого исключили."
+    rows = view.candidate_rows(data)
+    if rows is None:
+        st.info("В этом прогоне нет полного списка кандидатов: поле candidates появилось в пайплайне позже.")
+        return
+    stage_ru = {"top": "ТОП", "excluded": "исключён", "found": "найден"}
+    st.dataframe(
+        [{"Где": stage_ru.get(row["stage"], row["stage"]), "Название": row["name_ru"], "English": row["name_en"],
+          "Скоринг": row["score"], "Причина": row["reason_ru"]} for row in rows],
+        use_container_width=True,
+        hide_index=True,
     )
-    rows = []
-    for item in top:
-        rows.append(
-            {
-                "Где": "ТОП",
-                "Название": item.get("name_ru"),
-                "English": item.get("name_en"),
-                "Скоринг": item.get("score"),
-            }
-        )
-    for item in excluded:
-        rows.append(
-            {
-                "Где": "исключён",
-                "Название": item.get("name_ru"),
-                "English": item.get("name_en"),
-                "Скоринг": item.get("score"),
-            }
-        )
-    st.dataframe(rows, use_container_width=True, hide_index=True)
 
 
 def inject_style() -> None:
@@ -595,17 +501,19 @@ def inject_style() -> None:
           border-top-color: #3DDC97;
           animation: sweep 0.9s linear infinite;
         }
+        /* stMain — вертикальный flex: flex-start держит верх страницы у края окна (center увёл бы логотип вверх
+           за экран). По горизонтали центрируем сам блок полями auto, поля слева и справа равные. */
         [data-testid="stMain"] {
           justify-content: flex-start !important;
         }
         [data-testid="stMain"] .block-container {
           max-width: 1100px;
           width: 100%;
-          margin-left: 0 !important;
+          margin-left: auto !important;
           margin-right: auto !important;
           padding-top: 1.15rem !important;
-          padding-left: 3.25rem !important;
-          padding-right: 2rem !important;
+          padding-left: 2.5rem !important;
+          padding-right: 2.5rem !important;
           padding-bottom: 2rem !important;
         }
         [data-testid="stCustomComponentV1"],
@@ -905,11 +813,10 @@ def render_footer() -> None:
         "<div class='team-wrap'>"
         "<div class='team-head'>"
         "<div class='kicker'>команда</div>"
-        "<p>Наша команда собирает сервис для Газпромбанк. "
-        "По введённой теме мы ищем статьи и новости, выделяем из них ранние технологии "
-        "и оцениваем, насколько это ещё слабый сигнал. "
-        "На экране остаётся список таких технологий и карточка с описанием и преимуществом, "
-        "а прошлые запросы сохраняются в истории.</p>"
+        "<p>Введите направление — сервис найдёт в научных публикациях, новостях и патентах технологии, "
+        "которые только появляются, и соберёт ТОП-15 слабых сигналов с описанием, преимуществом, "
+        "источниками и объяснением выбора. Зрелые технологии отсеиваются, история запросов сохраняется. "
+        "Проект создан в рамках кейса Газпромбанк.Тех.</p>"
         "</div>"
         f"<div class='team-grid'>{''.join(cards)}</div>"
         "</div>",
@@ -917,19 +824,33 @@ def render_footer() -> None:
     )
 
 
+@st.fragment(run_every=POLL_EVERY_S)
+def poll_block() -> None:
+    """Опрос API без перерисовки всей страницы; готово или ошибка — одна полная перерисовка с результатом."""
+    if not st.session_state.polling:
+        return
+    try:
+        poll_remote()
+    except requests.RequestException as exc:
+        st.session_state.error = f"Не удалось опросить API. ({exc})"
+        st.session_state.polling = False
+    if not st.session_state.polling:
+        st.rerun()
+    shown = st.session_state.progress
+    st.progress(shown["share"], text=shown["text"])
+
+
 def render_stats(data: dict) -> None:
-    stats = data.get("stats") or {}
-    above = stats.get("above_075")
-    if above is None:
-        above = sum(
-            1
-            for item in (data.get("top") or [])
-            if isinstance(item.get("score"), (int, float)) and item["score"] >= SCORE_HIGH
-        )
+    shown = view.stats_view(data)
     c1, c2, c3 = st.columns(3)
-    c1.metric("Обработано источников", stats.get("documents_total", "—"))
-    c2.metric("Найдено кандидатов", stats.get("candidates_found", "—"))
-    c3.metric("Сигналы > 75%", above)
+    c1.metric(
+        "Обработано документов",
+        f"{shown['documents_analyzed']:,}".replace(",", " "),
+        help=(f"Свежие статьи, препринты и новости, прочитанные для поиска кандидатов: {shown['documents_total']}; "
+              "плюс публикации 2014–2026 и патенты Роспатента, по которым посчитаны признаки оценённых кандидатов."),
+    )
+    c2.metric("Найдено кандидатов", shown["candidates_found"])
+    c3.metric("Сигналов > 0.75 среди оценённых", shown["above_075"])
     if st.button("Перейти к списку кандидатов"):
         st.session_state.view = VIEW_LIST
         st.rerun()
@@ -941,13 +862,6 @@ init_state()
 consume_nav()
 render_history()
 keep_sidebar_closed()
-
-if st.session_state.polling and st.session_state.query_id and api_base():
-    try:
-        poll_remote()
-    except requests.RequestException as exc:
-        st.session_state.error = f"Не удалось опросить API. ({exc})"
-        st.session_state.polling = False
 
 data = st.session_state.result
 if (
@@ -998,35 +912,22 @@ if not locked and st.button("Найти сигналы", type="primary"):
         try:
             start_remote(topic.strip())
         except requests.RequestException as exc:
-            st.session_state.error = (
-                "API недоступен. Запустите его локально или уберите API_URL. "
-                f"({exc})"
-            )
+            st.session_state.error = f"Нет связи с пайплайном: API не ответил. ({exc})"
     else:
-        with st.spinner("Считаем пример контракта…"):
-            time.sleep(0.4)
-        start_local(topic.strip())
+        st.session_state.error = api_problem()
     st.rerun()
 
 if st.session_state.error:
     st.error(st.session_state.error)
 
-if st.session_state.polling:
-    total = max(int(st.session_state.progress_total or 1), 1)
-    done = int(st.session_state.progress_done or 0)
-    st.progress(min(done / total, 1.0))
-    st.info(
-        f"Стадия: {st.session_state.progress_stage or 'запуск'} "
-        f"({done}/{total}). Расчёт может занять несколько минут."
-    )
-    time.sleep(0.6)
-    st.rerun()
+if st.session_state.polling and st.session_state.query_id and api_base():
+    poll_block()
 
 if data is None:
     render_footer()
     st.stop()
 
-st.success(f"Запрос: «{data.get('topic', '')}» · область: {data.get('area') or 'Другое'}")
+st.success(f"Запрос: «{data['topic']}»")
 render_stats(data)
 
 views = [VIEW_TOP, VIEW_LIST, VIEW_EXCLUDED]
@@ -1039,8 +940,8 @@ if chosen_view != st.session_state.view:
 if st.session_state.view == VIEW_LIST:
     render_candidates(data)
 elif st.session_state.view == VIEW_EXCLUDED:
-    render_excluded(data.get("excluded") or [])
+    render_excluded(data)
 else:
-    render_top(data.get("top") or [])
+    render_top(data)
 
 render_footer()

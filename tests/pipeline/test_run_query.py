@@ -182,6 +182,7 @@ def test_output_matches_schema(result) -> None:
                         "timings", "warnings"}
     assert out["normalizer_deviations"] == ["company_stoplist_off"]
     assert set(out["stats"]) == {"documents_by_source", "documents_total", "documents_for_candidates",
+                                 "documents_analyzed",
                                  "documents_for_candidates_by_source",
                                  "candidates_found", "candidates_named",
                                  "candidates_scored", "above_threshold", "above_075",
@@ -191,11 +192,13 @@ def test_output_matches_schema(result) -> None:
     assert out["stats"]["time_budget_s"] == rq.TIME_BUDGET_S and out["stats"]["stopped_at"] is None
     assert out["model_version"] == "s2a2-v1"
     assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup",
-                                   "translate", "total", "queues"}
-    assert {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup", "translate"} <= set(stages)
+                                   "translate", "enrich", "total", "queues"}
+    assert out["enrichment"] == "done"
+    assert {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup", "translate",
+            "enrich"} <= set(stages)
     patent_keys = {"n_pat", "share_patent", "rospatent_failed", "note_ru"}
     for item in out["top"]:
-        assert set(item) == {"rank", "name_ru", "name_en", "score", "explanation_ru", "contributions",
+        assert set(item) == {"rank", "name_ru", "name_en", "score", "rank_score", "explanation_ru", "why_ru", "contributions",
                              "counters", "sources", "model_version", "name_ru_source", "name_ru_auto",
                              "variants"} | DETAIL_KEYS | patent_keys | SCORED_KEYS
         assert item["name_ru"] == f"Русское {item['name_en']}" and item["name_ru_source"] == "translate"
@@ -233,7 +236,7 @@ def test_same_term_merged_with_doc_ids(result) -> None:
     assert max(v["n_works"] for v in top["name_variants"]) == 5
     assert top["n_docs"] == 2 and top["n_sources"] == 1
     # v3 (по умолчанию) ставит arXiv первым на шаге 4: документы 1 и 2 — arXiv
-    assert {s["url"] for s in top["sources"]} == {"https://arxiv/3", "https://arxiv/4"}
+    assert {s["url"] for s in top["sources"][:2]} == {"https://arxiv/3", "https://arxiv/4"}  # дальше — догрузка
 
 
 def test_humanoid_robot_is_known_training_mainstream(result) -> None:
@@ -743,3 +746,63 @@ def test_round_without_new_subqueries_is_a_warning(tmp_path, monkeypatch) -> Non
     out, _, _ = run(tmp_path)
     assert len(out["stats"]["rounds"]) == 2
     assert any(w.startswith("раунд добора 2 не выполнен") for w in out["warnings"])
+
+
+def test_documents_analyzed_sums_search_counters_and_patents() -> None:
+    ranked = [{"name": "a", "score": 0.9, "counters": {"prev6": {"arxiv": 5, "openalex": 10}, "2025": {"techcrunch": 2}}},
+              {"name": "b", "score": 0.1, "counters": {"2024": {"openalex": 100}}},
+              {"name": "c", "score": None, "counters": {"2024": {"openalex": 1000}}},  # не оценён — не считается
+              {"name": "d", "score": 0.5}]
+    assert rq.documents_analyzed([{"url": "u1"}, {"url": "u2"}], ranked, {"a": 3, "b": 0}) == 2 + 17 + 100 + 3
+    assert rq.documents_analyzed([], [], {}) == 0
+
+
+def test_documents_analyzed_in_run_covers_search_documents(result) -> None:
+    out, _ = result
+    assert out["stats"]["documents_analyzed"] >= out["stats"]["documents_total"] > 0
+
+
+def scored(name: str, score: float | None, docs: int = 0) -> dict:
+    return {"name": name, "score": score, "counters": {"2025": {"openalex": docs}} if score is not None else {}}
+
+
+def test_rank_score_splits_equal_scores_by_evidence() -> None:
+    ranked = [scored("a", 0.870737, 1), scored("b", 0.870877, 2), scored("c", 0.870737, 1), scored("d", 0.95, 5),
+              scored("e", None)]
+    out = rq.with_rank_scores(ranked, {"a": 3})
+    by = {item["name"]: item.get("rank_score") for item in out}
+    # a: 1 публикация + 3 патента = 4 > b: 2 > c: 1; группа 0.871 из трёх -> +0.010, +0.005, +0.000
+    assert (by["a"], by["b"], by["c"], by["d"]) == (0.881, 0.876, 0.871, 0.95)
+    assert [item["name"] for item in out] == ["d", "a", "b", "c", "e"]
+    assert [item["score"] for item in out[:4]] == [0.95, 0.870737, 0.870877, 0.870737]  # score модели не тронут
+
+
+def test_rank_score_values_differ_on_screen_up_to_eleven() -> None:
+    out = rq.with_rank_scores([scored(f"t{i:02d}", 0.5, i) for i in range(11)], {})
+    shown = [f"{item['rank_score']:.3f}" for item in out]
+    assert len(set(shown)) == 11 and shown[0] == "0.510" and shown[-1] == "0.500"
+
+
+def test_rank_score_large_group_still_distinct_values() -> None:
+    out = rq.with_rank_scores([scored(f"t{i:02d}", 0.5, i) for i in range(15)], {})
+    values = [item["rank_score"] for item in out]
+    assert len(set(values)) == 15 and max(values) == 0.51 and min(values) == 0.5
+
+
+def test_rank_score_tie_in_evidence_breaks_by_name_and_empty_input() -> None:
+    out = rq.with_rank_scores([scored("b", 0.7, 1), scored("a", 0.7, 1)], {})
+    assert [(item["name"], item["rank_score"]) for item in out] == [("a", 0.71), ("b", 0.7)]
+    assert rq.with_rank_scores([], {}) == []
+
+
+def test_failed_translation_keeps_english_name_and_warns(tmp_path, monkeypatch) -> None:
+    """Перевод отклонён на всех попытках, term_ru не годится: в ТОП английское название и предупреждение."""
+    monkeypatch.setattr(sys.modules[__name__], "fake_translate",
+                        lambda system, user, **kwargs: {"text": "Не могу перевести", "error": None})
+    monkeypatch.setattr(translate, "passes", lambda name, term_en: False)
+    out, _, _ = run(tmp_path)
+    assert out["top"] and all(item["name_ru"] == item["name_en"] for item in out["top"])
+    assert out["stats"]["translation"]["на английском"] == len(out["top"]) + sum(
+        e["skipped_reason"] in ("below_threshold", "beyond_top") for e in out["excluded"])
+    warning = next(w for w in out["warnings"] if w.startswith("Перевод не прошёл проверки"))
+    assert all(item["name_en"] in warning for item in out["top"])
