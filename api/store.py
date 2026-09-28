@@ -20,7 +20,12 @@ def _json(value: Any) -> str:
 
 def database_url() -> str | None:
     value = (os.environ.get("DATABASE_URL") or "").strip()
-    return value or None
+    if not value:
+        return None
+    # В Docker хост db. С хоста (локальный uvicorn) — 127.0.0.1.
+    if "@db:" in value and not os.path.exists("/.dockerenv"):
+        value = value.replace("@db:", "@127.0.0.1:", 1)
+    return value
 
 
 def _connect():
