@@ -74,7 +74,7 @@ def test_screen_shows_pipeline_top(screen) -> None:
     assert [m.value for m in at.metric] == [str(ROBOTS["stats"][key])
                                            for key in ("documents_total", "candidates_found", "above_075")]
     # в robots.json нет documents_analyzed — плашка берёт documents_total
-    scores = [m.value for m in at.markdown if "уверенность" in m.value]
+    scores = [m.value for m in at.markdown if "балл" in m.value]
     assert [s.rsplit(" ", 1)[-1].removesuffix("</span>") for s in scores] == \
         [f"{t['score']:.3f}" for t in ROBOTS["top"]]
 
@@ -119,3 +119,12 @@ def test_card_explains_choice_in_words(screen, monkeypatch) -> None:
     next(b for b in at.button if b.label == "Смотреть").click().run()
     assert "Почему это слабый сигнал" in [h.value for h in at.subheader]
     assert answer["top"][0]["why_ru"] in [m.value for m in at.markdown]
+
+
+def test_screen_shows_rank_score_as_ball(screen, monkeypatch) -> None:
+    answer = copy.deepcopy(ROBOTS)
+    answer["top"][0]["rank_score"] = round(answer["top"][0]["score"], 3) + 0.004
+    monkeypatch.setattr("pipeline.run_query.run_query", lambda *args, **kwargs: copy.deepcopy(answer))
+    at = search(screen, "роботы для промышленности")
+    first = next(m.value for m in at.markdown if "балл" in m.value)
+    assert first.endswith(f"балл {answer['top'][0]['rank_score']:.3f}</span>")

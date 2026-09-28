@@ -65,6 +65,8 @@ QUOTA_MARGIN = 1.2
 QUOTA_WARNING = ("Квота OpenAlex: остатка {left} запросов хватит примерно на {limit} кандидатов "
                  "с запасом 20 %, оценка ограничена")
 HIGH_SCORE = 0.75
+# Балл ранжирования (методология 9.9): равные на экране score (3 знака) расходятся на 0…RANK_STEPS шагов по 0.001.
+RANK_STEPS, RANK_STEP = 10, 0.001
 MAX_SOURCES = 5
 NAME_WORDS = (2, 5)
 BAD_NAME_CHARS = '"(),:;/'
@@ -73,6 +75,7 @@ CYRILLIC_RE = re.compile(r"[а-яёА-ЯЁ]")
 EMPTY_AREA_WARNING = "область не выбрана: нормализатор получил пустую область, такое поведение не проверялось"
 ROSPATENT_OFF_WARNING = ("Роспатент выключен: патентный признак share_patent недоступен у всех кандидатов, "
                          "модель подставила медиану обучения")
+TRANSLATE_FAILED_WARNING = ("Перевод не прошёл проверки после всех попыток, в ТОП оставлено английское название: {}")
 ENRICH_STOPPED_WARNING = "Догрузка источников остановлена по бюджету времени: у части ТОП только источники поиска №1"
 PATENT_FAILED_NOTE = "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения"
 ROSPATENT_NO_KEY_WARNING = ("Нет ключа ROSPATENT в .env: патентный признак share_patent недоступен у всех кандидатов, "
@@ -314,6 +317,37 @@ def document_stats(documents: Sequence[dict], subqueries: Sequence[dict]) -> dic
     return counts
 
 
+def evidence(item: dict, n_pats: dict[str, int | None]) -> int:
+    """Подтверждения кандидата: публикации в счётчиках (все окна 2014–2026, все источники) плюс патенты."""
+    counted = sum(int(value) for window in (item.get("counters") or {}).values() for value in window.values())
+    return counted + int(n_pats.get(item["name"]) or 0)
+
+
+def with_rank_scores(ranked: list[dict], n_pats: dict[str, int | None]) -> list[dict]:
+    """rank_score и порядок по нему; неоценённые — в конце в прежнем порядке.
+
+    Группа — равные до 3 знаков score. Внутри группы по убыванию подтверждений (затем по названию) —
+    добавка от RANK_STEPS до 0 шагов по RANK_STEP к округлённому score: до 11 членов значения на экране разные.
+    Одиночка — rank_score = score. Порог и плашки считаются по score, не по rank_score.
+    """
+    scored = [dict(item) for item in ranked if item["score"] is not None]
+    groups: dict[float, list[dict]] = {}
+    for item in scored:
+        groups.setdefault(round(item["score"], 3), []).append(item)
+    for base, group in groups.items():
+        group.sort(key=lambda item: (-evidence(item, n_pats), item["name"]))
+        last = len(group) - 1
+        for place, item in enumerate(group):
+            if not last:
+                item["rank_score"] = item["score"]
+            elif last <= RANK_STEPS:
+                item["rank_score"] = round(base + RANK_STEP * round(RANK_STEPS * (last - place) / last), 6)
+            else:
+                item["rank_score"] = round(base + RANK_STEP * RANK_STEPS * (last - place) / last, 6)
+    scored.sort(key=lambda item: (-item["rank_score"], -evidence(item, n_pats), item["name"]))
+    return scored + [item for item in ranked if item["score"] is None]
+
+
 def split_ranked(ranked: list[dict], by_key: dict[str, dict], documents: Sequence[dict],
                  threshold: float, n_pats: dict[str, int | None] | None = None,
                  duplicate_of: dict[int, int] | None = None) -> tuple[list[dict], list[dict]]:
@@ -352,7 +386,8 @@ def split_ranked(ranked: list[dict], by_key: dict[str, dict], documents: Sequenc
         else:
             top.append({"rank": len(top) + 1, "name_ru": candidate["name_ru"], "name_en": candidate["name_en"],
                         "tech_key": tech_key(candidate["name_en"]),
-                        "score": item["score"], "is_signal": item.get("is_signal"),
+                        "score": item["score"], "rank_score": item.get("rank_score", item["score"]),
+                        "is_signal": item.get("is_signal"),
                         "features": item.get("features") or {},
                         "explanation_ru": explanation_top(item["features"], item["contributions"], item["counters"],
                                                           n_pat=n_pat),
@@ -636,6 +671,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     capped += [excluded(item, stop, documents) for item in pool if tech_key(item["name_en"]) not in scored]
     stopped_at = "counters" if stop == "time_budget" else stopped_at
     n_pats = {name: result["n_pat"] for name, result in patents.items() if not result["failed"]}
+    ranked = with_rank_scores(ranked, n_pats)
     by_key = {tech_key(c["name_en"]): c for c in pool}
     duplicate_of = staged("dedup", timings, progress, lambda: find_duplicates(ranked, by_key, warnings)) if dedup else {}
     top, below = split_ranked(ranked, by_key, documents, meta["threshold"], n_pats, duplicate_of)
@@ -650,6 +686,8 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
         warnings.append(ROSPATENT_OFF_WARNING)
     translation = staged("translate", timings, progress,
                          lambda: name_in_russian(top, dropped + capped + below, use_cache, progress))
+    english = [entry["name_en"] for entry in top if entry.get("name_ru_source") == "name_en"]
+    warnings += [TRANSLATE_FAILED_WARNING.format(", ".join(english))] if english else []
     mark, enriched = time.monotonic(), {"query_id": query_id, "top": top, "_documents": all_documents}
     enrich_top(enriched, collector, time_left=lambda: budget - (time.monotonic() - started), progress=progress,
                source_limit=MAX_SOURCES)

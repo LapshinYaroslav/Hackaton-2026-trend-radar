@@ -296,14 +296,16 @@ def keep_sidebar_closed() -> None:
     )
 
 
-def score_bar(score) -> str:
+def score_bar(score, rank_score=None) -> str:
+    """Полоса по score модели, число — балл ранжирования (методология 9.9); без балла — score."""
     if not isinstance(score, (int, float)):
         return "<span>скоринг не посчитан</span>"
     step = max(0, min(10, int(round(score * 10))))
     hot = " hot" if score >= SCORE_HIGH else ""
+    shown = rank_score if isinstance(rank_score, (int, float)) else score
     return (
         f"<div class='score{hot}'><i class='w{step}'></i></div>"
-        f"<span>уверенность {view.score_text(score)}</span>"
+        f"<span>балл {view.score_text(shown)}</span>"
     )
 
 
@@ -382,7 +384,7 @@ def render_card(item: dict) -> None:
         st.rerun()
     st.title(item.get("name_ru") or "Инсайт")
     st.write(f"**Английское название:** {item.get('name_en', '—')}")
-    st.markdown(score_bar(item.get("score")), unsafe_allow_html=True)
+    st.markdown(score_bar(item.get("score"), item.get("rank_score")), unsafe_allow_html=True)
     if item.get("why_ru"):
         st.subheader("Почему это слабый сигнал")
         st.write(item["why_ru"])
@@ -425,7 +427,7 @@ def render_top(data: dict) -> None:
                 unsafe_allow_html=True,
             )
             st.caption(row["name_en"] or "")
-            st.markdown(score_bar(row["score"]), unsafe_allow_html=True)
+            st.markdown(score_bar(row["score"], row["rank_score"]), unsafe_allow_html=True)
             st.write(_technology_description(item))
         with right:
             if st.button("Смотреть", key=f"card_{row['rank']}"):

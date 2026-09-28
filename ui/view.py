@@ -34,9 +34,10 @@ def check_result(data, query_id: str) -> dict:
 
 
 def top_rows(data: dict) -> list[dict]:
-    """ТОП как в терминале: ранг, названия, score, патенты."""
+    """ТОП как в терминале: ранг, названия, score, балл ранжирования (в старых прогонах = score), патенты."""
     return [{"rank": item["rank"], "name_ru": item.get("name_ru"), "name_en": item.get("name_en"),
-             "score": item["score"], "n_pat": item.get("n_pat")} for item in data["top"]]
+             "score": item["score"], "rank_score": item.get("rank_score", item["score"]),
+             "n_pat": item.get("n_pat")} for item in data["top"]]
 
 
 def excluded_rows(data: dict) -> list[dict]:

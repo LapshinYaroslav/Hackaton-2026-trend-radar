@@ -92,3 +92,9 @@ def test_stats_view_prefers_documents_analyzed() -> None:
     data = {"stats": {"documents_analyzed": 580376, "documents_total": 397, "candidates_found": 121, "above_075": 12},
             "top": [], "excluded": []}
     assert view.stats_view(data)["documents_analyzed"] == 580376
+
+
+def test_top_rows_carry_rank_score_or_fall_back_to_score() -> None:
+    data = {"top": [{"rank": 1, "name_ru": "а", "name_en": "a", "score": 0.870737, "rank_score": 0.881, "n_pat": 0},
+                    {"rank": 2, "name_ru": "б", "name_en": "b", "score": 0.870737, "n_pat": 0}]}
+    assert [(r["score"], r["rank_score"]) for r in view.top_rows(data)] == [(0.870737, 0.881), (0.870737, 0.870737)]

@@ -24,7 +24,7 @@ from typing import Callable, Sequence
 ROOT = Path(__file__).resolve().parents[1]
 CACHE_DIR = ROOT / "data" / "interim" / "cache" / "translate_names"
 LLM_MODEL = "yandexgpt-5-pro"
-TEMPERATURES = (0.0, 0.3)
+TEMPERATURES = (0.0, 0.3, 0.6)  # третья попытка — с причиной отказа второй в промпте
 MAX_WORDS, WORKERS = 8, 4  # 8 слов — решение Ярослава 26.09 (в ТЗ предела нет)
 CYRILLIC_RE = re.compile(r"[а-яё]", re.IGNORECASE)
 LATIN_RE = re.compile(r"[A-Za-z0-9]*[A-Za-z][A-Za-z0-9]*")  # слова через дефис — отдельно
@@ -133,7 +133,9 @@ def cache_path(term_en: str) -> Path:
 
 def translate_one(term_en: str, quote: str | None, term_ru: str | None, llm: Callable,
                   use_cache: bool = True) -> dict:
-    """name_ru, name_ru_source (translate | extract | None), name_ru_auto и число попыток (0 — из кэша)."""
+    """name_ru, name_ru_source (translate | extract | name_en), name_ru_auto и число попыток (0 — из кэша).
+
+    Все попытки отклонены и term_ru не проходит проверки — name_ru = term_en (source name_en), не None."""
     path = cache_path(term_en)
     if use_cache and path.exists():
         cached = json.loads(path.read_text(encoding="utf-8"))["answer"]
@@ -153,8 +155,9 @@ def translate_one(term_en: str, quote: str | None, term_ru: str | None, llm: Cal
             path.write_text(json.dumps({"term_en": term_en, "answer": result}, ensure_ascii=False), encoding="utf-8")
             return {**result, "attempts": attempt}
     fallback = capitalized(clean(term_ru)) if passes(clean(term_ru), term_en) else None
-    return {"name_ru": fallback, "name_ru_source": "extract" if fallback else None, "name_ru_auto": True,
-            "attempts": len(TEMPERATURES)}
+    if fallback is None:  # пустого названия на экране не бывает: английский термин и предупреждение в прогоне
+        return {"name_ru": term_en, "name_ru_source": "name_en", "name_ru_auto": True, "attempts": len(TEMPERATURES)}
+    return {"name_ru": fallback, "name_ru_source": "extract", "name_ru_auto": True, "attempts": len(TEMPERATURES)}
 
 
 def translate_entries(entries: Sequence[dict], llm: Callable | None = None, use_cache: bool = True,
@@ -179,6 +182,6 @@ def translate_entries(entries: Sequence[dict], llm: Callable | None = None, use_
         entry.update({k: result[k] for k in ("name_ru", "name_ru_source", "name_ru_auto")})
     return {"переведено": len(results), "из кэша": sum(r["attempts"] == 0 for r in results),
             "с первого раза": sum(r["attempts"] == 1 and r["name_ru_source"] == "translate" for r in results),
-            "с повтором": sum(r["attempts"] == 2 and r["name_ru_source"] == "translate" for r in results),
+            "с повтором": sum(r["attempts"] >= 2 and r["name_ru_source"] == "translate" for r in results),
             "откат на term_ru": sum(r["name_ru_source"] == "extract" for r in results),
-            "без названия": sum(r["name_ru_source"] is None for r in results)}
+            "на английском": sum(r["name_ru_source"] == "name_en" for r in results)}

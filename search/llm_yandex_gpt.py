@@ -35,6 +35,9 @@ CALL_LIMIT = threading.Semaphore(MAX_CONCURRENT_CALLS)
 RETRY_ATTEMPTS = 3
 RETRY_DELAY = 0.5
 TIMEOUT_ATTEMPTS = 2  # первая попытка и один повтор при таймауте
+# Временные сбои сервиса: повтор с растущей паузой, как при 429. 4xx кроме 429 — ошибка запроса, не повторяем.
+RETRY_STATUSES = {429, 500, 502, 503, 504}
+LOG_LOCK = threading.Lock()  # потоки пишут журнал по очереди: иначе строки JSONL склеиваются
 
 
 def build_model_uri(model: str | None = None) -> str:
@@ -55,8 +58,9 @@ def _log_call(record: dict) -> None:
     """Дописывает строку в logs/llm_calls.jsonl. Ключ API в лог не попадает."""
     try:
         LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
-        with LOG_FILE.open("a", encoding="utf-8") as file:
-            file.write(json.dumps(record, ensure_ascii=False) + "\n")
+        line = json.dumps(record, ensure_ascii=False) + "\n"
+        with LOG_LOCK, LOG_FILE.open("a", encoding="utf-8") as file:
+            file.write(line)
     except OSError as exc:
         print(f"Предупреждение: не удалось записать лог вызова LLM: {exc}")
 
@@ -77,17 +81,25 @@ def _post_once(body: dict, headers: dict, url: str = COMPLETION_URL):
 
 
 def _post_with_retry(body: dict, headers: dict, url: str = COMPLETION_URL) -> dict:
-    """POST под ограничением конкурентности, с повтором при 429 и растущей паузой."""
+    """POST под ограничением конкурентности; 429, 5xx и обрыв соединения — повтор с растущей паузой."""
     delay = RETRY_DELAY
     for attempt in range(RETRY_ATTEMPTS):
-        response = _post_once(body, headers, url)
-        if getattr(response, "status_code", 200) == 429 and attempt < RETRY_ATTEMPTS - 1:
+        last = attempt == RETRY_ATTEMPTS - 1
+        try:
+            response = _post_once(body, headers, url)
+        except requests.ConnectionError:
+            if last:
+                raise
+            time.sleep(delay)
+            delay *= 2
+            continue
+        if getattr(response, "status_code", 200) in RETRY_STATUSES and not last:
             time.sleep(delay)
             delay *= 2
             continue
         response.raise_for_status()
         return response.json()
-    raise requests.HTTPError("429 после всех повторов")
+    raise requests.HTTPError("сбой LLM после всех повторов")
 
 
 def _request(model_uri: str, openai: bool, system_prompt: str, user_prompt: str, temperature: float,

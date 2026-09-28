@@ -1,4 +1,4 @@
-"""Перевод названий без сети: снимок промпта, проверки, повтор, откат на term_ru, null, кэш."""
+"""Перевод названий без сети: снимок промпта, проверки, повторы, откат на term_ru, затем английский термин, кэш."""
 import hashlib
 
 import pytest
@@ -60,12 +60,14 @@ def test_retry_at_03_then_ok() -> None:
     assert [c["temperature"] for c in calls] == [0.0, 0.3]
 
 
-def test_fallback_to_term_ru_then_null() -> None:
-    llm, _ = fake(["ERR 403", "ERR 403"])
+def test_fallback_to_term_ru_then_english_name() -> None:
+    llm, _ = fake(["ERR 403", "ERR 403", "ERR 403"])
     got = tr.translate_one("federated learning", "q", "федеративное обучение", llm)
     assert got["name_ru"] == "Федеративное обучение" and got["name_ru_source"] == "extract"
-    got = tr.translate_one("federated learning", "q", "federated learning", fake(["no", "no"])[0])
-    assert got == {"name_ru": None, "name_ru_source": None, "name_ru_auto": True, "attempts": 2}
+    got = tr.translate_one("federated learning", "q", "federated learning", fake(["no", "no", "no"])[0])
+    assert got == {"name_ru": "federated learning", "name_ru_source": "name_en", "name_ru_auto": True, "attempts": 3}
+    got = tr.translate_one("edge ai", "q", None, fake(["ERR"])[0])
+    assert got["name_ru"] == "edge ai" and got["name_ru_source"] == "name_en"
 
 
 def test_cache_by_term_en_and_failures_not_cached() -> None:
@@ -86,9 +88,10 @@ def test_translate_entries_updates_in_place_and_counts() -> None:
     def llm(system, user, **kwargs):
         return {"text": answers[user], "error": None}
     stats = tr.translate_entries(entries, llm)
-    assert [e["name_ru_source"] for e in entries] == ["translate", "extract", None]
+    assert [e["name_ru_source"] for e in entries] == ["translate", "extract", "name_en"]
+    assert all(e["name_ru"] for e in entries)
     assert stats == {"переведено": 3, "из кэша": 0, "с первого раза": 1, "с повтором": 0,
-                     "откат на term_ru": 1, "без названия": 1}
+                     "откат на term_ru": 1, "на английском": 1}
 
 
 def test_clean_keeps_inner_quotes_and_strips_wrapping() -> None:
@@ -118,7 +121,7 @@ def test_capitalized_first_letter_but_not_latin_start() -> None:
 def test_latin_failure_retried_then_fallback() -> None:
     llm, calls = fake(["Batch-OF справедливость", "Batch-OF справедливость"])
     got = tr.translate_one("batch order fairness", "q", "справедливость порядка пакетов", llm)
-    assert [c["temperature"] for c in calls] == [0.0, 0.3]
+    assert [c["temperature"] for c in calls] == [0.0, 0.3, 0.6]
     assert got["name_ru"] == "Справедливость порядка пакетов" and got["name_ru_source"] == "extract"
 
 
@@ -134,7 +137,7 @@ def test_refusal_is_rejected(answer) -> None:
 def test_refusal_goes_to_retry_then_fallback() -> None:
     llm, calls = fake(["Извините, не могу помочь", "К сожалению, не могу"])
     got = tr.translate_one("federated learning", "q", "федеративное обучение", llm)
-    assert [c["temperature"] for c in calls] == [0.0, 0.3]
+    assert [c["temperature"] for c in calls] == [0.0, 0.3, 0.6]
     assert got["name_ru"] == "Федеративное обучение" and got["name_ru_source"] == "extract"
 
 
@@ -162,7 +165,7 @@ def test_whitelist_and_homogeneous_parts_pass(name, term) -> None:
 def test_abbreviation_goes_to_retry_then_fallback() -> None:
     llm, calls = fake(["ДНТ — глубокие нейронные трансформаторы", "ДНТ-модели"])
     got = tr.translate_one("deep neural transformer", "q", "глубокие нейронные трансформеры", llm)
-    assert [c["temperature"] for c in calls] == [0.0, 0.3]
+    assert [c["temperature"] for c in calls] == [0.0, 0.3, 0.6]
     assert got["name_ru"] == "Глубокие нейронные трансформеры" and got["name_ru_source"] == "extract"
 
 
@@ -209,3 +212,12 @@ def test_retry_after_api_error_has_no_reason() -> None:
                                             ("ДНТ-модели", "кириллическая аббревиатура")])
 def test_problem_names_first_failed_check(name, fragment) -> None:
     assert fragment in tr.problem(name, "batch order fairness" if "OF" in fragment else "federated learning")
+
+
+def test_third_attempt_rescues_rejected_abbreviation() -> None:
+    """Случай «умного города»: ДТП вне белого списка дважды, третья попытка раскрывает аббревиатуру."""
+    llm, calls = fake(["Документация мест ДТП на основе ИИ", "Документация мест ДТП с помощью ИИ",
+                       "Документирование мест дорожных происшествий на основе ИИ"])
+    got = tr.translate_one("AI-driven accident scene documentation", "q", None, llm)
+    assert [c["temperature"] for c in calls] == [0.0, 0.3, 0.6] and "ДТП" in calls[2]["system"]
+    assert got["name_ru"] == "Документирование мест дорожных происшествий на основе ИИ" and got["attempts"] == 3

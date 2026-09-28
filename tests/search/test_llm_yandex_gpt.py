@@ -76,10 +76,44 @@ class AskLlmTest(unittest.TestCase):
         self.assertEqual(result["text"], "ответ модели")
 
     def test_network_error(self):
-        """Ошибка сети возвращается в error, а не исключением."""
-        result, _ = self._call(side_effect=requests.ConnectionError("нет сети"))
+        """Ошибка сети на всех попытках возвращается в error, а не исключением."""
+        with patch.object(llm.time, "sleep"):
+            result, post = self._call(side_effect=requests.ConnectionError("нет сети"))
         self.assertIsNone(result["text"])
         self.assertIn("ConnectionError", result["error"])
+        self.assertEqual(post.call_count, llm.RETRY_ATTEMPTS)
+
+    def test_connection_error_then_answer(self):
+        """Обрыв соединения -> пауза и повтор, со второй попытки ответ принимается."""
+        with patch.object(llm.time, "sleep") as sleep:
+            result, post = self._call(side_effect=[requests.ConnectionError("обрыв"), FakeResponse(BODY)])
+        self.assertEqual((post.call_count, sleep.call_args.args[0]), (2, llm.RETRY_DELAY))
+        self.assertIsNone(result["error"])
+
+    def test_server_errors_retried_with_growing_pause(self):
+        """503 и 500 -> повторы с паузой 0.5 и 1.0, третья попытка отвечает."""
+        with patch.object(llm.time, "sleep") as sleep:
+            result, post = self._call(side_effect=[FakeResponse({}, status_code=503), FakeResponse({}, status_code=500),
+                                                   FakeResponse(BODY)])
+        self.assertEqual(post.call_count, 3)
+        self.assertEqual([c.args[0] for c in sleep.call_args_list], [llm.RETRY_DELAY, llm.RETRY_DELAY * 2])
+        self.assertEqual(result["text"], "ответ модели")
+
+    def test_client_error_is_not_retried(self):
+        """400 — ошибка запроса: повтор дал бы то же самое."""
+        with patch.object(llm.time, "sleep") as sleep:
+            result, post = self._call(return_value=FakeResponse({}, status_code=400))
+        self.assertEqual((post.call_count, sleep.call_count), (1, 0))
+        self.assertIn("400", result["error"])
+
+    def test_parallel_log_lines_stay_whole(self):
+        """Потоки пишут журнал одновременно: каждая строка — целый JSON."""
+        from concurrent.futures import ThreadPoolExecutor
+        with patch.object(llm, "LOG_FILE", self.log_file):
+            with ThreadPoolExecutor(max_workers=8) as pool:
+                list(pool.map(lambda i: llm._log_call({"n": i, "text": "х" * 5000}), range(200)))
+        lines = self.log_file.read_text(encoding="utf-8").splitlines()
+        self.assertEqual(sorted(json.loads(line)["n"] for line in lines), list(range(200)))
 
     def test_broken_answer_shape(self):
         """Ответ без alternatives не роняет вызов."""
