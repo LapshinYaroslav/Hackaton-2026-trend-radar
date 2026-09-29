@@ -1,4 +1,4 @@
-"""CLI: python -m pipeline "тема" [--area Финтех] [--out result.json] [--no-cache] [--no-rospatent] [--quiet]
+"""CLI: python -m pipeline "тема" [--out result.json] [--no-cache] [--no-rospatent] [--quiet]
 [--no-dedup] [--time-budget 900] [--fresh].
 
 Прогресс — одна строка в stdout, перезаписывается: «[ 37%] Сбор счётчиков 812/2160 · осталось ~9 мин».
@@ -50,7 +50,6 @@ def main(argv: list[str] | None = None) -> int:
     """Разбирает аргументы, запускает run_query, пишет JSON."""
     parser = argparse.ArgumentParser(description="Тема -> ТОП-15 слабых сигналов")
     parser.add_argument("topic", help="тема в свободной форме")
-    parser.add_argument("--area", default=None, help="одна из шести областей; без неё — общая нормировка")
     parser.add_argument("--out", default=None, help="куда записать JSON; по умолчанию data/interim/pipeline_runs/")
     parser.add_argument("--no-cache", action="store_true", help="не брать подзапросы и кандидатов из кэша")
     parser.add_argument("--no-rospatent", action="store_true",
@@ -65,7 +64,7 @@ def main(argv: list[str] | None = None) -> int:
     load_dotenv(ROOT / ".env")
     from pipeline.run_query import run_query  # после .env: модули читают настройки при вызове
 
-    result = run_query(args.topic, args.area, use_cache=not args.no_cache,
+    result = run_query(args.topic, use_cache=not args.no_cache,
                        rospatent=False if args.no_rospatent else None,
                        on_progress=None if args.quiet else printer(sys.stdout), dedup=not args.no_dedup,
                        time_budget=args.time_budget,

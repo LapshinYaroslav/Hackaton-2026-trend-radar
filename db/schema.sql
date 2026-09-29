@@ -268,7 +268,6 @@ CREATE TABLE IF NOT EXISTS scores (
 CREATE TABLE IF NOT EXISTS queries (
     query_id            TEXT        PRIMARY KEY,
     topic               TEXT        NOT NULL,
-    area                TEXT,
     status              TEXT        NOT NULL,
     progress_stage      TEXT,
     progress_done       INTEGER     NOT NULL DEFAULT 0,
@@ -293,7 +292,9 @@ CREATE TABLE IF NOT EXISTS queries (
 
 CREATE INDEX IF NOT EXISTS queries_created_idx ON queries (created_at DESC);
 CREATE INDEX IF NOT EXISTS queries_status_idx ON queries (status);
-CREATE INDEX IF NOT EXISTS queries_area_idx ON queries (area);
+-- Запрос идёт без области. В базах, созданных раньше, колонка есть: сначала представление, которое её читает.
+DROP VIEW IF EXISTS v_query_history;
+ALTER TABLE queries DROP COLUMN IF EXISTS area;
 
 CREATE TABLE IF NOT EXISTS subqueries (
     subquery_id     TEXT        PRIMARY KEY,
@@ -376,7 +377,6 @@ CREATE OR REPLACE VIEW v_query_history AS
 SELECT
     q.query_id,
     q.topic,
-    q.area,
     q.status,
     q.model_version,
     q.created_at,

@@ -21,8 +21,8 @@ def test_insight_built_by_pipeline_is_served_without_llm(client, finished, monke
 
     fake_run_query = rq.run_query  # уже подменён в conftest готовым прогоном
 
-    def with_insight(topic, area=None, **kwargs):
-        result = fake_run_query(topic, area, **kwargs)
+    def with_insight(topic, **kwargs):
+        result = fake_run_query(topic, **kwargs)
         result["top"][0]["insight"] = {"status": "done", "description_ru": "готовое описание",
                                        "advantages_ru": [], "cases_ru": [], "sources": []}
         return result

@@ -141,7 +141,7 @@ def run(tmp_path, extract=fake_extract, patents=None, **options):
          patch.object(llm_module, "ask_llm", side_effect=fake_translate), \
          patch.object(et, "dedupe_candidates", lambda items, threshold=None: [
              {**item, "doc_ids": [item["doc"]], "doc_count": 1} for item in items]):
-        out = rq.run_query("роботы для промышленности", "Роботы", adapters=adapters(), settings=Settings(),
+        out = rq.run_query("роботы для промышленности", adapters=adapters(), settings=Settings(),
                            progress=lambda stage, done, total: stages.append(stage), **options)
     return out, stages, extract_prompts
 
@@ -175,7 +175,7 @@ SCORED_KEYS = {"tech_key", "features", "is_signal", "threshold", "weak_source_on
 
 def test_output_matches_schema(result) -> None:
     out, stages = result
-    assert set(out) == {"query_id", "topic", "area", "model_version", "threshold", "cutoff_date", "subqueries",
+    assert set(out) == {"query_id", "topic", "model_version", "threshold", "cutoff_date", "subqueries",
                         "candidate_sources", "extract_version", "extract_model", "naming_mode", "candidates_version",
                         "stats", "normalizer_deviations", "top", "excluded", "candidates",
                         "enrichment", "_documents",

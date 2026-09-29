@@ -10,22 +10,20 @@ from tests.conftest import ROBOTS
 from ui import view
 
 
-def test_other_area_is_null(finished, pipeline_calls) -> None:
-    body = finished("что-то новое", "Другое")
-    assert body["area"] is None and pipeline_calls[-1]["area"] is None
-
-
-def test_unknown_area_is_rejected(client) -> None:
-    assert client.post("/queries", json={"topic": "тема", "area": "Космос"}).status_code == 422
+def test_query_has_no_area(finished, pipeline_calls) -> None:
+    """Области нет ни в вызове run_query, ни в ответе, даже если в старом прогоне она была (ROBOTS)."""
+    body = finished("что-то новое")
+    assert "area" in ROBOTS and "area" not in body
+    assert "area" not in pipeline_calls[-1]["kwargs"]
 
 
 def test_list_queries_remembers_created(client) -> None:
-    created = client.post("/queries", json={"topic": "история теста", "area": "Edge"})
+    created = client.post("/queries", json={"topic": "история теста", "area": "Edge"})  # лишнее поле игнорируется
     query_id = created.json()["query_id"]
     listed = client.get("/queries").json()["items"]
     match = next(item for item in listed if item["query_id"] == query_id)
     assert match["topic"] == "история теста"
-    assert match["area"] == "Edge"
+    assert "area" not in match
 
 
 def test_answer_is_run_query_output(finished) -> None:
@@ -74,7 +72,7 @@ def test_progress_is_pipeline_percent(finished, monkeypatch) -> None:
                         {"pct": 97, "stage_ru": "Догрузка источников", "eta_s": 20.0},
                         {"pct": 100, "stage_ru": "Готово", "eta_s": 0.0}]
 
-    def fake(topic, area=None, **kwargs):
+    def fake(topic, **kwargs):
         assert "progress" not in kwargs
         for event in events:
             kwargs["on_progress"](event)
