@@ -206,5 +206,15 @@ class AskLlmTest(unittest.TestCase):
                 llm.ask_llm("с", "п", purpose="subqueries")
 
 
+class ModelUriTest(unittest.TestCase):
+    def test_missing_model_is_an_error_not_lite(self) -> None:
+        """Без YANDEX_GPT_MODEL и явной модели — ошибка, а не тихий yandexgpt-lite."""
+        with patch.dict("os.environ", {"YANDEX_FOLDER_ID": "b1gtest"}, clear=True), \
+                patch.object(llm, "load_dotenv"):
+            with self.assertRaisesRegex(ValueError, "YANDEX_GPT_MODEL"):
+                llm.build_model_uri()
+            self.assertEqual(llm.build_model_uri("yandexgpt-5-pro"), "gpt://b1gtest/yandexgpt-5-pro")
+
+
 if __name__ == "__main__":
     unittest.main()

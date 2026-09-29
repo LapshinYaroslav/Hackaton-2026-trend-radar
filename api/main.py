@@ -8,7 +8,6 @@ API запросов: POST запускает pipeline.run_query, GET отдаё
 from __future__ import annotations
 
 import copy
-import logging
 import threading
 import uuid
 from pathlib import Path
@@ -20,8 +19,6 @@ from dotenv import load_dotenv
 from api import store
 
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
-
-logger = logging.getLogger(__name__)
 
 # Прогресс — события pipeline.progress (on_progress): pct от бюджета времени, не убывает, 100 — только в конце.
 # Хранится в progress_done при progress_total = 100 (схема queries не меняется); eta_s — оценка остатка, в памяти.
@@ -38,16 +35,12 @@ _lock = threading.Lock()
 
 @app.on_event("startup")
 def _startup() -> None:
-    try:
-        store.ensure_ready()
-    except Exception:  # noqa: BLE001
-        pass
-    try:
-        from model.bootstrap import ensure_artifact
+    from model.bootstrap import ensure_artifact
+    from pipeline.run_query import check_config
 
-        ensure_artifact()
-    except Exception as exc:
-        logger.warning("model artifact: %s", exc)
+    check_config()  # нет ключа — API не стартует
+    ensure_artifact()  # нет обученной модели — API не стартует
+    store.ensure_ready()  # DATABASE_URL задан, а база не отвечает — API не стартует
 
 
 def _public(job: dict) -> dict:

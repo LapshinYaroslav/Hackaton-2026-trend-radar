@@ -1,38 +1,34 @@
-from model.bootstrap import ensure_artifact, write_published
-from model.predict import load, predict
+import joblib
+import pytest
+
+from model.bootstrap import ensure_artifact
 
 
-def test_published_artifact_scores(tmp_path, monkeypatch) -> None:
-    monkeypatch.chdir(tmp_path)
-    from model import train as train_mod
-    from model import bootstrap as boot
-
-    monkeypatch.setattr(train_mod, "ARTIFACT_DIR", tmp_path / "data" / "model")
-    monkeypatch.setattr(boot, "try_train", lambda version="s2a2-v1": None)
-    path = write_published("s2a2-v1")
-    assert path.exists()
-    artifact = load(path)
-    assert artifact["meta"]["model_version"] == "s2a2-v1"
-    score, parts = predict(
-        {
-            "share_news_wordmatch": 0.8,
-            "recency": 0.9,
-            "share_patent": 0.0,
-            "age_first_arxiv": 1.0,
-            "share_prev6": 0.0,
-            "growth_research": 0.1,
-        },
-        area="Роботы",
-        artifact=artifact,
-    )
-    assert 0 < score < 1
-    assert "share_news_wordmatch" in parts
-
-
-def test_ensure_artifact_reuses_existing(tmp_path, monkeypatch) -> None:
+def _artifact_dir(tmp_path, monkeypatch):
+    """Каталог артефактов во временной папке."""
     from model import train as train_mod
 
     monkeypatch.setattr(train_mod, "ARTIFACT_DIR", tmp_path / "model")
-    first = write_published("s2a2-v1")
-    again = ensure_artifact("s2a2-v1")
-    assert again == first or again.exists()
+    return tmp_path / "model" / "s2a2-v1"
+
+
+def test_missing_artifact_raises(tmp_path, monkeypatch) -> None:
+    _artifact_dir(tmp_path, monkeypatch)
+    with pytest.raises(FileNotFoundError, match="Нет обученной модели s2a2-v1"):
+        ensure_artifact("s2a2-v1")
+
+
+def test_bootstrap_stub_raises(tmp_path, monkeypatch) -> None:
+    folder = _artifact_dir(tmp_path, monkeypatch)
+    folder.mkdir(parents=True)
+    joblib.dump({"meta": {"bootstrap": True}, "pipeline": None}, folder / "trend_radar_s2a2-v1.joblib")
+    with pytest.raises(RuntimeError, match="заглушка"):
+        ensure_artifact("s2a2-v1")
+
+
+def test_trained_artifact_passes(tmp_path, monkeypatch) -> None:
+    folder = _artifact_dir(tmp_path, monkeypatch)
+    folder.mkdir(parents=True)
+    path = folder / "trend_radar_s2a2-v1.joblib"
+    joblib.dump({"meta": {"model_version": "s2a2-v1"}, "pipeline": None}, path)
+    assert ensure_artifact("s2a2-v1") == path

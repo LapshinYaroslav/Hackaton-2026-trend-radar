@@ -25,7 +25,6 @@ SESSION = requests.Session()  # keep-alive: TLS-рукопожатие не по
 # AI Studio (23.09.2026) yandexgpt/latest — это YandexGPT Pro 5, то есть yandexgpt-5-pro.
 EXPLICIT_MODELS = {"yandexgpt-5-pro", "yandexgpt-5.1"}
 ALLOWED_MODELS = {"yandexgpt", "yandexgpt-lite"} | EXPLICIT_MODELS | OPENAI_MODELS
-DEFAULT_MODEL = "yandexgpt-lite"
 DEFAULT_TIMEOUT = 60
 
 # Квота Yandex AI Studio: 10 одновременных генераций в синхронном режиме.
@@ -44,9 +43,11 @@ def build_model_uri(model: str | None = None) -> str:
     """URI модели: явная модель из аргумента или YANDEX_GPT_MODEL из .env."""
     load_dotenv()
     folder_id = os.getenv("YANDEX_FOLDER_ID", "").strip()
-    model = model or os.getenv("YANDEX_GPT_MODEL", "").strip() or DEFAULT_MODEL
+    model = model or os.getenv("YANDEX_GPT_MODEL", "").strip()
     if not folder_id:
         raise ValueError("В .env нет YANDEX_FOLDER_ID")
+    if not model:
+        raise ValueError("В .env нет YANDEX_GPT_MODEL (ставьте yandexgpt-5-pro)")
     if model not in ALLOWED_MODELS:
         raise ValueError(f"Модель {model!r} не разрешена, выберите из {sorted(ALLOWED_MODELS)}")
     if model in EXPLICIT_MODELS:

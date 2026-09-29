@@ -1,0 +1,184 @@
+{
+  "model_version": "s2a2-v1",
+  "cutoff_date": "2026-09-01",
+  "trained_at": "2026-09-24T20:28:19+00:00",
+  "random_state": 42,
+  "normalization": "area_z",
+  "features": [
+    "share_patent",
+    "growth_research",
+    "recency",
+    "share_news_wordmatch",
+    "share_prev6",
+    "age_first_arxiv"
+  ],
+  "threshold": 0.4,
+  "threshold_criterion": "accuracy",
+  "intercept": 0.3812488866445876,
+  "coefficients": {
+    "share_patent": -0.6614673800834331,
+    "growth_research": 0.0027032769355555875,
+    "recency": 1.0494593322685128,
+    "share_news_wordmatch": 1.3346690281497156,
+    "share_prev6": -0.09976107431855738,
+    "age_first_arxiv": -0.41752806697862366
+  },
+  "imputer_median_scaled": {
+    "share_patent": -0.4961871198910776,
+    "growth_research": -0.09500436856855927,
+    "recency": -0.07375516201730625,
+    "share_news_wordmatch": -0.5269887363765662,
+    "share_prev6": 0.07281770481224051,
+    "age_first_arxiv": 0.5661477751898457
+  },
+  "overall": {
+    "centre": {
+      "share_patent": 0.14929112795727906,
+      "growth_research": 0.35451728363901613,
+      "recency": 0.4367032295636504,
+      "share_news_wordmatch": 0.3865422726796857,
+      "share_prev6": 0.2504342910605183,
+      "age_first_arxiv": 6.413043478260869
+    },
+    "scale": {
+      "share_patent": 0.23534875403849814,
+      "growth_research": 0.8790947638992124,
+      "recency": 0.23439113735979858,
+      "share_news_wordmatch": 0.3879231746415227,
+      "share_prev6": 0.16561409604823743,
+      "age_first_arxiv": 3.155919813251734
+    }
+  },
+  "by_area": {
+    "Edge": {
+      "centre": {
+        "share_patent": 0.15309884499403748,
+        "growth_research": 0.4170940213352446,
+        "recency": 0.4250684803813585,
+        "share_news_wordmatch": 0.3158671552882274,
+        "share_prev6": 0.23817761793396722,
+        "age_first_arxiv": 5.75
+      },
+      "scale": {
+        "share_patent": 0.2391525392234336,
+        "growth_research": 1.0304348042439246,
+        "recency": 0.2327925812567261,
+        "share_news_wordmatch": 0.3440888898654218,
+        "share_prev6": 0.14900087524023348,
+        "age_first_arxiv": 3.17214438511238
+      }
+    },
+    "Защита ИИ": {
+      "centre": {
+        "share_patent": 0.14779973913406727,
+        "growth_research": 0.8185588277391284,
+        "recency": 0.4902702994468028,
+        "share_news_wordmatch": 0.4736495842278091,
+        "share_prev6": 0.2321543988415399,
+        "age_first_arxiv": 5.7272727272727275
+      },
+      "scale": {
+        "share_patent": 0.24953716159331393,
+        "growth_research": 1.040000121203685,
+        "recency": 0.25078226491900096,
+        "share_news_wordmatch": 0.37352733260841303,
+        "share_prev6": 0.18832030311368228,
+        "age_first_arxiv": 3.1934851036818723
+      }
+    },
+    "Индустриальный ИИ": {
+      "centre": {
+        "share_patent": 0.10591527076905702,
+        "growth_research": 0.43584647855929265,
+        "recency": 0.45708041667765353,
+        "share_news_wordmatch": 0.378282873843181,
+        "share_prev6": 0.24518027862604336,
+        "age_first_arxiv": 5.785714285714286
+      },
+      "scale": {
+        "share_patent": 0.16200126084970606,
+        "growth_research": 0.925126535258965,
+        "recency": 0.26673921807528983,
+        "share_news_wordmatch": 0.3907641177343578,
+        "share_prev6": 0.1732763433961399,
+        "age_first_arxiv": 3.097892634600206
+      }
+    },
+    "Инфраструктура ИИ": {
+      "centre": {
+        "share_patent": 0.22316864100607609,
+        "growth_research": 0.23448833571121927,
+        "recency": 0.44488946006777996,
+        "share_news_wordmatch": 0.31698457663434887,
+        "share_prev6": 0.24528876261056348,
+        "age_first_arxiv": 7.526315789473684
+      },
+      "scale": {
+        "share_patent": 0.30654687764592636,
+        "growth_research": 0.6480219254325585,
+        "recency": 0.21759801678728782,
+        "share_news_wordmatch": 0.3782110923543142,
+        "share_prev6": 0.17530780131278687,
+        "age_first_arxiv": 2.6030027408164713
+      }
+    },
+    "Роботы": {
+      "centre": {
+        "share_patent": 0.14818719377754172,
+        "growth_research": -0.05362231582138747,
+        "recency": 0.3702395124064432,
+        "share_news_wordmatch": 0.3687839662323906,
+        "share_prev6": 0.2751264512602072,
+        "age_first_arxiv": 5.9411764705882355
+      },
+      "scale": {
+        "share_patent": 0.23677647944059305,
+        "growth_research": 0.4885927943244717,
+        "recency": 0.16644265954013673,
+        "share_news_wordmatch": 0.41069120027398065,
+        "share_prev6": 0.13233451699020937,
+        "age_first_arxiv": 3.386314815205707
+      }
+    },
+    "Финтех": {
+      "centre": {
+        "share_patent": 0.11508844983269634,
+        "growth_research": 0.2942427351178712,
+        "recency": 0.43422425731671105,
+        "share_news_wordmatch": 0.46629407963573777,
+        "share_prev6": 0.2655472531891022,
+        "age_first_arxiv": 7.333333333333333
+      },
+      "scale": {
+        "share_patent": 0.16232272999840544,
+        "growth_research": 0.773765288501809,
+        "recency": 0.24252172874484723,
+        "share_news_wordmatch": 0.3940631677203037,
+        "share_prev6": 0.16546260348602626,
+        "age_first_arxiv": 2.913569784454954
+      }
+    }
+  },
+  "training": {
+    "rows": 160,
+    "signals": 100,
+    "negatives": 60,
+    "groups": 150,
+    "areas": [
+      "Edge",
+      "Защита ИИ",
+      "Индустриальный ИИ",
+      "Инфраструктура ИИ",
+      "Роботы",
+      "Финтех"
+    ],
+    "missing_by_feature": {
+      "share_patent": 3,
+      "growth_research": 0,
+      "recency": 0,
+      "share_news_wordmatch": 0,
+      "share_prev6": 0,
+      "age_first_arxiv": 68
+    }
+  }
+}

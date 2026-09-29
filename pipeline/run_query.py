@@ -79,8 +79,10 @@ ROSPATENT_OFF_WARNING = ("Роспатент выключен: патентны�
 TRANSLATE_FAILED_WARNING = ("Перевод не прошёл проверки после всех попыток, в ТОП оставлено английское название: {}")
 ENRICH_STOPPED_WARNING = "Догрузка источников остановлена по бюджету времени: у части ТОП только источники поиска №1"
 PATENT_FAILED_NOTE = "Патентный признак недоступен: Роспатент не ответил, подставлена медиана обучения"
-ROSPATENT_NO_KEY_WARNING = ("Нет ключа ROSPATENT в .env: патентный признак share_patent недоступен у всех кандидатов, "
-                            "модель подставила медиану обучения")
+ROSPATENT_NO_KEY_ERROR = ("Нет ключа ROSPATENT в .env: без него патентный признак share_patent не посчитать. "
+                          "Задайте ключ или запустите без Роспатента (--no-rospatent, только для отладки)")
+REQUIRED_ENV = {"YANDEX_API_KEY": "ключ YandexGPT", "YANDEX_FOLDER_ID": "каталог Yandex Cloud",
+                "YANDEX_GPT_MODEL": "модель подзапросов и инсайтов, yandexgpt-5-pro"}
 # Генерация кандидатов v3 (задача Г): промпт подзапросов subq-v4 (задача О3) и состав документов шага 4 (step4_documents).
 CANDIDATES_VERSION = "v3"
 # Поля выхода о режиме шага 4 и названий (контракт): в продукте один режим — extract-v4 (задача О2) и direct.
@@ -425,6 +427,17 @@ def patent_fields(counters: dict, result: dict | None) -> dict:
             "rospatent_failed": False}
 
 
+def check_config(rospatent: bool | None = None) -> None:
+    """Ключи сервиса заданы в окружении, иначе ошибка со списком недостающих. Вызывается до прогона."""
+    missing = [f"{name} ({why})" for name, why in REQUIRED_ENV.items() if not (os.environ.get(name) or "").strip()]
+    if not (os.environ.get("OPENALEX_API_KEY") or os.environ.get("OPEN_ALEX") or "").strip():
+        missing.append("OPENALEX_API_KEY или OPEN_ALEX (ключ OpenAlex)")
+    if rospatent_options(rospatent) is not None and not (os.environ.get("ROSPATENT") or "").strip():
+        missing.append("ROSPATENT (ключ Роспатента, признак share_patent)")
+    if missing:
+        raise RuntimeError("В .env не заданы: " + "; ".join(missing))
+
+
 def rospatent_options(enabled: bool | None) -> dict | None:
     """Параметры очереди Роспатента или None, если источник выключен."""
     if not (rospatent_source.ROSPATENT_ENABLED if enabled is None else enabled):
@@ -621,6 +634,8 @@ def run_query(topic: str, *, use_cache: bool = True,
     adapters = list(adapters) if adapters is not None else default_adapters(settings)
     from model.bootstrap import ensure_artifact
     ensure_artifact()
+    if (options := rospatent_options(rospatent)) is not None and not options["token"]:
+        raise RuntimeError(ROSPATENT_NO_KEY_ERROR)  # до платных вызовов LLM и источников
     meta, started, timings = load()["meta"], time.monotonic(), {}
     query_id = query_id or f"q{datetime.now():%Y%m%d%H%M%S}"
 
@@ -662,9 +677,6 @@ def run_query(topic: str, *, use_cache: bool = True,
     dropped += [excluded(item, "bad_name", documents) for item in merged if not good_name(item["name_en"])]
     good = [item for item in merged if good_name(item["name_en"])]
     pool, capped = apply_cap(good, documents, limit=MAX_SCORED_HARD)
-    options = rospatent_options(rospatent)
-    if options is not None and not options["token"]:
-        warnings.append(ROSPATENT_NO_KEY_WARNING)
     ranked, patents, scored, stop, schedule = score_pool(
         pool, adapters, settings, warnings, progress, timings,
         use_cache if counters_cache is None else counters_cache, options, report, budget=budget,

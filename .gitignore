@@ -8,6 +8,10 @@
 data/*
 !data/interim/
 data/interim/*
+# Боевая модель s2a2-v1: без неё API на чистом клоне пишет заглушку (model/bootstrap.py).
+!data/model/
+data/model/*
+!data/model/s2a2-v1/
 artifacts/
 *.xlsx
 *.xls
@@ -23,6 +27,7 @@ catboost_info/
 # Таблица технологий, на которой обучается модель. Стоит здесь, а не в лесенке
 # выше: в .gitignore побеждает последнее совпавшее правило, и *.csv перебило бы.
 !data/interim/technologies.csv
+!data/model/s2a2-v1/trend_radar_s2a2-v1.joblib
 
 # ============================================================
 #  Секреты: пароли и ключи API только в .env
