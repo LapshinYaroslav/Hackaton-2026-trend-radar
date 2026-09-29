@@ -98,3 +98,11 @@ def test_top_rows_carry_rank_score_or_fall_back_to_score() -> None:
     data = {"top": [{"rank": 1, "name_ru": "а", "name_en": "a", "score": 0.870737, "rank_score": 0.881, "n_pat": 0},
                     {"rank": 2, "name_ru": "б", "name_en": "b", "score": 0.870737, "n_pat": 0}]}
     assert [(r["score"], r["rank_score"]) for r in view.top_rows(data)] == [(0.870737, 0.881), (0.870737, 0.870737)]
+
+
+def test_top_rows_show_card_description_or_pointer_to_card() -> None:
+    data = {"top": [{"rank": 1, "score": 0.9, "description_ru": "Описание из карточки."},
+                    {"rank": 2, "score": 0.9, "description_ru": "  "},
+                    {"rank": 3, "score": 0.9}]}
+    assert [r["description_ru"] for r in view.top_rows(data)] == [
+        "Описание из карточки.", "Описание технологии в карточке проекта.", "Описание технологии в карточке проекта."]

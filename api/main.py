@@ -199,7 +199,8 @@ def get_insight(query_id: str, rank: int) -> dict:
         return {**stored, "query_id": query_id, "rank": rank}
     from pipeline.insights import build_insight
 
-    payload = build_insight(item, result.get("_documents") or [])
+    # Инсайт строится в run_query до выдачи; build_insight здесь — только для прогонов, сделанных раньше.
+    payload = dict(item.get("insight") or build_insight(item, result.get("_documents") or []))
     payload["query_id"] = query_id
     payload["rank"] = rank
     store.save_insight(query_id, rank, payload)

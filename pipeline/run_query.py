@@ -2,7 +2,8 @@
 
 Шаги: подзапросы -> поиск №1 -> кандидаты (шаг 4, extract-v4: name_en = термин) -> след названия
 в OpenAlex (pipeline/naming.py, no_trace) -> слияние по tech_key -> страховочная проверка названия -> лимит
--> счётчики и признаки -> ранжирование -> склейка дублей -> перевод названий -> догрузка источников ТОП.
+-> счётчики и признаки -> ранжирование -> склейка дублей -> перевод названий -> догрузка источников ТОП
+-> инсайты ТОП (описание для главного экрана и карточки).
 
 Запрос кандидата для счётчиков строится так же, как у 160 обучающих технологий: один
 термин — tech_key названия, без context_terms (CLAUDE.md, правила ML, п. 2).
@@ -30,6 +31,7 @@ from collector.db import build_cache
 from collector.settings import Settings
 from pipeline.catalog import catalog_candidates
 from pipeline.enrich import enrich_top
+from pipeline.insights import insights_top
 from pipeline.persist import persist_features_and_scores, persist_search_documents
 from pipeline.weak_sources import move_weak_only
 from model.config import ROSPATENT_DATASETS
@@ -693,6 +695,9 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
                source_limit=MAX_SOURCES)
     timings["enrich"], all_documents = round(time.monotonic() - mark, 2), enriched["_documents"]
     warnings += [ENRICH_STOPPED_WARNING] if enriched["enrichment"] == "partial" else []
+    mark = time.monotonic()
+    insights_top(top, all_documents, progress=progress)  # описание на главном экране и карточка без ожидания LLM
+    timings["insights"] = round(time.monotonic() - mark, 2)
     for entry in top + dropped + capped + below:
         entry["model_version"] = meta["model_version"]
     scores = [item["score"] for item in ranked if item["score"] is not None]

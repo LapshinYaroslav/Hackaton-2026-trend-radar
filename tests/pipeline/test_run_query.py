@@ -192,15 +192,17 @@ def test_output_matches_schema(result) -> None:
     assert out["stats"]["time_budget_s"] == rq.TIME_BUDGET_S and out["stats"]["stopped_at"] is None
     assert out["model_version"] == "s2a2-v1"
     assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup",
-                                   "translate", "enrich", "total", "queues"}
+                                   "translate", "enrich", "insights", "total", "queues"}
     assert out["enrichment"] == "done"
     assert {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup", "translate",
-            "enrich"} <= set(stages)
+            "enrich", "insights"} <= set(stages)
     patent_keys = {"n_pat", "share_patent", "rospatent_failed", "note_ru"}
     for item in out["top"]:
         assert set(item) == {"rank", "name_ru", "name_en", "score", "rank_score", "explanation_ru", "why_ru", "contributions",
                              "counters", "sources", "model_version", "name_ru_source", "name_ru_auto",
-                             "variants"} | DETAIL_KEYS | patent_keys | SCORED_KEYS
+                             "variants", "insight", "description_ru"} | DETAIL_KEYS | patent_keys | SCORED_KEYS
+        # описание главного экрана — то же, что «Описание технологии» в карточке
+        assert item["description_ru"] and item["description_ru"] == item["insight"]["description_ru"]
         assert item["name_ru"] == f"Русское {item['name_en']}" and item["name_ru_source"] == "translate"
         assert item["name_choice_rule"] == "direct" and len(item["name_variants"]) == 1
         assert len(item["sources"]) <= 5
