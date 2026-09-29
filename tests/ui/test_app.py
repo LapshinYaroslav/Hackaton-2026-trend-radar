@@ -43,7 +43,7 @@ def test_polling_redraws_only_progress_fragment(screen, monkeypatch) -> None:
 
     release = threading.Event()
 
-    def slow(topic, area=None, **kwargs):
+    def slow(topic, **kwargs):
         kwargs["on_progress"]({"pct": 41, "stage_ru": "Сбор счётчиков", "eta_s": 480.0})
         release.wait(5)
         return copy.deepcopy(ROBOTS)

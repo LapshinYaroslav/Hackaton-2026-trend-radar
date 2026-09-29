@@ -2,7 +2,8 @@
 
 Шаги: подзапросы -> поиск №1 -> кандидаты (шаг 4, extract-v4: name_en = термин) -> след названия
 в OpenAlex (pipeline/naming.py, no_trace) -> слияние по tech_key -> страховочная проверка названия -> лимит
--> счётчики и признаки -> ранжирование -> склейка дублей -> перевод названий -> догрузка источников ТОП.
+-> счётчики и признаки -> ранжирование -> склейка дублей -> перевод названий -> догрузка источников ТОП
+-> инсайты ТОП (описание для главного экрана и карточки).
 
 Запрос кандидата для счётчиков строится так же, как у 160 обучающих технологий: один
 термин — tech_key названия, без context_terms (CLAUDE.md, правила ML, п. 2).
@@ -30,6 +31,7 @@ from collector.db import build_cache
 from collector.settings import Settings
 from pipeline.catalog import catalog_candidates
 from pipeline.enrich import enrich_top
+from pipeline.insights import insights_top
 from pipeline.persist import persist_features_and_scores, persist_search_documents
 from pipeline.weak_sources import move_weak_only
 from model.config import ROSPATENT_DATASETS
@@ -72,7 +74,6 @@ NAME_WORDS = (2, 5)
 BAD_NAME_CHARS = '"(),:;/'
 LATIN_RE = re.compile(r"[a-zA-Z]")
 CYRILLIC_RE = re.compile(r"[а-яёА-ЯЁ]")
-EMPTY_AREA_WARNING = "область не выбрана: нормализатор получил пустую область, такое поведение не проверялось"
 ROSPATENT_OFF_WARNING = ("Роспатент выключен: патентный признак share_patent недоступен у всех кандидатов, "
                          "модель подставила медиану обучения")
 TRANSLATE_FAILED_WARNING = ("Перевод не прошёл проверки после всех попыток, в ТОП оставлено английское название: {}")
@@ -432,7 +433,7 @@ def rospatent_options(enabled: bool | None) -> dict | None:
             "parallel": rospatent_source.ROSPATENT_PARALLEL}
 
 
-def score_pool(pool: list[dict], area: str | None, adapters: Sequence[SourceAdapter], settings: Settings,
+def score_pool(pool: list[dict], adapters: Sequence[SourceAdapter], settings: Settings,
                warnings: list[str], progress: Progress, timings: dict, use_cache: bool = True,
                rospatent: dict | None = None, report: Report | None = None, budget: float = math.inf,
                elapsed: Callable[[], float] = lambda: 0.0, quota: Callable[[], int | None] = lambda: None
@@ -466,8 +467,8 @@ def score_pool(pool: list[dict], area: str | None, adapters: Sequence[SourceAdap
         finally:
             fetch_time[0] += time.monotonic() - begin
 
-    items = [{"name": tech_key(c["name_en"]), "terms": [tech_key(c["name_en"])], "context_terms": [],
-              "area": area or ""} for c in pool]
+    items = [{"name": tech_key(c["name_en"]), "terms": [tech_key(c["name_en"])], "context_terms": []}
+             for c in pool]
     begin = time.monotonic()  # очереди по источникам (Л5.2), пачками по бюджету (Х3)
     scored, stop, schedule = schedule_counters(fetch, [item["name"] for item in items], elapsed, budget,
                                                warnings, quota)
@@ -476,7 +477,7 @@ def score_pool(pool: list[dict], area: str | None, adapters: Sequence[SourceAdap
     for item in items:  # n_pat — в признак share_patent; сбой -> None -> медиана обучения
         found = fetch.patents.get(item["name"])
         item["n_pat"] = found["n_pat"] if found and not found["failed"] else None
-    ranked = rank_candidates(items, area=area or "", fetch=timed_fetch)
+    ranked = rank_candidates(items, fetch=timed_fetch)  # без области: общие центр и масштаб нормировки
     timings["counters"] = round(fetch_time[0], 2)
     timings["ranking"] = round(time.monotonic() - mark - fetch_time[0], 2)
     timings["queues"] = list(fetch.queues)
@@ -587,7 +588,7 @@ def add_rounds(rounds: list[dict], state: dict, collector: DocumentCollector, op
             return
 
 
-def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
+def run_query(topic: str, *, use_cache: bool = True,
               progress: Progress | None = None, adapters: Sequence[SourceAdapter] | None = None,
               settings: Settings | None = None, candidate_sources: set[str] | None = None,
               extract_model: str | None = "yandexgpt-5-pro", counters_cache: bool | None = None,
@@ -638,7 +639,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     extract_cache = use_cache if extract_cache is None else extract_cache
     found = staged("candidates", timings, progress,
                    lambda: extract_terms(documents, topic, query_id, model=extract_model, use_cache=extract_cache))
-    warnings += found["warnings"] + ([EMPTY_AREA_WARNING] if not area else [])
+    warnings += found["warnings"]
 
     mark = time.monotonic()
     openalex = next(a for a in adapters if a.source == "openalex")
@@ -665,7 +666,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
     if options is not None and not options["token"]:
         warnings.append(ROSPATENT_NO_KEY_WARNING)
     ranked, patents, scored, stop, schedule = score_pool(
-        pool, area, adapters, settings, warnings, progress, timings,
+        pool, adapters, settings, warnings, progress, timings,
         use_cache if counters_cache is None else counters_cache, options, report, budget=budget,
         elapsed=lambda: time.monotonic() - started, quota=lambda: fetch_module.openalex_quota())
     capped += [excluded(item, stop, documents) for item in pool if tech_key(item["name_en"]) not in scored]
@@ -693,6 +694,9 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
                source_limit=MAX_SOURCES)
     timings["enrich"], all_documents = round(time.monotonic() - mark, 2), enriched["_documents"]
     warnings += [ENRICH_STOPPED_WARNING] if enriched["enrichment"] == "partial" else []
+    mark = time.monotonic()
+    insights_top(top, all_documents, progress=progress)  # описание на главном экране и карточка без ожидания LLM
+    timings["insights"] = round(time.monotonic() - mark, 2)
     for entry in top + dropped + capped + below:
         entry["model_version"] = meta["model_version"]
     scores = [item["score"] for item in ranked if item["score"] is not None]
@@ -707,7 +711,7 @@ def run_query(topic: str, area: str | None = None, *, use_cache: bool = True,
         query_id, top + excluded_items, model_version=meta["model_version"], threshold=meta["threshold"]
     )
     return {
-        "query_id": query_id, "topic": topic.strip(), "area": area,
+        "query_id": query_id, "topic": topic.strip(),
         "model_version": meta["model_version"], "threshold": meta["threshold"], "cutoff_date": meta["cutoff_date"],
         "subqueries": subq["subqueries"],
         "candidate_sources": sorted(candidate_sources) if candidate_sources is not None else None,

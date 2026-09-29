@@ -141,7 +141,7 @@ def run(tmp_path, extract=fake_extract, patents=None, **options):
          patch.object(llm_module, "ask_llm", side_effect=fake_translate), \
          patch.object(et, "dedupe_candidates", lambda items, threshold=None: [
              {**item, "doc_ids": [item["doc"]], "doc_count": 1} for item in items]):
-        out = rq.run_query("роботы для промышленности", "Роботы", adapters=adapters(), settings=Settings(),
+        out = rq.run_query("роботы для промышленности", adapters=adapters(), settings=Settings(),
                            progress=lambda stage, done, total: stages.append(stage), **options)
     return out, stages, extract_prompts
 
@@ -175,7 +175,7 @@ SCORED_KEYS = {"tech_key", "features", "is_signal", "threshold", "weak_source_on
 
 def test_output_matches_schema(result) -> None:
     out, stages = result
-    assert set(out) == {"query_id", "topic", "area", "model_version", "threshold", "cutoff_date", "subqueries",
+    assert set(out) == {"query_id", "topic", "model_version", "threshold", "cutoff_date", "subqueries",
                         "candidate_sources", "extract_version", "extract_model", "naming_mode", "candidates_version",
                         "stats", "normalizer_deviations", "top", "excluded", "candidates",
                         "enrichment", "_documents",
@@ -192,15 +192,17 @@ def test_output_matches_schema(result) -> None:
     assert out["stats"]["time_budget_s"] == rq.TIME_BUDGET_S and out["stats"]["stopped_at"] is None
     assert out["model_version"] == "s2a2-v1"
     assert set(out["timings"]) == {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup",
-                                   "translate", "enrich", "total", "queues"}
+                                   "translate", "enrich", "insights", "total", "queues"}
     assert out["enrichment"] == "done"
     assert {"subqueries", "search", "candidates", "naming", "counters", "ranking", "dedup", "translate",
-            "enrich"} <= set(stages)
+            "enrich", "insights"} <= set(stages)
     patent_keys = {"n_pat", "share_patent", "rospatent_failed", "note_ru"}
     for item in out["top"]:
         assert set(item) == {"rank", "name_ru", "name_en", "score", "rank_score", "explanation_ru", "why_ru", "contributions",
                              "counters", "sources", "model_version", "name_ru_source", "name_ru_auto",
-                             "variants"} | DETAIL_KEYS | patent_keys | SCORED_KEYS
+                             "variants", "insight", "description_ru"} | DETAIL_KEYS | patent_keys | SCORED_KEYS
+        # описание главного экрана — то же, что «Описание технологии» в карточке
+        assert item["description_ru"] and item["description_ru"] == item["insight"]["description_ru"]
         assert item["name_ru"] == f"Русское {item['name_en']}" and item["name_ru_source"] == "translate"
         assert item["name_choice_rule"] == "direct" and len(item["name_variants"]) == 1
         assert len(item["sources"]) <= 5

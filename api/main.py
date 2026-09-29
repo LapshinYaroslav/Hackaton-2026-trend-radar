@@ -12,7 +12,6 @@ import logging
 import threading
 import uuid
 from pathlib import Path
-from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
@@ -28,19 +27,9 @@ logger = logging.getLogger(__name__)
 # Хранится в progress_done при progress_total = 100 (схема queries не меняется); eta_s — оценка остатка, в памяти.
 START_STAGE = "Запуск"
 
-AREAS = {
-    "Edge",
-    "Защита ИИ",
-    "Индустриальный ИИ",
-    "Инфраструктура ИИ",
-    "Роботы",
-    "Финтех",
-}
-
 
 class CreateQuery(BaseModel):
     topic: str = Field(min_length=1)
-    area: Optional[str] = None
 
 
 app = FastAPI(title="Trend Radar API", version="0.2.0")
@@ -65,7 +54,6 @@ def _public(job: dict) -> dict:
     payload = {
         "query_id": job["query_id"],
         "topic": job["topic"],
-        "area": job["area"],
         "status": job["status"],
         "progress_stage": job["progress_stage"],
         "progress_done": job["progress_done"],
@@ -77,7 +65,7 @@ def _public(job: dict) -> dict:
         payload.pop("_documents", None)
         payload["query_id"] = job["query_id"]
         payload["topic"] = job["topic"]
-        payload["area"] = job["area"]
+        payload.pop("area", None)  # прогоны, сохранённые до удаления областей
         payload["status"] = "done"
     if job["status"] == "error":
         payload["error"] = job.get("error") or "ошибка расчёта"
@@ -108,7 +96,6 @@ def _run_live(query_id: str) -> None:
     with _lock:
         job = store.get_query(query_id) or {}
         topic = job.get("topic") or ""
-        area = job.get("area")
         store.update_progress(
             query_id,
             status="running",
@@ -116,10 +103,9 @@ def _run_live(query_id: str) -> None:
             progress_done=0,
             progress_total=100,
         )
-    result = run_query(topic, area=area, query_id=query_id, on_progress=_on_progress(query_id))
+    result = run_query(topic, query_id=query_id, on_progress=_on_progress(query_id))
     result["query_id"] = query_id
     result["topic"] = topic
-    result["area"] = area
     with _lock:
         # копия: после done ответ не меняется, даже если кто-то держит ссылку на result
         store.finish_query(query_id, copy.deepcopy(result))
@@ -144,16 +130,10 @@ def create_query(body: CreateQuery) -> dict:
     topic = body.topic.strip()
     if not topic:
         raise HTTPException(status_code=422, detail="пустая тема")
-    area = body.area
-    if area in (None, "", "Другое"):
-        area = None
-    elif area not in AREAS:
-        raise HTTPException(status_code=422, detail="неизвестная область")
     query_id = f"q-{uuid.uuid4().hex[:8]}"
     job = {
         "query_id": query_id,
         "topic": topic,
-        "area": area,
         "status": "running",
         "progress_stage": START_STAGE,
         "progress_done": 0,
@@ -199,7 +179,8 @@ def get_insight(query_id: str, rank: int) -> dict:
         return {**stored, "query_id": query_id, "rank": rank}
     from pipeline.insights import build_insight
 
-    payload = build_insight(item, result.get("_documents") or [])
+    # Инсайт строится в run_query до выдачи; build_insight здесь — только для прогонов, сделанных раньше.
+    payload = dict(item.get("insight") or build_insight(item, result.get("_documents") or []))
     payload["query_id"] = query_id
     payload["rank"] = rank
     store.save_insight(query_id, rank, payload)

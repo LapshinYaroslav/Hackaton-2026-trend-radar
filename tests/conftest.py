@@ -16,9 +16,9 @@ def pipeline_calls(monkeypatch) -> list[dict]:
     """Вызовы подменённого run_query: аргументы и возвращённый объект (result)."""
     calls: list[dict] = []
 
-    def fake_run_query(topic, area=None, **kwargs):
+    def fake_run_query(topic, **kwargs):
         result = copy.deepcopy(ROBOTS)
-        calls.append({"topic": topic, "area": area, "kwargs": kwargs, "result": result})
+        calls.append({"topic": topic, "kwargs": kwargs, "result": result})
         return result
 
     monkeypatch.delenv("DATABASE_URL", raising=False)
@@ -38,8 +38,8 @@ def client(pipeline_calls) -> TestClient:
 @pytest.fixture
 def finished(client):
     """POST темы и опрос GET до done или error; возвращает тело последнего ответа."""
-    def run(topic: str = "роботы для промышленности", area: str | None = None) -> dict:
-        query_id = client.post("/queries", json={"topic": topic, "area": area}).json()["query_id"]
+    def run(topic: str = "роботы для промышленности") -> dict:
+        query_id = client.post("/queries", json={"topic": topic}).json()["query_id"]
         deadline = time.monotonic() + 10
         while time.monotonic() < deadline:
             body = client.get(f"/queries/{query_id}").json()

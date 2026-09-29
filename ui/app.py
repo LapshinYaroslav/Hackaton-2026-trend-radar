@@ -394,32 +394,13 @@ def render_card(item: dict) -> None:
         st.error(api_problem())
 
 
-def _technology_description(item: dict) -> str:
-    """Короткое описание технологии по документам, без долей и вкладов модели."""
-    explicit = str(item.get("description_ru") or "").strip()
-    if explicit:
-        return explicit
-    titles = []
-    for source in item.get("sources") or []:
-        title = str(source.get("title") or "").strip()
-        summary = str(source.get("summary_ru") or "").strip()
-        line = summary or title
-        if line and line not in titles:
-            titles.append(line)
-        if len(titles) == 2:
-            break
-    if not titles:
-        return "Описание по найденным документам появится в карточке."
-    return "По найденным документам: " + "; ".join(titles) + "."
-
-
 def render_top(data: dict) -> None:
     rows = view.top_rows(data)
     if not rows:
         st.info("В ТОП пока нет технологий выше порога.")
         return
     st.caption(f"Показано {len(rows)}. Если меньше 15 — столько прошло порог модели.")
-    for row, item in zip(rows, data["top"]):
+    for row in rows:
         left, right = st.columns([4, 1])
         with left:
             st.markdown(
@@ -428,7 +409,7 @@ def render_top(data: dict) -> None:
             )
             st.caption(row["name_en"] or "")
             st.markdown(score_bar(row["score"], row["rank_score"]), unsafe_allow_html=True)
-            st.write(_technology_description(item))
+            st.write(row["description_ru"])
         with right:
             if st.button("Смотреть", key=f"card_{row['rank']}"):
                 st.session_state.rank = row["rank"]

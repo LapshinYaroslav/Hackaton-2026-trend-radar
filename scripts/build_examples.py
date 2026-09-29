@@ -2,7 +2,7 @@
 
 Сеть идёт только за тем, чего нет в кэше, и за переводом. Перед каждым прогоном — остаток суточной квоты
 OpenAlex (x-ratelimit-remaining); меньше 1000 — стоп. Результат — examples/<slug>.json: полный ответ
-по контракту query_result плюс meta (запрос, область, дата, модель, генерация, время, доля кэша счётчиков).
+по контракту query_result плюс meta (запрос, дата, модель, генерация, время, доля кэша счётчиков).
 examples/README.md — таблица примеров, без оценок качества.
 
 Запуск: python -m scripts.build_examples [slug ...]
@@ -19,10 +19,10 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "examples"
 MIN_QUOTA = 1000
-QUERIES = {"ai": ("технологии в ИИ", "Инфраструктура ИИ"),
-           "fintech": ("перспективные решения в финтехе", "Финтех"),
-           "cybersec": ("слабые сигналы в области кибербезопасности", "Защита ИИ"),
-           "robots": ("роботы для промышленности", "Роботы")}
+QUERIES = {"ai": "технологии в ИИ",
+           "fintech": "перспективные решения в финтехе",
+           "cybersec": "слабые сигналы в области кибербезопасности",
+           "robots": "роботы для промышленности"}
 
 
 def quota() -> int:
@@ -43,8 +43,7 @@ def cache_share(result: dict) -> float:
 
 def example(slug: str, result: dict, run_date: str) -> dict:
     """Ответ пайплайна и meta для стенда."""
-    topic, area = QUERIES[slug]
-    meta = {"query": topic, "area": area, "run_date": run_date, "model_version": result["model_version"],
+    meta = {"query": QUERIES[slug], "run_date": run_date, "model_version": result["model_version"],
             "candidates_version": result["candidates_version"], "seconds": result["timings"]["total"],
             "counters_cache_share": cache_share(result)}
     return {**result, "meta": meta}
@@ -52,11 +51,11 @@ def example(slug: str, result: dict, run_date: str) -> dict:
 
 def readme(examples: dict[str, dict]) -> str:
     """Одна таблица: пример, запрос, дата, кандидатов, выше порога, ТОП-15."""
-    rows = [f"| `{slug}.json` | {e['meta']['query']} ({e['meta']['area']}) | {e['meta']['run_date']} | "
+    rows = [f"| `{slug}.json` | {e['meta']['query']} | {e['meta']['run_date']} | "
             f"{e['stats']['candidates_scored']} | {e['stats']['above_threshold']} | {len(e['top'])} |"
             for slug, e in examples.items()]
     return ("# Готовые примеры для стенда\n\nПолный ответ пайплайна (`pipeline.run_query`) "
-            "плюс `meta`. Открываются без сети.\n\n| пример | запрос (область) | дата прогона | кандидатов оценено | "
+            "плюс `meta`. Открываются без сети.\n\n| пример | запрос | дата прогона | кандидатов оценено | "
             "выше порога | ТОП-15 |\n|---|---|---|---|---|---|\n" + "\n".join(rows) + "\n")
 
 
@@ -71,9 +70,8 @@ def main(slugs: list[str]) -> None:
         print(f"{slug}: квота OpenAlex {left}", flush=True)
         if left < MIN_QUOTA:
             raise SystemExit(f"квота OpenAlex {left} < {MIN_QUOTA}: прогоны остановлены")
-        topic, area = QUERIES[slug]
         run_date = datetime.now().isoformat(timespec="seconds")
-        result = run_query(topic, area, use_cache=True, on_progress=printer(sys.stdout))
+        result = run_query(QUERIES[slug], use_cache=True, on_progress=printer(sys.stdout))
         (EXAMPLES / f"{slug}.json").write_text(json.dumps(example(slug, result, run_date), ensure_ascii=False, indent=2),
                                              encoding="utf-8")
         print(f"{slug}: {result['timings']['total']} с, доля кэша счётчиков {cache_share(result)}", flush=True)

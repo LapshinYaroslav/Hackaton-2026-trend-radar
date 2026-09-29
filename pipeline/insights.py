@@ -1,15 +1,18 @@
-"""Инсайт по клику: описание, преимущества и кейсы только из документов поиска."""
+"""Инсайт карточки: описание, преимущества и кейсы только из документов поиска; строится до выдачи."""
 
 from __future__ import annotations
 
 import json
 import logging
 import re
-from typing import Any, Mapping, Sequence
+import threading
+from concurrent.futures import ThreadPoolExecutor
+from typing import Any, Callable, Mapping, Sequence
 
 from pipeline.weak_sources import is_weak_only, weak_source_note
 
 logger = logging.getLogger(__name__)
+INSIGHT_WORKERS = 10
 
 SYSTEM_PROMPT = (
     "Ты аналитик слабых технологических сигналов. Отвечай только по приложенным "
@@ -249,3 +252,27 @@ def build_insight(
         }
     )
     return payload
+
+
+def insights_top(top: Sequence[dict], documents: Sequence[Mapping] | None = None, *,
+                 progress: Callable[[str, int, int], None] | None = None,
+                 workers: int = INSIGHT_WORKERS) -> None:
+    """Инсайты всех пунктов ТОП до выдачи: item["insight"] и item["description_ru"] для главного экрана.
+
+    Параллельно не больше workers вызовов (квота AI Studio — 10 одновременных генераций).
+    """
+    done, lock = [0], threading.Lock()
+
+    def one(item: dict) -> None:
+        item["insight"] = build_insight(item, documents)
+        item["description_ru"] = item["insight"]["description_ru"]
+        with lock:
+            done[0] += 1
+            if progress:
+                progress("insights", done[0], len(top))
+
+    if progress:
+        progress("insights", 0, len(top))
+    if top:
+        with ThreadPoolExecutor(max_workers=max(1, min(workers, len(top)))) as pool:
+            list(pool.map(one, top))

@@ -8,6 +8,7 @@ REQUIRED = ("query_id", "topic", "model_version", "threshold", "cutoff_date", "s
             "excluded", "timings", "extract_version", "candidates_version")
 REQUIRED_STATS = ("documents_total", "candidates_found", "above_075")
 TOP_N = 15
+NO_DESCRIPTION = "Описание технологии в карточке проекта."
 
 
 def check_result(data, query_id: str) -> dict:
@@ -34,10 +35,15 @@ def check_result(data, query_id: str) -> dict:
 
 
 def top_rows(data: dict) -> list[dict]:
-    """ТОП как в терминале: ранг, названия, score, балл ранжирования (в старых прогонах = score), патенты."""
+    """ТОП как в терминале: ранг, названия, score, балл ранжирования (в старых прогонах = score), патенты.
+
+    description_ru — «Описание технологии» из инсайта карточки; в прогонах до инсайтов — отсылка к карточке.
+    """
     return [{"rank": item["rank"], "name_ru": item.get("name_ru"), "name_en": item.get("name_en"),
              "score": item["score"], "rank_score": item.get("rank_score", item["score"]),
-             "n_pat": item.get("n_pat")} for item in data["top"]]
+             "n_pat": item.get("n_pat"),
+             "description_ru": str(item.get("description_ru") or "").strip() or NO_DESCRIPTION}
+            for item in data["top"]]
 
 
 def excluded_rows(data: dict) -> list[dict]:

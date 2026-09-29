@@ -61,9 +61,9 @@ def create_query(job: dict[str, Any]) -> None:
             cur.execute(
                 """
                 INSERT INTO queries (
-                    query_id, topic, area, status, progress_stage,
+                    query_id, topic, status, progress_stage,
                     progress_done, progress_total, created_at, started_at
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (query_id) DO UPDATE SET
                     status = EXCLUDED.status,
                     progress_stage = EXCLUDED.progress_stage
@@ -71,7 +71,6 @@ def create_query(job: dict[str, Any]) -> None:
                 (
                     job["query_id"],
                     job["topic"],
-                    job.get("area"),
                     job["status"],
                     job.get("progress_stage"),
                     job.get("progress_done") or 0,
@@ -307,7 +306,7 @@ def get_query(query_id: str) -> dict[str, Any] | None:
         with conn.cursor() as cur:
             cur.execute(
                 """
-                SELECT query_id, topic, area, status, progress_stage, progress_done,
+                SELECT query_id, topic, status, progress_stage, progress_done,
                        progress_total, error, result, created_at
                 FROM queries WHERE query_id = %s
                 """,
@@ -316,18 +315,17 @@ def get_query(query_id: str) -> dict[str, Any] | None:
             row = cur.fetchone()
     if row is None:
         return None
-    result = row[8] or {}
+    result = row[7] or {}
     job = {
         "query_id": row[0],
         "topic": row[1],
-        "area": row[2],
-        "status": row[3],
-        "progress_stage": row[4],
-        "progress_done": row[5],
-        "progress_total": row[6],
-        "error": row[7],
-        "result": result if row[3] == "done" else None,
-        "created_at": row[9],
+        "status": row[2],
+        "progress_stage": row[3],
+        "progress_done": row[4],
+        "progress_total": row[5],
+        "error": row[6],
+        "result": result if row[2] == "done" else None,
+        "created_at": row[8],
     }
     _memory[query_id] = job
     return job
@@ -339,7 +337,7 @@ def list_queries(limit: int = 30) -> list[dict[str, Any]]:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT query_id, topic, area, status, created_at, finished_at,
+                    SELECT query_id, topic, status, created_at, finished_at,
                            stats->>'candidates_found', stats->>'above_075'
                     FROM queries
                     ORDER BY created_at DESC
@@ -352,12 +350,11 @@ def list_queries(limit: int = 30) -> list[dict[str, Any]]:
             {
                 "query_id": row[0],
                 "topic": row[1],
-                "area": row[2],
-                "status": row[3],
-                "created_at": row[4].isoformat() if row[4] else None,
-                "finished_at": row[5].isoformat() if row[5] else None,
-                "candidates_found": _as_int(row[6]),
-                "above_075": _as_int(row[7]),
+                "status": row[2],
+                "created_at": row[3].isoformat() if row[3] else None,
+                "finished_at": row[4].isoformat() if row[4] else None,
+                "candidates_found": _as_int(row[5]),
+                "above_075": _as_int(row[6]),
             }
             for row in rows
         ]
@@ -370,7 +367,6 @@ def list_queries(limit: int = 30) -> list[dict[str, Any]]:
             {
                 "query_id": job["query_id"],
                 "topic": job["topic"],
-                "area": job.get("area"),
                 "status": job["status"],
                 "created_at": created.isoformat() if hasattr(created, "isoformat") else created,
                 "finished_at": None,
