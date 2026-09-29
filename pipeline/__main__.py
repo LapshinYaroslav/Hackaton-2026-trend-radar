@@ -62,8 +62,9 @@ def main(argv: list[str] | None = None) -> int:
                         help="шаг 4 и счётчики без кэша; подзапросы, поиск и перевод — из кэша")
     args = parser.parse_args(argv)
     load_dotenv(ROOT / ".env")
-    from pipeline.run_query import run_query  # после .env: модули читают настройки при вызове
+    from pipeline.run_query import check_config, run_query  # после .env: модули читают настройки при вызове
 
+    check_config(rospatent=False if args.no_rospatent else None)
     result = run_query(args.topic, use_cache=not args.no_cache,
                        rospatent=False if args.no_rospatent else None,
                        on_progress=None if args.quiet else printer(sys.stdout), dedup=not args.no_dedup,

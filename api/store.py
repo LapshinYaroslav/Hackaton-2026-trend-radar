@@ -467,10 +467,8 @@ def get_insight(query_id: str, rank: int) -> dict[str, Any] | None:
 
 
 def _persist_side_tables(query_id: str, result: dict[str, Any]) -> None:
-    try:
-        from pipeline.persist import persist_features_and_scores, persist_search_documents
-    except Exception:
-        return
+    from pipeline.persist import persist_features_and_scores, persist_search_documents
+
     persist_search_documents(
         query_id,
         result.get("_documents") or [],

@@ -490,11 +490,42 @@ def test_rospatent_disabled_makes_no_request_and_warns(tmp_path) -> None:
     assert out["stats"]["rospatent_enabled"] is False and rq.ROSPATENT_OFF_WARNING in out["warnings"]
 
 
-def test_missing_rospatent_key_is_a_run_warning(tmp_path, monkeypatch) -> None:
-    """Роспатент включён, ключа нет: прогон не падает, в warnings — запись об этом."""
+def test_missing_rospatent_key_stops_the_run(tmp_path, monkeypatch) -> None:
+    """Роспатент включён, ключа нет: прогон падает до вызовов источников, медиана не подставляется."""
     monkeypatch.delenv("ROSPATENT", raising=False)
-    out, _, _ = run(tmp_path)
-    assert rq.ROSPATENT_NO_KEY_WARNING in out["warnings"]
+    with pytest.raises(RuntimeError, match="Нет ключа ROSPATENT"):
+        run(tmp_path)
+
+
+KEYS = {"YANDEX_API_KEY": "k", "YANDEX_FOLDER_ID": "f", "YANDEX_GPT_MODEL": "yandexgpt-5-pro",
+        "OPEN_ALEX": "o", "ROSPATENT": "r"}
+
+
+def test_check_config_passes_with_all_keys(monkeypatch) -> None:
+    for name, value in KEYS.items():
+        monkeypatch.setenv(name, value)
+    monkeypatch.delenv("OPENALEX_API_KEY", raising=False)
+    rq.check_config()
+
+
+def test_check_config_lists_missing_keys(monkeypatch) -> None:
+    for name, value in KEYS.items():
+        monkeypatch.setenv(name, value)
+    for name in ("YANDEX_GPT_MODEL", "OPEN_ALEX", "OPENALEX_API_KEY"):
+        monkeypatch.delenv(name, raising=False)
+    with pytest.raises(RuntimeError) as error:
+        rq.check_config()
+    assert "YANDEX_GPT_MODEL" in str(error.value) and "OPEN_ALEX" in str(error.value)
+    assert "ROSPATENT" not in str(error.value)
+
+
+def test_check_config_without_rospatent_does_not_need_its_key(monkeypatch) -> None:
+    for name, value in KEYS.items():
+        monkeypatch.setenv(name, value)
+    monkeypatch.setenv("ROSPATENT", " ")
+    with pytest.raises(RuntimeError, match="ROSPATENT"):
+        rq.check_config()
+    rq.check_config(rospatent=False)
 
 
 def test_rospatent_enabled_by_default_feeds_the_model(tmp_path) -> None:

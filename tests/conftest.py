@@ -24,6 +24,7 @@ def pipeline_calls(monkeypatch) -> list[dict]:
     monkeypatch.delenv("DATABASE_URL", raising=False)
     monkeypatch.setattr("pipeline.run_query.run_query", fake_run_query)
     monkeypatch.setattr("model.bootstrap.ensure_artifact", lambda *args, **kwargs: None)
+    monkeypatch.setattr("pipeline.run_query.check_config", lambda *args, **kwargs: None)
     monkeypatch.setattr("pipeline.insights._llm_insight", lambda item, docs: None)
     return calls
 
